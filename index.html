@@ -667,6 +667,126 @@
   .reveal-stagger > *:nth-child(5){transition-delay:.27s}
   .reveal-stagger > *:nth-child(6){transition-delay:.33s}
 
+  /* ============================================================
+     MEDIA ILUSTRADO EN TARJETAS  (beneficios + servicios)
+     Ilustraciones SVG propias, sin fotos de stock ni dependencias.
+     ============================================================ */
+  .card-media{
+    position:relative;border-radius:14px;overflow:hidden;
+    border:1px solid var(--line-soft);
+    background:linear-gradient(165deg,var(--navy-raised),#0a0f1f);
+  }
+  .card-media > svg{width:100%;height:auto;display:block}
+  .card-media .b-icon{
+    position:absolute;left:12px;bottom:12px;margin:0;
+    width:38px;height:38px;border-radius:10px;
+    background:rgba(6,9,16,.62);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  }
+
+  .bento{grid-auto-rows:auto}
+  .b-card{justify-content:flex-start;gap:12px}
+  .b-card.big{
+    grid-column:1/-1;grid-row:auto;
+    flex-direction:row;align-items:center;gap:34px;
+  }
+  .b-card.big .card-media{width:44%;flex-shrink:0}
+  .b-card.big .big-text{flex:1;display:flex;flex-direction:column;gap:10px}
+  .b-card.big .b-icon{width:44px;height:44px}
+
+  .s-card .card-media{margin:14px 0 20px}
+
+  @media (max-width:860px){
+    .b-card.big{flex-direction:column;align-items:stretch;gap:14px}
+    .b-card.big .card-media{width:100%}
+  }
+
+  /* ============================================================
+     PLANES / PAQUETES
+     ============================================================ */
+  .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+  .plan-card{
+    background:var(--navy-card);border:1px solid var(--line);
+    border-radius:var(--r-lg);padding:34px 28px 30px;
+    display:flex;flex-direction:column;gap:16px;position:relative;
+    min-width:0;overflow-wrap:break-word;
+    transition:transform .4s var(--ease),border-color .4s var(--ease);
+  }
+  .plan-card:hover{transform:translateY(-6px);border-color:rgba(76,125,255,.45)}
+  .plan-card.featured{
+    border-color:rgba(76,125,255,.55);
+    background:linear-gradient(180deg,rgba(76,125,255,.1),transparent 42%),var(--navy-card);
+  }
+  .plan-flag{
+    position:absolute;top:-12px;left:28px;
+    font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+    background:linear-gradient(135deg,var(--accent-btn),var(--accent-deep));color:#fff;
+    padding:6px 12px;border-radius:100px;
+  }
+  .plan-card h3{font-size:1.32rem;font-weight:700;font-family:var(--font-body)}
+  .plan-desc{color:var(--text-soft);font-size:.94rem;line-height:1.55}
+  .plan-meta{
+    display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
+    font-family:var(--font-mono);font-size:.76rem;
+    color:var(--accent-bright);
+    background:rgba(76,125,255,.1);border:1px solid rgba(76,125,255,.25);
+    padding:7px 13px;border-radius:100px;
+  }
+  .plan-meta svg{width:15px;height:15px;flex-shrink:0}
+  .plan-list{display:flex;flex-direction:column;gap:10px;margin-top:2px}
+  .plan-list li{display:flex;gap:10px;color:var(--text-soft);font-size:.9rem;line-height:1.5}
+  .plan-list svg{width:17px;height:17px;color:var(--wa-icon);flex-shrink:0;margin-top:2px}
+  .plan-card .btn{margin-top:auto}
+  .plans-foot{text-align:center;margin-top:36px;color:var(--text-soft);font-size:.95rem}
+  .plans-foot a{color:var(--accent-bright);border-bottom:1px solid rgba(130,168,255,.4)}
+  @media (max-width:900px){
+    .plans-grid{grid-template-columns:minmax(0,1fr);max-width:440px;margin-inline:auto}
+  }
+
+  /* ============================================================
+     FORMULARIO "EMPEZAR"
+     ============================================================ */
+  .start-section{padding-bottom:120px}
+  .start-panel{
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+    background:linear-gradient(135deg,#0d1730,#141c38 55%,#101830);
+    border:1px solid var(--line);border-radius:var(--r-xl);
+    padding:52px 48px;
+  }
+  .start-copy h2{
+    font-size:clamp(1.8rem,2.6vw + 1rem,2.5rem);font-weight:800;
+    margin-top:14px;letter-spacing:-.01em;
+  }
+  .start-copy p{margin-top:16px;color:var(--text-soft);font-size:1.02rem;max-width:44ch}
+  .start-form{display:flex;flex-direction:column;gap:16px}
+  .start-form label{
+    display:flex;flex-direction:column;gap:8px;
+    font-size:.82rem;font-weight:600;color:var(--text-soft);
+  }
+  .start-form input,.start-form select{
+    font-family:var(--font-body);font-size:.98rem;color:var(--text);
+    background:var(--navy);border:1px solid var(--line);
+    border-radius:var(--r-sm);padding:14px 15px;width:100%;
+    transition:border-color .2s;
+  }
+  .start-form input::placeholder{color:var(--text-mute)}
+  .start-form input:focus,.start-form select:focus{outline:none;border-color:var(--accent)}
+  .start-form select{
+    appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:42px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa7c2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;background-size:16px;
+  }
+  .start-form .btn{margin-top:6px}
+  .start-msg{font-size:.84rem;margin-top:2px}
+  .start-msg.err{color:var(--danger)}
+  .start-msg.ok{color:var(--wa-icon)}
+  @media (max-width:820px){
+    .start-panel{grid-template-columns:1fr;gap:32px;padding:40px 26px}
+  }
+
+  /* Mockups de ejemplos: SVG a pantalla completa dentro del marco */
+  .ex-screen > svg{width:100%;height:auto;display:block}
+
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
     *{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.15s !important}
@@ -690,11 +810,12 @@
       <a href="#inicio">Inicio</a>
       <a href="#beneficios">Beneficios</a>
       <a href="#servicios">Servicios</a>
+      <a href="#paquetes">Planes</a>
       <a href="#preguntas">Preguntas</a>
       <a href="#contacto">Contacto</a>
     </nav>
     <div class="nav-cta">
-      <a href="#contacto" class="btn btn-ghost">Ver planes</a>
+      <a href="#paquetes" class="btn btn-ghost">Ver planes</a>
       <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
          class="btn btn-wa" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.6 6.6 0 0 1 5.6-10.13 6.55 6.55 0 0 1 6.55 6.56 6.6 6.6 0 0 1-6.55 6.67Zm3.6-4.92c-.2-.1-1.17-.58-1.35-.64-.18-.07-.32-.1-.45.1-.13.19-.51.64-.63.77-.11.13-.23.14-.43.05-.2-.1-.83-.31-1.58-1-.58-.52-.98-1.16-1.09-1.36-.11-.19-.01-.3.09-.4.09-.09.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.45-1.08-.61-1.48-.16-.39-.33-.33-.45-.34h-.38c-.13 0-.34.05-.52.24-.18.19-.68.67-.68 1.63 0 .96.7 1.89.8 2.02.1.13 1.37 2.1 3.33 2.94.46.2.83.32 1.11.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.17-.46.17-.86.12-.94-.05-.09-.18-.14-.38-.24Z" fill="currentColor"/></svg>
@@ -711,6 +832,7 @@
   <a href="#inicio">Inicio</a>
   <a href="#beneficios">Beneficios</a>
   <a href="#servicios">Servicios</a>
+  <a href="#paquetes">Planes</a>
   <a href="#preguntas">Preguntas</a>
   <a href="#contacto">Contacto</a>
   <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
@@ -827,27 +949,116 @@
       <div class="bento reveal-stagger">
         <article class="b-card big">
           <div class="b-glow" aria-hidden="true"></div>
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8.5 12 14l10-5.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 15.5 12 21l10-5.5M2 12l10 5.5L22 12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-          <h3>Diseño moderno, hecho a la medida de tu negocio</h3>
-          <p>Nada de plantillas genéricas reutilizadas. Cada página se diseña pensando en la identidad, el tono y los objetivos de tu negocio.</p>
+          <div class="card-media">
+            <svg viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <rect x="26" y="24" width="308" height="252" rx="12" fill="#0c1122" stroke="var(--line)"/>
+              <line x1="26" y1="48" x2="334" y2="48" stroke="var(--line-soft)"/>
+              <line x1="58" y1="24" x2="58" y2="276" stroke="var(--line-soft)"/>
+              <text x="70" y="42" fill="var(--text-mute)" font-family="monospace" font-size="9">tunegocio.com — diseño a medida</text>
+              <rect x="74" y="62" width="244" height="40" rx="7" fill="var(--accent)"/>
+              <circle cx="94" cy="82" r="8" fill="#fff" opacity="0.9"/>
+              <rect x="110" y="76" width="60" height="6" rx="3" fill="#fff" opacity="0.75"/>
+              <rect x="110" y="88" width="40" height="5" rx="2.5" fill="#fff" opacity="0.45"/>
+              <rect x="266" y="74" width="44" height="16" rx="8" fill="#fff" opacity="0.9"/>
+              <rect x="74" y="116" width="120" height="13" rx="6" fill="var(--text-soft)"/>
+              <rect x="74" y="138" width="150" height="8" rx="4" fill="var(--line)"/>
+              <rect x="74" y="154" width="120" height="8" rx="4" fill="var(--line)"/>
+              <rect x="74" y="176" width="92" height="24" rx="12" fill="var(--wa-btn)"/>
+              <rect x="212" y="116" width="106" height="84" rx="8" fill="#131b2f" stroke="var(--line)"/>
+              <path d="M212 182 L244 156 L268 174 L300 146 L318 168 L318 200 L212 200 Z" fill="var(--violet)" opacity="0.4"/>
+              <circle cx="292" cy="140" r="9" fill="var(--accent-bright)" opacity="0.8"/>
+              <rect x="74" y="214" width="20" height="20" rx="5" fill="var(--accent)"/>
+              <rect x="100" y="214" width="20" height="20" rx="5" fill="var(--violet)"/>
+              <rect x="126" y="214" width="20" height="20" rx="5" fill="var(--wa-icon)"/>
+              <rect x="152" y="214" width="20" height="20" rx="5" fill="#ff9d6c"/>
+              <rect x="178" y="214" width="20" height="20" rx="5" fill="var(--line)"/>
+              <path d="M276 236 l30 12 -12 4 -3 13 z" fill="#fff"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8.5 12 14l10-5.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 15.5 12 21l10-5.5M2 12l10 5.5L22 12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          </div>
+          <div class="big-text">
+            <h3>Diseño moderno, hecho a la medida de tu negocio</h3>
+            <p>Nada de plantillas genéricas reutilizadas. Cada página se diseña pensando en la identidad, el tono y los objetivos de tu negocio.</p>
+          </div>
         </article>
         <article class="b-card">
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <rect x="18" y="24" width="176" height="120" rx="9" fill="#0c1122" stroke="var(--line)"/>
+              <rect x="30" y="36" width="152" height="15" rx="4" fill="var(--accent)"/>
+              <rect x="30" y="60" width="86" height="7" rx="3.5" fill="var(--line)"/>
+              <rect x="30" y="74" width="120" height="7" rx="3.5" fill="var(--line)"/>
+              <rect x="30" y="92" width="152" height="42" rx="6" fill="#131b2f" stroke="var(--line-soft)"/>
+              <rect x="206" y="34" width="62" height="94" rx="8" fill="#0c1122" stroke="var(--line)"/>
+              <rect x="214" y="44" width="46" height="11" rx="3" fill="var(--accent)"/>
+              <rect x="214" y="62" width="30" height="5" rx="2.5" fill="var(--line)"/>
+              <rect x="214" y="72" width="40" height="5" rx="2.5" fill="var(--line)"/>
+              <rect x="214" y="86" width="46" height="32" rx="4" fill="#131b2f" stroke="var(--line-soft)"/>
+              <rect x="278" y="52" width="34" height="76" rx="8" fill="#0c1122" stroke="var(--line)"/>
+              <rect x="284" y="60" width="22" height="9" rx="2.5" fill="var(--accent)"/>
+              <rect x="284" y="74" width="15" height="4" rx="2" fill="var(--line)"/>
+              <rect x="284" y="84" width="22" height="20" rx="3" fill="#131b2f" stroke="var(--line-soft)"/>
+              <rect x="284" y="108" width="22" height="8" rx="3" fill="var(--wa-btn)"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          </div>
           <h3>100% adaptada a celulares</h3>
           <p>La mayoría de tus clientes te buscará desde el teléfono. Tu página se ve y funciona perfecto en cualquier pantalla.</p>
         </article>
         <article class="b-card">
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <path d="M40 34 H280 L216 104 V152 L144 132 V104 Z" fill="none" stroke="var(--line)" stroke-width="2"/>
+              <path d="M40 34 H280 L232 86 H88 Z" fill="var(--accent)" opacity="0.3"/>
+              <circle cx="70" cy="24" r="5" fill="var(--text-mute)"/>
+              <circle cx="100" cy="20" r="5" fill="var(--text-mute)"/>
+              <circle cx="130" cy="24" r="5" fill="var(--text-mute)"/>
+              <circle cx="160" cy="19" r="5" fill="var(--text-mute)"/>
+              <circle cx="190" cy="24" r="5" fill="var(--text-mute)"/>
+              <rect x="150" y="150" width="60" height="26" rx="13" fill="var(--wa-btn)"/>
+              <path d="M180 148 v-14 M180 134 l-6 6 M180 134 l6 6" stroke="var(--wa-icon)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M244 150 l10 -10 M254 140 h-9 M254 140 v9" stroke="var(--accent-bright)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          </div>
           <h3>Pensada para convertir</h3>
           <p>Cada sección, botón y texto está diseñado con un propósito: que el visitante te contacte.</p>
         </article>
         <article class="b-card">
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <path d="M40 44 h150 a12 12 0 0 1 12 12 v34 a12 12 0 0 1 -12 12 h-96 l-24 20 v-20 h-30 a12 12 0 0 1 -12 -12 v-34 a12 12 0 0 1 12 -12 Z" fill="var(--navy-card)" stroke="var(--line)"/>
+              <rect x="56" y="60" width="110" height="7" rx="3.5" fill="var(--line)"/>
+              <rect x="56" y="74" width="80" height="7" rx="3.5" fill="var(--line)"/>
+              <path d="M280 92 h-120 a12 12 0 0 0 -12 12 v30 a12 12 0 0 0 12 12 h84 l24 18 v-18 h12 a12 12 0 0 0 12 -12 v-30 a12 12 0 0 0 -12 -12 Z" fill="var(--wa-btn)" opacity="0.9"/>
+              <rect x="166" y="106" width="90" height="7" rx="3.5" fill="#fff" opacity="0.8"/>
+              <rect x="166" y="120" width="60" height="7" rx="3.5" fill="#fff" opacity="0.55"/>
+              <circle cx="248" cy="58" r="16" fill="var(--wa-icon)"/>
+              <path d="M243 58 l4 4 8 -9" stroke="#06170d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          </div>
           <h3>Contacto directo por WhatsApp</h3>
           <p>Botones estratégicos para que tus clientes te escriban en un solo clic, sin formularios largos.</p>
         </article>
         <article class="b-card">
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <circle cx="128" cy="95" r="64" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+              <ellipse cx="128" cy="95" rx="26" ry="64" fill="none" stroke="var(--line-soft)" stroke-width="1.5"/>
+              <line x1="64" y1="95" x2="192" y2="95" stroke="var(--line-soft)" stroke-width="1.5"/>
+              <path d="M70 66 h116 M70 124 h116" stroke="var(--line-soft)" stroke-width="1.5"/>
+              <path d="M128 95 V55 M128 95 l30 16" stroke="var(--accent-bright)" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="128" cy="95" r="4" fill="var(--accent-bright)"/>
+              <circle cx="236" cy="70" r="30" fill="var(--navy-card)" stroke="var(--accent)" stroke-width="1.5"/>
+              <text x="236" y="76" text-anchor="middle" fill="var(--accent-bright)" font-family="monospace" font-weight="700" font-size="16">24/7</text>
+              <rect x="206" y="118" width="60" height="40" rx="6" fill="#131b2f" stroke="var(--line)"/>
+              <rect x="214" y="126" width="44" height="6" rx="3" fill="var(--accent)"/>
+              <rect x="214" y="138" width="30" height="4" rx="2" fill="var(--line)"/>
+              <rect x="214" y="146" width="38" height="4" rx="2" fill="var(--line)"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          </div>
           <h3>Presencia disponible 24/7</h3>
           <p>Tu página trabaja incluso cuando tú no estás: mostrando lo que ofreces a cualquier hora.</p>
         </article>
@@ -910,41 +1121,200 @@
       <div class="services-grid reveal-stagger">
         <article class="s-card">
           <span class="s-num">01</span>
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="24" y="20" width="200" height="120" rx="8" fill="#0c1122" stroke="var(--line)"/>
+              <rect x="36" y="32" width="176" height="24" rx="5" fill="var(--accent)"/>
+              <rect x="36" y="66" width="90" height="9" rx="4.5" fill="var(--text-soft)"/>
+              <rect x="36" y="82" width="120" height="6" rx="3" fill="var(--line)"/>
+              <rect x="36" y="94" width="100" height="6" rx="3" fill="var(--line)"/>
+              <rect x="36" y="112" width="70" height="16" rx="8" fill="var(--wa-btn)"/>
+              <rect x="238" y="30" width="18" height="18" rx="4" fill="var(--accent)"/>
+              <rect x="238" y="54" width="18" height="18" rx="4" fill="var(--violet)"/>
+              <rect x="238" y="78" width="18" height="18" rx="4" fill="var(--wa-icon)"/>
+              <rect x="238" y="102" width="18" height="18" rx="4" fill="#ff9d6c"/>
+              <path d="M150 120 q30 -40 66 -30" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-dasharray="4 4"/>
+              <circle cx="150" cy="120" r="4" fill="var(--accent-bright)"/>
+              <path d="M212 86 l16 6 -6 4 -1 8 z" fill="#fff"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          </div>
           <h3>Diseño web a la medida</h3>
           <p>Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio. Nada de plantillas repetidas.</p>
         </article>
         <article class="s-card">
           <span class="s-num">02</span>
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="30" y="24" width="118" height="52" rx="8" fill="#131b2f" stroke="var(--line)"/>
+              <path d="M60 40 v20 M66 40 v10 a4 4 0 0 1 -8 0 M96 40 c-6 0 -6 12 0 12 v8" fill="none" stroke="#ff9d6c" stroke-width="2.4" stroke-linecap="round"/>
+              <rect x="172" y="24" width="118" height="52" rx="8" fill="#131b2f" stroke="var(--line)"/>
+              <path d="M218 42 h28 l-4 18 h-20 z M222 42 a5 5 0 0 1 10 0" fill="none" stroke="var(--accent-bright)" stroke-width="2.4" stroke-linejoin="round"/>
+              <rect x="30" y="86" width="118" height="52" rx="8" fill="#131b2f" stroke="var(--line)"/>
+              <path d="M74 100 h20 v22 h-20 z M80 100 v-5 h8 v5" fill="none" stroke="var(--violet)" stroke-width="2.4" stroke-linejoin="round"/>
+              <rect x="172" y="86" width="118" height="52" rx="8" fill="#131b2f" stroke="var(--line)"/>
+              <path d="M214 122 v-16 l18 -8 v24 z M214 106 h18 M222 98 v-6" fill="none" stroke="var(--wa-icon)" stroke-width="2.4" stroke-linejoin="round"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          </div>
           <h3>Páginas para todo tipo de negocio</h3>
           <p>Restaurantes, tiendas, emprendimientos, profesionales independientes y empresas de servicios.</p>
         </article>
         <article class="s-card">
           <span class="s-num">03</span>
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="8" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="30" y="26" width="150" height="100" rx="9" fill="#0c1122" stroke="var(--line)"/>
+              <rect x="30" y="118" width="150" height="8" rx="4" fill="var(--line)"/>
+              <rect x="42" y="38" width="126" height="16" rx="4" fill="var(--accent)"/>
+              <rect x="42" y="62" width="70" height="7" rx="3.5" fill="var(--line)"/>
+              <rect x="42" y="76" width="126" height="30" rx="5" fill="#131b2f" stroke="var(--line-soft)"/>
+              <rect x="196" y="34" width="60" height="92" rx="8" fill="#0c1122" stroke="var(--line)"/>
+              <rect x="204" y="44" width="44" height="12" rx="3" fill="var(--accent)"/>
+              <rect x="204" y="62" width="30" height="5" rx="2.5" fill="var(--line)"/>
+              <rect x="204" y="74" width="44" height="30" rx="4" fill="#131b2f" stroke="var(--line-soft)"/>
+              <rect x="204" y="110" width="44" height="8" rx="4" fill="var(--wa-btn)"/>
+              <rect x="268" y="52" width="30" height="66" rx="7" fill="#0c1122" stroke="var(--line)"/>
+              <rect x="273" y="60" width="20" height="8" rx="2.5" fill="var(--accent)"/>
+              <rect x="273" y="74" width="20" height="18" rx="3" fill="#131b2f" stroke="var(--line-soft)"/>
+              <rect x="273" y="98" width="20" height="7" rx="3" fill="var(--wa-btn)"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="8" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          </div>
           <h3>Diseño 100% responsive</h3>
           <p>Tu web funciona y se ve bien en celular, tablet y computador, sin excepciones.</p>
         </article>
         <article class="s-card">
           <span class="s-num">04</span>
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M46 40 h130 a12 12 0 0 1 12 12 v28 a12 12 0 0 1 -12 12 h-86 l-26 20 v-20 h-32 a12 12 0 0 1 -12 -12 v-28 a12 12 0 0 1 12 -12 Z" fill="var(--navy-card)" stroke="var(--line)"/>
+              <rect x="62" y="56" width="96" height="7" rx="3.5" fill="var(--line)"/>
+              <rect x="62" y="70" width="66" height="7" rx="3.5" fill="var(--line)"/>
+              <path d="M276 74 h-96 a12 12 0 0 0 -12 12 v24 a12 12 0 0 0 12 12 h64 l24 18 v-18 h8 a12 12 0 0 0 12 -12 v-24 a12 12 0 0 0 -12 -12 Z" fill="var(--wa-btn)"/>
+              <rect x="186" y="88" width="76" height="7" rx="3.5" fill="#fff" opacity="0.8"/>
+              <rect x="186" y="101" width="50" height="7" rx="3.5" fill="#fff" opacity="0.5"/>
+              <circle cx="252" cy="48" r="15" fill="var(--wa-icon)"/>
+              <path d="M247 48 l4 4 8 -9" stroke="#06170d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          </div>
           <h3>Integración con WhatsApp</h3>
           <p>Botones de contacto directo para que tus clientes te escriban en un clic, desde cualquier sección.</p>
         </article>
         <article class="s-card">
           <span class="s-num">05</span>
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8.5 12 14l10-5.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 15.5 12 21l10-5.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="22" y="42" width="72" height="76" rx="7" fill="#131b2f" stroke="var(--line)"/>
+              <rect x="30" y="52" width="56" height="10" rx="3" fill="var(--accent)"/>
+              <rect x="30" y="68" width="40" height="5" rx="2.5" fill="var(--line)"/>
+              <rect x="30" y="78" width="50" height="5" rx="2.5" fill="var(--line)"/>
+              <rect x="30" y="96" width="34" height="12" rx="6" fill="var(--wa-btn)"/>
+              <rect x="124" y="42" width="72" height="76" rx="7" fill="#131b2f" stroke="var(--line)"/>
+              <rect x="132" y="52" width="56" height="10" rx="3" fill="var(--violet)"/>
+              <rect x="132" y="70" width="56" height="26" rx="4" fill="#0c1122" stroke="var(--line-soft)"/>
+              <rect x="132" y="102" width="40" height="6" rx="3" fill="var(--line)"/>
+              <rect x="226" y="42" width="72" height="76" rx="7" fill="#131b2f" stroke="var(--line)"/>
+              <rect x="234" y="52" width="40" height="10" rx="3" fill="var(--wa-icon)"/>
+              <path d="M244 88 l8 8 16 -18" fill="none" stroke="var(--wa-icon)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M96 80 h26 M198 80 h26" stroke="var(--accent-bright)" stroke-width="2" stroke-dasharray="3 3"/>
+              <path d="M120 80 l-6 -4 v8 z M222 80 l-6 -4 v8 z" fill="var(--accent-bright)"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8.5 12 14l10-5.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 15.5 12 21l10-5.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          </div>
           <h3>Experiencia de usuario (UX/UI)</h3>
           <p>Navegación clara, tiempos de carga cuidados y una estructura pensada para guiar al visitante hasta el contacto.</p>
         </article>
         <article class="s-card">
           <span class="s-num">06</span>
-          <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.7-2.8 2.9-4.5 5.5-4.5s4.8 1.7 5.5 4.5M15.5 8.4a3 3 0 1 1 3.3 4.6M17 14.3c2.1.4 3.6 1.8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="card-media">
+            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="96" cy="66" r="22" fill="var(--navy-card)" stroke="var(--accent)" stroke-width="1.5"/>
+              <circle cx="96" cy="59" r="8" fill="var(--accent-bright)"/>
+              <path d="M82 82 c3 -9 25 -9 28 0" fill="var(--accent-bright)"/>
+              <circle cx="188" cy="66" r="22" fill="var(--navy-card)" stroke="var(--wa-icon)" stroke-width="1.5"/>
+              <circle cx="188" cy="59" r="8" fill="var(--wa-icon)"/>
+              <path d="M174 82 c3 -9 25 -9 28 0" fill="var(--wa-icon)"/>
+              <rect x="120" y="52" width="44" height="24" rx="8" fill="var(--navy-raised)" stroke="var(--line)"/>
+              <circle cx="132" cy="64" r="2.4" fill="var(--text-soft)"/><circle cx="142" cy="64" r="2.4" fill="var(--text-soft)"/><circle cx="152" cy="64" r="2.4" fill="var(--text-soft)"/>
+              <rect x="60" y="104" width="200" height="34" rx="10" fill="#131b2f" stroke="var(--line)"/>
+              <path d="M78 121 l8 8 16 -18" fill="none" stroke="var(--wa-icon)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="112" y="115" width="90" height="7" rx="3.5" fill="var(--text-soft)"/>
+              <rect x="112" y="126" width="60" height="6" rx="3" fill="var(--line)"/>
+            </svg>
+            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.7-2.8 2.9-4.5 5.5-4.5s4.8 1.7 5.5 4.5M15.5 8.4a3 3 0 1 1 3.3 4.6M17 14.3c2.1.4 3.6 1.8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          </div>
           <h3>Acompañamiento personalizado</h3>
           <p>Te guiamos en todo el proceso, desde la primera idea hasta que tu página está lista y publicada.</p>
         </article>
       </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PAQUETES / PLANES
+       ============================================================ -->
+  <section id="paquetes">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Planes</span>
+        <h2>Un paquete para cada etapa de tu negocio</h2>
+        <p>Elige tu punto de partida. El alcance se puede ajustar según lo que necesites: escríbenos y lo definimos juntos.</p>
+      </div>
+
+      <div class="plans-grid reveal-stagger">
+        <article class="plan-card">
+          <h3>Paquete Básico</h3>
+          <p class="plan-desc">Landing page de 1 a 3 páginas. Ideal para empezar con una presencia profesional, clara y directa.</p>
+          <span class="plan-meta">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Entrega en 5-7 días
+          </span>
+          <ul class="plan-list">
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Landing page de 1 a 3 páginas</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño 100% responsive</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Integración con WhatsApp</li>
+          </ul>
+          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20B%C3%A1sico%20(landing%20page%2C%201-3%20p%C3%A1ginas).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+             class="btn btn-ghost btn-block" target="_blank" rel="noopener">Quiero el Paquete Básico</a>
+        </article>
+
+        <article class="plan-card featured">
+          <span class="plan-flag">Más popular</span>
+          <h3>Paquete Profesional</h3>
+          <p class="plan-desc">Sitio web completo con SEO básico configurado para que tus clientes te encuentren en Google.</p>
+          <span class="plan-meta">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Entrega en 10-15 días
+          </span>
+          <ul class="plan-list">
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Sitio web completo (varias secciones)</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>SEO básico configurado</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño responsive + WhatsApp</li>
+          </ul>
+          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Profesional%20(sitio%20completo%20%2B%20SEO%20b%C3%A1sico).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+             class="btn btn-primary btn-block" target="_blank" rel="noopener">Quiero el Paquete Profesional</a>
+        </article>
+
+        <article class="plan-card">
+          <h3>Paquete Premium</h3>
+          <p class="plan-desc">Sitio completo con copywriting, selección de fotos y mantenimiento mensual continuo.</p>
+          <span class="plan-meta">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M4.2 7.2l2.1 2.1M17.7 14.7l2.1 2.1M3 12h3M18 12h3M4.2 16.8l2.1-2.1M17.7 9.3l2.1-2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Servicio recurrente
+          </span>
+          <ul class="plan-list">
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Paquete Profesional</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Copywriting + selección de fotos</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Mantenimiento mensual</li>
+          </ul>
+          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Premium%20(sitio%20%2B%20copywriting%20%2B%20fotos%20%2B%20mantenimiento%20mensual).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+             class="btn btn-wa btn-block" target="_blank" rel="noopener">Quiero el Paquete Premium</a>
+        </article>
+      </div>
+
+      <p class="plans-foot reveal">¿No sabes cuál elegir? <a href="#empezar">Déjanos tus datos</a> y te asesoramos sin compromiso.</p>
     </div>
   </section>
 
@@ -969,13 +1339,45 @@
           <div class="ex-mock">
             <span class="badge">Ejemplo conceptual</span>
             <div class="ex-screen">
-              <div class="ex-topbar"><i></i><i></i><i></i></div>
-              <div class="ex-body">
-                <div class="ex-hero"></div>
-                <div class="bskel ex-l1"></div>
-                <div class="bskel ex-l2"></div>
-                <div class="ex-row"><div></div><div></div><div></div></div>
-              </div>
+              <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mockup conceptual de una página web para un restaurante">
+                <defs><linearGradient id="exRestHero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a2f1c"/><stop offset="1" stop-color="#b7472e"/></linearGradient></defs>
+                <rect width="400" height="300" fill="#0e1220"/>
+                <rect width="400" height="24" fill="#141a2b"/>
+                <circle cx="16" cy="12" r="4" fill="#ff6b6b"/><circle cx="30" cy="12" r="4" fill="#ffc861"/><circle cx="44" cy="12" r="4" fill="#3ddc84"/>
+                <rect x="60" y="6" width="200" height="12" rx="6" fill="#0e1220"/>
+                <text x="68" y="15" fill="#5e6b87" font-family="monospace" font-size="8">elrincon.com</text>
+                <rect x="0" y="24" width="400" height="30" fill="#12182a"/>
+                <text x="22" y="44" fill="#ff9d6c" font-family="Georgia,serif" font-size="15" font-weight="700">El Rincón</text>
+                <text x="236" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">MENÚ</text>
+                <text x="284" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">CARTA</text>
+                <rect x="330" y="33" width="54" height="15" rx="7.5" fill="#0f7a40"/>
+                <text x="341" y="43" fill="#fff" font-family="sans-serif" font-size="7.5">Reservar</text>
+                <rect x="0" y="54" width="400" height="140" fill="url(#exRestHero)"/>
+                <rect x="0" y="54" width="400" height="140" fill="#000" opacity="0.16"/>
+                <circle cx="304" cy="126" r="52" fill="#e8a06b" opacity="0.92"/>
+                <circle cx="304" cy="126" r="40" fill="#c8703e"/>
+                <circle cx="304" cy="126" r="12" fill="#8a4a28"/>
+                <text x="30" y="100" fill="#fff" font-family="Georgia,serif" font-size="21" font-weight="700">Sabores de</text>
+                <text x="30" y="125" fill="#fff" font-family="Georgia,serif" font-size="21" font-weight="700">la casa</text>
+                <rect x="30" y="140" width="150" height="7" rx="3.5" fill="#fff" opacity="0.6"/>
+                <rect x="30" y="153" width="110" height="7" rx="3.5" fill="#fff" opacity="0.38"/>
+                <rect x="30" y="169" width="132" height="19" rx="9.5" fill="#0f7a40"/>
+                <text x="41" y="181" fill="#fff" font-family="sans-serif" font-size="8">Reservar por WhatsApp</text>
+                <g font-family="sans-serif">
+                  <rect x="20" y="212" width="112" height="72" rx="8" fill="#131b2f" stroke="#1e2740"/>
+                  <rect x="32" y="224" width="88" height="34" rx="5" fill="#3a2418"/>
+                  <rect x="32" y="264" width="52" height="6" rx="3" fill="#9aa7c2"/>
+                  <text x="98" y="270" fill="#ff9d6c" font-size="8">$18</text>
+                  <rect x="144" y="212" width="112" height="72" rx="8" fill="#131b2f" stroke="#1e2740"/>
+                  <rect x="156" y="224" width="88" height="34" rx="5" fill="#3a2418"/>
+                  <rect x="156" y="264" width="52" height="6" rx="3" fill="#9aa7c2"/>
+                  <text x="222" y="270" fill="#ff9d6c" font-size="8">$22</text>
+                  <rect x="268" y="212" width="112" height="72" rx="8" fill="#131b2f" stroke="#1e2740"/>
+                  <rect x="280" y="224" width="88" height="34" rx="5" fill="#3a2418"/>
+                  <rect x="280" y="264" width="52" height="6" rx="3" fill="#9aa7c2"/>
+                  <text x="346" y="270" fill="#ff9d6c" font-size="8">$15</text>
+                </g>
+              </svg>
             </div>
           </div>
           <div class="ex-info">
@@ -987,13 +1389,42 @@
           <div class="ex-mock">
             <span class="badge">Ejemplo conceptual</span>
             <div class="ex-screen">
-              <div class="ex-topbar"><i></i><i></i><i></i></div>
-              <div class="ex-body">
-                <div class="ex-hero"></div>
-                <div class="bskel ex-l1"></div>
-                <div class="bskel ex-l2"></div>
-                <div class="ex-row"><div></div><div></div><div></div></div>
-              </div>
+              <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mockup conceptual de una tienda online">
+                <defs><linearGradient id="exShopHero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4c7dff"/><stop offset="1" stop-color="#8b7cff"/></linearGradient></defs>
+                <rect width="400" height="300" fill="#0e1220"/>
+                <rect width="400" height="24" fill="#141a2b"/>
+                <circle cx="16" cy="12" r="4" fill="#ff6b6b"/><circle cx="30" cy="12" r="4" fill="#ffc861"/><circle cx="44" cy="12" r="4" fill="#3ddc84"/>
+                <rect x="60" y="6" width="200" height="12" rx="6" fill="#0e1220"/>
+                <text x="68" y="15" fill="#5e6b87" font-family="monospace" font-size="8">nova-shop.com</text>
+                <rect x="0" y="24" width="400" height="30" fill="#12182a"/>
+                <text x="22" y="44" fill="#f4f6fb" font-family="sans-serif" font-size="14" font-weight="800">NOVA·shop</text>
+                <text x="244" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">TIENDA</text>
+                <text x="298" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">OFERTAS</text>
+                <path d="M356 34 h16 l-2 13 h-12 z M358 34 a4 4 0 0 1 12 0" fill="none" stroke="#82a8ff" stroke-width="1.6"/>
+                <rect x="20" y="64" width="360" height="96" rx="10" fill="url(#exShopHero)"/>
+                <text x="40" y="102" fill="#fff" font-family="sans-serif" font-size="18" font-weight="800">Nueva colección</text>
+                <rect x="40" y="114" width="160" height="7" rx="3.5" fill="#fff" opacity="0.55"/>
+                <rect x="40" y="130" width="100" height="19" rx="9.5" fill="#0e1220"/>
+                <text x="52" y="142" fill="#fff" font-family="sans-serif" font-size="8">Ver catálogo</text>
+                <circle cx="322" cy="112" r="34" fill="#fff" opacity="0.16"/>
+                <g font-family="sans-serif">
+                  <rect x="20" y="176" width="112" height="108" rx="8" fill="#131b2f" stroke="#1e2740"/>
+                  <rect x="32" y="186" width="88" height="58" rx="6" fill="#243048"/>
+                  <circle cx="76" cy="215" r="15" fill="#4c7dff" opacity="0.55"/>
+                  <rect x="32" y="252" width="60" height="6" rx="3" fill="#9aa7c2"/>
+                  <text x="32" y="276" fill="#82a8ff" font-size="9" font-weight="700">$29</text>
+                  <rect x="144" y="176" width="112" height="108" rx="8" fill="#131b2f" stroke="#1e2740"/>
+                  <rect x="156" y="186" width="88" height="58" rx="6" fill="#243048"/>
+                  <rect x="176" y="204" width="48" height="24" rx="4" fill="#8b7cff" opacity="0.55"/>
+                  <rect x="156" y="252" width="60" height="6" rx="3" fill="#9aa7c2"/>
+                  <text x="156" y="276" fill="#82a8ff" font-size="9" font-weight="700">$45</text>
+                  <rect x="268" y="176" width="112" height="108" rx="8" fill="#131b2f" stroke="#1e2740"/>
+                  <rect x="280" y="186" width="88" height="58" rx="6" fill="#243048"/>
+                  <circle cx="324" cy="215" r="15" fill="#2fdb74" opacity="0.5"/>
+                  <rect x="280" y="252" width="60" height="6" rx="3" fill="#9aa7c2"/>
+                  <text x="280" y="276" fill="#82a8ff" font-size="9" font-weight="700">$19</text>
+                </g>
+              </svg>
             </div>
           </div>
           <div class="ex-info">
@@ -1005,13 +1436,47 @@
           <div class="ex-mock">
             <span class="badge">Ejemplo conceptual</span>
             <div class="ex-screen">
-              <div class="ex-topbar"><i></i><i></i><i></i></div>
-              <div class="ex-body">
-                <div class="ex-hero"></div>
-                <div class="bskel ex-l1"></div>
-                <div class="bskel ex-l2"></div>
-                <div class="ex-row"><div></div><div></div><div></div></div>
-              </div>
+              <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mockup conceptual de una web para un profesional de servicios">
+                <defs><linearGradient id="exProHero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2fdb74"/><stop offset="1" stop-color="#4c7dff"/></linearGradient></defs>
+                <rect width="400" height="300" fill="#0e1220"/>
+                <rect width="400" height="24" fill="#141a2b"/>
+                <circle cx="16" cy="12" r="4" fill="#ff6b6b"/><circle cx="30" cy="12" r="4" fill="#ffc861"/><circle cx="44" cy="12" r="4" fill="#3ddc84"/>
+                <rect x="60" y="6" width="200" height="12" rx="6" fill="#0e1220"/>
+                <text x="68" y="15" fill="#5e6b87" font-family="monospace" font-size="8">marinaruiz.co</text>
+                <rect x="0" y="24" width="400" height="30" fill="#12182a"/>
+                <text x="22" y="44" fill="#f4f6fb" font-family="Georgia,serif" font-size="13" font-weight="700">M. Ruiz · Abogada</text>
+                <text x="232" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">SERVICIOS</text>
+                <text x="298" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">SOBRE MÍ</text>
+                <rect x="352" y="33" width="34" height="15" rx="7.5" fill="#3d5fdb"/>
+                <path d="M60 54 h280" stroke="#1e2740"/>
+                <text x="26" y="94" fill="#f4f6fb" font-family="Georgia,serif" font-size="17" font-weight="700">Asesoría legal</text>
+                <text x="26" y="116" fill="#f4f6fb" font-family="Georgia,serif" font-size="17" font-weight="700">clara y cercana</text>
+                <rect x="26" y="128" width="150" height="7" rx="3.5" fill="#1e2740"/>
+                <rect x="26" y="140" width="110" height="7" rx="3.5" fill="#1e2740"/>
+                <rect x="26" y="156" width="128" height="20" rx="10" fill="#3d5fdb"/>
+                <text x="38" y="169" fill="#fff" font-family="sans-serif" font-size="8">Agendar una cita</text>
+                <circle cx="312" cy="120" r="48" fill="url(#exProHero)" opacity="0.3"/>
+                <circle cx="312" cy="120" r="37" fill="#131b2f" stroke="#1e2740"/>
+                <circle cx="312" cy="110" r="14" fill="#82a8ff"/>
+                <path d="M290 142 c4 -16 40 -16 44 0 z" fill="#82a8ff"/>
+                <g font-family="sans-serif">
+                  <rect x="20" y="196" width="360" height="26" rx="6" fill="#131b2f" stroke="#1e2740"/>
+                  <circle cx="38" cy="209" r="8" fill="#2fdb74" opacity="0.2"/>
+                  <path d="M34 209 l3 3 6 -7" fill="none" stroke="#2fdb74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="56" y="205" width="150" height="6" rx="3" fill="#9aa7c2"/>
+                  <rect x="56" y="214" width="90" height="4" rx="2" fill="#5e6b87"/>
+                  <rect x="20" y="228" width="360" height="26" rx="6" fill="#131b2f" stroke="#1e2740"/>
+                  <circle cx="38" cy="241" r="8" fill="#2fdb74" opacity="0.2"/>
+                  <path d="M34 241 l3 3 6 -7" fill="none" stroke="#2fdb74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="56" y="237" width="170" height="6" rx="3" fill="#9aa7c2"/>
+                  <rect x="56" y="246" width="80" height="4" rx="2" fill="#5e6b87"/>
+                  <rect x="20" y="260" width="360" height="26" rx="6" fill="#131b2f" stroke="#1e2740"/>
+                  <circle cx="38" cy="273" r="8" fill="#2fdb74" opacity="0.2"/>
+                  <path d="M34 273 l3 3 6 -7" fill="none" stroke="#2fdb74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="56" y="269" width="140" height="6" rx="3" fill="#9aa7c2"/>
+                  <rect x="56" y="278" width="100" height="4" rx="2" fill="#5e6b87"/>
+                </g>
+              </svg>
             </div>
           </div>
           <div class="ex-info">
@@ -1115,6 +1580,43 @@
       </div>
     </div>
   </section>
+
+  <!-- ============================================================
+       FORMULARIO — ¿QUÉ PLAN BUSCAS?
+       ============================================================ -->
+  <section id="empezar" class="start-section">
+    <div class="wrap">
+      <div class="start-panel reveal">
+        <div class="start-copy">
+          <span class="eyebrow">Cuéntanos qué necesitas</span>
+          <h2>¿Qué plan estás buscando?</h2>
+          <p>Déjanos tu nombre, tu correo y el plan que te interesa. Te contactamos para afinar los detalles de tu página web, sin compromiso.</p>
+        </div>
+        <form class="start-form" id="startForm" novalidate>
+          <label>Tu nombre
+            <input type="text" name="nombre" id="f-nombre" required autocomplete="name" placeholder="Nombre y apellido">
+          </label>
+          <label>Tu correo electrónico
+            <input type="email" name="email" id="f-email" required autocomplete="email" placeholder="tucorreo@ejemplo.com">
+          </label>
+          <label>Plan que te interesa
+            <select name="plan" id="f-plan" required>
+              <option value="" disabled selected>Selecciona un plan</option>
+              <option value="Paquete Básico (landing page, 1-3 páginas)">Paquete Básico — landing page (1-3 páginas)</option>
+              <option value="Paquete Profesional (sitio completo + SEO básico)">Paquete Profesional — sitio completo + SEO básico</option>
+              <option value="Paquete Premium (sitio + copywriting + fotos + mantenimiento)">Paquete Premium — sitio + copywriting + fotos + mantenimiento</option>
+              <option value="Aún no estoy seguro">Aún no estoy seguro / quiero asesoría</option>
+            </select>
+          </label>
+          <button type="submit" class="btn btn-wa btn-block btn-lg">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg>
+            Enviar y hablar por WhatsApp
+          </button>
+          <p class="start-msg" id="f-msg" role="status" hidden></p>
+        </form>
+      </div>
+    </div>
+  </section>
 </main>
 
 <!-- ============================================================
@@ -1137,6 +1639,8 @@
         <a href="#inicio">Inicio</a>
         <a href="#beneficios">Beneficios</a>
         <a href="#servicios">Servicios</a>
+        <a href="#paquetes">Planes</a>
+        <a href="#empezar">Empezar</a>
         <a href="#preguntas">Preguntas</a>
       </div>
       <div class="footer-col">
@@ -1232,7 +1736,38 @@
   /* Footer year */
   var yearEl = document.getElementById("year");
   if(yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* Formulario "¿qué plan buscas?" -> abre WhatsApp con los datos */
+  var startForm = document.getElementById("startForm");
+  if(startForm){
+    var WA_NUMBER = "573161838836";
+    var msgEl = document.getElementById("f-msg");
+    startForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      var nombre = document.getElementById("f-nombre").value.trim();
+      var email = document.getElementById("f-email").value.trim();
+      var plan = document.getElementById("f-plan").value;
+      var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+      if(!nombre || !emailOk || !plan){
+        msgEl.hidden = false;
+        msgEl.className = "start-msg err";
+        msgEl.textContent = "Completa tu nombre, un correo válido y elige un plan.";
+        return;
+      }
+
+      var texto = "Hola, soy " + nombre + ". Me interesa el " + plan +
+        ". Mi correo es " + email + ". ¿Podrían darme más información?";
+      var url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(texto);
+
+      msgEl.hidden = false;
+      msgEl.className = "start-msg ok";
+      msgEl.textContent = "Te estamos redirigiendo a WhatsApp con tus datos…";
+      window.open(url, "_blank", "noopener");
+    });
+  }
 })();
 </script>
 
 </body>
+</html>
