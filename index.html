@@ -7,162 +7,134 @@
 <title>WebZipe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
-     WEBZIPE — TOKENS
-     Marca deliberadamente oscura (navy profundo + azul eléctrico).
-     No se ramifica por prefers-color-scheme: el mundo visual es
-     único e intencional, pintado explícitamente en :root.
+     WEBZIPE — REDISEÑO
+     Azul oscuro como base, morado en la atmósfera de fondo,
+     naranja para toda acción / contacto.
+     Mundo visual único: pintado explícitamente, sin ramificar
+     por prefers-color-scheme.
      ============================================================ */
   :root{
-    --void:#060910;
-    --navy:#0a0f1c;
-    --navy-raised:#101728;
-    --navy-card:#131b2f;
-    --navy-card-hover:#172038;
-    --line:#1e2740;
-    --line-soft:#161d33;
+    --bg:#070b1c;
+    --bg-2:#0a1030;
+    --panel:#0e1738;
+    --panel-2:#111e46;
+    --panel-hover:#152352;
+    --line:#243257;
+    --line-soft:#1a2547;
 
-    --accent:#4c7dff;
-    --accent-bright:#82a8ff;
-    --accent-btn:#3d5fdb;
-    --accent-btn-hover:#3352c9;
-    --accent-deep:#2b46b8;
-    --violet:#8b7cff;
+    --blue:#3d6fe6;
+    --blue-bright:#7aa2ff;
+    --purple:#7b3ff2;
+    --purple-bright:#ac82ff;
+    --purple-deep:#3c1f80;
 
-    --text:#f4f6fb;
-    --text-soft:#9aa7c2;
-    --text-mute:#5e6b87;
+    --orange:#ff7a2f;
+    --orange-bright:#ff9f5c;
+    --orange-deep:#e7590f;
 
-    --wa-icon:#2fdb74;
-    --wa-btn:#0f7a40;
-    --wa-btn-hover:#0c6636;
-    --wa-soft:rgba(47,219,116,.1);
-    --wa-line:rgba(47,219,116,.28);
+    --text:#eef1fb;
+    --text-soft:#a8b2d6;
+    --text-mute:#6a7499;
 
+    --ok:#3ddc84;
     --danger:#ff7a7a;
-    --danger-soft:rgba(255,122,122,.1);
 
-    --r-sm:10px; --r-md:16px; --r-lg:22px; --r-xl:28px;
-    --font-display:'Unbounded',system-ui,sans-serif;
-    --font-body:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
-    --shadow-lg:0 30px 60px -20px rgba(0,0,0,.55);
-    --shadow-md:0 16px 32px -14px rgba(0,0,0,.5);
+    --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:32px;
+    --font-display:'Space Grotesk',system-ui,sans-serif;
+    --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --shadow-lg:0 40px 80px -30px rgba(0,0,0,.65);
+    --shadow-md:0 20px 40px -18px rgba(0,0,0,.55);
     --ease:cubic-bezier(.16,1,.3,1);
   }
 
-  /* ============================================================
-     RESET
-     ============================================================ */
+  /* ---------- RESET ---------- */
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
   body{
-    background:var(--void);
+    background:var(--bg);
     color:var(--text);
     font-family:var(--font-body);
-    font-size:16px;
-    line-height:1.6;
+    font-size:16px;line-height:1.65;
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
     overflow-x:hidden;
+    position:relative;
   }
-  img,svg{display:block;max-width:100%}
+  /* Atmósfera morada de fondo */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(55% 45% at 12% -5%, rgba(123,63,242,.26), transparent 70%),
+      radial-gradient(45% 40% at 100% 12%, rgba(61,111,230,.20), transparent 72%),
+      radial-gradient(50% 45% at 50% 108%, rgba(123,63,242,.20), transparent 70%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.5;
+    background-image:
+      linear-gradient(rgba(122,162,255,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(122,162,255,.045) 1px,transparent 1px);
+    background-size:70px 70px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%);
+            mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%);
+  }
+  img,svg,video{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
   button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   ul{list-style:none}
-  h1,h2,h3,h4{font-family:var(--font-display);text-wrap:balance;line-height:1.15}
+  h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
   p{text-wrap:pretty}
-  :focus-visible{outline:2px solid var(--accent-bright);outline-offset:3px;border-radius:4px}
-  ::selection{background:var(--accent);color:#fff}
+  ::selection{background:var(--orange);color:#1c0c02}
+  :focus-visible{outline:2px solid var(--orange-bright);outline-offset:3px;border-radius:6px}
+  section[id]{scroll-margin-top:92px}
 
-  section[id]{scroll-margin-top:84px}
+  .wrap{width:100%;max-width:1160px;margin-inline:auto;padding-inline:24px}
+  section{position:relative;padding-block:120px}
+  @media (max-width:720px){ section{padding-block:80px} }
 
-  .wrap{
-    width:100%;
-    max-width:1180px;
-    margin-inline:auto;
-    padding-inline:24px;
+  /* ---------- ETIQUETAS / TÍTULOS ---------- */
+  .kicker{
+    display:inline-flex;align-items:center;gap:12px;
+    font-family:var(--font-display);font-weight:600;
+    font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--orange-bright);
   }
-
-  /* Blueprint texture used behind hero + CTA — evokes wireframes/dev grids */
-  .grid-texture{
-    position:absolute;inset:0;
-    background-image:
-      linear-gradient(rgba(76,125,255,.07) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(76,125,255,.07) 1px,transparent 1px);
-    background-size:64px 64px;
-    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000 40%,transparent 100%);
-            mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000 40%,transparent 100%);
-    pointer-events:none;
+  .kicker::before{
+    content:"";width:26px;height:2px;border-radius:2px;
+    background:linear-gradient(90deg,var(--orange),transparent);
   }
-
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    font-family:var(--font-mono);
-    font-size:.72rem;font-weight:500;
-    letter-spacing:.14em;text-transform:uppercase;
-    color:var(--accent-bright);
+  .sec-head{max-width:640px;margin-bottom:60px}
+  .sec-head.center{margin-inline:auto;text-align:center}
+  .sec-head h2{
+    font-size:clamp(2rem,3vw + 1rem,2.9rem);font-weight:700;
+    margin-top:18px;
   }
-  .eyebrow::before{content:"//";color:var(--text-mute)}
+  .sec-head p{margin-top:18px;color:var(--text-soft);font-size:1.06rem;max-width:56ch}
+  .sec-head.center p{margin-inline:auto}
 
-  .section-head{
-    max-width:640px;
-    margin-bottom:52px;
-  }
-  .section-head h2{
-    font-size:clamp(1.9rem,3vw + 1rem,2.75rem);
-    font-weight:700;
-    margin-top:14px;
-    letter-spacing:-.01em;
-  }
-  .section-head p{
-    margin-top:16px;
-    color:var(--text-soft);
-    font-size:1.05rem;
-    max-width:56ch;
-  }
-  .section-head.center{margin-inline:auto;text-align:center}
-  .section-head.center p{margin-inline:auto}
-
-  section{position:relative;padding-block:112px}
-  @media (max-width:720px){ section{padding-block:76px} }
-
-  /* ============================================================
-     BUTTONS
-     ============================================================ */
+  /* ---------- BOTONES ---------- */
   .btn{
-    position:relative;
-    display:inline-flex;align-items:center;justify-content:center;gap:10px;
-    padding:16px 30px;
-    border-radius:100px;
-    font-family:var(--font-body);
-    font-weight:700;
-    font-size:.98rem;
+    position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    padding:15px 28px;border-radius:100px;
+    font-family:var(--font-display);font-weight:600;font-size:.98rem;
     white-space:nowrap;
-    transition:transform .35s var(--ease),box-shadow .35s var(--ease),background-color .25s;
+    transition:transform .35s var(--ease),box-shadow .35s var(--ease),background-color .25s,border-color .25s;
   }
-  .btn svg{width:19px;height:19px;flex-shrink:0}
+  .btn svg{width:18px;height:18px;flex-shrink:0}
   .btn-primary{
-    background:linear-gradient(135deg,var(--accent-btn),var(--accent-deep,#2b46b8));
+    background:linear-gradient(135deg,var(--orange),var(--orange-deep));
     color:#fff;
-    box-shadow:0 14px 30px -10px rgba(61,95,219,.65);
+    box-shadow:0 16px 38px -12px rgba(255,122,47,.6),inset 0 1px 0 rgba(255,255,255,.25);
   }
-  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 20px 38px -12px rgba(61,95,219,.8)}
-  .btn-wa{
-    background:linear-gradient(135deg,var(--wa-btn),var(--wa-btn-hover));
-    color:#fff;
-    box-shadow:0 14px 30px -10px rgba(15,122,64,.6);
-  }
-  .btn-wa:hover{transform:translateY(-3px);box-shadow:0 20px 38px -12px rgba(15,122,64,.75)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 24px 50px -14px rgba(255,122,47,.78),inset 0 1px 0 rgba(255,255,255,.25)}
   .btn-ghost{
-    background:var(--navy-card);
-    color:var(--text);
+    background:rgba(122,162,255,.06);color:var(--text);
     border:1px solid var(--line);
   }
-  .btn-ghost:hover{background:var(--navy-card-hover);border-color:var(--accent)}
-  .btn-lg{padding:19px 38px;font-size:1.05rem}
+  .btn-ghost:hover{background:var(--panel-hover);border-color:var(--purple-bright)}
+  .btn-lg{padding:18px 36px;font-size:1.05rem}
   .btn-block{width:100%}
 
   /* ============================================================
@@ -170,76 +142,66 @@
      ============================================================ */
   header{
     position:fixed;top:0;left:0;right:0;z-index:100;
-    padding-block:20px;
-    transition:padding .3s var(--ease),background-color .3s var(--ease),
-               border-color .3s var(--ease),backdrop-filter .3s;
-    border-bottom:1px solid transparent;
+    padding-block:20px;border-bottom:1px solid transparent;
+    transition:padding .3s var(--ease),background-color .3s var(--ease),border-color .3s var(--ease),backdrop-filter .3s;
   }
   header.scrolled{
     padding-block:12px;
-    background:rgba(6,9,16,.78);
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    background:rgba(7,11,28,.8);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
     border-color:var(--line-soft);
   }
   .nav-row{display:flex;align-items:center;justify-content:space-between;gap:24px}
   .logo{
-    display:flex;align-items:center;gap:9px;
-    font-family:var(--font-display);font-weight:700;font-size:1.28rem;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--font-display);font-weight:700;font-size:1.3rem;letter-spacing:-.02em;
   }
-  .logo .dot{
-    width:9px;height:9px;border-radius:3px;
-    background:linear-gradient(135deg,var(--accent-bright),var(--violet));
-    box-shadow:0 0 14px rgba(76,125,255,.8);
+  .logo .mark{
+    width:26px;height:26px;border-radius:9px;flex-shrink:0;
+    background:linear-gradient(140deg,var(--purple),var(--blue));
+    box-shadow:0 0 18px rgba(123,63,242,.6);
+    position:relative;
   }
-  .nav-links{display:flex;align-items:center;gap:36px}
-  .nav-links a{
-    font-size:.94rem;font-weight:600;color:var(--text-soft);
-    transition:color .2s;position:relative;
+  .logo .mark::after{
+    content:"";position:absolute;inset:7px;border-radius:4px;
+    background:var(--orange);
   }
+  .logo-accent{color:var(--orange-bright)}
+  .nav-links{display:flex;align-items:center;gap:34px}
+  .nav-links a{font-size:.93rem;font-weight:500;color:var(--text-soft);transition:color .2s}
   .nav-links a:hover{color:var(--text)}
   .nav-cta{display:flex;align-items:center;gap:14px}
-  .nav-cta .btn{padding:12px 22px;font-size:.9rem}
+  .nav-cta .btn{padding:11px 20px;font-size:.88rem}
 
   .burger{
-    display:none;
-    width:42px;height:42px;
-    border-radius:10px;
-    background:var(--navy-card);
-    border:1px solid var(--line);
-    position:relative;
-    flex-shrink:0;
+    display:none;width:44px;height:44px;border-radius:12px;flex-shrink:0;
+    background:var(--panel);border:1px solid var(--line);position:relative;
   }
   .burger span{
-    position:absolute;left:11px;right:11px;height:2px;background:var(--text);
-    border-radius:2px;transition:transform .3s var(--ease),opacity .3s var(--ease),top .3s var(--ease);
+    position:absolute;left:12px;right:12px;height:2px;background:var(--text);border-radius:2px;
+    transition:transform .3s var(--ease),opacity .3s var(--ease),top .3s var(--ease);
   }
-  .burger span:nth-child(1){top:15px}
-  .burger span:nth-child(2){top:20px}
-  .burger span:nth-child(3){top:25px}
-  .burger[aria-expanded="true"] span:nth-child(1){top:20px;transform:rotate(45deg)}
+  .burger span:nth-child(1){top:16px}
+  .burger span:nth-child(2){top:21px}
+  .burger span:nth-child(3){top:26px}
+  .burger[aria-expanded="true"] span:nth-child(1){top:21px;transform:rotate(45deg)}
   .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
-  .burger[aria-expanded="true"] span:nth-child(3){top:20px;transform:rotate(-45deg)}
+  .burger[aria-expanded="true"] span:nth-child(3){top:21px;transform:rotate(-45deg)}
 
   .mobile-panel{
-    position:fixed;inset:0;z-index:99;
-    background:var(--navy);
-    display:flex;flex-direction:column;
-    padding:104px 28px 40px;
-    transform:translateY(-8px);
-    opacity:0;visibility:hidden;
+    position:fixed;inset:0;z-index:99;background:var(--bg-2);
+    display:flex;flex-direction:column;padding:110px 28px 40px;
+    transform:translateY(-8px);opacity:0;visibility:hidden;
     transition:opacity .3s var(--ease),transform .3s var(--ease),visibility 0s linear .3s;
   }
-  .mobile-panel.open{
-    opacity:1;visibility:visible;transform:translateY(0);
-    transition:opacity .3s var(--ease),transform .3s var(--ease),visibility 0s;
-  }
+  .mobile-panel.open{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .3s var(--ease),transform .3s var(--ease),visibility 0s}
   .mobile-panel a{
     font-family:var(--font-display);font-size:1.6rem;font-weight:600;
     padding-block:16px;border-bottom:1px solid var(--line-soft);color:var(--text);
   }
   .mobile-panel .btn{margin-top:28px}
 
-  @media (max-width:900px){
+  @media (max-width:920px){
     .nav-links,.nav-cta .btn-ghost{display:none}
     .burger{display:block}
   }
@@ -247,371 +209,348 @@
   /* ============================================================
      HERO
      ============================================================ */
-  .hero{
-    padding-top:168px;padding-bottom:120px;
-    position:relative;overflow:hidden;
+  .hero{padding-top:170px;padding-bottom:110px;text-align:center;overflow:hidden}
+  .hero .kicker{justify-content:center}
+  .hero h1{
+    font-size:clamp(2.6rem,5vw + 1rem,4.4rem);font-weight:700;
+    margin-top:22px;max-width:16ch;margin-inline:auto;
   }
-  .hero-glow{
-    position:absolute;width:640px;height:640px;border-radius:50%;
-    top:-220px;right:-160px;
-    background:radial-gradient(circle,rgba(76,125,255,.28),transparent 68%);
-    filter:blur(20px);pointer-events:none;
-  }
-  .hero-grid{
-    display:grid;grid-template-columns:1.05fr .95fr;
-    gap:56px;align-items:center;position:relative;z-index:1;
-  }
-  .hero-copy h1{
-    font-size:clamp(2.5rem,4.6vw + 1rem,4.1rem);
-    font-weight:800;letter-spacing:-.02em;margin-top:22px;
-  }
-  .hero-copy h1 .grad{
-    background:linear-gradient(100deg,var(--accent-bright),var(--violet) 70%);
+  .hero h1 .grad{
+    background:linear-gradient(100deg,var(--purple-bright),var(--orange-bright) 90%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  .hero-copy p.lead{
-    margin-top:24px;font-size:1.14rem;color:var(--text-soft);max-width:52ch;
+  .hero .lead{margin-top:24px;font-size:1.16rem;color:var(--text-soft);max-width:56ch;margin-inline:auto}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:38px}
+  .hero-trust{
+    display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;
+    margin-top:40px;color:var(--text-mute);font-size:.86rem;
   }
-  .hero-actions{display:flex;flex-wrap:wrap;gap:16px;margin-top:38px}
+  .hero-trust span{display:flex;align-items:center;gap:9px}
+  .hero-trust svg{width:16px;height:16px;color:var(--orange-bright)}
 
-  .trust-row{
-    margin-top:56px;padding-top:28px;border-top:1px solid var(--line-soft);
-    display:flex;flex-wrap:wrap;gap:12px 30px;
+  .hero-stage{
+    margin-top:70px;position:relative;
+    perspective:1600px;
   }
-  .trust-row span{
-    font-family:var(--font-mono);font-size:.76rem;letter-spacing:.06em;
-    color:var(--text-mute);display:flex;align-items:center;gap:8px;
-  }
-  .trust-row svg{width:15px;height:15px;color:var(--wa-icon);flex-shrink:0}
-
-  /* --- Hero visual: CSS browser mockup, no stock photography --- */
-  .hero-visual{position:relative;isolation:isolate}
-  .hv-blob{
-    position:absolute;border-radius:50%;filter:blur(46px);z-index:-1;
-  }
-  .hv-blob.b1{width:280px;height:280px;background:rgba(139,124,255,.35);top:-40px;left:-30px;animation:drift 11s ease-in-out infinite}
-  .hv-blob.b2{width:220px;height:220px;background:rgba(47,219,116,.22);bottom:-20px;right:-10px;animation:drift 13s ease-in-out infinite reverse}
-
-  .browser{
-    background:linear-gradient(180deg,var(--navy-card),var(--navy-raised));
-    border:1px solid var(--line);
-    border-radius:var(--r-lg);
+  .hero-frame{
+    position:relative;max-width:940px;margin-inline:auto;
+    border:1px solid var(--line);border-radius:var(--r-lg);
+    background:linear-gradient(180deg,rgba(172,130,255,.08),rgba(61,111,230,.04));
+    padding:14px;
     box-shadow:var(--shadow-lg);
-    overflow:hidden;
+    transform:rotateX(9deg);
+    transform-origin:center top;
   }
-  .browser.back{
-    position:absolute;inset:34px -18px auto auto;width:78%;
-    transform:rotate(4deg);opacity:.5;filter:saturate(.7);
-    top:64px;right:-26px;z-index:-1;
+  .hero-frame::after{
+    content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,122,47,.35),transparent 40%);
+    -webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
+            mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
+    -webkit-mask-composite:xor;mask-composite:exclude;padding:1px;
   }
-  .browser-bar{
-    display:flex;align-items:center;gap:10px;
-    padding:13px 16px;border-bottom:1px solid var(--line);
-    background:rgba(255,255,255,.015);
+  .browser-top{
+    display:flex;align-items:center;gap:10px;padding:10px 14px;
   }
-  .browser-bar .traffic{display:flex;gap:6px}
-  .browser-bar .traffic i{width:9px;height:9px;border-radius:50%;display:block}
-  .browser-bar .traffic i:nth-child(1){background:#ff6b6b}
-  .browser-bar .traffic i:nth-child(2){background:#ffc861}
-  .browser-bar .traffic i:nth-child(3){background:#3ddc84}
-  .browser-bar .url{
-    flex:1;margin-left:6px;
-    background:var(--navy);border:1px solid var(--line-soft);
-    border-radius:100px;padding:6px 14px;
-    font-family:var(--font-mono);font-size:.72rem;color:var(--text-mute);
+  .browser-top i{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+  .browser-top i:nth-child(1){background:#ff6b6b}
+  .browser-top i:nth-child(2){background:var(--orange)}
+  .browser-top i:nth-child(3){background:var(--ok)}
+  .browser-top .url{
+    margin-left:8px;flex:1;max-width:280px;
+    background:var(--bg);border:1px solid var(--line-soft);border-radius:100px;
+    padding:6px 14px;font-size:.72rem;color:var(--text-mute);text-align:left;
   }
-  .browser-body{padding:22px}
-  .bskel{border-radius:8px;background:linear-gradient(90deg,var(--line-soft),var(--line),var(--line-soft))}
-  .bnav{display:flex;align-items:center;gap:10px;margin-bottom:22px}
-  .bnav .sq{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--violet))}
-  .bnav .bar{height:8px;border-radius:5px}
-  .bnav .bar.w1{width:38px}
-  .bnav .bar.w2{width:30px}
-  .bnav .bar.w3{width:34px}
-  .bnav .pill{margin-left:auto;width:64px;height:22px;border-radius:100px;background:var(--accent-btn)}
-  .bhero{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-  .bhero .lines .bar{height:11px;border-radius:6px;margin-bottom:10px}
-  .bhero .lines .bar.w80{width:80%}
-  .bhero .lines .bar.w60{width:60%}
-  .bhero .lines .bar.w45{width:45%;margin-top:16px;height:30px;border-radius:100px;background:var(--wa-btn)}
-  .bhero .art{
-    border-radius:12px;aspect-ratio:1/.72;
-    background:linear-gradient(135deg,rgba(76,125,255,.35),rgba(139,124,255,.28));
-    position:relative;overflow:hidden;
+  .hero-frame video,.hero-frame .fallback{
+    width:100%;display:block;border-radius:14px;border:1px solid var(--line-soft);
+    aspect-ratio:16/9;object-fit:cover;background:#05070f;
   }
-  .bhero .art::after{
-    content:"";position:absolute;inset:0;
-    background:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 2px,transparent 2px 10px);
+  .hero-chip{
+    position:absolute;display:flex;align-items:center;gap:9px;
+    background:var(--panel);border:1px solid var(--line);
+    padding:10px 15px;border-radius:100px;font-size:.82rem;font-weight:600;
+    box-shadow:var(--shadow-md);
+    animation:floaty 6s ease-in-out infinite;
   }
-  .bcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .bcards .card{
-    border:1px solid var(--line-soft);border-radius:10px;padding:12px;
-    background:rgba(255,255,255,.015);
-  }
-  .bcards .card .ico{width:18px;height:18px;border-radius:5px;background:var(--line);margin-bottom:10px}
-  .bcards .card .bar{height:6px;border-radius:4px;margin-bottom:6px}
-  .bcards .card .bar.w70{width:70%}
-  .bcards .card .bar.w50{width:50%}
+  .hero-chip svg{width:16px;height:16px}
+  .hero-chip.a{top:26px;left:-8px;color:var(--purple-bright);animation-delay:.2s}
+  .hero-chip.b{bottom:38px;right:-10px;color:var(--orange-bright);animation-delay:.9s}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
-  .chip{
-    position:absolute;display:flex;align-items:center;gap:8px;
-    background:var(--navy-card);border:1px solid var(--line);
-    padding:10px 15px;border-radius:100px;
-    font-size:.8rem;font-weight:700;box-shadow:var(--shadow-md);
-    animation:floaty 5.5s ease-in-out infinite;
-  }
-  .chip svg{width:16px;height:16px}
-  .chip.speed{top:-18px;right:20px;color:var(--accent-bright)}
-  .chip.speed svg{color:var(--accent-bright)}
-  .chip.responsive{bottom:36px;left:-30px;color:var(--text);animation-delay:.6s}
-  .chip.responsive svg{color:var(--violet)}
-
-  .wa-preview{
-    position:absolute;bottom:-26px;right:-14px;
-    width:210px;background:var(--navy-card);border:1px solid var(--wa-line);
-    border-radius:var(--r-md);padding:12px 14px;box-shadow:var(--shadow-md);
-    animation:floaty 6s ease-in-out infinite;animation-delay:.3s;
-  }
-  .wa-preview .row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-  .wa-preview .row .avatar{
-    width:24px;height:24px;border-radius:50%;
-    background:linear-gradient(135deg,var(--wa-icon),var(--wa-btn));
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  }
-  .wa-preview .row .avatar svg{width:13px;height:13px;color:#06170d}
-  .wa-preview .row b{font-size:.78rem}
-  .wa-preview .row .status{width:6px;height:6px;border-radius:50%;background:var(--wa-icon);margin-left:auto}
-  .wa-preview p{font-size:.74rem;color:var(--text-soft);line-height:1.4}
-
-  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-  @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(18px,-14px) scale(1.06)}}
-
-  @media (max-width:980px){
-    .hero-grid{grid-template-columns:1fr;gap:76px}
-    .hero-visual{max-width:440px;margin-inline:auto;width:100%}
-  }
-  @media (max-width:520px){
-    .hero{padding-top:134px}
-    .chip{display:none}
-    .wa-preview{width:180px;right:-4px;bottom:-20px}
-    .browser.back{display:none}
+  @media (max-width:720px){
+    .hero-frame{transform:none;padding:10px}
+    .hero-chip{display:none}
   }
 
   /* ============================================================
-     MARQUEE STRIP
+     MARQUEE
      ============================================================ */
-  .marquee{
-    border-block:1px solid var(--line-soft);
-    background:var(--navy-raised);
-    overflow:hidden;padding-block:18px;
-  }
-  .marquee-track{display:flex;gap:56px;width:max-content;animation:scroll-left 26s linear infinite}
+  .marquee{border-block:1px solid var(--line-soft);background:var(--bg-2);overflow:hidden;padding-block:16px}
+  .marquee-track{display:flex;gap:52px;width:max-content;animation:scroll-left 30s linear infinite}
   .marquee span{
-    font-family:var(--font-mono);font-size:.82rem;letter-spacing:.08em;
-    color:var(--text-mute);white-space:nowrap;display:flex;align-items:center;gap:14px;
+    font-family:var(--font-display);font-size:.86rem;font-weight:500;letter-spacing:.02em;
+    color:var(--text-mute);white-space:nowrap;display:flex;align-items:center;gap:16px;
   }
-  .marquee span::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);display:block}
+  .marquee span::after{content:"";width:6px;height:6px;border-radius:2px;background:var(--orange);display:block}
   @keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
   /* ============================================================
-     BENTO — ¿POR QUÉ WEBZIPE?
+     BENEFICIOS — filas alternadas
      ============================================================ */
-  .bento{
-    display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:180px;gap:18px;
+  .rows{display:flex;flex-direction:column;gap:38px;margin-top:12px}
+  .row{
+    display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:38px;
+    transition:border-color .4s var(--ease),transform .4s var(--ease),background .4s var(--ease);
   }
-  .b-card{
-    grid-column:span 2;
-    background:var(--navy-card);border:1px solid var(--line);
-    border-radius:var(--r-lg);padding:26px;
-    display:flex;flex-direction:column;justify-content:flex-end;gap:10px;
-    position:relative;overflow:hidden;
-    transition:transform .4s var(--ease),border-color .4s var(--ease),background .4s var(--ease);
+  .row:hover{border-color:rgba(172,130,255,.45);transform:translateY(-4px);background:var(--panel-hover)}
+  .row:nth-child(even){grid-template-columns:.95fr 1.05fr}
+  .row:nth-child(even) .row-media{order:-1}
+  .row-num{
+    font-family:var(--font-display);font-weight:700;font-size:1rem;
+    color:var(--orange-bright);letter-spacing:.1em;
   }
-  .b-card:hover{transform:translateY(-5px);border-color:rgba(76,125,255,.5);background:var(--navy-card-hover)}
-  .b-card.big{grid-column:span 2;grid-row:span 2}
-  .b-card .b-icon{
-    width:44px;height:44px;border-radius:12px;
-    background:linear-gradient(135deg,rgba(76,125,255,.22),rgba(139,124,255,.16));
-    border:1px solid rgba(76,125,255,.3);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--accent-bright);
+  .row-text h3{font-size:1.5rem;font-weight:700;margin:12px 0 12px}
+  .row-text p{color:var(--text-soft);font-size:.98rem}
+  .row-media{
+    border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line-soft);
+    background:linear-gradient(160deg,var(--bg-2),#0a0f28);
+    aspect-ratio:16/10;position:relative;
   }
-  .b-card.big .b-icon{width:52px;height:52px}
-  .b-card .b-icon svg{width:22px;height:22px}
-  .b-card h3{font-size:1.12rem;font-weight:700;font-family:var(--font-body)}
-  .b-card.big h3{font-size:1.4rem}
-  .b-card p{color:var(--text-soft);font-size:.92rem;line-height:1.55}
-  .b-card .b-glow{
-    position:absolute;width:160px;height:160px;border-radius:50%;
-    background:radial-gradient(circle,rgba(76,125,255,.16),transparent 70%);
-    top:-60px;right:-60px;pointer-events:none;
+  .row-media > svg,.row-media > img{width:100%;height:100%;object-fit:cover;display:block}
+  .devices{
+    display:flex;gap:12px;align-items:flex-end;justify-content:center;
+    padding:18px;height:100%;
   }
+  .devices img{
+    border-radius:10px;border:1px solid var(--line);object-fit:cover;object-position:top;
+    box-shadow:var(--shadow-md);
+  }
+  .devices .d-phone{width:26%;aspect-ratio:9/17}
+  .devices .d-tab{width:34%;aspect-ratio:3/4}
+  .devices .d-desk{width:40%;aspect-ratio:16/10}
 
-  .studio-note{
-    margin-top:28px;
-    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-    background:linear-gradient(90deg,rgba(76,125,255,.08),rgba(139,124,255,.05));
-    border:1px solid var(--line);border-radius:var(--r-lg);
-    padding:22px 26px;
+  .note-card{
+    margin-top:34px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    background:linear-gradient(90deg,rgba(123,63,242,.12),rgba(255,122,47,.06));
+    border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 28px;
   }
-  .studio-note .flag{
-    font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;
-    color:var(--accent-bright);border:1px solid rgba(76,125,255,.4);
-    padding:5px 10px;border-radius:100px;flex-shrink:0;
+  .note-card .flag{
+    font-family:var(--font-display);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--orange-bright);border:1px solid rgba(255,122,47,.4);padding:6px 12px;border-radius:100px;flex-shrink:0;
   }
-  .studio-note p{color:var(--text-soft);font-size:.95rem}
-  .studio-note strong{color:var(--text)}
+  .note-card p{color:var(--text-soft);font-size:.96rem}
+  .note-card strong{color:var(--text)}
 
   @media (max-width:860px){
-    .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:auto}
-    .b-card,.b-card.big{grid-column:span 2;grid-row:auto;min-height:180px}
+    .row,.row:nth-child(even){grid-template-columns:1fr;gap:26px;padding:26px}
+    .row:nth-child(even) .row-media{order:0}
   }
 
   /* ============================================================
      PROBLEMA → SOLUCIÓN
      ============================================================ */
-  .ps-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch}
-  .ps-card{
-    border-radius:var(--r-lg);padding:36px 32px;border:1px solid var(--line);
-  }
-  .ps-card.problem{background:linear-gradient(180deg,rgba(255,122,122,.06),transparent 40%),var(--navy-card)}
-  .ps-card.solution{background:linear-gradient(180deg,rgba(47,219,116,.08),transparent 40%),var(--navy-card);border-color:rgba(47,219,116,.25)}
+  .ps{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .ps-card{border-radius:var(--r-lg);padding:38px 34px;border:1px solid var(--line)}
+  .ps-card.problem{background:linear-gradient(180deg,rgba(255,122,122,.05),transparent 40%),var(--panel)}
+  .ps-card.solution{background:linear-gradient(180deg,rgba(255,122,47,.1),transparent 42%),var(--panel);border-color:rgba(255,122,47,.35)}
   .ps-card .tag{
-    font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    font-family:var(--font-display);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
     display:inline-block;margin-bottom:14px;
   }
   .ps-card.problem .tag{color:var(--danger)}
-  .ps-card.solution .tag{color:var(--wa-icon)}
-  .ps-card h3{font-size:1.5rem;font-weight:700;margin-bottom:22px;font-family:var(--font-body)}
-  .ps-list li{display:flex;gap:12px;padding-block:11px;border-top:1px solid var(--line-soft);color:var(--text-soft);font-size:.96rem}
+  .ps-card.solution .tag{color:var(--orange-bright)}
+  .ps-card h3{font-size:1.4rem;font-weight:700;margin-bottom:22px}
+  .ps-list li{display:flex;gap:12px;padding-block:12px;border-top:1px solid var(--line-soft);color:var(--text-soft);font-size:.95rem}
   .ps-list li:first-child{border-top:none}
-  .ps-list svg{width:19px;height:19px;flex-shrink:0;margin-top:1px}
+  .ps-list svg{width:19px;height:19px;flex-shrink:0;margin-top:2px}
   .ps-card.problem svg{color:var(--danger)}
-  .ps-card.solution svg{color:var(--wa-icon)}
+  .ps-card.solution svg{color:var(--orange-bright)}
   .ps-card.solution li{color:var(--text)}
-
-  @media (max-width:820px){ .ps-grid{grid-template-columns:1fr} }
+  @media (max-width:820px){ .ps{grid-template-columns:1fr} }
 
   /* ============================================================
      SERVICIOS
      ============================================================ */
-  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   .s-card{
-    background:var(--navy-card);border:1px solid var(--line);border-radius:var(--r-lg);
-    padding:30px 26px;transition:transform .4s var(--ease),border-color .4s var(--ease);
-    position:relative;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:30px 26px;position:relative;overflow:hidden;
+    transition:transform .4s var(--ease),border-color .4s var(--ease);
   }
-  .s-card:hover{transform:translateY(-6px);border-color:rgba(76,125,255,.45)}
-  .s-card .s-num{
-    font-family:var(--font-mono);font-size:.76rem;color:var(--text-mute);
-    display:block;margin-bottom:18px;
+  .s-card::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:3px;
+    background:linear-gradient(90deg,var(--orange),var(--purple));
+    transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease);
   }
-  .s-card .b-icon{
-    width:46px;height:46px;border-radius:12px;margin-bottom:20px;
-    background:linear-gradient(135deg,rgba(76,125,255,.22),rgba(139,124,255,.14));
-    border:1px solid rgba(76,125,255,.3);
-    display:flex;align-items:center;justify-content:center;color:var(--accent-bright);
+  .s-card:hover{transform:translateY(-6px);border-color:rgba(255,122,47,.4)}
+  .s-card:hover::before{transform:scaleX(1)}
+  .s-num{font-family:var(--font-display);font-weight:700;font-size:.8rem;color:var(--text-mute);display:block;margin-bottom:18px}
+  .s-ico{
+    width:46px;height:46px;border-radius:13px;margin-bottom:18px;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(140deg,rgba(123,63,242,.24),rgba(255,122,47,.14));
+    border:1px solid rgba(172,130,255,.3);color:var(--purple-bright);
   }
-  .s-card .b-icon svg{width:22px;height:22px}
-  .s-card h3{font-size:1.15rem;font-weight:700;margin-bottom:10px;font-family:var(--font-body)}
-  .s-card p{color:var(--text-soft);font-size:.92rem;line-height:1.55}
-
-  @media (max-width:900px){ .services-grid{grid-template-columns:1fr 1fr} }
-  @media (max-width:600px){ .services-grid{grid-template-columns:1fr} }
+  .s-ico svg{width:22px;height:22px}
+  .s-card h3{font-size:1.14rem;font-weight:600;margin-bottom:10px}
+  .s-card p{color:var(--text-soft);font-size:.92rem}
+  @media (max-width:900px){ .services{grid-template-columns:1fr 1fr} }
+  @media (max-width:600px){ .services{grid-template-columns:1fr} }
 
   /* ============================================================
-     EJEMPLOS CONCEPTUALES
+     PLANES
      ============================================================ */
-  .examples-note{
+  .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+  .plan{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:34px 28px;display:flex;flex-direction:column;gap:16px;position:relative;min-width:0;
+    transition:transform .4s var(--ease),border-color .4s var(--ease);
+  }
+  .plan:hover{transform:translateY(-6px);border-color:rgba(172,130,255,.45)}
+  .plan.featured{
+    border-color:rgba(255,122,47,.55);
+    background:linear-gradient(180deg,rgba(255,122,47,.12),transparent 42%),var(--panel);
+  }
+  .plan-flag{
+    position:absolute;top:-12px;left:28px;
+    font-family:var(--font-display);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    background:linear-gradient(135deg,var(--orange),var(--orange-deep));color:#fff;
+    padding:6px 12px;border-radius:100px;
+  }
+  .plan h3{font-size:1.3rem;font-weight:700}
+  .plan .desc{color:var(--text-soft);font-size:.94rem}
+  .plan .meta{
+    display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
+    font-family:var(--font-display);font-size:.76rem;color:var(--purple-bright);
+    background:rgba(123,63,242,.14);border:1px solid rgba(123,63,242,.3);
+    padding:7px 13px;border-radius:100px;
+  }
+  .plan .meta svg{width:15px;height:15px}
+  .plan ul{display:flex;flex-direction:column;gap:10px;margin-top:2px}
+  .plan li{display:flex;gap:10px;color:var(--text-soft);font-size:.9rem;line-height:1.5}
+  .plan li svg{width:17px;height:17px;color:var(--orange-bright);flex-shrink:0;margin-top:2px}
+  .plan .btn{margin-top:auto}
+  .plans-foot{text-align:center;margin-top:36px;color:var(--text-soft);font-size:.95rem}
+  .plans-foot a{color:var(--orange-bright);border-bottom:1px solid rgba(255,159,92,.4)}
+  @media (max-width:900px){ .plans{grid-template-columns:minmax(0,1fr);max-width:440px;margin-inline:auto} }
+
+  /* ============================================================
+     EJEMPLOS
+     ============================================================ */
+  .ex-note{
     display:flex;gap:12px;align-items:flex-start;
-    background:var(--navy-card);border:1px dashed var(--line);border-radius:var(--r-md);
+    background:var(--panel);border:1px dashed var(--line);border-radius:var(--r-md);
     padding:16px 18px;margin-bottom:44px;max-width:640px;
   }
-  .examples-note svg{width:18px;height:18px;color:var(--accent-bright);flex-shrink:0;margin-top:2px}
-  .examples-note p{font-size:.88rem;color:var(--text-soft)}
-  .examples-note strong{color:var(--text)}
+  .ex-note svg{width:18px;height:18px;color:var(--orange-bright);flex-shrink:0;margin-top:2px}
+  .ex-note p{font-size:.88rem;color:var(--text-soft)}
+  .ex-note strong{color:var(--text)}
 
-  .examples-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-  .ex-card{
-    background:var(--navy-card);border:1px solid var(--line);border-radius:var(--r-lg);
-    overflow:hidden;transition:transform .4s var(--ease),border-color .4s;
+  .ex-rows{display:flex;flex-direction:column;gap:28px}
+  .ex-row{
+    display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:26px;transition:border-color .4s var(--ease),transform .4s var(--ease);
   }
-  .ex-card:hover{transform:translateY(-5px)}
-  .ex-mock{padding:16px;position:relative}
-  .ex-mock .badge{
-    position:absolute;top:12px;right:12px;z-index:2;
-    font-family:var(--font-mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;
-    background:rgba(6,9,16,.7);border:1px solid var(--line);color:var(--text-mute);
-    padding:4px 9px;border-radius:100px;
+  .ex-row:hover{border-color:rgba(172,130,255,.4);transform:translateY(-4px)}
+  .ex-row:nth-child(even){grid-template-columns:.85fr 1.15fr}
+  .ex-row:nth-child(even) .ex-shot{order:-1}
+  .ex-shot{
+    border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line-soft);position:relative;
+    background:var(--bg-2);
   }
-  .ex-screen{border-radius:10px;overflow:hidden;border:1px solid var(--line-soft)}
-  .ex-topbar{display:flex;gap:5px;padding:9px 10px;background:rgba(255,255,255,.02)}
-  .ex-topbar i{width:6px;height:6px;border-radius:50%;background:var(--line)}
-  .ex-body{padding:14px}
-  .ex-hero{height:52px;border-radius:8px;margin-bottom:10px}
-  .ex-l1{height:8px;border-radius:5px;width:70%;margin-bottom:7px}
-  .ex-l2{height:8px;border-radius:5px;width:45%;margin-bottom:14px}
-  .ex-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-  .ex-row div{height:24px;border-radius:6px;background:var(--line-soft)}
-  .ex-info{padding:20px 22px 24px}
-  .ex-info h3{font-size:1.05rem;font-weight:700;margin-bottom:6px;font-family:var(--font-body)}
-  .ex-info p{color:var(--text-soft);font-size:.86rem}
-
-  .ex-card.restaurante .ex-hero,.ex-card.restaurante .ex-l1,.ex-card.restaurante .ex-l2{background:linear-gradient(120deg,#ff9d6c,#ff6b6b)}
-  .ex-card.restaurante .ex-l1,.ex-card.restaurante .ex-l2{opacity:.4;background:var(--line-soft)}
-  .ex-card.tienda .ex-hero{background:linear-gradient(120deg,#4c7dff,#8b7cff)}
-  .ex-card.profesional .ex-hero{background:linear-gradient(120deg,#2fdb74,#4c7dff)}
-
-  @media (max-width:900px){ .examples-grid{grid-template-columns:1fr} }
+  .ex-shot img{width:100%;display:block;aspect-ratio:16/10;object-fit:cover;object-position:top}
+  .ex-badge{
+    position:absolute;top:12px;left:12px;z-index:2;
+    font-family:var(--font-display);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;
+    background:rgba(7,11,28,.78);border:1px solid var(--line);color:var(--text-soft);
+    padding:5px 10px;border-radius:100px;
+  }
+  .ex-info h3{font-size:1.3rem;font-weight:700;margin-bottom:8px}
+  .ex-info p{color:var(--text-soft);font-size:.94rem;margin-bottom:18px}
+  .ex-info a{
+    display:inline-flex;align-items:center;gap:8px;color:var(--orange-bright);
+    font-family:var(--font-display);font-weight:600;font-size:.9rem;
+  }
+  .ex-info a svg{width:16px;height:16px;transition:transform .3s var(--ease)}
+  .ex-info a:hover svg{transform:translateX(4px)}
+  @media (max-width:860px){
+    .ex-row,.ex-row:nth-child(even){grid-template-columns:1fr;gap:22px}
+    .ex-row:nth-child(even) .ex-shot{order:0}
+  }
 
   /* ============================================================
      CTA FINAL
      ============================================================ */
-  .cta-section{padding-block:0}
   .cta-panel{
-    position:relative;overflow:hidden;
-    background:linear-gradient(135deg,#0d1730,#141c38 45%,#182047);
+    position:relative;overflow:hidden;text-align:center;
+    background:linear-gradient(135deg,var(--purple-deep),var(--bg-2) 55%,#231041);
     border:1px solid var(--line);border-radius:var(--r-xl);
-    padding:76px 40px;text-align:center;
+    padding:72px 40px;
   }
-  .cta-panel .eyebrow{justify-content:center;display:flex}
-  .cta-panel h2{
-    font-size:clamp(2rem,3.6vw + 1rem,3.1rem);font-weight:800;
-    margin-top:18px;letter-spacing:-.02em;max-width:18ch;margin-inline:auto;
+  .cta-panel::before{
+    content:"";position:absolute;width:600px;height:600px;border-radius:50%;
+    top:-320px;left:50%;transform:translateX(-50%);
+    background:radial-gradient(circle,rgba(255,122,47,.24),transparent 70%);
   }
-  .cta-panel p{
-    color:var(--text-soft);font-size:1.08rem;max-width:52ch;margin:20px auto 0;
-  }
-  .cta-actions{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:36px}
-  .cta-panel .hero-glow{top:-260px;left:50%;transform:translateX(-50%);width:800px;height:800px}
+  .cta-panel .kicker{justify-content:center;position:relative}
+  .cta-panel h2{font-size:clamp(2rem,3.5vw + 1rem,3rem);font-weight:700;margin-top:16px;max-width:18ch;margin-inline:auto;position:relative}
+  .cta-panel p{color:var(--text-soft);font-size:1.06rem;max-width:52ch;margin:18px auto 0;position:relative}
+  .cta-panel .btn{margin-top:34px;position:relative}
 
   /* ============================================================
      FAQ
      ============================================================ */
-  .faq-list{max-width:760px;margin-inline:auto;display:flex;flex-direction:column;gap:12px}
-  .faq-item{
-    background:var(--navy-card);border:1px solid var(--line);border-radius:var(--r-md);
-    overflow:hidden;
-  }
+  .faq{max-width:760px;margin-inline:auto;display:flex;flex-direction:column;gap:12px}
+  .faq-item{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+  .faq-item[data-open="true"]{border-color:rgba(255,122,47,.4)}
   .faq-q{
     width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;
-    padding:22px 24px;text-align:left;font-weight:700;font-size:1rem;
+    padding:22px 24px;text-align:left;font-family:var(--font-display);font-weight:600;font-size:1rem;
   }
-  .faq-q .plus{
-    width:28px;height:28px;border-radius:8px;background:var(--navy-raised);
-    border:1px solid var(--line);flex-shrink:0;position:relative;
-  }
-  .faq-q .plus::before,.faq-q .plus::after{
-    content:"";position:absolute;background:var(--accent-bright);border-radius:2px;
+  .faq-q .pm{width:28px;height:28px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line);flex-shrink:0;position:relative}
+  .faq-q .pm::before,.faq-q .pm::after{
+    content:"";position:absolute;background:var(--orange-bright);border-radius:2px;
     top:50%;left:50%;transform:translate(-50%,-50%);transition:transform .3s var(--ease),opacity .3s;
   }
-  .faq-q .plus::before{width:12px;height:2px}
-  .faq-q .plus::after{width:2px;height:12px}
-  .faq-item[data-open="true"] .plus::after{transform:translate(-50%,-50%) rotate(90deg);opacity:0}
+  .faq-q .pm::before{width:12px;height:2px}
+  .faq-q .pm::after{width:2px;height:12px}
+  .faq-item[data-open="true"] .pm::after{transform:translate(-50%,-50%) rotate(90deg);opacity:0}
   .faq-a-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
   .faq-item[data-open="true"] .faq-a-wrap{grid-template-rows:1fr}
   .faq-a-inner{overflow:hidden}
   .faq-a-wrap p{padding:0 24px 22px;color:var(--text-soft);font-size:.95rem;line-height:1.65;max-width:64ch}
+
+  /* ============================================================
+     FORMULARIO
+     ============================================================ */
+  .start-panel{
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+    background:linear-gradient(135deg,var(--purple-deep),var(--bg-2) 60%,#1c1338);
+    border:1px solid var(--line);border-radius:var(--r-xl);padding:52px 48px;
+  }
+  .start-copy h2{font-size:clamp(1.8rem,2.6vw + 1rem,2.4rem);font-weight:700;margin-top:14px}
+  .start-copy p{margin-top:16px;color:var(--text-soft);font-size:1.02rem;max-width:44ch}
+  .start-form{display:flex;flex-direction:column;gap:16px}
+  .start-form label{display:flex;flex-direction:column;gap:8px;font-size:.82rem;font-weight:600;color:var(--text-soft)}
+  .start-form input,.start-form select{
+    font-family:var(--font-body);font-size:.98rem;color:var(--text);
+    background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);
+    padding:14px 15px;width:100%;transition:border-color .2s;
+  }
+  .start-form input::placeholder{color:var(--text-mute)}
+  .start-form input:focus,.start-form select:focus{outline:none;border-color:var(--orange)}
+  .start-form select{
+    appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:42px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8b2d6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;background-size:16px;
+  }
+  .start-form .btn{margin-top:6px}
+  .start-msg{font-size:.84rem;margin-top:2px}
+  .start-msg.err{color:var(--danger)}
+  .start-msg.ok{color:var(--ok)}
+  @media (max-width:820px){ .start-panel{grid-template-columns:1fr;gap:32px;padding:40px 26px} }
 
   /* ============================================================
      FLOATING WHATSAPP
@@ -619,14 +558,14 @@
   .wa-float{
     position:fixed;right:22px;bottom:22px;z-index:90;
     width:60px;height:60px;border-radius:50%;
-    background:linear-gradient(135deg,var(--wa-icon),var(--wa-btn));
+    background:linear-gradient(135deg,var(--orange),var(--orange-deep));
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 14px 34px -8px rgba(15,122,64,.65);
+    box-shadow:0 16px 38px -8px rgba(255,122,47,.6);
   }
-  .wa-float svg{width:28px;height:28px;color:#06170d}
+  .wa-float svg{width:28px;height:28px;color:#fff}
   .wa-float::before{
     content:"";position:absolute;inset:0;border-radius:50%;
-    border:2px solid var(--wa-icon);animation:pulse-ring 2.4s ease-out infinite;
+    border:2px solid var(--orange);animation:pulse-ring 2.4s ease-out infinite;
   }
   @keyframes pulse-ring{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.7);opacity:0}}
   @media (max-width:520px){ .wa-float{width:54px;height:54px;right:16px;bottom:16px} .wa-float svg{width:25px;height:25px} }
@@ -634,21 +573,15 @@
   /* ============================================================
      FOOTER
      ============================================================ */
-  footer{border-top:1px solid var(--line-soft);padding-block:64px 36px;background:var(--navy)}
+  footer{border-top:1px solid var(--line-soft);padding-block:64px 36px;background:var(--bg-2)}
   .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.1fr;gap:40px}
   .footer-brand p{color:var(--text-soft);font-size:.92rem;margin-top:14px;max-width:34ch}
-  .footer-col h4{
-    font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--text-mute);margin-bottom:16px;
-  }
-  .footer-col a,.footer-col span{
-    display:block;color:var(--text-soft);font-size:.92rem;padding-block:6px;transition:color .2s;
-  }
+  .footer-col h4{font-family:var(--font-display);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute);margin-bottom:16px}
+  .footer-col a,.footer-col span{display:block;color:var(--text-soft);font-size:.92rem;padding-block:6px;transition:color .2s}
   .footer-col a:hover{color:var(--text)}
   .footer-bottom{
     margin-top:56px;padding-top:24px;border-top:1px solid var(--line-soft);
-    display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;
-    font-size:.84rem;color:var(--text-mute);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:.84rem;color:var(--text-mute);
   }
   @media (max-width:820px){ .footer-grid{grid-template-columns:1fr 1fr;gap:36px} }
   @media (max-width:520px){ .footer-grid{grid-template-columns:1fr} }
@@ -658,168 +591,47 @@
      ============================================================ */
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
   .reveal.is-in{opacity:1;transform:translateY(0)}
-  .reveal-stagger.is-in > *{opacity:1;transform:translateY(0)}
   .reveal-stagger > *{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
-  .reveal-stagger > *:nth-child(1){transition-delay:.03s}
-  .reveal-stagger > *:nth-child(2){transition-delay:.09s}
-  .reveal-stagger > *:nth-child(3){transition-delay:.15s}
-  .reveal-stagger > *:nth-child(4){transition-delay:.21s}
-  .reveal-stagger > *:nth-child(5){transition-delay:.27s}
-  .reveal-stagger > *:nth-child(6){transition-delay:.33s}
+  .reveal-stagger.is-in > *{opacity:1;transform:translateY(0)}
+  .reveal-stagger.is-in > *:nth-child(1){transition-delay:.04s}
+  .reveal-stagger.is-in > *:nth-child(2){transition-delay:.1s}
+  .reveal-stagger.is-in > *:nth-child(3){transition-delay:.16s}
+  .reveal-stagger.is-in > *:nth-child(4){transition-delay:.22s}
+  .reveal-stagger.is-in > *:nth-child(5){transition-delay:.28s}
+  .reveal-stagger.is-in > *:nth-child(6){transition-delay:.34s}
 
-  /* ============================================================
-     MEDIA ILUSTRADO EN TARJETAS  (beneficios + servicios)
-     Ilustraciones SVG propias, sin fotos de stock ni dependencias.
-     ============================================================ */
-  .card-media{
-    position:relative;border-radius:14px;overflow:hidden;
-    border:1px solid var(--line-soft);
-    background:linear-gradient(165deg,var(--navy-raised),#0a0f1f);
-  }
-  .card-media > svg{width:100%;height:auto;display:block}
-  .card-media .b-icon{
-    position:absolute;left:12px;bottom:12px;margin:0;
-    width:38px;height:38px;border-radius:10px;
-    background:rgba(6,9,16,.62);
-    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
-  }
-
-  .bento{grid-auto-rows:auto}
-  .b-card{justify-content:flex-start;gap:12px}
-  .b-card.big{
-    grid-column:1/-1;grid-row:auto;
-    flex-direction:row;align-items:center;gap:34px;
-  }
-  .b-card.big .card-media{width:44%;flex-shrink:0}
-  .b-card.big .big-text{flex:1;display:flex;flex-direction:column;gap:10px}
-  .b-card.big .b-icon{width:44px;height:44px}
-
-  .s-card .card-media{margin:14px 0 20px}
-
-  @media (max-width:860px){
-    .b-card.big{flex-direction:column;align-items:stretch;gap:14px}
-    .b-card.big .card-media{width:100%}
-  }
-
-  /* ============================================================
-     PLANES / PAQUETES
-     ============================================================ */
-  .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
-  .plan-card{
-    background:var(--navy-card);border:1px solid var(--line);
-    border-radius:var(--r-lg);padding:34px 28px 30px;
-    display:flex;flex-direction:column;gap:16px;position:relative;
-    min-width:0;overflow-wrap:break-word;
-    transition:transform .4s var(--ease),border-color .4s var(--ease);
-  }
-  .plan-card:hover{transform:translateY(-6px);border-color:rgba(76,125,255,.45)}
-  .plan-card.featured{
-    border-color:rgba(76,125,255,.55);
-    background:linear-gradient(180deg,rgba(76,125,255,.1),transparent 42%),var(--navy-card);
-  }
-  .plan-flag{
-    position:absolute;top:-12px;left:28px;
-    font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
-    background:linear-gradient(135deg,var(--accent-btn),var(--accent-deep));color:#fff;
-    padding:6px 12px;border-radius:100px;
-  }
-  .plan-card h3{font-size:1.32rem;font-weight:700;font-family:var(--font-body)}
-  .plan-desc{color:var(--text-soft);font-size:.94rem;line-height:1.55}
-  .plan-meta{
-    display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
-    font-family:var(--font-mono);font-size:.76rem;
-    color:var(--accent-bright);
-    background:rgba(76,125,255,.1);border:1px solid rgba(76,125,255,.25);
-    padding:7px 13px;border-radius:100px;
-  }
-  .plan-meta svg{width:15px;height:15px;flex-shrink:0}
-  .plan-list{display:flex;flex-direction:column;gap:10px;margin-top:2px}
-  .plan-list li{display:flex;gap:10px;color:var(--text-soft);font-size:.9rem;line-height:1.5}
-  .plan-list svg{width:17px;height:17px;color:var(--wa-icon);flex-shrink:0;margin-top:2px}
-  .plan-card .btn{margin-top:auto}
-  .plans-foot{text-align:center;margin-top:36px;color:var(--text-soft);font-size:.95rem}
-  .plans-foot a{color:var(--accent-bright);border-bottom:1px solid rgba(130,168,255,.4)}
-  @media (max-width:900px){
-    .plans-grid{grid-template-columns:minmax(0,1fr);max-width:440px;margin-inline:auto}
-  }
-
-  /* ============================================================
-     FORMULARIO "EMPEZAR"
-     ============================================================ */
-  .start-section{padding-bottom:120px}
-  .start-panel{
-    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
-    background:linear-gradient(135deg,#0d1730,#141c38 55%,#101830);
-    border:1px solid var(--line);border-radius:var(--r-xl);
-    padding:52px 48px;
-  }
-  .start-copy h2{
-    font-size:clamp(1.8rem,2.6vw + 1rem,2.5rem);font-weight:800;
-    margin-top:14px;letter-spacing:-.01em;
-  }
-  .start-copy p{margin-top:16px;color:var(--text-soft);font-size:1.02rem;max-width:44ch}
-  .start-form{display:flex;flex-direction:column;gap:16px}
-  .start-form label{
-    display:flex;flex-direction:column;gap:8px;
-    font-size:.82rem;font-weight:600;color:var(--text-soft);
-  }
-  .start-form input,.start-form select{
-    font-family:var(--font-body);font-size:.98rem;color:var(--text);
-    background:var(--navy);border:1px solid var(--line);
-    border-radius:var(--r-sm);padding:14px 15px;width:100%;
-    transition:border-color .2s;
-  }
-  .start-form input::placeholder{color:var(--text-mute)}
-  .start-form input:focus,.start-form select:focus{outline:none;border-color:var(--accent)}
-  .start-form select{
-    appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:42px;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa7c2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;background-position:right 14px center;background-size:16px;
-  }
-  .start-form .btn{margin-top:6px}
-  .start-msg{font-size:.84rem;margin-top:2px}
-  .start-msg.err{color:var(--danger)}
-  .start-msg.ok{color:var(--wa-icon)}
-  @media (max-width:820px){
-    .start-panel{grid-template-columns:1fr;gap:32px;padding:40px 26px}
-  }
-
-  /* Mockups de ejemplos: SVG a pantalla completa dentro del marco */
-  .ex-screen > svg{width:100%;height:auto;display:block}
-
-  @media (prefers-reduced-motion: reduce){
+  @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.15s !important}
     .reveal,.reveal-stagger > *{opacity:1 !important;transform:none !important}
     .marquee-track{animation:none}
+    .hero-frame{transform:none}
   }
 </style>
+<noscript><style>.reveal,.reveal-stagger > *{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
 
-
-<!-- ============================================================
-     HEADER
-     ============================================================ -->
+<!-- ============================================================ HEADER ============================================================ -->
 <header id="siteHeader">
   <div class="wrap nav-row">
     <a href="#inicio" class="logo" aria-label="WebZipe — inicio">
-      <span class="dot" aria-hidden="true"></span>WebZipe
+      <span class="mark" aria-hidden="true"></span>Web<span class="logo-accent">Zipe</span>
     </a>
     <nav class="nav-links" aria-label="Navegación principal">
       <a href="#inicio">Inicio</a>
       <a href="#beneficios">Beneficios</a>
       <a href="#servicios">Servicios</a>
       <a href="#paquetes">Planes</a>
+      <a href="#ejemplos">Ejemplos</a>
       <a href="#preguntas">Preguntas</a>
-      <a href="#contacto">Contacto</a>
     </nav>
     <div class="nav-cta">
       <a href="#paquetes" class="btn btn-ghost">Ver planes</a>
       <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
-         class="btn btn-wa" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.6 6.6 0 0 1 5.6-10.13 6.55 6.55 0 0 1 6.55 6.56 6.6 6.6 0 0 1-6.55 6.67Zm3.6-4.92c-.2-.1-1.17-.58-1.35-.64-.18-.07-.32-.1-.45.1-.13.19-.51.64-.63.77-.11.13-.23.14-.43.05-.2-.1-.83-.31-1.58-1-.58-.52-.98-1.16-1.09-1.36-.11-.19-.01-.3.09-.4.09-.09.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.45-1.08-.61-1.48-.16-.39-.33-.33-.45-.34h-.38c-.13 0-.34.05-.52.24-.18.19-.68.67-.68 1.63 0 .96.7 1.89.8 2.02.1.13 1.37 2.1 3.33 2.94.46.2.83.32 1.11.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.17-.46.17-.86.12-.94-.05-.09-.18-.14-.38-.24Z" fill="currentColor"/></svg>
-        Hablar por WhatsApp
+         class="btn btn-primary" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
+        Escríbenos
       </a>
     </div>
     <button class="burger" id="burgerBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Abrir menú">
@@ -833,94 +645,53 @@
   <a href="#beneficios">Beneficios</a>
   <a href="#servicios">Servicios</a>
   <a href="#paquetes">Planes</a>
+  <a href="#ejemplos">Ejemplos</a>
   <a href="#preguntas">Preguntas</a>
-  <a href="#contacto">Contacto</a>
   <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
-     class="btn btn-wa btn-block" target="_blank" rel="noopener">Hablar por WhatsApp</a>
+     class="btn btn-primary btn-block" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
 </div>
 
 <main>
-  <!-- ============================================================
-       HERO
-       ============================================================ -->
+  <!-- ============================================================ HERO ============================================================ -->
   <section id="inicio" class="hero">
-    <div class="grid-texture" aria-hidden="true"></div>
-    <div class="hero-glow" aria-hidden="true"></div>
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <span class="eyebrow">Diseño web para negocios</span>
-        <h1>Convierte tu negocio en una <span class="grad">presencia digital profesional</span></h1>
-        <p class="lead">
-          En WebZipe diseñamos páginas web modernas, rápidas y pensadas para generar confianza
-          y convertir visitas en clientes. Sin plantillas genéricas: una web hecha a la medida
-          de tu negocio, con contacto directo por WhatsApp desde el primer segundo.
-        </p>
-        <div class="hero-actions">
-          <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio.%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
-             class="btn btn-primary btn-lg" target="_blank" rel="noopener">
-            Quiero mi página web
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
-             class="btn btn-wa btn-lg" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg>
-            Hablar por WhatsApp
-          </a>
-        </div>
-        <div class="trust-row">
-          <span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño 100% responsive</span>
-          <span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Contacto directo por WhatsApp</span>
-          <span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Hecho a la medida de tu negocio</span>
-        </div>
+    <div class="wrap">
+      <span class="kicker">Estudio de diseño y desarrollo web</span>
+      <h1>Creamos la página web que tu negocio necesita para <span class="grad">crecer</span></h1>
+      <p class="lead">
+        En WebZipe diseñamos sitios modernos, rápidos y 100% responsive, con contacto directo
+        por WhatsApp. Sin plantillas genéricas: todo hecho a la medida de tu negocio.
+      </p>
+      <div class="hero-actions">
+        <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio.%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+           class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
+          Quiero mi página web
+        </a>
+        <a href="#ejemplos" class="btn btn-ghost btn-lg">Ver ejemplos
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="hero-trust">
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño a medida</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Optimizada para móviles</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Contacto directo por WhatsApp</span>
       </div>
 
-      <div class="hero-visual" aria-hidden="true">
-        <div class="hv-blob b1"></div>
-        <div class="hv-blob b2"></div>
-        <div class="browser back"></div>
-        <div class="browser front">
-          <div class="browser-bar">
-            <div class="traffic"><i></i><i></i><i></i></div>
-            <div class="url">tunegocio.com</div>
+      <div class="hero-stage">
+        <div class="hero-frame">
+          <div class="browser-top" aria-hidden="true">
+            <i></i><i></i><i></i>
+            <span class="url">tunegocio.com</span>
           </div>
-          <div class="browser-body">
-            <div class="bnav">
-              <span class="sq"></span>
-              <span class="bskel bar w1"></span>
-              <span class="bskel bar w2"></span>
-              <span class="bskel bar w3"></span>
-              <span class="pill"></span>
-            </div>
-            <div class="bhero">
-              <div class="lines">
-                <span class="bskel bar w80"></span>
-                <span class="bskel bar w60"></span>
-                <span class="bar w45"></span>
-              </div>
-              <div class="art"></div>
-            </div>
-            <div class="bcards">
-              <div class="card"><span class="ico"></span><span class="bskel bar w70"></span><span class="bskel bar w50"></span></div>
-              <div class="card"><span class="ico"></span><span class="bskel bar w70"></span><span class="bskel bar w50"></span></div>
-              <div class="card"><span class="ico"></span><span class="bskel bar w70"></span><span class="bskel bar w50"></span></div>
-            </div>
-          </div>
-        </div>
-        <span class="chip speed">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" fill="currentColor"/></svg>
-          Rápida
-        </span>
-        <span class="chip responsive">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          Responsive
-        </span>
-        <div class="wa-preview">
-          <div class="row">
-            <span class="avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg></span>
-            <b>Cliente</b>
-            <span class="status"></span>
-          </div>
-          <p>"Hola, quiero información sobre mis servicios"</p>
+          <video src="VIDEO%201.mp4" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+          <span class="hero-chip a" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" fill="currentColor"/></svg>
+            Carga rápida
+          </span>
+          <span class="hero-chip b" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            100% responsive
+          </span>
         </div>
       </div>
     </div>
@@ -928,160 +699,167 @@
 
   <div class="marquee" role="presentation">
     <div class="marquee-track" aria-hidden="true">
-      <span>Diseño responsive</span><span>Integración con WhatsApp</span><span>Hecho a la medida</span>
-      <span>Atención personalizada</span><span>Enfocado en conversión</span><span>Disponible 24/7</span>
-      <span>Diseño responsive</span><span>Integración con WhatsApp</span><span>Hecho a la medida</span>
-      <span>Atención personalizada</span><span>Enfocado en conversión</span><span>Disponible 24/7</span>
+      <span>Diseño a la medida</span><span>Integración con WhatsApp</span><span>Optimizada para móviles</span>
+      <span>Enfocada en conversión</span><span>Atención personalizada</span><span>Disponible 24/7</span>
+      <span>Diseño a la medida</span><span>Integración con WhatsApp</span><span>Optimizada para móviles</span>
+      <span>Enfocada en conversión</span><span>Atención personalizada</span><span>Disponible 24/7</span>
     </div>
   </div>
 
-  <!-- ============================================================
-       ¿POR QUÉ WEBZIPE?
-       ============================================================ -->
+  <!-- ============================================================ BENEFICIOS ============================================================ -->
   <section id="beneficios">
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">¿Por qué WebZipe?</span>
+      <div class="sec-head reveal">
+        <span class="kicker">01 — Por qué WebZipe</span>
         <h2>Un estudio que empieza contigo, no con un catálogo de plantillas</h2>
-        <p>Somos un estudio de diseño web enfocado en un solo objetivo: que tu negocio se vea profesional en Internet y consiga más clientes. Esto es lo que puedes esperar al trabajar con nosotros.</p>
+        <p>Nos enfocamos en un solo objetivo: que tu negocio se vea profesional en Internet y consiga más clientes. Esto es lo que puedes esperar al trabajar con nosotros.</p>
       </div>
 
-      <div class="bento reveal-stagger">
-        <article class="b-card big">
-          <div class="b-glow" aria-hidden="true"></div>
-          <div class="card-media">
-            <svg viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-              <rect x="26" y="24" width="308" height="252" rx="12" fill="#0c1122" stroke="var(--line)"/>
-              <line x1="26" y1="48" x2="334" y2="48" stroke="var(--line-soft)"/>
-              <line x1="58" y1="24" x2="58" y2="276" stroke="var(--line-soft)"/>
-              <text x="70" y="42" fill="var(--text-mute)" font-family="monospace" font-size="9">tunegocio.com — diseño a medida</text>
-              <rect x="74" y="62" width="244" height="40" rx="7" fill="var(--accent)"/>
-              <circle cx="94" cy="82" r="8" fill="#fff" opacity="0.9"/>
-              <rect x="110" y="76" width="60" height="6" rx="3" fill="#fff" opacity="0.75"/>
-              <rect x="110" y="88" width="40" height="5" rx="2.5" fill="#fff" opacity="0.45"/>
-              <rect x="266" y="74" width="44" height="16" rx="8" fill="#fff" opacity="0.9"/>
-              <rect x="74" y="116" width="120" height="13" rx="6" fill="var(--text-soft)"/>
-              <rect x="74" y="138" width="150" height="8" rx="4" fill="var(--line)"/>
-              <rect x="74" y="154" width="120" height="8" rx="4" fill="var(--line)"/>
-              <rect x="74" y="176" width="92" height="24" rx="12" fill="var(--wa-btn)"/>
-              <rect x="212" y="116" width="106" height="84" rx="8" fill="#131b2f" stroke="var(--line)"/>
-              <path d="M212 182 L244 156 L268 174 L300 146 L318 168 L318 200 L212 200 Z" fill="var(--violet)" opacity="0.4"/>
-              <circle cx="292" cy="140" r="9" fill="var(--accent-bright)" opacity="0.8"/>
-              <rect x="74" y="214" width="20" height="20" rx="5" fill="var(--accent)"/>
-              <rect x="100" y="214" width="20" height="20" rx="5" fill="var(--violet)"/>
-              <rect x="126" y="214" width="20" height="20" rx="5" fill="var(--wa-icon)"/>
-              <rect x="152" y="214" width="20" height="20" rx="5" fill="#ff9d6c"/>
-              <rect x="178" y="214" width="20" height="20" rx="5" fill="var(--line)"/>
-              <path d="M276 236 l30 12 -12 4 -3 13 z" fill="#fff"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8.5 12 14l10-5.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 15.5 12 21l10-5.5M2 12l10 5.5L22 12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-          </div>
-          <div class="big-text">
+      <div class="rows">
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">01</span>
             <h3>Diseño moderno, hecho a la medida de tu negocio</h3>
             <p>Nada de plantillas genéricas reutilizadas. Cada página se diseña pensando en la identidad, el tono y los objetivos de tu negocio.</p>
           </div>
-        </article>
-        <article class="b-card">
-          <div class="card-media">
-            <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-              <rect x="18" y="24" width="176" height="120" rx="9" fill="#0c1122" stroke="var(--line)"/>
-              <rect x="30" y="36" width="152" height="15" rx="4" fill="var(--accent)"/>
-              <rect x="30" y="60" width="86" height="7" rx="3.5" fill="var(--line)"/>
-              <rect x="30" y="74" width="120" height="7" rx="3.5" fill="var(--line)"/>
-              <rect x="30" y="92" width="152" height="42" rx="6" fill="#131b2f" stroke="var(--line-soft)"/>
-              <rect x="206" y="34" width="62" height="94" rx="8" fill="#0c1122" stroke="var(--line)"/>
-              <rect x="214" y="44" width="46" height="11" rx="3" fill="var(--accent)"/>
-              <rect x="214" y="62" width="30" height="5" rx="2.5" fill="var(--line)"/>
-              <rect x="214" y="72" width="40" height="5" rx="2.5" fill="var(--line)"/>
-              <rect x="214" y="86" width="46" height="32" rx="4" fill="#131b2f" stroke="var(--line-soft)"/>
-              <rect x="278" y="52" width="34" height="76" rx="8" fill="#0c1122" stroke="var(--line)"/>
-              <rect x="284" y="60" width="22" height="9" rx="2.5" fill="var(--accent)"/>
-              <rect x="284" y="74" width="15" height="4" rx="2" fill="var(--line)"/>
-              <rect x="284" y="84" width="22" height="20" rx="3" fill="#131b2f" stroke="var(--line-soft)"/>
-              <rect x="284" y="108" width="22" height="8" rx="3" fill="var(--wa-btn)"/>
+          <div class="row-media">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <rect x="18" y="16" width="248" height="168" rx="10" fill="#0a1030" stroke="var(--line)"/>
+              <rect x="18" y="16" width="248" height="20" rx="10" fill="#0d1636"/>
+              <circle cx="31" cy="26" r="2.6" fill="var(--text-mute)"/><circle cx="40" cy="26" r="2.6" fill="var(--text-mute)"/><circle cx="49" cy="26" r="2.6" fill="var(--text-mute)"/>
+              <rect x="36" y="50" width="78" height="22" rx="6" fill="var(--purple-bright)"/>
+              <rect x="36" y="84" width="120" height="8" rx="4" fill="var(--line)"/>
+              <rect x="36" y="100" width="94" height="8" rx="4" fill="var(--line)"/>
+              <rect x="36" y="122" width="84" height="22" rx="11" fill="var(--orange)"/>
+              <rect x="150" y="48" width="80" height="96" rx="8" fill="#111e46" stroke="var(--line)"/>
+              <path d="M150 128 C170 84 210 140 230 78" fill="none" stroke="var(--orange-bright)" stroke-width="2.6"/>
+              <circle cx="150" cy="128" r="3.6" fill="var(--orange-bright)"/><circle cx="230" cy="78" r="3.6" fill="var(--orange-bright)"/>
+              <rect x="36" y="154" width="14" height="14" rx="4" fill="var(--purple)"/>
+              <rect x="54" y="154" width="14" height="14" rx="4" fill="var(--blue)"/>
+              <rect x="72" y="154" width="14" height="14" rx="4" fill="var(--orange)"/>
+              <rect x="90" y="154" width="14" height="14" rx="4" fill="var(--purple-bright)"/>
+              <rect x="242" y="42" width="20" height="102" rx="6" fill="#0d1636" stroke="var(--line)"/>
+              <rect x="248" y="50" width="8" height="8" rx="2.5" fill="var(--orange)"/>
+              <rect x="248" y="64" width="8" height="8" rx="2.5" fill="var(--line)"/>
+              <rect x="248" y="78" width="8" height="8" rx="2.5" fill="var(--line)"/>
             </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
           </div>
-          <h3>100% adaptada a celulares</h3>
-          <p>La mayoría de tus clientes te buscará desde el teléfono. Tu página se ve y funciona perfecto en cualquier pantalla.</p>
         </article>
-        <article class="b-card">
-          <div class="card-media">
-            <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-              <path d="M40 34 H280 L216 104 V152 L144 132 V104 Z" fill="none" stroke="var(--line)" stroke-width="2"/>
-              <path d="M40 34 H280 L232 86 H88 Z" fill="var(--accent)" opacity="0.3"/>
-              <circle cx="70" cy="24" r="5" fill="var(--text-mute)"/>
-              <circle cx="100" cy="20" r="5" fill="var(--text-mute)"/>
-              <circle cx="130" cy="24" r="5" fill="var(--text-mute)"/>
-              <circle cx="160" cy="19" r="5" fill="var(--text-mute)"/>
-              <circle cx="190" cy="24" r="5" fill="var(--text-mute)"/>
-              <rect x="150" y="150" width="60" height="26" rx="13" fill="var(--wa-btn)"/>
-              <path d="M180 148 v-14 M180 134 l-6 6 M180 134 l6 6" stroke="var(--wa-icon)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M244 150 l10 -10 M254 140 h-9 M254 140 v9" stroke="var(--accent-bright)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">02</span>
+            <h3>Perfecta en cualquier pantalla</h3>
+            <p>La mayoría de tus clientes te buscará desde el teléfono. Tu página se ve y funciona igual de bien en celular, tablet y computador.</p>
           </div>
-          <h3>Pensada para convertir</h3>
-          <p>Cada sección, botón y texto está diseñado con un propósito: que el visitante te contacte.</p>
+          <div class="row-media">
+            <div class="devices">
+              <img class="d-phone" src="iamgen%20celular%203.png" alt="Página web en un celular" loading="lazy" decoding="async">
+              <img class="d-tab" src="iamagen%20tablet%203.png" alt="Página web en una tablet" loading="lazy" decoding="async">
+              <img class="d-desk" src="imagen%20cafeteria%201%20pc.png" alt="Página web en un computador" loading="lazy" decoding="async">
+            </div>
+          </div>
         </article>
-        <article class="b-card">
-          <div class="card-media">
-            <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-              <path d="M40 44 h150 a12 12 0 0 1 12 12 v34 a12 12 0 0 1 -12 12 h-96 l-24 20 v-20 h-30 a12 12 0 0 1 -12 -12 v-34 a12 12 0 0 1 12 -12 Z" fill="var(--navy-card)" stroke="var(--line)"/>
-              <rect x="56" y="60" width="110" height="7" rx="3.5" fill="var(--line)"/>
-              <rect x="56" y="74" width="80" height="7" rx="3.5" fill="var(--line)"/>
-              <path d="M280 92 h-120 a12 12 0 0 0 -12 12 v30 a12 12 0 0 0 12 12 h84 l24 18 v-18 h12 a12 12 0 0 0 12 -12 v-30 a12 12 0 0 0 -12 -12 Z" fill="var(--wa-btn)" opacity="0.9"/>
-              <rect x="166" y="106" width="90" height="7" rx="3.5" fill="#fff" opacity="0.8"/>
-              <rect x="166" y="120" width="60" height="7" rx="3.5" fill="#fff" opacity="0.55"/>
-              <circle cx="248" cy="58" r="16" fill="var(--wa-icon)"/>
-              <path d="M243 58 l4 4 8 -9" stroke="#06170d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
+
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">03</span>
+            <h3>Pensada para convertir visitas en clientes</h3>
+            <p>Cada sección, botón y texto está diseñado con un propósito: guiar al visitante hasta que te escribe.</p>
           </div>
-          <h3>Contacto directo por WhatsApp</h3>
-          <p>Botones estratégicos para que tus clientes te escriban en un solo clic, sin formularios largos.</p>
+          <div class="row-media">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <rect x="16" y="20" width="200" height="160" rx="10" fill="#0a1030" stroke="var(--line)"/>
+              <rect x="16" y="20" width="200" height="18" rx="10" fill="#0d1636"/>
+              <rect x="34" y="54" width="120" height="12" rx="6" fill="var(--text-soft)"/>
+              <rect x="34" y="76" width="90" height="8" rx="4" fill="var(--line)"/>
+              <rect x="34" y="100" width="104" height="26" rx="13" fill="var(--orange)"/>
+              <rect x="48" y="110" width="60" height="7" rx="3.5" fill="#fff" opacity="0.9"/>
+              <path d="M170 160 L170 96 L192 114 L214 72 L228 88" fill="none" stroke="var(--orange-bright)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="228" cy="88" r="3.6" fill="var(--orange-bright)"/>
+              <rect x="238" y="48" width="66" height="42" rx="11" fill="#111e46" stroke="rgba(255,122,47,.4)"/>
+              <text x="271" y="68" text-anchor="middle" fill="var(--orange-bright)" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="14">+38%</text>
+              <text x="271" y="82" text-anchor="middle" fill="var(--text-mute)" font-family="'Space Grotesk',sans-serif" font-size="7">contactos</text>
+              <rect x="238" y="102" width="66" height="34" rx="9" fill="#111e46" stroke="var(--line)"/>
+              <rect x="247" y="111" width="42" height="6" rx="3" fill="var(--purple-bright)"/>
+              <rect x="247" y="122" width="30" height="5" rx="2.5" fill="var(--line)"/>
+            </svg>
+          </div>
         </article>
-        <article class="b-card">
-          <div class="card-media">
-            <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-              <circle cx="128" cy="95" r="64" fill="none" stroke="var(--line)" stroke-width="1.5"/>
-              <ellipse cx="128" cy="95" rx="26" ry="64" fill="none" stroke="var(--line-soft)" stroke-width="1.5"/>
-              <line x1="64" y1="95" x2="192" y2="95" stroke="var(--line-soft)" stroke-width="1.5"/>
-              <path d="M70 66 h116 M70 124 h116" stroke="var(--line-soft)" stroke-width="1.5"/>
-              <path d="M128 95 V55 M128 95 l30 16" stroke="var(--accent-bright)" stroke-width="3" stroke-linecap="round"/>
-              <circle cx="128" cy="95" r="4" fill="var(--accent-bright)"/>
-              <circle cx="236" cy="70" r="30" fill="var(--navy-card)" stroke="var(--accent)" stroke-width="1.5"/>
-              <text x="236" y="76" text-anchor="middle" fill="var(--accent-bright)" font-family="monospace" font-weight="700" font-size="16">24/7</text>
-              <rect x="206" y="118" width="60" height="40" rx="6" fill="#131b2f" stroke="var(--line)"/>
-              <rect x="214" y="126" width="44" height="6" rx="3" fill="var(--accent)"/>
-              <rect x="214" y="138" width="30" height="4" rx="2" fill="var(--line)"/>
-              <rect x="214" y="146" width="38" height="4" rx="2" fill="var(--line)"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">04</span>
+            <h3>Contacto directo por WhatsApp</h3>
+            <p>Botones estratégicos en cada sección para que tus clientes te escriban en un solo clic, sin formularios largos.</p>
           </div>
-          <h3>Presencia disponible 24/7</h3>
-          <p>Tu página trabaja incluso cuando tú no estás: mostrando lo que ofreces a cualquier hora.</p>
+          <div class="row-media">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <rect x="24" y="18" width="196" height="164" rx="10" fill="#0a1030" stroke="var(--line)"/>
+              <rect x="24" y="18" width="196" height="20" rx="10" fill="#0d1636"/>
+              <rect x="38" y="24" width="30" height="7" rx="3.5" fill="var(--orange-bright)"/>
+              <rect x="38" y="54" width="120" height="11" rx="5.5" fill="var(--text-soft)"/>
+              <rect x="38" y="72" width="150" height="7" rx="3.5" fill="var(--line)"/>
+              <rect x="38" y="94" width="96" height="24" rx="12" fill="var(--orange)"/>
+              <circle cx="52" cy="106" r="6" fill="#fff" opacity="0.92"/>
+              <rect x="64" y="103" width="58" height="6" rx="3" fill="#fff" opacity="0.9"/>
+              <rect x="38" y="132" width="176" height="28" rx="7" fill="#111e46" stroke="var(--line-soft)"/>
+              <rect x="196" y="40" width="106" height="60" rx="12" fill="#111e46" stroke="rgba(255,122,47,.4)"/>
+              <circle cx="213" cy="57" r="8" fill="var(--orange)"/>
+              <rect x="227" y="51" width="46" height="6" rx="3" fill="var(--text-soft)"/>
+              <rect x="227" y="61" width="30" height="5" rx="2.5" fill="var(--line)"/>
+              <rect x="206" y="76" width="86" height="16" rx="8" fill="#0d1636"/>
+              <rect x="214" y="82" width="64" height="5" rx="2.5" fill="var(--text-soft)"/>
+              <circle cx="244" cy="152" r="18" fill="var(--orange)"/>
+              <g transform="translate(235,143)"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="#fff" transform="scale(0.78)"/></g>
+            </svg>
+          </div>
+        </article>
+
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">05</span>
+            <h3>Tu presencia trabaja 24/7</h3>
+            <p>Tu página muestra lo que ofreces a cualquier hora, incluso cuando tú no estás disponible para responder.</p>
+          </div>
+          <div class="row-media">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <rect x="18" y="24" width="176" height="152" rx="10" fill="#0a1030" stroke="var(--line)"/>
+              <rect x="18" y="24" width="176" height="20" rx="10" fill="#0d1636"/>
+              <circle cx="33" cy="34" r="4" fill="var(--ok)"/>
+              <rect x="43" y="31" width="40" height="6" rx="3" fill="var(--line)"/>
+              <rect x="36" y="58" width="120" height="12" rx="6" fill="var(--text-soft)"/>
+              <rect x="36" y="80" width="88" height="7" rx="3.5" fill="var(--line)"/>
+              <rect x="36" y="100" width="140" height="42" rx="6" fill="#111e46" stroke="var(--line-soft)"/>
+              <rect x="36" y="150" width="66" height="14" rx="7" fill="var(--orange)"/>
+              <circle cx="252" cy="70" r="36" fill="#111e46" stroke="var(--purple-bright)" stroke-width="1.5"/>
+              <path d="M252 70 V48 M252 70 l16 9" stroke="var(--orange-bright)" stroke-width="2.6" stroke-linecap="round"/>
+              <circle cx="252" cy="70" r="3.4" fill="var(--orange-bright)"/>
+              <text x="252" y="118" text-anchor="middle" fill="var(--purple-bright)" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="15">24/7</text>
+              <rect x="212" y="134" width="86" height="24" rx="12" fill="#111e46" stroke="rgba(61,220,132,.4)"/>
+              <circle cx="228" cy="146" r="4.5" fill="var(--ok)"/>
+              <text x="240" y="150" fill="var(--text-soft)" font-family="'Space Grotesk',sans-serif" font-size="8.5">En línea</text>
+            </svg>
+          </div>
         </article>
       </div>
 
-      <div class="studio-note reveal">
-        <span class="flag">EN CRECIMIENTO</span>
-        <p><strong>Somos un estudio que está comenzando</strong>, y eso significa que cada proyecto recibe toda nuestra atención: sin procesos en serie ni clientes en espera. Prefieres trabajar de cerca con quien realmente diseña tu página, y eso es justo lo que ofrecemos.</p>
+      <div class="note-card reveal">
+        <span class="flag">En crecimiento</span>
+        <p><strong>Somos un estudio que está comenzando</strong>, y eso significa que cada proyecto recibe toda nuestra atención: sin procesos en serie ni clientes en espera. Trabajas de cerca con quien realmente diseña tu página.</p>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       PROBLEMA → SOLUCIÓN
-       ============================================================ -->
+  <!-- ============================================================ PROBLEMA → SOLUCIÓN ============================================================ -->
   <section id="problema-solucion">
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">El problema</span>
+      <div class="sec-head reveal">
+        <span class="kicker">02 — El cambio</span>
         <h2>Tener redes sociales ya no es suficiente</h2>
         <p>Muchos negocios manejan Instagram o Facebook, pero no tienen un sitio web propio donde sus clientes puedan conocer a fondo sus servicios, productos y formas de contacto.</p>
       </div>
-      <div class="ps-grid">
+      <div class="ps">
         <div class="ps-card problem reveal">
           <span class="tag">Sin página web</span>
           <h3>Lo que suele pasar</h3>
@@ -1108,143 +886,48 @@
     </div>
   </section>
 
-  <!-- ============================================================
-       SERVICIOS
-       ============================================================ -->
+  <!-- ============================================================ SERVICIOS ============================================================ -->
   <section id="servicios">
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Servicios</span>
+      <div class="sec-head reveal">
+        <span class="kicker">03 — Servicios</span>
         <h2>Todo lo que necesitas para tener una web profesional</h2>
         <p>Nos encargamos del diseño, la estructura y la experiencia de tu página, para que solo tengas que preocuparte por atender a los clientes que lleguen.</p>
       </div>
-      <div class="services-grid reveal-stagger">
+      <div class="services reveal-stagger">
         <article class="s-card">
           <span class="s-num">01</span>
-          <div class="card-media">
-            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="24" y="20" width="200" height="120" rx="8" fill="#0c1122" stroke="var(--line)"/>
-              <rect x="36" y="32" width="176" height="24" rx="5" fill="var(--accent)"/>
-              <rect x="36" y="66" width="90" height="9" rx="4.5" fill="var(--text-soft)"/>
-              <rect x="36" y="82" width="120" height="6" rx="3" fill="var(--line)"/>
-              <rect x="36" y="94" width="100" height="6" rx="3" fill="var(--line)"/>
-              <rect x="36" y="112" width="70" height="16" rx="8" fill="var(--wa-btn)"/>
-              <rect x="238" y="30" width="18" height="18" rx="4" fill="var(--accent)"/>
-              <rect x="238" y="54" width="18" height="18" rx="4" fill="var(--violet)"/>
-              <rect x="238" y="78" width="18" height="18" rx="4" fill="var(--wa-icon)"/>
-              <rect x="238" y="102" width="18" height="18" rx="4" fill="#ff9d6c"/>
-              <path d="M150 120 q30 -40 66 -30" fill="none" stroke="var(--accent-bright)" stroke-width="2" stroke-dasharray="4 4"/>
-              <circle cx="150" cy="120" r="4" fill="var(--accent-bright)"/>
-              <path d="M212 86 l16 6 -6 4 -1 8 z" fill="#fff"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-          </div>
+          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
           <h3>Diseño web a la medida</h3>
           <p>Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio. Nada de plantillas repetidas.</p>
         </article>
         <article class="s-card">
           <span class="s-num">02</span>
-          <div class="card-media">
-            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="30" y="24" width="118" height="52" rx="8" fill="#131b2f" stroke="var(--line)"/>
-              <path d="M60 40 v20 M66 40 v10 a4 4 0 0 1 -8 0 M96 40 c-6 0 -6 12 0 12 v8" fill="none" stroke="#ff9d6c" stroke-width="2.4" stroke-linecap="round"/>
-              <rect x="172" y="24" width="118" height="52" rx="8" fill="#131b2f" stroke="var(--line)"/>
-              <path d="M218 42 h28 l-4 18 h-20 z M222 42 a5 5 0 0 1 10 0" fill="none" stroke="var(--accent-bright)" stroke-width="2.4" stroke-linejoin="round"/>
-              <rect x="30" y="86" width="118" height="52" rx="8" fill="#131b2f" stroke="var(--line)"/>
-              <path d="M74 100 h20 v22 h-20 z M80 100 v-5 h8 v5" fill="none" stroke="var(--violet)" stroke-width="2.4" stroke-linejoin="round"/>
-              <rect x="172" y="86" width="118" height="52" rx="8" fill="#131b2f" stroke="var(--line)"/>
-              <path d="M214 122 v-16 l18 -8 v24 z M214 106 h18 M222 98 v-6" fill="none" stroke="var(--wa-icon)" stroke-width="2.4" stroke-linejoin="round"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          </div>
+          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/></svg></div>
           <h3>Páginas para todo tipo de negocio</h3>
           <p>Restaurantes, tiendas, emprendimientos, profesionales independientes y empresas de servicios.</p>
         </article>
         <article class="s-card">
           <span class="s-num">03</span>
-          <div class="card-media">
-            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="30" y="26" width="150" height="100" rx="9" fill="#0c1122" stroke="var(--line)"/>
-              <rect x="30" y="118" width="150" height="8" rx="4" fill="var(--line)"/>
-              <rect x="42" y="38" width="126" height="16" rx="4" fill="var(--accent)"/>
-              <rect x="42" y="62" width="70" height="7" rx="3.5" fill="var(--line)"/>
-              <rect x="42" y="76" width="126" height="30" rx="5" fill="#131b2f" stroke="var(--line-soft)"/>
-              <rect x="196" y="34" width="60" height="92" rx="8" fill="#0c1122" stroke="var(--line)"/>
-              <rect x="204" y="44" width="44" height="12" rx="3" fill="var(--accent)"/>
-              <rect x="204" y="62" width="30" height="5" rx="2.5" fill="var(--line)"/>
-              <rect x="204" y="74" width="44" height="30" rx="4" fill="#131b2f" stroke="var(--line-soft)"/>
-              <rect x="204" y="110" width="44" height="8" rx="4" fill="var(--wa-btn)"/>
-              <rect x="268" y="52" width="30" height="66" rx="7" fill="#0c1122" stroke="var(--line)"/>
-              <rect x="273" y="60" width="20" height="8" rx="2.5" fill="var(--accent)"/>
-              <rect x="273" y="74" width="20" height="18" rx="3" fill="#131b2f" stroke="var(--line-soft)"/>
-              <rect x="273" y="98" width="20" height="7" rx="3" fill="var(--wa-btn)"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="8" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-          </div>
+          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="8" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
           <h3>Diseño 100% responsive</h3>
           <p>Tu web funciona y se ve bien en celular, tablet y computador, sin excepciones.</p>
         </article>
         <article class="s-card">
           <span class="s-num">04</span>
-          <div class="card-media">
-            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M46 40 h130 a12 12 0 0 1 12 12 v28 a12 12 0 0 1 -12 12 h-86 l-26 20 v-20 h-32 a12 12 0 0 1 -12 -12 v-28 a12 12 0 0 1 12 -12 Z" fill="var(--navy-card)" stroke="var(--line)"/>
-              <rect x="62" y="56" width="96" height="7" rx="3.5" fill="var(--line)"/>
-              <rect x="62" y="70" width="66" height="7" rx="3.5" fill="var(--line)"/>
-              <path d="M276 74 h-96 a12 12 0 0 0 -12 12 v24 a12 12 0 0 0 12 12 h64 l24 18 v-18 h8 a12 12 0 0 0 12 -12 v-24 a12 12 0 0 0 -12 -12 Z" fill="var(--wa-btn)"/>
-              <rect x="186" y="88" width="76" height="7" rx="3.5" fill="#fff" opacity="0.8"/>
-              <rect x="186" y="101" width="50" height="7" rx="3.5" fill="#fff" opacity="0.5"/>
-              <circle cx="252" cy="48" r="15" fill="var(--wa-icon)"/>
-              <path d="M247 48 l4 4 8 -9" stroke="#06170d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          </div>
+          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
           <h3>Integración con WhatsApp</h3>
           <p>Botones de contacto directo para que tus clientes te escriban en un clic, desde cualquier sección.</p>
         </article>
         <article class="s-card">
           <span class="s-num">05</span>
-          <div class="card-media">
-            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="22" y="42" width="72" height="76" rx="7" fill="#131b2f" stroke="var(--line)"/>
-              <rect x="30" y="52" width="56" height="10" rx="3" fill="var(--accent)"/>
-              <rect x="30" y="68" width="40" height="5" rx="2.5" fill="var(--line)"/>
-              <rect x="30" y="78" width="50" height="5" rx="2.5" fill="var(--line)"/>
-              <rect x="30" y="96" width="34" height="12" rx="6" fill="var(--wa-btn)"/>
-              <rect x="124" y="42" width="72" height="76" rx="7" fill="#131b2f" stroke="var(--line)"/>
-              <rect x="132" y="52" width="56" height="10" rx="3" fill="var(--violet)"/>
-              <rect x="132" y="70" width="56" height="26" rx="4" fill="#0c1122" stroke="var(--line-soft)"/>
-              <rect x="132" y="102" width="40" height="6" rx="3" fill="var(--line)"/>
-              <rect x="226" y="42" width="72" height="76" rx="7" fill="#131b2f" stroke="var(--line)"/>
-              <rect x="234" y="52" width="40" height="10" rx="3" fill="var(--wa-icon)"/>
-              <path d="M244 88 l8 8 16 -18" fill="none" stroke="var(--wa-icon)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M96 80 h26 M198 80 h26" stroke="var(--accent-bright)" stroke-width="2" stroke-dasharray="3 3"/>
-              <path d="M120 80 l-6 -4 v8 z M222 80 l-6 -4 v8 z" fill="var(--accent-bright)"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8.5 12 14l10-5.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 15.5 12 21l10-5.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-          </div>
+          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8.5 12 14l10-5.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 15.5 12 21l10-5.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
           <h3>Experiencia de usuario (UX/UI)</h3>
           <p>Navegación clara, tiempos de carga cuidados y una estructura pensada para guiar al visitante hasta el contacto.</p>
         </article>
         <article class="s-card">
           <span class="s-num">06</span>
-          <div class="card-media">
-            <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="96" cy="66" r="22" fill="var(--navy-card)" stroke="var(--accent)" stroke-width="1.5"/>
-              <circle cx="96" cy="59" r="8" fill="var(--accent-bright)"/>
-              <path d="M82 82 c3 -9 25 -9 28 0" fill="var(--accent-bright)"/>
-              <circle cx="188" cy="66" r="22" fill="var(--navy-card)" stroke="var(--wa-icon)" stroke-width="1.5"/>
-              <circle cx="188" cy="59" r="8" fill="var(--wa-icon)"/>
-              <path d="M174 82 c3 -9 25 -9 28 0" fill="var(--wa-icon)"/>
-              <rect x="120" y="52" width="44" height="24" rx="8" fill="var(--navy-raised)" stroke="var(--line)"/>
-              <circle cx="132" cy="64" r="2.4" fill="var(--text-soft)"/><circle cx="142" cy="64" r="2.4" fill="var(--text-soft)"/><circle cx="152" cy="64" r="2.4" fill="var(--text-soft)"/>
-              <rect x="60" y="104" width="200" height="34" rx="10" fill="#131b2f" stroke="var(--line)"/>
-              <path d="M78 121 l8 8 16 -18" fill="none" stroke="var(--wa-icon)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="112" y="115" width="90" height="7" rx="3.5" fill="var(--text-soft)"/>
-              <rect x="112" y="126" width="60" height="6" rx="3" fill="var(--line)"/>
-            </svg>
-            <div class="b-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.7-2.8 2.9-4.5 5.5-4.5s4.8 1.7 5.5 4.5M15.5 8.4a3 3 0 1 1 3.3 4.6M17 14.3c2.1.4 3.6 1.8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          </div>
+          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.7-2.8 2.9-4.5 5.5-4.5s4.8 1.7 5.5 4.5M15.5 8.4a3 3 0 1 1 3.3 4.6M17 14.3c2.1.4 3.6 1.8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
           <h3>Acompañamiento personalizado</h3>
           <p>Te guiamos en todo el proceso, desde la primera idea hasta que tu página está lista y publicada.</p>
         </article>
@@ -1252,26 +935,23 @@
     </div>
   </section>
 
-  <!-- ============================================================
-       PAQUETES / PLANES
-       ============================================================ -->
+  <!-- ============================================================ PLANES ============================================================ -->
   <section id="paquetes">
     <div class="wrap">
-      <div class="section-head center reveal">
-        <span class="eyebrow">Planes</span>
+      <div class="sec-head center reveal">
+        <span class="kicker">04 — Planes</span>
         <h2>Un paquete para cada etapa de tu negocio</h2>
         <p>Elige tu punto de partida. El alcance se puede ajustar según lo que necesites: escríbenos y lo definimos juntos.</p>
       </div>
-
-      <div class="plans-grid reveal-stagger">
-        <article class="plan-card">
+      <div class="plans reveal-stagger">
+        <article class="plan">
           <h3>Paquete Básico</h3>
-          <p class="plan-desc">Landing page de 1 a 3 páginas. Ideal para empezar con una presencia profesional, clara y directa.</p>
-          <span class="plan-meta">
+          <p class="desc">Landing page de 1 a 3 páginas. Ideal para empezar con una presencia profesional, clara y directa.</p>
+          <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Entrega en 5-7 días
           </span>
-          <ul class="plan-list">
+          <ul>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Landing page de 1 a 3 páginas</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño 100% responsive</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Integración con WhatsApp</li>
@@ -1280,15 +960,15 @@
              class="btn btn-ghost btn-block" target="_blank" rel="noopener">Quiero el Paquete Básico</a>
         </article>
 
-        <article class="plan-card featured">
+        <article class="plan featured">
           <span class="plan-flag">Más popular</span>
           <h3>Paquete Profesional</h3>
-          <p class="plan-desc">Sitio web completo con SEO básico configurado para que tus clientes te encuentren en Google.</p>
-          <span class="plan-meta">
+          <p class="desc">Sitio web completo con SEO básico configurado para que tus clientes te encuentren en Google.</p>
+          <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Entrega en 10-15 días
           </span>
-          <ul class="plan-list">
+          <ul>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Sitio web completo (varias secciones)</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>SEO básico configurado</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño responsive + WhatsApp</li>
@@ -1297,298 +977,150 @@
              class="btn btn-primary btn-block" target="_blank" rel="noopener">Quiero el Paquete Profesional</a>
         </article>
 
-        <article class="plan-card">
+        <article class="plan">
           <h3>Paquete Premium</h3>
-          <p class="plan-desc">Sitio completo con copywriting, selección de fotos y mantenimiento mensual continuo.</p>
-          <span class="plan-meta">
+          <p class="desc">Sitio completo con copywriting, selección de fotos y mantenimiento mensual continuo.</p>
+          <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M4.2 7.2l2.1 2.1M17.7 14.7l2.1 2.1M3 12h3M18 12h3M4.2 16.8l2.1-2.1M17.7 9.3l2.1-2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Servicio recurrente
           </span>
-          <ul class="plan-list">
+          <ul>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Paquete Profesional</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Copywriting + selección de fotos</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Mantenimiento mensual</li>
           </ul>
           <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Premium%20(sitio%20%2B%20copywriting%20%2B%20fotos%20%2B%20mantenimiento%20mensual).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
-             class="btn btn-wa btn-block" target="_blank" rel="noopener">Quiero el Paquete Premium</a>
+             class="btn btn-ghost btn-block" target="_blank" rel="noopener">Quiero el Paquete Premium</a>
         </article>
       </div>
-
       <p class="plans-foot reveal">¿No sabes cuál elegir? <a href="#empezar">Déjanos tus datos</a> y te asesoramos sin compromiso.</p>
     </div>
   </section>
 
-  <!-- ============================================================
-       EJEMPLOS CONCEPTUALES
-       ============================================================ -->
+  <!-- ============================================================ EJEMPLOS ============================================================ -->
   <section id="ejemplos">
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Imagina tu negocio en Internet</span>
+      <div class="sec-head reveal">
+        <span class="kicker">05 — Ejemplos</span>
         <h2>Así de bien podría verse tu página web</h2>
         <p>Estos son <strong style="color:var(--text)">ejemplos conceptuales</strong> para mostrarte posibilidades de diseño según el tipo de negocio, no proyectos reales de clientes de WebZipe.</p>
       </div>
 
-      <div class="examples-note reveal">
+      <div class="ex-note reveal">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 8h.01M11 11h1v5h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
         <p><strong>Aviso:</strong> las composiciones de abajo son mockups conceptuales creados para ilustrar estilos de diseño, no capturas de páginas ya entregadas.</p>
       </div>
 
-      <div class="examples-grid reveal-stagger">
-        <article class="ex-card restaurante">
-          <div class="ex-mock">
-            <span class="badge">Ejemplo conceptual</span>
-            <div class="ex-screen">
-              <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mockup conceptual de una página web para un restaurante">
-                <defs><linearGradient id="exRestHero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a2f1c"/><stop offset="1" stop-color="#b7472e"/></linearGradient></defs>
-                <rect width="400" height="300" fill="#0e1220"/>
-                <rect width="400" height="24" fill="#141a2b"/>
-                <circle cx="16" cy="12" r="4" fill="#ff6b6b"/><circle cx="30" cy="12" r="4" fill="#ffc861"/><circle cx="44" cy="12" r="4" fill="#3ddc84"/>
-                <rect x="60" y="6" width="200" height="12" rx="6" fill="#0e1220"/>
-                <text x="68" y="15" fill="#5e6b87" font-family="monospace" font-size="8">elrincon.com</text>
-                <rect x="0" y="24" width="400" height="30" fill="#12182a"/>
-                <text x="22" y="44" fill="#ff9d6c" font-family="Georgia,serif" font-size="15" font-weight="700">El Rincón</text>
-                <text x="236" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">MENÚ</text>
-                <text x="284" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">CARTA</text>
-                <rect x="330" y="33" width="54" height="15" rx="7.5" fill="#0f7a40"/>
-                <text x="341" y="43" fill="#fff" font-family="sans-serif" font-size="7.5">Reservar</text>
-                <rect x="0" y="54" width="400" height="140" fill="url(#exRestHero)"/>
-                <rect x="0" y="54" width="400" height="140" fill="#000" opacity="0.16"/>
-                <circle cx="304" cy="126" r="52" fill="#e8a06b" opacity="0.92"/>
-                <circle cx="304" cy="126" r="40" fill="#c8703e"/>
-                <circle cx="304" cy="126" r="12" fill="#8a4a28"/>
-                <text x="30" y="100" fill="#fff" font-family="Georgia,serif" font-size="21" font-weight="700">Sabores de</text>
-                <text x="30" y="125" fill="#fff" font-family="Georgia,serif" font-size="21" font-weight="700">la casa</text>
-                <rect x="30" y="140" width="150" height="7" rx="3.5" fill="#fff" opacity="0.6"/>
-                <rect x="30" y="153" width="110" height="7" rx="3.5" fill="#fff" opacity="0.38"/>
-                <rect x="30" y="169" width="132" height="19" rx="9.5" fill="#0f7a40"/>
-                <text x="41" y="181" fill="#fff" font-family="sans-serif" font-size="8">Reservar por WhatsApp</text>
-                <g font-family="sans-serif">
-                  <rect x="20" y="212" width="112" height="72" rx="8" fill="#131b2f" stroke="#1e2740"/>
-                  <rect x="32" y="224" width="88" height="34" rx="5" fill="#3a2418"/>
-                  <rect x="32" y="264" width="52" height="6" rx="3" fill="#9aa7c2"/>
-                  <text x="98" y="270" fill="#ff9d6c" font-size="8">$18</text>
-                  <rect x="144" y="212" width="112" height="72" rx="8" fill="#131b2f" stroke="#1e2740"/>
-                  <rect x="156" y="224" width="88" height="34" rx="5" fill="#3a2418"/>
-                  <rect x="156" y="264" width="52" height="6" rx="3" fill="#9aa7c2"/>
-                  <text x="222" y="270" fill="#ff9d6c" font-size="8">$22</text>
-                  <rect x="268" y="212" width="112" height="72" rx="8" fill="#131b2f" stroke="#1e2740"/>
-                  <rect x="280" y="224" width="88" height="34" rx="5" fill="#3a2418"/>
-                  <rect x="280" y="264" width="52" height="6" rx="3" fill="#9aa7c2"/>
-                  <text x="346" y="270" fill="#ff9d6c" font-size="8">$15</text>
-                </g>
-              </svg>
-            </div>
-          </div>
+      <div class="ex-rows reveal-stagger">
+        <article class="ex-row">
           <div class="ex-info">
             <h3>Restaurantes y cafés</h3>
-            <p>Menú visual, ubicación y reservas o pedidos directos por WhatsApp.</p>
+            <p>Menú visual, ubicación y reservas o pedidos directos por WhatsApp. Una página que abre el apetito antes de que el cliente llegue.</p>
+            <a href="https://wa.me/573161838836?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio."
+               target="_blank" rel="noopener">Quiero algo así
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+          <div class="ex-shot">
+            <span class="ex-badge">Ejemplo conceptual</span>
+            <img src="imagen%20cafeteria%201%20pc.png" alt="Ejemplo conceptual de una página web para una cafetería" loading="lazy" decoding="async">
           </div>
         </article>
-        <article class="ex-card tienda">
-          <div class="ex-mock">
-            <span class="badge">Ejemplo conceptual</span>
-            <div class="ex-screen">
-              <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mockup conceptual de una tienda online">
-                <defs><linearGradient id="exShopHero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4c7dff"/><stop offset="1" stop-color="#8b7cff"/></linearGradient></defs>
-                <rect width="400" height="300" fill="#0e1220"/>
-                <rect width="400" height="24" fill="#141a2b"/>
-                <circle cx="16" cy="12" r="4" fill="#ff6b6b"/><circle cx="30" cy="12" r="4" fill="#ffc861"/><circle cx="44" cy="12" r="4" fill="#3ddc84"/>
-                <rect x="60" y="6" width="200" height="12" rx="6" fill="#0e1220"/>
-                <text x="68" y="15" fill="#5e6b87" font-family="monospace" font-size="8">nova-shop.com</text>
-                <rect x="0" y="24" width="400" height="30" fill="#12182a"/>
-                <text x="22" y="44" fill="#f4f6fb" font-family="sans-serif" font-size="14" font-weight="800">NOVA·shop</text>
-                <text x="244" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">TIENDA</text>
-                <text x="298" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">OFERTAS</text>
-                <path d="M356 34 h16 l-2 13 h-12 z M358 34 a4 4 0 0 1 12 0" fill="none" stroke="#82a8ff" stroke-width="1.6"/>
-                <rect x="20" y="64" width="360" height="96" rx="10" fill="url(#exShopHero)"/>
-                <text x="40" y="102" fill="#fff" font-family="sans-serif" font-size="18" font-weight="800">Nueva colección</text>
-                <rect x="40" y="114" width="160" height="7" rx="3.5" fill="#fff" opacity="0.55"/>
-                <rect x="40" y="130" width="100" height="19" rx="9.5" fill="#0e1220"/>
-                <text x="52" y="142" fill="#fff" font-family="sans-serif" font-size="8">Ver catálogo</text>
-                <circle cx="322" cy="112" r="34" fill="#fff" opacity="0.16"/>
-                <g font-family="sans-serif">
-                  <rect x="20" y="176" width="112" height="108" rx="8" fill="#131b2f" stroke="#1e2740"/>
-                  <rect x="32" y="186" width="88" height="58" rx="6" fill="#243048"/>
-                  <circle cx="76" cy="215" r="15" fill="#4c7dff" opacity="0.55"/>
-                  <rect x="32" y="252" width="60" height="6" rx="3" fill="#9aa7c2"/>
-                  <text x="32" y="276" fill="#82a8ff" font-size="9" font-weight="700">$29</text>
-                  <rect x="144" y="176" width="112" height="108" rx="8" fill="#131b2f" stroke="#1e2740"/>
-                  <rect x="156" y="186" width="88" height="58" rx="6" fill="#243048"/>
-                  <rect x="176" y="204" width="48" height="24" rx="4" fill="#8b7cff" opacity="0.55"/>
-                  <rect x="156" y="252" width="60" height="6" rx="3" fill="#9aa7c2"/>
-                  <text x="156" y="276" fill="#82a8ff" font-size="9" font-weight="700">$45</text>
-                  <rect x="268" y="176" width="112" height="108" rx="8" fill="#131b2f" stroke="#1e2740"/>
-                  <rect x="280" y="186" width="88" height="58" rx="6" fill="#243048"/>
-                  <circle cx="324" cy="215" r="15" fill="#2fdb74" opacity="0.5"/>
-                  <rect x="280" y="252" width="60" height="6" rx="3" fill="#9aa7c2"/>
-                  <text x="280" y="276" fill="#82a8ff" font-size="9" font-weight="700">$19</text>
-                </g>
-              </svg>
-            </div>
-          </div>
+        <article class="ex-row">
           <div class="ex-info">
             <h3>Tiendas y emprendimientos</h3>
-            <p>Catálogo de productos claro, con botón de compra o consulta directa.</p>
+            <p>Catálogo de productos claro, con botón de compra o consulta directa. Ideal para vender sin depender solo de las redes.</p>
+            <a href="https://wa.me/573161838836?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio."
+               target="_blank" rel="noopener">Quiero algo así
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+          <div class="ex-shot">
+            <span class="ex-badge">Ejemplo conceptual</span>
+            <img src="prueva%20de%20interfaz%20de%20pagina.png" alt="Ejemplo conceptual de una tienda de ropa online" loading="lazy" decoding="async">
           </div>
         </article>
-        <article class="ex-card profesional">
-          <div class="ex-mock">
-            <span class="badge">Ejemplo conceptual</span>
-            <div class="ex-screen">
-              <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mockup conceptual de una web para un profesional de servicios">
-                <defs><linearGradient id="exProHero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2fdb74"/><stop offset="1" stop-color="#4c7dff"/></linearGradient></defs>
-                <rect width="400" height="300" fill="#0e1220"/>
-                <rect width="400" height="24" fill="#141a2b"/>
-                <circle cx="16" cy="12" r="4" fill="#ff6b6b"/><circle cx="30" cy="12" r="4" fill="#ffc861"/><circle cx="44" cy="12" r="4" fill="#3ddc84"/>
-                <rect x="60" y="6" width="200" height="12" rx="6" fill="#0e1220"/>
-                <text x="68" y="15" fill="#5e6b87" font-family="monospace" font-size="8">marinaruiz.co</text>
-                <rect x="0" y="24" width="400" height="30" fill="#12182a"/>
-                <text x="22" y="44" fill="#f4f6fb" font-family="Georgia,serif" font-size="13" font-weight="700">M. Ruiz · Abogada</text>
-                <text x="232" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">SERVICIOS</text>
-                <text x="298" y="43" fill="#9aa7c2" font-family="sans-serif" font-size="8.5">SOBRE MÍ</text>
-                <rect x="352" y="33" width="34" height="15" rx="7.5" fill="#3d5fdb"/>
-                <path d="M60 54 h280" stroke="#1e2740"/>
-                <text x="26" y="94" fill="#f4f6fb" font-family="Georgia,serif" font-size="17" font-weight="700">Asesoría legal</text>
-                <text x="26" y="116" fill="#f4f6fb" font-family="Georgia,serif" font-size="17" font-weight="700">clara y cercana</text>
-                <rect x="26" y="128" width="150" height="7" rx="3.5" fill="#1e2740"/>
-                <rect x="26" y="140" width="110" height="7" rx="3.5" fill="#1e2740"/>
-                <rect x="26" y="156" width="128" height="20" rx="10" fill="#3d5fdb"/>
-                <text x="38" y="169" fill="#fff" font-family="sans-serif" font-size="8">Agendar una cita</text>
-                <circle cx="312" cy="120" r="48" fill="url(#exProHero)" opacity="0.3"/>
-                <circle cx="312" cy="120" r="37" fill="#131b2f" stroke="#1e2740"/>
-                <circle cx="312" cy="110" r="14" fill="#82a8ff"/>
-                <path d="M290 142 c4 -16 40 -16 44 0 z" fill="#82a8ff"/>
-                <g font-family="sans-serif">
-                  <rect x="20" y="196" width="360" height="26" rx="6" fill="#131b2f" stroke="#1e2740"/>
-                  <circle cx="38" cy="209" r="8" fill="#2fdb74" opacity="0.2"/>
-                  <path d="M34 209 l3 3 6 -7" fill="none" stroke="#2fdb74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <rect x="56" y="205" width="150" height="6" rx="3" fill="#9aa7c2"/>
-                  <rect x="56" y="214" width="90" height="4" rx="2" fill="#5e6b87"/>
-                  <rect x="20" y="228" width="360" height="26" rx="6" fill="#131b2f" stroke="#1e2740"/>
-                  <circle cx="38" cy="241" r="8" fill="#2fdb74" opacity="0.2"/>
-                  <path d="M34 241 l3 3 6 -7" fill="none" stroke="#2fdb74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <rect x="56" y="237" width="170" height="6" rx="3" fill="#9aa7c2"/>
-                  <rect x="56" y="246" width="80" height="4" rx="2" fill="#5e6b87"/>
-                  <rect x="20" y="260" width="360" height="26" rx="6" fill="#131b2f" stroke="#1e2740"/>
-                  <circle cx="38" cy="273" r="8" fill="#2fdb74" opacity="0.2"/>
-                  <path d="M34 273 l3 3 6 -7" fill="none" stroke="#2fdb74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <rect x="56" y="269" width="140" height="6" rx="3" fill="#9aa7c2"/>
-                  <rect x="56" y="278" width="100" height="4" rx="2" fill="#5e6b87"/>
-                </g>
-              </svg>
-            </div>
-          </div>
+        <article class="ex-row">
           <div class="ex-info">
             <h3>Profesionales y servicios</h3>
-            <p>Presentación de servicios, experiencia y forma de agendar una cita o consulta.</p>
+            <p>Presentación de servicios, experiencia y forma de agendar una cita o consulta. Transmite confianza desde el primer segundo.</p>
+            <a href="https://wa.me/573161838836?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio."
+               target="_blank" rel="noopener">Quiero algo así
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+          <div class="ex-shot">
+            <span class="ex-badge">Ejemplo conceptual</span>
+            <img src="imagen%20pc%203.png" alt="Ejemplo conceptual de una web para una profesional de servicios" loading="lazy" decoding="async">
           </div>
         </article>
       </div>
+    </div>
+  </section>
 
-      <div style="text-align:center;margin-top:44px" class="reveal">
-        <a href="https://wa.me/573161838836?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio."
-           class="btn btn-ghost" target="_blank" rel="noopener">
-          Quiero algo así para mi negocio
+  <!-- ============================================================ CTA FINAL ============================================================ -->
+  <section>
+    <div class="wrap">
+      <div class="cta-panel reveal">
+        <span class="kicker">Empecemos hoy</span>
+        <h2>¿Listo para llevar tu negocio a Internet?</h2>
+        <p>Cuéntanos sobre tu negocio por WhatsApp y te ayudamos a definir cómo debería verse tu página web: sin compromisos, directo y sin vueltas.</p>
+        <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20crear%20mi%20p%C3%A1gina%20web%20con%20WebZipe.%20%C2%BFC%C3%B3mo%20empezamos%3F"
+           class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
+          Crear mi página web
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       CTA FINAL
-       ============================================================ -->
-  <section class="cta-section">
-    <div class="wrap">
-      <div class="cta-panel reveal">
-        <div class="hero-glow" aria-hidden="true"></div>
-        <span class="eyebrow">Empecemos hoy</span>
-        <h2>¿Listo para llevar tu negocio a Internet?</h2>
-        <p>Cuéntanos sobre tu negocio por WhatsApp y te ayudamos a definir cómo debería verse tu página web: sin compromisos, directo y sin vueltas.</p>
-        <div class="cta-actions">
-          <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20crear%20mi%20p%C3%A1gina%20web%20con%20WebZipe.%20%C2%BFC%C3%B3mo%20empezamos%3F"
-             class="btn btn-wa btn-lg" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg>
-            Crear mi página web
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       FAQ
-       ============================================================ -->
+  <!-- ============================================================ FAQ ============================================================ -->
   <section id="preguntas">
     <div class="wrap">
-      <div class="section-head center reveal">
-        <span class="eyebrow">Preguntas frecuentes</span>
+      <div class="sec-head center reveal">
+        <span class="kicker">06 — Preguntas</span>
         <h2>Todo lo que quizás quieras saber</h2>
         <p>Si tienes otra duda que no está aquí, escríbenos directamente por WhatsApp.</p>
       </div>
-
-      <div class="faq-list reveal">
+      <div class="faq reveal">
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">
-            ¿Qué tipo de negocios pueden tener una página web?
-            <span class="plus" aria-hidden="true"></span>
-          </button>
+          <button class="faq-q" aria-expanded="false">¿Qué tipo de negocios pueden tener una página web?<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a-wrap"><div class="faq-a-inner"><p>Cualquier tipo: restaurantes, tiendas, emprendimientos, profesionales independientes, empresas de servicios y mucho más. Si tienes un negocio, una página web puede ayudarte a mostrarlo mejor.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">
-            ¿La página funciona en celulares?
-            <span class="plus" aria-hidden="true"></span>
-          </button>
+          <button class="faq-q" aria-expanded="false">¿La página funciona en celulares?<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a-wrap"><div class="faq-a-inner"><p>Sí. Todas las páginas que diseñamos son 100% responsive: se adaptan y funcionan correctamente en celulares, tablets y computadores.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">
-            ¿Puedo agregar WhatsApp a mi página?
-            <span class="plus" aria-hidden="true"></span>
-          </button>
+          <button class="faq-q" aria-expanded="false">¿Puedo agregar WhatsApp a mi página?<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a-wrap"><div class="faq-a-inner"><p>Claro, de hecho es una de las integraciones que más recomendamos. Es la forma más rápida y directa para que tus clientes te contacten.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">
-            ¿Puedo solicitar cambios en el diseño?
-            <span class="plus" aria-hidden="true"></span>
-          </button>
+          <button class="faq-q" aria-expanded="false">¿Puedo solicitar cambios en el diseño?<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a-wrap"><div class="faq-a-inner"><p>Sí. El diseño se ajusta a lo que necesites: cuéntanos tu idea, tus colores y tu estilo, y lo desarrollamos contigo hasta que quede como lo imaginas.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">
-            ¿Cuánto tarda en realizarse una página?
-            <span class="plus" aria-hidden="true"></span>
-          </button>
+          <button class="faq-q" aria-expanded="false">¿Cuánto tarda en realizarse una página?<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a-wrap"><div class="faq-a-inner"><p>Depende de la complejidad y el alcance de tu proyecto. Una vez conozcamos los detalles de tu negocio, te damos un tiempo estimado por WhatsApp.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">
-            ¿Qué información necesitan para comenzar?
-            <span class="plus" aria-hidden="true"></span>
-          </button>
+          <button class="faq-q" aria-expanded="false">¿Qué información necesitan para comenzar?<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a-wrap"><div class="faq-a-inner"><p>Nos ayuda conocer a qué se dedica tu negocio, qué productos o servicios ofreces y cómo prefieres que tus clientes te contacten. Con eso ya podemos empezar a diseñar.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">
-            ¿Puedo personalizar la página para mi negocio?
-            <span class="plus" aria-hidden="true"></span>
-          </button>
+          <button class="faq-q" aria-expanded="false">¿Puedo personalizar la página para mi negocio?<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a-wrap"><div class="faq-a-inner"><p>Sí, siempre. Cada página se adapta a la identidad, los colores y el contenido específico de tu negocio: no usamos plantillas fijas.</p></div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================
-       FORMULARIO — ¿QUÉ PLAN BUSCAS?
-       ============================================================ -->
-  <section id="empezar" class="start-section">
+  <!-- ============================================================ FORMULARIO ============================================================ -->
+  <section id="empezar">
     <div class="wrap">
       <div class="start-panel reveal">
         <div class="start-copy">
-          <span class="eyebrow">Cuéntanos qué necesitas</span>
+          <span class="kicker">Cuéntanos qué necesitas</span>
           <h2>¿Qué plan estás buscando?</h2>
           <p>Déjanos tu nombre, tu correo y el plan que te interesa. Te contactamos para afinar los detalles de tu página web, sin compromiso.</p>
         </div>
@@ -1608,8 +1140,8 @@
               <option value="Aún no estoy seguro">Aún no estoy seguro / quiero asesoría</option>
             </select>
           </label>
-          <button type="submit" class="btn btn-wa btn-block btn-lg">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
             Enviar y hablar por WhatsApp
           </button>
           <p class="start-msg" id="f-msg" role="status" hidden></p>
@@ -1619,18 +1151,16 @@
   </section>
 </main>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
+<!-- ============================================================ FOOTER ============================================================ -->
 <footer id="contacto">
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="#inicio" class="logo" aria-label="WebZipe — inicio"><span class="dot" aria-hidden="true"></span>WebZipe</a>
+        <a href="#inicio" class="logo" aria-label="WebZipe — inicio"><span class="mark" aria-hidden="true"></span>Web<span class="logo-accent">Zipe</span></a>
         <p>Diseñamos páginas web profesionales para negocios, emprendimientos y empresas que quieren verse mejor en Internet y conseguir más clientes.</p>
         <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
-           class="btn btn-wa" style="margin-top:22px" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg>
+           class="btn btn-primary" style="margin-top:22px" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
           Escríbenos por WhatsApp
         </a>
       </div>
@@ -1640,7 +1170,7 @@
         <a href="#beneficios">Beneficios</a>
         <a href="#servicios">Servicios</a>
         <a href="#paquetes">Planes</a>
-        <a href="#empezar">Empezar</a>
+        <a href="#ejemplos">Ejemplos</a>
         <a href="#preguntas">Preguntas</a>
       </div>
       <div class="footer-col">
