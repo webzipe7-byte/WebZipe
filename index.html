@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="WebZipe diseña páginas web profesionales para negocios, emprendimientos y empresas: diseño moderno, 100% responsive y contacto directo por WhatsApp.">
+<meta name="description" content="WebZipe crea soluciones digitales para negocios: páginas web, tiendas virtuales, catálogos digitales, posicionamiento SEO, integración con redes sociales, formularios, reservas y mantenimiento, con contacto directo por WhatsApp.">
 <title>WebZipe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -673,6 +673,31 @@
   @media (max-width:520px){ .wa-float{width:54px;height:54px;right:16px;bottom:16px} .wa-float svg{width:25px;height:25px} }
 
   /* ============================================================
+     FLOATING INSTAGRAM
+     ============================================================ */
+  .ig-float{
+    position:fixed;right:22px;bottom:112px;z-index:90;
+    width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(135deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+    background-size:220% 220%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 14px 32px -8px rgba(214,41,118,.55);
+    transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+    animation:ig-bounce 3.2s ease-in-out infinite,ig-gradient 6s ease-in-out infinite;
+  }
+  .ig-float:hover{transform:scale(1.14) translateY(-6px);box-shadow:0 20px 42px -6px rgba(214,41,118,.7)}
+  .ig-float svg{width:24px;height:24px;color:#fff;transition:transform .35s var(--ease)}
+  .ig-float:hover svg{transform:rotate(-10deg) scale(1.12)}
+  .ig-float::before{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    border:2px solid #d62976;animation:pulse-ring 2.4s ease-out .6s infinite;
+  }
+  @keyframes ig-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  @keyframes ig-gradient{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  @media (max-width:520px){ .ig-float{width:46px;height:46px;right:16px;bottom:90px} .ig-float svg{width:21px;height:21px} }
+  @media (prefers-reduced-motion:reduce){ .ig-float{animation:none} .ig-float::before{animation:none} }
+
+  /* ============================================================
      FOOTER
      ============================================================ */
   footer{border-top:1px solid var(--line-soft);padding-block:64px 36px;background:var(--bg-2)}
@@ -736,7 +761,7 @@
     </nav>
     <div class="nav-cta">
       <a href="#paquetes" class="btn btn-ghost">Ver planes</a>
-      <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
+      <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc)."
          class="btn btn-primary" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
         Escríbenos
@@ -755,7 +780,7 @@
   <a href="#paquetes">Planes</a>
   <a href="#ejemplos">Ejemplos</a>
   <a href="#preguntas">Preguntas</a>
-  <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
+  <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc)."
      class="btn btn-primary btn-block" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
 </div>
 
@@ -763,25 +788,26 @@
   <!-- ============================================================ HERO ============================================================ -->
   <section id="inicio" class="hero">
     <div class="wrap">
-      <span class="kicker">Estudio de diseño y desarrollo web</span>
-      <h1>Creamos la página web que tu negocio necesita para <span class="grad">crecer</span></h1>
+      <span class="kicker">Estudio de soluciones digitales para negocios</span>
+      <h1>Creamos la solución digital que tu negocio necesita para <span class="grad">crecer</span></h1>
       <p class="lead">
-        En WebZipe diseñamos sitios modernos, rápidos y 100% responsive, con contacto directo
-        por WhatsApp. Sin plantillas genéricas: todo hecho a la medida de tu negocio.
+        En WebZipe diseñamos páginas web, tiendas virtuales y catálogos digitales, con SEO básico,
+        integración a tus redes sociales, formularios, reservas y mantenimiento. Todo hecho a la
+        medida de tu negocio, con contacto directo por WhatsApp.
       </p>
       <div class="hero-actions">
-        <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio.%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+        <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
            class="btn btn-primary btn-lg" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
-          Quiero mi página web
+          Quiero mi solución digital
         </a>
         <a href="#ejemplos" class="btn btn-ghost btn-lg">Ver ejemplos
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
       <div class="hero-trust">
-        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño a medida</span>
-        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Optimizada para móviles</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Páginas web y tiendas virtuales</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>SEO y redes sociales integradas</span>
         <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Contacto directo por WhatsApp</span>
       </div>
 
@@ -807,10 +833,12 @@
 
   <div class="marquee" role="presentation">
     <div class="marquee-track" aria-hidden="true">
-      <span>Diseño a la medida</span><span>Integración con WhatsApp</span><span>Optimizada para móviles</span>
-      <span>Enfocada en conversión</span><span>Atención personalizada</span><span>Disponible 24/7</span>
-      <span>Diseño a la medida</span><span>Integración con WhatsApp</span><span>Optimizada para móviles</span>
-      <span>Enfocada en conversión</span><span>Atención personalizada</span><span>Disponible 24/7</span>
+      <span>Páginas web a la medida</span><span>Tiendas virtuales</span><span>Catálogos digitales</span>
+      <span>Posicionamiento SEO</span><span>Integración con redes sociales</span><span>Formularios y reservas</span>
+      <span>Mantenimiento y marketing digital</span><span>Integración con WhatsApp</span>
+      <span>Páginas web a la medida</span><span>Tiendas virtuales</span><span>Catálogos digitales</span>
+      <span>Posicionamiento SEO</span><span>Integración con redes sociales</span><span>Formularios y reservas</span>
+      <span>Mantenimiento y marketing digital</span><span>Integración con WhatsApp</span>
     </div>
   </div>
 
@@ -820,7 +848,7 @@
       <div class="sec-head reveal">
         <span class="kicker">Por qué WebZipe</span>
         <h2>Un estudio que empieza contigo, no con un catálogo de plantillas</h2>
-        <p>Nos enfocamos en un solo objetivo: que tu negocio se vea profesional en Internet y consiga más clientes. Esto es lo que puedes esperar al trabajar con nosotros.</p>
+        <p>No solo te entregamos una página: te asesoramos sobre qué necesita tu negocio (página web, tienda virtual, catálogo, formularios o reservas) para verse profesional en Internet y conseguir más clientes.</p>
       </div>
 
       <div class="rows">
@@ -962,7 +990,7 @@
       <div class="sec-head reveal">
         <span class="kicker">El cambio</span>
         <h2>Tener redes sociales ya no es suficiente</h2>
-        <p>Muchos negocios manejan Instagram o Facebook, pero no tienen un sitio web propio donde sus clientes puedan conocer a fondo sus servicios, productos y formas de contacto.</p>
+        <p>Hoy a muchos negocios les interesa tener presencia en Internet, pero no siempre saben cómo lograrlo: manejan Instagram o Facebook, pero no tienen un sitio propio, una tienda virtual o un catálogo donde sus clientes conozcan a fondo sus servicios y productos.</p>
       </div>
       <div class="ps">
         <div class="ps-card problem reveal">
@@ -996,45 +1024,45 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="kicker">Servicios</span>
-        <h2>Todo lo que necesitas para tener una web profesional</h2>
-        <p>Nos encargamos del diseño, la estructura y la experiencia de tu página, para que solo tengas que preocuparte por atender a los clientes que lleguen.</p>
+        <h2>Soluciones digitales para hacer crecer tu negocio</h2>
+        <p>No solo hacemos páginas web: te ayudamos a resolver lo que tu negocio necesita para tener presencia en Internet, mostrar tus productos o servicios y conseguir más clientes.</p>
       </div>
       <div class="services reveal-stagger">
         <article class="s-card">
           <span class="s-num">01</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-          <h3>Diseño web a la medida</h3>
+          <h3>Páginas web a la medida</h3>
           <p>Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio. Nada de plantillas repetidas.</p>
         </article>
         <article class="s-card">
           <span class="s-num">02</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <h3>Páginas para todo tipo de negocio</h3>
-          <p>Restaurantes, tiendas, emprendimientos, profesionales independientes y empresas de servicios.</p>
+          <h3>Tiendas virtuales y catálogos digitales</h3>
+          <p>Muestra y vende tus productos con un catálogo digital o una tienda virtual completa, sin depender solo de las redes sociales.</p>
         </article>
         <article class="s-card">
           <span class="s-num">03</span>
-          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="8" width="4" height="8" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-          <h3>Diseño 100% responsive</h3>
-          <p>Tu web funciona y se ve bien en celular, tablet y computador, sin excepciones.</p>
+          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <h3>Posicionamiento SEO</h3>
+          <p>Configuramos lo básico para que tu página aparezca en las búsquedas de Google y tus clientes te encuentren más fácil.</p>
         </article>
         <article class="s-card">
           <span class="s-num">04</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <h3>Integración con WhatsApp</h3>
-          <p>Botones de contacto directo para que tus clientes te escriban en un clic, desde cualquier sección.</p>
+          <h3>WhatsApp y redes sociales</h3>
+          <p>Botones de contacto directo a WhatsApp y enlaces a tus redes sociales, para que tus clientes te escriban en un clic desde cualquier sección.</p>
         </article>
         <article class="s-card">
           <span class="s-num">05</span>
-          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8.5 12 14l10-5.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 15.5 12 21l10-5.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-          <h3>Experiencia de usuario (UX/UI)</h3>
-          <p>Navegación clara, tiempos de carga cuidados y una estructura pensada para guiar al visitante hasta el contacto.</p>
+          <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4.5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 3.5v3M16 3.5v3M3.5 10h17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 14.5l2.2 2.2L16 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Formularios y reservas</h3>
+          <p>Formularios de contacto y sistemas de reservas o agendamiento de citas, directamente desde tu página.</p>
         </article>
         <article class="s-card">
           <span class="s-num">06</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.7-2.8 2.9-4.5 5.5-4.5s4.8 1.7 5.5 4.5M15.5 8.4a3 3 0 1 1 3.3 4.6M17 14.3c2.1.4 3.6 1.8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          <h3>Acompañamiento personalizado</h3>
-          <p>Te guiamos en todo el proceso, desde la primera idea hasta que tu página está lista y publicada.</p>
+          <h3>Mantenimiento y marketing digital</h3>
+          <p>Actualizamos tu página, te acompañamos después de la entrega y lo complementamos poco a poco con estrategias de marketing digital.</p>
         </article>
       </div>
     </div>
@@ -1046,12 +1074,12 @@
       <div class="sec-head center reveal">
         <span class="kicker">Planes</span>
         <h2>Un paquete para cada etapa de tu negocio</h2>
-        <p>Elige tu punto de partida. El alcance se puede ajustar según lo que necesites: escríbenos y lo definimos juntos.</p>
+        <p>Elige tu punto de partida: página web, tienda virtual o catálogo digital. El alcance se puede ajustar según lo que necesites: escríbenos y lo definimos juntos.</p>
       </div>
       <div class="plans reveal-stagger">
         <article class="plan">
           <h3>Paquete Básico</h3>
-          <p class="desc">Landing page de 1 a 3 páginas. Ideal para empezar con una presencia profesional, clara y directa.</p>
+          <p class="desc">Landing page de 1 a 3 páginas con formulario de contacto. Ideal para empezar con una presencia profesional, clara y directa.</p>
           <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Entrega en 5-7 días
@@ -1059,42 +1087,42 @@
           <ul>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Landing page de 1 a 3 páginas</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño 100% responsive</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Integración con WhatsApp</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Formulario de contacto + WhatsApp</li>
           </ul>
-          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20B%C3%A1sico%20(landing%20page%2C%201-3%20p%C3%A1ginas).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20B%C3%A1sico%20(landing%20page%20%2B%20formulario%20de%20contacto).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
              class="btn btn-ghost btn-block" target="_blank" rel="noopener">Quiero el Paquete Básico</a>
         </article>
 
         <article class="plan featured">
           <span class="plan-flag">Más popular</span>
           <h3>Paquete Profesional</h3>
-          <p class="desc">Sitio web completo con SEO básico configurado para que tus clientes te encuentren en Google.</p>
+          <p class="desc">Sitio web completo con catálogo digital, SEO básico e integración con tus redes sociales, para que tus clientes te encuentren y conozcan todo lo que ofreces.</p>
           <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Entrega en 10-15 días
           </span>
           <ul>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Sitio web completo (varias secciones)</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>SEO básico configurado</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño responsive + WhatsApp</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Catálogo digital + SEO básico</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Redes sociales + WhatsApp integrados</li>
           </ul>
-          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Profesional%20(sitio%20completo%20%2B%20SEO%20b%C3%A1sico).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Profesional%20(sitio%20completo%20%2B%20cat%C3%A1logo%20digital%20%2B%20SEO%20b%C3%A1sico%20%2B%20redes%20sociales).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
              class="btn btn-primary btn-block" target="_blank" rel="noopener">Quiero el Paquete Profesional</a>
         </article>
 
         <article class="plan">
           <h3>Paquete Premium</h3>
-          <p class="desc">Sitio completo con copywriting, selección de fotos y mantenimiento mensual continuo.</p>
+          <p class="desc">Sitio completo con tienda virtual o sistema de reservas, mantenimiento mensual y acompañamiento en marketing digital.</p>
           <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M4.2 7.2l2.1 2.1M17.7 14.7l2.1 2.1M3 12h3M18 12h3M4.2 16.8l2.1-2.1M17.7 9.3l2.1-2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             Servicio recurrente
           </span>
           <ul>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Paquete Profesional</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Copywriting + selección de fotos</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Mantenimiento mensual</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Tienda virtual y/o sistema de reservas</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Mantenimiento mensual + marketing digital</li>
           </ul>
-          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Premium%20(sitio%20%2B%20copywriting%20%2B%20fotos%20%2B%20mantenimiento%20mensual).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Premium%20(sitio%20%2B%20tienda%20virtual%20%2B%20mantenimiento%20%2B%20marketing%20digital).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
              class="btn btn-ghost btn-block" target="_blank" rel="noopener">Quiero el Paquete Premium</a>
         </article>
       </div>
@@ -1172,11 +1200,11 @@
       <div class="cta-panel reveal">
         <span class="kicker">Empecemos hoy</span>
         <h2>¿Listo para llevar tu negocio a Internet?</h2>
-        <p>Cuéntanos sobre tu negocio por WhatsApp y te ayudamos a definir cómo debería verse tu página web: sin compromisos, directo y sin vueltas.</p>
-        <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20crear%20mi%20p%C3%A1gina%20web%20con%20WebZipe.%20%C2%BFC%C3%B3mo%20empezamos%3F"
+        <p>Cuéntanos sobre tu negocio por WhatsApp y te ayudamos a definir qué necesitas: página web, tienda virtual, catálogo digital o mantenimiento. Sin compromisos, directo y sin vueltas.</p>
+        <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20crear%20mi%20p%C3%A1gina%20web%20o%20tienda%20virtual%20con%20WebZipe.%20%C2%BFC%C3%B3mo%20empezamos%3F"
            class="btn btn-primary btn-lg" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
-          Crear mi página web
+          Crear mi solución digital
         </a>
       </div>
     </div>
@@ -1219,6 +1247,10 @@
           <button class="faq-q" aria-expanded="false">¿Puedo personalizar la página para mi negocio?<span class="pm" aria-hidden="true"></span></button>
           <div class="faq-a-wrap"><div class="faq-a-inner"><p>Sí, siempre. Cada página se adapta a la identidad, los colores y el contenido específico de tu negocio: no usamos plantillas fijas.</p></div></div>
         </div>
+        <div class="faq-item" data-open="false">
+          <button class="faq-q" aria-expanded="false">¿Solo hacen páginas web o también tiendas virtuales y otros servicios?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>También creamos tiendas virtuales, catálogos digitales, formularios y sistemas de reservas, integración con redes sociales, posicionamiento SEO básico y mantenimiento continuo. Cuéntanos qué necesita tu negocio y te asesoramos sobre la mejor opción.</p></div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -1242,9 +1274,9 @@
           <label>Plan que te interesa
             <select name="plan" id="f-plan" required>
               <option value="" disabled selected>Selecciona un plan</option>
-              <option value="Paquete Básico (landing page, 1-3 páginas)">Paquete Básico — landing page (1-3 páginas)</option>
-              <option value="Paquete Profesional (sitio completo + SEO básico)">Paquete Profesional — sitio completo + SEO básico</option>
-              <option value="Paquete Premium (sitio + copywriting + fotos + mantenimiento)">Paquete Premium — sitio + copywriting + fotos + mantenimiento</option>
+              <option value="Paquete Básico (landing page + formulario de contacto)">Paquete Básico — landing page + formulario</option>
+              <option value="Paquete Profesional (sitio completo + catálogo digital + SEO básico + redes sociales)">Paquete Profesional — sitio + catálogo + SEO</option>
+              <option value="Paquete Premium (sitio + tienda virtual + mantenimiento + marketing digital)">Paquete Premium — tienda virtual + mantenimiento</option>
               <option value="Aún no estoy seguro">Aún no estoy seguro / quiero asesoría</option>
             </select>
           </label>
@@ -1265,8 +1297,8 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="#inicio" class="logo" aria-label="WebZipe — inicio"><span class="mark" aria-hidden="true"></span>Web<span class="logo-accent">Zipe</span></a>
-        <p>Diseñamos páginas web profesionales para negocios, emprendimientos y empresas que quieren verse mejor en Internet y conseguir más clientes.</p>
-        <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20crear%20una%20p%C3%A1gina%20web%20para%20mi%20negocio."
+        <p>Creamos soluciones digitales para negocios, emprendimientos y empresas: páginas web, tiendas virtuales, catálogos digitales y mantenimiento, para verse mejor en Internet y conseguir más clientes.</p>
+        <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc)."
            class="btn btn-primary" style="margin-top:22px" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
           Escríbenos por WhatsApp
@@ -1283,13 +1315,15 @@
       </div>
       <div class="footer-col">
         <h4>Servicios</h4>
-        <span>Diseño web a la medida</span>
-        <span>Diseño responsive</span>
-        <span>Integración con WhatsApp</span>
+        <span>Páginas web y tiendas virtuales</span>
+        <span>Catálogos digitales y SEO</span>
+        <span>Redes sociales y WhatsApp</span>
+        <span>Mantenimiento y marketing digital</span>
       </div>
       <div class="footer-col">
         <h4>Contacto</h4>
         <a href="https://wa.me/573161838836" target="_blank" rel="noopener">WhatsApp: +57 316 183 8836</a>
+        <a href="https://www.instagram.com/webzipe/" target="_blank" rel="noopener">Instagram: @webzipe</a>
         <span>Colombia</span>
       </div>
     </div>
@@ -1299,6 +1333,11 @@
     </div>
   </div>
 </footer>
+
+<a href="https://www.instagram.com/webzipe/"
+   class="ig-float" target="_blank" rel="noopener" aria-label="Ver el Instagram de WebZipe">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/><circle cx="17.15" cy="6.85" r="1.15" fill="currentColor"/></svg>
+</a>
 
 <a href="https://wa.me/573161838836?text=Hola%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios%20de%20WebZipe."
    class="wa-float" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp a WebZipe">
