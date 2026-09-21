@@ -579,6 +579,27 @@
   }
 
   /* ============================================================
+     EJEMPLOS DE PÁGINAS (enlaces reales)
+     ============================================================ */
+  .real-ex-list{display:flex;flex-direction:column;gap:18px}
+  .real-ex-item{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:28px 30px;
+    transition:border-color .35s var(--ease),transform .35s var(--ease),background .35s var(--ease);
+  }
+  .real-ex-item:hover{border-color:var(--gold-line);transform:translateY(-4px);background:var(--panel-hover)}
+  .real-ex-text h3{font-size:1.14rem;font-weight:600;margin-bottom:6px}
+  .real-ex-text p{color:var(--text-soft);font-size:.92rem;max-width:56ch}
+  .real-ex-cta{
+    display:inline-flex;align-items:center;gap:8px;flex-shrink:0;
+    color:var(--gold-bright);font-family:var(--font-display);font-style:italic;font-weight:600;font-size:.98rem;
+  }
+  .real-ex-cta svg{width:16px;height:16px;transition:transform .3s var(--ease)}
+  .real-ex-item:hover .real-ex-cta svg{transform:translateX(4px)}
+  @media (max-width:600px){ .real-ex-item{padding:22px 22px} }
+
+  /* ============================================================
      CTA FINAL
      ============================================================ */
   .cta-panel{
@@ -757,6 +778,7 @@
       <a href="#servicios">Servicios</a>
       <a href="#paquetes">Planes</a>
       <a href="#ejemplos">Ejemplos</a>
+      <a href="#ejemplos-paginas">Ejemplos de páginas</a>
       <a href="#preguntas">Preguntas</a>
     </nav>
     <div class="nav-cta">
@@ -779,6 +801,7 @@
   <a href="#servicios">Servicios</a>
   <a href="#paquetes">Planes</a>
   <a href="#ejemplos">Ejemplos</a>
+  <a href="#ejemplos-paginas">Ejemplos de páginas</a>
   <a href="#preguntas">Preguntas</a>
   <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc)."
      class="btn btn-primary btn-block" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
@@ -1194,6 +1217,56 @@
     </div>
   </section>
 
+  <!-- ============================================================ EJEMPLOS DE PÁGINAS (enlaces reales) ============================================================ -->
+  <section id="ejemplos-paginas">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">Ejemplos de páginas</span>
+        <h2>Mira algunas páginas que hemos creado</h2>
+        <p>Estos son enlaces reales a páginas de prueba. Haz clic en cada una para verla en vivo.</p>
+      </div>
+
+      <div class="real-ex-list reveal-stagger">
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-ropa-" target="_blank" rel="noopener">
+          <div class="real-ex-text">
+            <h3>Catálogo de Ropa</h3>
+            <p>Catálogo de modelos de ropa con precios y botón de "Pedir ahora" para cada prenda.</p>
+          </div>
+          <span class="real-ex-cta">Ver página
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" target="_blank" rel="noopener">
+          <div class="real-ex-text">
+            <h3>Javier Restrepo | Abogado de Familia</h3>
+            <p>Página para un profesional independiente: "Defendemos lo que más importa: tu familia". Incluye áreas de práctica, experiencia y consulta gratuita por WhatsApp.</p>
+          </div>
+          <span class="real-ex-cta">Ver página
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" target="_blank" rel="noopener">
+          <div class="real-ex-text">
+            <h3>El Buen Sazón | Comida casera a tu mesa o a tu puerta</h3>
+            <p>Página de restaurante con menú, pedidos en mesa y domicilios, con envío del pedido directo por WhatsApp.</p>
+          </div>
+          <span class="real-ex-cta">Ver página
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" target="_blank" rel="noopener">
+          <div class="real-ex-text">
+            <h3>ToyLandia — Juguetes para toda la familia</h3>
+            <p>Tienda digital de juguetes con catálogo de productos y botón de "Pide ya" para cada uno.</p>
+          </div>
+          <span class="real-ex-cta">Ver página
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================================================ CTA FINAL ============================================================ -->
   <section>
     <div class="wrap">
@@ -1311,6 +1384,7 @@
         <a href="#servicios">Servicios</a>
         <a href="#paquetes">Planes</a>
         <a href="#ejemplos">Ejemplos</a>
+        <a href="#ejemplos-paginas">Ejemplos de páginas</a>
         <a href="#preguntas">Preguntas</a>
       </div>
       <div class="footer-col">
