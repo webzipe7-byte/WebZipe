@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en-US">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="WebZipe crea soluciones digitales para negocios: páginas web, tiendas virtuales, catálogos digitales, posicionamiento SEO, integración con redes sociales, formularios, reservas y mantenimiento, con contacto directo por WhatsApp.">
+<meta name="description" content="WebZipe builds digital solutions for businesses: websites, online stores, digital catalogs, SEO, social media integration, forms, booking and maintenance, with direct contact via WhatsApp.">
 <title>WebZipe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -216,7 +216,77 @@
   .nav-links a.active{color:var(--text)}
   .nav-links a.active::after{transform:scaleX(1)}
   .nav-cta{display:flex;align-items:center;gap:14px}
+  .nav-end{display:flex;align-items:center;gap:14px}
+
+  /* Selector de idioma */
+  .lang{position:relative}
+  .lang-btn{
+    display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:100px;
+    background:rgba(201,161,92,.05);border:1px solid var(--line);
+    font-size:.87rem;font-weight:600;color:var(--text);
+    transition:border-color .25s,background-color .25s;
+  }
+  .lang-btn:hover,.lang-btn[aria-expanded="true"]{border-color:var(--gold-line);background:var(--panel-hover)}
+  .lang-btn svg{width:18px;height:18px;color:var(--gold-bright)}
+  .lang-menu{
+    position:absolute;top:calc(100% + 10px);right:0;min-width:190px;z-index:120;
+    display:flex;flex-direction:column;padding:6px;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md);
+    box-shadow:var(--shadow-lg);
+  }
+  .lang-menu[hidden]{display:none}
+  .lang-menu button{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:11px 14px;border-radius:var(--r-sm);text-align:left;
+    font-size:.92rem;font-weight:500;color:var(--text-soft);
+  }
+  .lang-menu button:hover{background:var(--panel-hover);color:var(--text)}
+  .lang-menu button[aria-checked="true"]{color:var(--gold-bright)}
+  .lang-menu button[aria-checked="true"]::after{content:"✓";font-weight:700}
+  @media (max-width:560px){ .lang-btn{padding:0 13px} }
+
+  /* Selector de tema (reutiliza el estilo del selector de idioma) */
+  .theme{position:relative}
+  .lang-btn{white-space:nowrap;flex-shrink:0}
+  .lang-btn svg{flex-shrink:0}
+  .theme .lang-menu{min-width:160px}
+  .theme-ico-light,.theme .t-short{display:none}
+  html[data-theme="light"] .theme-ico-dark{display:none}
+  html[data-theme="light"] .theme-ico-light{display:block}
+  @media (max-width:560px){ .nav-end{gap:6px} .lang:not(.theme) .lang-btn span{display:none} .lang-btn{padding:0 12px} .theme .lang-btn{padding:0 10px;gap:5px} .theme .t-long{display:none} .theme .t-short{display:inline} .nav-row{gap:8px} }
+  @media (max-width:370px){ .theme .t-short{display:none} }
+
+  /* ---------- TEMA CLARO ---------- */
+  html[data-theme="light"]{
+    color-scheme:light;
+    --bg:#ffffff;
+    --bg-2:#f5f6fa;
+    --panel:#ffffff;
+    --panel-2:#f3f5fb;
+    --panel-hover:#eef1fa;
+    --line:#dde1ec;
+    --line-soft:#e8ebf3;
+    --blue-bright:#3d5fe0;
+    --blue-deep:#e3e9fb;
+    --gold-bright:#9a7430;
+    --gold-line:rgba(154,116,48,.45);
+    --accent-bright:#3d5fe0;
+    --text:#14161f;
+    --text-soft:#4a5068;
+    --text-mute:#6f7489;
+    --shadow-lg:0 44px 90px -30px rgba(20,30,70,.18);
+    --shadow-md:0 22px 44px -20px rgba(20,30,70,.16);
+  }
+  html[data-theme="light"] body::before{opacity:.45}
+  html[data-theme="light"] .page-frame{box-shadow:none}
+  html[data-theme="light"] .logo-accent{background-image:linear-gradient(100deg,#b8893a,#9a7430 60%,#7a5a22)}
+  html[data-theme="light"] header.scrolled{background:rgba(255,255,255,.88)}
+  html[data-theme="light"] .row-media{background:linear-gradient(160deg,var(--bg-2),#eaeef8)}
+  html[data-theme="light"] .cta-panel{background:linear-gradient(135deg,var(--blue-deep),var(--bg-2) 55%,#eef1fb)}
+  html[data-theme="light"] .start-panel{background:linear-gradient(135deg,var(--blue-deep),var(--bg-2) 58%,#eef1fb)}
   .nav-cta .btn{padding:11px 20px;font-size:.87rem}
+  header .wrap{max-width:1480px}
+  @media (max-width:1560px){ .nav-links{gap:24px} .nav-cta .btn-ghost{display:none} }
 
   .burger{
     display:none;width:44px;height:44px;border-radius:11px;flex-shrink:0;
@@ -246,7 +316,7 @@
   }
   .mobile-panel .btn{margin-top:28px}
 
-  @media (max-width:920px){
+  @media (max-width:1380px){
     .nav-links,.nav-cta .btn-ghost{display:none}
     .burger{display:block}
   }
@@ -514,10 +584,12 @@
   .plan .meta svg{width:15px;height:15px}
   .plan ul{display:flex;flex-direction:column;gap:10px;margin-top:2px}
   .plan ul::before{
-    content:"Qué incluye";
+    content:"What's included";
     font-family:var(--font-display);font-style:italic;font-size:.86rem;
     color:var(--text-mute);margin-bottom:4px;display:block;
   }
+  html[lang="es"] .plan ul::before{content:"Qué incluye"}
+  html[lang="fr"] .plan ul::before{content:"Ce qui est inclus"}
   .plan li{display:flex;gap:10px;color:var(--text-soft);font-size:.9rem;line-height:1.5}
   .plan li svg{width:17px;height:17px;color:var(--gold-bright);flex-shrink:0;margin-top:2px}
   .plan .btn{margin-top:auto}
@@ -554,7 +626,7 @@
   .ex-badge{
     position:absolute;top:12px;left:12px;z-index:2;
     font-family:var(--font-display);font-style:italic;font-size:.78rem;
-    background:rgba(7,8,13,.8);border:1px solid var(--line);color:var(--text-soft);
+    background:color-mix(in srgb,var(--bg) 85%,transparent);border:1px solid var(--line);color:var(--text-soft);
     padding:5px 12px;border-radius:100px;
   }
   .ex-mini{
@@ -665,9 +737,16 @@
     background-repeat:no-repeat;background-position:right 14px center;background-size:16px;
   }
   .start-form .btn{margin-top:6px}
+  .start-form .btn[disabled]{opacity:.7;cursor:progress}
+  .f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .f-row > label{min-width:0}
+  html:not([data-theme="light"]) .start-form input{color-scheme:dark}
+  @media (max-width:420px){ .f-row{grid-template-columns:1fr} }
   .start-msg{font-size:.84rem;margin-top:2px}
   .start-msg.err{color:var(--danger)}
   .start-msg.ok{color:var(--ok)}
+  .start-panel > *{min-width:0}
+  .start-form select{max-width:100%;text-overflow:ellipsis}
   @media (max-width:820px){ .start-panel{grid-template-columns:1fr;gap:32px;padding:40px 26px} }
 
   /* ============================================================
@@ -717,6 +796,68 @@
   @media (prefers-reduced-motion:reduce){ .ig-float{animation:none} .ig-float::before{animation:none} }
 
   /* ============================================================
+     ASISTENTE IA (ZIPE)
+     ============================================================ */
+  .ia-float{
+    position:fixed;left:22px;bottom:22px;z-index:95;
+    display:flex;align-items:center;gap:10px;
+    padding:0 20px 0 16px;height:54px;border-radius:999px;border:1px solid var(--gold-line);
+    background:linear-gradient(135deg,var(--panel-2),var(--blue-deep));
+    color:var(--text);font-family:var(--font-body);font-weight:600;font-size:.94rem;cursor:pointer;
+    box-shadow:var(--shadow-md),var(--shadow-gold);
+    transition:transform .35s var(--ease),border-color .35s var(--ease);
+  }
+  .ia-float:hover{transform:translateY(-4px);border-color:var(--gold)}
+  .ia-float svg{width:22px;height:22px;color:var(--gold-bright)}
+  .ia-float[aria-expanded="true"]{opacity:0;pointer-events:none}
+  .ia-panel{
+    position:fixed;left:22px;bottom:22px;z-index:96;
+    width:min(400px,calc(100vw - 32px));height:min(600px,calc(100dvh - 110px));
+    display:flex;flex-direction:column;overflow:hidden;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    box-shadow:var(--shadow-lg);
+    opacity:0;transform:translateY(18px) scale(.98);pointer-events:none;visibility:hidden;
+    transition:opacity .35s var(--ease),transform .35s var(--ease),visibility 0s linear .35s;
+  }
+  .ia-panel.is-open{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition-delay:0s}
+  .ia-float[hidden],.ia-panel[hidden]{display:none}
+  .ia-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line-soft);background:var(--panel-2)}
+  .ia-avatar{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#0a0c15;font-family:var(--font-display);font-weight:700}
+  .ia-head strong{display:block;font-family:var(--font-display);font-size:1.04rem;font-weight:600}
+  .ia-head small{display:block;color:var(--text-mute);font-size:.78rem;line-height:1.3}
+  .ia-close{margin-left:auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:transparent;
+    color:var(--text-soft);font-size:1.2rem;line-height:1;cursor:pointer}
+  .ia-close:hover{color:var(--text);border-color:var(--text-mute)}
+  .ia-log{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain}
+  .ia-msg{max-width:88%;padding:11px 14px;border-radius:var(--r-md);font-size:.92rem;line-height:1.55;overflow-wrap:anywhere}
+  .ia-msg.user{align-self:flex-end;background:var(--accent-deep);border-bottom-right-radius:4px}
+  .ia-msg.bot{align-self:flex-start;background:var(--panel-2);border:1px solid var(--line-soft);border-bottom-left-radius:4px}
+  .ia-msg.err{border-color:var(--danger);color:var(--danger)}
+  .ia-msg a{color:var(--blue-bright);text-decoration:underline}
+  .ia-meta{margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft);font-size:.78rem;color:var(--text-mute)}
+  .ia-meta ol{margin:4px 0 0 18px}
+  .ia-meta li{padding-block:2px}
+  .ia-typing{display:inline-flex;gap:5px;align-items:center}
+  .ia-typing i{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:ia-dot 1.2s ease-in-out infinite}
+  .ia-typing i:nth-child(2){animation-delay:.15s}
+  .ia-typing i:nth-child(3){animation-delay:.3s}
+  @keyframes ia-dot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+  .ia-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line-soft);background:var(--panel-2)}
+  .ia-form textarea{flex:1;resize:none;height:44px;max-height:120px;padding:11px 14px;border-radius:var(--r-sm);
+    border:1px solid var(--line);background:var(--bg-2);color:var(--text);font:inherit;font-size:.92rem}
+  .ia-form textarea:focus{outline:none;border-color:var(--accent)}
+  .ia-form button{flex:none;width:44px;height:44px;border-radius:var(--r-sm);border:0;cursor:pointer;
+    background:linear-gradient(135deg,var(--gold-bright),var(--gold));color:#0a0c15;display:grid;place-items:center}
+  .ia-form button:disabled{opacity:.5;cursor:wait}
+  .ia-form button svg{width:18px;height:18px}
+  .ia-note{padding:0 14px 10px;background:var(--panel-2);font-size:.7rem;color:var(--text-mute);line-height:1.4}
+  @media (max-width:520px){
+    .ia-float{left:16px;bottom:16px;height:50px;padding:0 16px 0 13px;font-size:.88rem}
+    .ia-panel{left:16px;bottom:16px}
+  }
+
+  /* ============================================================
      FOOTER
      ============================================================ */
   footer{border-top:1px solid var(--line-soft);padding-block:64px 36px;background:var(--bg-2)}
@@ -758,98 +899,124 @@
   }
 </style>
 <noscript><style>.reveal,.reveal-stagger > *{opacity:1 !important;transform:none !important}</style></noscript>
+<script>try{if(localStorage.getItem("wz-theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
 </head>
 <body>
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 <div class="page-frame" aria-hidden="true"></div>
-<a class="skip" href="#inicio">Saltar al contenido</a>
+<a class="skip" href="#inicio">Skip to content</a>
 
 <!-- ============================================================ HEADER ============================================================ -->
 <header id="siteHeader">
   <div class="wrap nav-row">
-    <a href="#inicio" class="logo" aria-label="WebZipe — inicio">
+    <a href="#inicio" class="logo" aria-label="WebZipe — home">
       <span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M10 42 L27 88 L42 55 L55 88 L78 26" stroke="var(--blue)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M68 44 L78 26" stroke="var(--blue-bright)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
         <circle cx="80" cy="24" r="7" fill="var(--blue-bright)"/>
       </svg></span>Web<span class="logo-accent">Zipe</span>
     </a>
-    <nav class="nav-links" aria-label="Navegación principal">
-      <a href="#inicio">Inicio</a>
-      <a href="#beneficios">Beneficios</a>
-      <a href="#servicios">Servicios</a>
-      <a href="#paquetes">Planes</a>
-      <a href="#ejemplos">Ejemplos</a>
-      <a href="#ejemplos-paginas">Ejemplos de páginas</a>
-      <a href="#preguntas">Preguntas</a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#inicio">Home</a>
+      <a href="#beneficios">Benefits</a>
+      <a href="#servicios">Services</a>
+      <a href="#paquetes">Plans</a>
+      <a href="#ejemplos">Examples</a>
+      <a href="#ejemplos-paginas">Live sites</a>
+      <a href="#preguntas">FAQ</a>
     </nav>
+    <div class="nav-end">
+    <div class="lang theme" id="themeSwitch">
+      <button type="button" class="lang-btn" id="themeBtn" aria-label="Page theme" aria-haspopup="true" aria-expanded="false" aria-controls="themeMenu">
+        <svg class="theme-ico-dark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <svg class="theme-ico-light" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="t-long">Page theme</span><span class="t-short">Theme</span>
+      </button>
+      <div class="lang-menu" id="themeMenu" role="menu" hidden>
+        <button type="button" role="menuitemradio" data-theme-opt="dark" aria-checked="true">Dark</button>
+        <button type="button" role="menuitemradio" data-theme-opt="light" aria-checked="false">Light</button>
+      </div>
+    </div>
+    <div class="lang" id="langSwitch">
+      <button type="button" class="lang-btn" id="langBtn" aria-label="Translate" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span>Translate</span>
+      </button>
+      <div class="lang-menu" id="langMenu" role="menu" hidden>
+        <button type="button" role="menuitemradio" data-lang="en-US" aria-checked="true">English (US)</button>
+        <button type="button" role="menuitemradio" data-lang="en-GB" aria-checked="false">English (UK)</button>
+        <button type="button" role="menuitemradio" data-lang="es" aria-checked="false">Español</button>
+        <button type="button" role="menuitemradio" data-lang="fr" aria-checked="false">Français</button>
+      </div>
+    </div>
     <div class="nav-cta">
-      <a href="#paquetes" class="btn btn-ghost">Ver planes</a>
-      <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc)."
+      <a href="#paquetes" class="btn btn-ghost">See plans</a>
+      <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)."
          class="btn btn-primary" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
-        Escríbenos
+        Message us
       </a>
     </div>
-    <button class="burger" id="burgerBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Abrir menú">
+    <button class="burger" id="burgerBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
+    </div>
   </div>
 </header>
 
 <div class="mobile-panel" id="mobilePanel">
-  <a href="#inicio">Inicio</a>
-  <a href="#beneficios">Beneficios</a>
-  <a href="#servicios">Servicios</a>
-  <a href="#paquetes">Planes</a>
-  <a href="#ejemplos">Ejemplos</a>
-  <a href="#ejemplos-paginas">Ejemplos de páginas</a>
-  <a href="#preguntas">Preguntas</a>
-  <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc)."
-     class="btn btn-primary btn-block" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+  <a href="#inicio">Home</a>
+  <a href="#beneficios">Benefits</a>
+  <a href="#servicios">Services</a>
+  <a href="#paquetes">Plans</a>
+  <a href="#ejemplos">Examples</a>
+  <a href="#ejemplos-paginas">Live sites</a>
+  <a href="#preguntas">FAQ</a>
+  <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)."
+     class="btn btn-primary btn-block" target="_blank" rel="noopener">Message us on WhatsApp</a>
 </div>
 
 <main>
   <!-- ============================================================ HERO ============================================================ -->
   <section id="inicio" class="hero">
     <div class="wrap">
-      <span class="kicker">Estudio de soluciones digitales para negocios</span>
-      <h1>Creamos la solución digital que tu negocio necesita para <span class="grad">crecer</span></h1>
+      <span class="kicker">A digital solutions studio for businesses</span>
+      <h1>We build the digital solution your business needs to <span class="grad">grow</span></h1>
       <p class="lead">
-        En WebZipe diseñamos páginas web, tiendas virtuales y catálogos digitales, con SEO básico,
-        integración a tus redes sociales, formularios, reservas y mantenimiento. Todo hecho a la
-        medida de tu negocio, con contacto directo por WhatsApp.
+        At WebZipe we design websites, online stores and digital catalogs, with basic SEO,
+        social media integration, forms, booking and ongoing maintenance. All tailored
+        to your business, with direct contact via WhatsApp.
       </p>
       <div class="hero-actions">
-        <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
+        <a href="https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).%20Could%20you%20send%20me%20more%20information%3F"
            class="btn btn-primary btn-lg" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
-          Quiero mi solución digital
+          Get my digital solution
         </a>
-        <a href="#ejemplos" class="btn btn-ghost btn-lg">Ver ejemplos
+        <a href="#ejemplos" class="btn btn-ghost btn-lg">See examples
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
       <div class="hero-trust">
-        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Páginas web y tiendas virtuales</span>
-        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>SEO y redes sociales integradas</span>
-        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Contacto directo por WhatsApp</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Websites and online stores</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>SEO and social media built in</span>
+        <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Direct contact via WhatsApp</span>
       </div>
 
       <div class="hero-stage">
         <div class="hero-frame">
           <div class="browser-top" aria-hidden="true">
             <i></i><i></i><i></i>
-            <span class="url">tunegocio.com</span>
+            <span class="url">yourbusiness.com</span>
           </div>
           <video src="hero-video.mp4" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
           <span class="hero-chip a" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" fill="currentColor"/></svg>
-            Carga rápida
+            Fast loading
           </span>
           <span class="hero-chip b" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            100% responsive
+            Fully responsive
           </span>
         </div>
       </div>
@@ -858,12 +1025,12 @@
 
   <div class="marquee" role="presentation">
     <div class="marquee-track" aria-hidden="true">
-      <span>Páginas web a la medida</span><span>Tiendas virtuales</span><span>Catálogos digitales</span>
-      <span>Posicionamiento SEO</span><span>Integración con redes sociales</span><span>Formularios y reservas</span>
-      <span>Mantenimiento y marketing digital</span><span>Integración con WhatsApp</span>
-      <span>Páginas web a la medida</span><span>Tiendas virtuales</span><span>Catálogos digitales</span>
-      <span>Posicionamiento SEO</span><span>Integración con redes sociales</span><span>Formularios y reservas</span>
-      <span>Mantenimiento y marketing digital</span><span>Integración con WhatsApp</span>
+      <span>Custom websites</span><span>Online stores</span><span>Digital catalogs</span>
+      <span>SEO</span><span>Social media integration</span><span>Forms and booking</span>
+      <span>Maintenance and digital marketing</span><span>WhatsApp integration</span>
+      <span>Custom websites</span><span>Online stores</span><span>Digital catalogs</span>
+      <span>SEO</span><span>Social media integration</span><span>Forms and booking</span>
+      <span>Maintenance and digital marketing</span><span>WhatsApp integration</span>
     </div>
   </div>
 
@@ -871,17 +1038,17 @@
   <section id="beneficios">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="kicker">Por qué WebZipe</span>
-        <h2>Un estudio que empieza contigo, no con un catálogo de plantillas</h2>
-        <p>No solo te entregamos una página: te asesoramos sobre qué necesita tu negocio (página web, tienda virtual, catálogo, formularios o reservas) para verse profesional en Internet y conseguir más clientes.</p>
+        <span class="kicker">Why WebZipe</span>
+        <h2>A studio that starts with you, not with a catalog of templates</h2>
+        <p>We don't just hand you a website: we help you figure out what your business actually needs (a website, online store, catalog, forms or booking) to look professional online and win more customers.</p>
       </div>
 
       <div class="rows">
         <article class="row reveal">
           <div class="row-text">
             <span class="row-num">01</span>
-            <h3>Diseño moderno, hecho a la medida de tu negocio</h3>
-            <p>Nada de plantillas genéricas reutilizadas. Cada página se diseña pensando en la identidad, el tono y los objetivos de tu negocio.</p>
+            <h3>Modern design, tailored to your business</h3>
+            <p>No recycled generic templates. Every site is designed around your business's identity, voice and goals.</p>
           </div>
           <div class="row-media">
             <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
@@ -892,7 +1059,7 @@
               </defs>
               <rect width="320" height="200" fill="var(--bg-2)"/>
               <rect x="24" y="26" width="272" height="148" rx="14" fill="var(--panel-2)" stroke="var(--line)"/>
-              <text x="44" y="58" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="9" letter-spacing="2">PALETA DE MARCA</text>
+              <text x="44" y="58" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="9" letter-spacing="2">BRAND PALETTE</text>
               <circle cx="52" cy="82" r="13" fill="url(#g1a)"/>
               <circle cx="84" cy="82" r="13" fill="var(--gold)"/>
               <circle cx="116" cy="82" r="13" fill="#f2ede4"/>
@@ -911,14 +1078,14 @@
         <article class="row reveal">
           <div class="row-text">
             <span class="row-num">02</span>
-            <h3>Perfecta en cualquier pantalla</h3>
-            <p>La mayoría de tus clientes te buscará desde el teléfono. Tu página se ve y funciona igual de bien en celular, tablet y computador.</p>
+            <h3>Looks great on any screen</h3>
+            <p>Most of your customers will find you on their phone. Your site looks and works just as well on phones, tablets and computers.</p>
           </div>
           <div class="row-media">
             <div class="devices">
-              <img class="d-phone" src="dispositivo-celular.png" alt="Página web de una abogada vista en un celular" loading="lazy" decoding="async">
-              <img class="d-tab" src="dispositivo-tablet.png" alt="Página web de una abogada vista en una tablet" loading="lazy" decoding="async">
-              <img class="d-desk" src="ejemplo-profesional.png" alt="Página web de una abogada vista en un computador" loading="lazy" decoding="async">
+              <img class="d-phone" src="dispositivo-celular.png" alt="A lawyer's website viewed on a phone" loading="lazy" decoding="async">
+              <img class="d-tab" src="dispositivo-tablet.png" alt="A lawyer's website viewed on a tablet" loading="lazy" decoding="async">
+              <img class="d-desk" src="ejemplo-profesional.png" alt="A lawyer's website viewed on a computer" loading="lazy" decoding="async">
             </div>
           </div>
         </article>
@@ -926,8 +1093,8 @@
         <article class="row reveal">
           <div class="row-text">
             <span class="row-num">03</span>
-            <h3>Pensada para convertir visitas en clientes</h3>
-            <p>Cada sección, botón y texto está diseñado con un propósito: guiar al visitante hasta que te escribe.</p>
+            <h3>Built to turn visitors into customers</h3>
+            <p>Every section, button and line of copy has one purpose: guiding visitors until they reach out to you.</p>
           </div>
           <div class="row-media">
             <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
@@ -938,13 +1105,13 @@
               </defs>
               <rect width="320" height="200" fill="var(--bg-2)"/>
               <rect x="24" y="24" width="272" height="152" rx="14" fill="var(--panel-2)" stroke="var(--line)"/>
-              <text x="46" y="54" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="9" letter-spacing="2">CONTACTOS ESTE MES</text>
+              <text x="46" y="54" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="9" letter-spacing="2">LEADS THIS MONTH</text>
               <path d="M46 140 L46 150 L266 150 L266 140 L210 110 L172 128 L120 78 L46 140Z" fill="url(#g3a)"/>
               <path d="M46 140 L120 78 L172 128 L210 110 L266 140" fill="none" stroke="var(--gold-bright)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
               <circle cx="266" cy="140" r="4.5" fill="var(--gold-bright)"/>
               <rect x="196" y="58" width="70" height="38" rx="10" fill="var(--bg-2)" stroke="var(--gold-line)"/>
               <text x="231" y="78" text-anchor="middle" fill="var(--gold-bright)" font-family="'Fraunces',serif" font-weight="600" font-size="15">+38%</text>
-              <text x="231" y="90" text-anchor="middle" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="7">contactos</text>
+              <text x="231" y="90" text-anchor="middle" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="7">leads</text>
               <rect x="46" y="156" width="100" height="9" rx="4.5" fill="var(--blue)"/>
             </svg>
           </div>
@@ -953,8 +1120,8 @@
         <article class="row reveal">
           <div class="row-text">
             <span class="row-num">04</span>
-            <h3>Contacto directo por WhatsApp</h3>
-            <p>Botones estratégicos en cada sección para que tus clientes te escriban en un solo clic, sin formularios largos.</p>
+            <h3>Direct contact via WhatsApp</h3>
+            <p>Strategically placed buttons in every section so customers can message you in one click, with no long forms.</p>
           </div>
           <div class="row-media">
             <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
@@ -977,8 +1144,8 @@
         <article class="row reveal">
           <div class="row-text">
             <span class="row-num">05</span>
-            <h3>Tu presencia trabaja 24/7</h3>
-            <p>Tu página muestra lo que ofreces a cualquier hora, incluso cuando tú no estás disponible para responder.</p>
+            <h3>Your online presence works 24/7</h3>
+            <p>Your site shows what you offer around the clock, even when you're not available to reply.</p>
           </div>
           <div class="row-media">
             <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
@@ -992,11 +1159,11 @@
               <circle cx="160" cy="100" r="58" fill="none" stroke="url(#g5a)" stroke-width="2.5" stroke-dasharray="14 10" stroke-linecap="round"/>
               <circle cx="160" cy="100" r="40" fill="var(--panel-2)" stroke="var(--line)"/>
               <text x="160" y="94" text-anchor="middle" fill="var(--text)" font-family="'Fraunces',serif" font-weight="600" font-size="21">24/7</text>
-              <text x="160" y="112" text-anchor="middle" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="7.5" letter-spacing="1.5">DISPONIBLE</text>
+              <text x="160" y="112" text-anchor="middle" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="7.5" letter-spacing="1.5">AVAILABLE</text>
               <circle cx="160" cy="42" r="5" fill="var(--gold-bright)"/>
               <rect x="118" y="164" width="84" height="22" rx="11" fill="var(--panel-2)" stroke="rgba(52,199,123,.4)"/>
               <circle cx="132" cy="175" r="4" fill="var(--ok)"/>
-              <text x="142" y="179" fill="var(--text-soft)" font-family="'Inter',sans-serif" font-size="8">En línea ahora</text>
+              <text x="142" y="179" fill="var(--text-soft)" font-family="'Inter',sans-serif" font-size="8">Online now</text>
             </svg>
           </div>
         </article>
@@ -1004,7 +1171,7 @@
 
       <div class="note-card reveal">
         <span class="avatar" aria-hidden="true">W</span>
-        <p><strong>Somos un estudio que está comenzando</strong>, y eso significa que cada proyecto recibe toda nuestra atención: sin procesos en serie ni clientes en espera. Trabajas de cerca con quien realmente diseña tu página.</p>
+        <p><strong>We're a young studio</strong>, which means every project gets our full attention: no assembly lines and no waiting lists. You work directly with the person who actually designs your site.</p>
       </div>
     </div>
   </section>
@@ -1013,31 +1180,31 @@
   <section id="problema-solucion">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="kicker">El cambio</span>
-        <h2>Tener redes sociales ya no es suficiente</h2>
-        <p>Hoy a muchos negocios les interesa tener presencia en Internet, pero no siempre saben cómo lograrlo: manejan Instagram o Facebook, pero no tienen un sitio propio, una tienda virtual o un catálogo donde sus clientes conozcan a fondo sus servicios y productos.</p>
+        <span class="kicker">The shift</span>
+        <h2>Social media alone isn't enough anymore</h2>
+        <p>Many businesses today want an online presence but aren't sure how to get there: they run Instagram or Facebook, but they don't have their own website, online store or catalog where customers can really get to know their products and services.</p>
       </div>
       <div class="ps">
         <div class="ps-card problem reveal">
-          <span class="tag">Sin página web</span>
-          <h3>Lo que suele pasar</h3>
+          <span class="tag">Without a website</span>
+          <h3>What usually happens</h3>
           <ul class="ps-list">
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Tus clientes buscan información y solo encuentran una bio de Instagram.</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Tu negocio depende por completo del alcance de un algoritmo que no controlas.</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>No hay un lugar claro para mostrar todos tus servicios o productos.</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>La imagen del negocio se siente menos profesional frente a la competencia.</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>No existe un espacio propio en Internet que represente al negocio.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Customers look for information and only find an Instagram bio.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Your business depends entirely on the reach of an algorithm you don't control.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>There's no clear place to showcase all your products or services.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Your business looks less professional than the competition.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>You have no space of your own online that represents your business.</li>
           </ul>
         </div>
         <div class="ps-card solution reveal">
-          <span class="tag">Con WebZipe</span>
-          <h3>Lo que cambia con una página web</h3>
+          <span class="tag">With WebZipe</span>
+          <h3>What changes with a website</h3>
           <ul class="ps-list">
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Presentas tus servicios y productos de forma clara y ordenada.</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Facilitas el contacto con botones directos a WhatsApp.</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Proyectas una imagen mucho más profesional y confiable.</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Estás disponible para tus clientes a cualquier hora, todos los días.</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Tienes un espacio propio en Internet que no depende de ningún algoritmo.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You present your products and services in a clear, organized way.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You make it easy to reach you with direct WhatsApp buttons.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You project a far more professional, trustworthy image.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You're available to customers any time, every day.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You own a space online that doesn't depend on any algorithm.</li>
           </ul>
         </div>
       </div>
@@ -1048,46 +1215,46 @@
   <section id="servicios">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="kicker">Servicios</span>
-        <h2>Soluciones digitales para hacer crecer tu negocio</h2>
-        <p>No solo hacemos páginas web: te ayudamos a resolver lo que tu negocio necesita para tener presencia en Internet, mostrar tus productos o servicios y conseguir más clientes.</p>
+        <span class="kicker">Services</span>
+        <h2>Digital solutions to help your business grow</h2>
+        <p>We don't just build websites: we help you solve what your business needs to be present online, showcase your products or services and win more customers.</p>
       </div>
       <div class="services reveal-stagger">
         <article class="s-card">
           <span class="s-num">01</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-          <h3>Páginas web a la medida</h3>
-          <p>Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio. Nada de plantillas repetidas.</p>
+          <h3>Custom websites</h3>
+          <p>Modern, original designs tailored to each business's visual identity and voice. No cookie-cutter templates.</p>
         </article>
         <article class="s-card">
           <span class="s-num">02</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <h3>Tiendas virtuales y catálogos digitales</h3>
-          <p>Muestra y vende tus productos con un catálogo digital o una tienda virtual completa, sin depender solo de las redes sociales.</p>
+          <h3>Online stores and digital catalogs</h3>
+          <p>Showcase and sell your products with a digital catalog or a full online store, without relying on social media alone.</p>
         </article>
         <article class="s-card">
           <span class="s-num">03</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-          <h3>Posicionamiento SEO</h3>
-          <p>Configuramos lo básico para que tu página aparezca en las búsquedas de Google y tus clientes te encuentren más fácil.</p>
+          <h3>SEO</h3>
+          <p>We set up the essentials so your site shows up in Google searches and customers can find you more easily.</p>
         </article>
         <article class="s-card">
           <span class="s-num">04</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <h3>WhatsApp y redes sociales</h3>
-          <p>Botones de contacto directo a WhatsApp y enlaces a tus redes sociales, para que tus clientes te escriban en un clic desde cualquier sección.</p>
+          <h3>WhatsApp and social media</h3>
+          <p>Direct WhatsApp contact buttons and links to your social profiles, so customers can reach you in one click from any section.</p>
         </article>
         <article class="s-card">
           <span class="s-num">05</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4.5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 3.5v3M16 3.5v3M3.5 10h17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 14.5l2.2 2.2L16 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <h3>Formularios y reservas</h3>
-          <p>Formularios de contacto y sistemas de reservas o agendamiento de citas, directamente desde tu página.</p>
+          <h3>Forms and booking</h3>
+          <p>Contact forms and booking or appointment scheduling systems, right from your website.</p>
         </article>
         <article class="s-card">
           <span class="s-num">06</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.7-2.8 2.9-4.5 5.5-4.5s4.8 1.7 5.5 4.5M15.5 8.4a3 3 0 1 1 3.3 4.6M17 14.3c2.1.4 3.6 1.8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-          <h3>Mantenimiento y marketing digital</h3>
-          <p>Actualizamos tu página, te acompañamos después de la entrega y lo complementamos poco a poco con estrategias de marketing digital.</p>
+          <h3>Maintenance and digital marketing</h3>
+          <p>We keep your site up to date, support you after launch and gradually add digital marketing strategies.</p>
         </article>
       </div>
     </div>
@@ -1097,61 +1264,61 @@
   <section id="paquetes">
     <div class="wrap">
       <div class="sec-head center reveal">
-        <span class="kicker">Planes</span>
-        <h2>Un paquete para cada etapa de tu negocio</h2>
-        <p>Elige tu punto de partida: página web, tienda virtual o catálogo digital. El alcance se puede ajustar según lo que necesites: escríbenos y lo definimos juntos.</p>
+        <span class="kicker">Plans</span>
+        <h2>A package for every stage of your business</h2>
+        <p>Choose your starting point: a website, online store or digital catalog. The scope can be adjusted to fit your needs, so message us and we'll define it together.</p>
       </div>
       <div class="plans reveal-stagger">
         <article class="plan">
-          <h3>Paquete Básico</h3>
-          <p class="desc">Landing page de 1 a 3 páginas con formulario de contacto. Ideal para empezar con una presencia profesional, clara y directa.</p>
+          <h3>Basic Package</h3>
+          <p class="desc">A 1–3 page landing site with a contact form. Ideal for getting started with a clear, direct, professional presence.</p>
           <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Entrega en 5-7 días
+            Delivered in 5–7 days
           </span>
           <ul>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Landing page de 1 a 3 páginas</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Diseño 100% responsive</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Formulario de contacto + WhatsApp</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>1–3 page landing site</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Fully responsive design</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Contact form + WhatsApp</li>
           </ul>
-          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20B%C3%A1sico%20(landing%20page%20%2B%20formulario%20de%20contacto).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
-             class="btn btn-ghost btn-block" target="_blank" rel="noopener">Quiero el Paquete Básico</a>
+          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Basic%20Package%20(landing%20page%20%2B%20contact%20form).%20Could%20you%20send%20me%20more%20information%3F"
+             class="btn btn-ghost btn-block" target="_blank" rel="noopener">Get the Basic Package</a>
         </article>
 
         <article class="plan featured">
-          <span class="plan-flag">Más popular</span>
-          <h3>Paquete Profesional</h3>
-          <p class="desc">Sitio web completo con catálogo digital, SEO básico e integración con tus redes sociales, para que tus clientes te encuentren y conozcan todo lo que ofreces.</p>
+          <span class="plan-flag">Most popular</span>
+          <h3>Professional Package</h3>
+          <p class="desc">A full website with a digital catalog, basic SEO and social media integration, so customers can find you and see everything you offer.</p>
           <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Entrega en 10-15 días
+            Delivered in 10–15 days
           </span>
           <ul>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Sitio web completo (varias secciones)</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Catálogo digital + SEO básico</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Redes sociales + WhatsApp integrados</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Full website (multiple sections)</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Digital catalog + basic SEO</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Social media + WhatsApp integration</li>
           </ul>
-          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Profesional%20(sitio%20completo%20%2B%20cat%C3%A1logo%20digital%20%2B%20SEO%20b%C3%A1sico%20%2B%20redes%20sociales).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
-             class="btn btn-primary btn-block" target="_blank" rel="noopener">Quiero el Paquete Profesional</a>
+          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20Package%20(full%20website%20%2B%20digital%20catalog%20%2B%20basic%20SEO%20%2B%20social%20media).%20Could%20you%20send%20me%20more%20information%3F"
+             class="btn btn-primary btn-block" target="_blank" rel="noopener">Get the Professional Package</a>
         </article>
 
         <article class="plan">
-          <h3>Paquete Premium</h3>
-          <p class="desc">Sitio completo con tienda virtual o sistema de reservas, mantenimiento mensual y acompañamiento en marketing digital.</p>
+          <h3>Premium Package</h3>
+          <p class="desc">A full website with an online store or booking system, monthly maintenance and ongoing digital marketing support.</p>
           <span class="meta">
             <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M4.2 7.2l2.1 2.1M17.7 14.7l2.1 2.1M3 12h3M18 12h3M4.2 16.8l2.1-2.1M17.7 9.3l2.1-2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Servicio recurrente
+            Ongoing service
           </span>
           <ul>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Paquete Profesional</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Tienda virtual y/o sistema de reservas</li>
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Mantenimiento mensual + marketing digital</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Everything in the Professional Package</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Online store and/or booking system</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Monthly maintenance + digital marketing</li>
           </ul>
-          <a href="https://wa.me/573161838836?text=Hola%2C%20me%20interesa%20el%20Paquete%20Premium%20(sitio%20%2B%20tienda%20virtual%20%2B%20mantenimiento%20%2B%20marketing%20digital).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
-             class="btn btn-ghost btn-block" target="_blank" rel="noopener">Quiero el Paquete Premium</a>
+          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Premium%20Package%20(website%20%2B%20online%20store%20%2B%20maintenance%20%2B%20digital%20marketing).%20Could%20you%20send%20me%20more%20information%3F"
+             class="btn btn-ghost btn-block" target="_blank" rel="noopener">Get the Premium Package</a>
         </article>
       </div>
-      <p class="plans-foot reveal">¿No sabes cuál elegir? <a href="#empezar">Déjanos tus datos</a> y te asesoramos sin compromiso.</p>
+      <p class="plans-foot reveal">Not sure which one to choose? <a href="#empezar">Leave us your details</a> and we'll help you decide, no strings attached.</p>
     </div>
   </section>
 
@@ -1159,29 +1326,29 @@
   <section id="ejemplos">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="kicker">Ejemplos</span>
-        <h2>Así de bien podría verse tu página web</h2>
-        <p>Estos son <strong style="color:var(--text)">ejemplos conceptuales</strong> para mostrarte posibilidades de diseño según el tipo de negocio, no proyectos reales de clientes de WebZipe.</p>
+        <span class="kicker">Examples</span>
+        <h2>This is how good your website could look</h2>
+        <p>These are <strong style="color:var(--text)">concept examples</strong> showing design possibilities for different types of businesses, not real WebZipe client projects.</p>
       </div>
 
       <div class="ex-note reveal">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 8h.01M11 11h1v5h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        <p><strong>Aviso:</strong> las composiciones de abajo son mockups conceptuales creados para ilustrar estilos de diseño, no capturas de páginas ya entregadas.</p>
+        <p><strong>Note:</strong> the layouts below are concept mockups created to illustrate design styles, not screenshots of delivered sites.</p>
       </div>
 
       <div class="ex-rows reveal-stagger">
         <article class="ex-row">
           <div class="ex-info">
-            <h3>Restaurantes y cafés</h3>
-            <p>Menú visual, ubicación y reservas o pedidos directos por WhatsApp. Una página que abre el apetito antes de que el cliente llegue.</p>
-            <a href="https://wa.me/573161838836?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio."
-               target="_blank" rel="noopener">Quiero algo así
+            <h3>Restaurants and cafés</h3>
+            <p>A visual menu, location and reservations or orders straight through WhatsApp. A site that works up an appetite before customers even walk in.</p>
+            <a href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business."
+               target="_blank" rel="noopener">I want something like this
               <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
           <div class="ex-shot">
             <span class="ex-badge">Ejemplo conceptual</span>
-            <img src="ejemplo-cafeteria.png" alt="Ejemplo conceptual de una página web para una cafetería" loading="lazy" decoding="async">
+            <img src="ejemplo-cafeteria.png" alt="Concept example of a website for a coffee shop" loading="lazy" decoding="async">
             <div class="ex-mini" aria-hidden="true">
               <img src="cafeteria-celular.png" alt="" loading="lazy" decoding="async">
             </div>
@@ -1189,30 +1356,30 @@
         </article>
         <article class="ex-row">
           <div class="ex-info">
-            <h3>Tiendas y emprendimientos</h3>
-            <p>Catálogo de productos claro, con botón de compra o consulta directa. Ideal para vender sin depender solo de las redes.</p>
-            <a href="https://wa.me/573161838836?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio."
-               target="_blank" rel="noopener">Quiero algo así
+            <h3>Shops and small businesses</h3>
+            <p>A clear product catalog with a buy or inquire button. Ideal for selling without relying on social media alone.</p>
+            <a href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business."
+               target="_blank" rel="noopener">I want something like this
               <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
           <div class="ex-shot">
             <span class="ex-badge">Ejemplo conceptual</span>
-            <img src="ejemplo-tienda.png" alt="Ejemplo conceptual de una tienda de ropa online" loading="lazy" decoding="async">
+            <img src="ejemplo-tienda.png" alt="Concept example of an online clothing store" loading="lazy" decoding="async">
           </div>
         </article>
         <article class="ex-row">
           <div class="ex-info">
-            <h3>Profesionales y servicios</h3>
-            <p>Presentación de servicios, experiencia y forma de agendar una cita o consulta. Transmite confianza desde el primer segundo.</p>
-            <a href="https://wa.me/573161838836?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio."
-               target="_blank" rel="noopener">Quiero algo así
+            <h3>Professionals and services</h3>
+            <p>Your services, experience and an easy way to book an appointment or consultation. Builds trust from the very first second.</p>
+            <a href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business."
+               target="_blank" rel="noopener">I want something like this
               <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
           <div class="ex-shot">
             <span class="ex-badge">Ejemplo conceptual</span>
-            <img src="ejemplo-profesional.png" alt="Ejemplo conceptual de una web para una profesional de servicios" loading="lazy" decoding="async">
+            <img src="ejemplo-profesional.png" alt="Concept example of a website for a service professional" loading="lazy" decoding="async">
           </div>
         </article>
       </div>
@@ -1223,54 +1390,54 @@
   <section id="ejemplos-paginas">
     <div class="wrap">
       <div class="sec-head reveal">
-        <span class="kicker">Ejemplos de páginas</span>
-        <h2>Mira algunas páginas que hemos creado</h2>
-        <p>Estos son enlaces reales a páginas de prueba. Haz clic en cada una para verla en vivo.</p>
+        <span class="kicker">Live sites</span>
+        <h2>Check out some sites we've built</h2>
+        <p>These are real links to demo sites. Click any of them to see it live.</p>
       </div>
 
       <div class="real-ex-list reveal-stagger">
         <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-ropa-" target="_blank" rel="noopener">
           <div class="real-ex-text">
-            <h3>Catálogo de Ropa</h3>
-            <p>Catálogo de modelos de ropa con precios y botón de "Pedir ahora" para cada prenda.</p>
+            <h3>Clothing Catalog</h3>
+            <p>A clothing catalog with prices and an "Order now" button for each item.</p>
           </div>
-          <span class="real-ex-cta">Ver página
+          <span class="real-ex-cta">View site
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </a>
         <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" target="_blank" rel="noopener">
           <div class="real-ex-text">
-            <h3>Javier Restrepo | Abogado de Familia</h3>
-            <p>Página para un profesional independiente: "Defendemos lo que más importa: tu familia". Incluye áreas de práctica, experiencia y consulta gratuita por WhatsApp.</p>
+            <h3>Javier Restrepo | Family Lawyer</h3>
+            <p>A site for an independent professional: "We defend what matters most: your family." Includes practice areas, experience and a free consultation via WhatsApp.</p>
           </div>
-          <span class="real-ex-cta">Ver página
+          <span class="real-ex-cta">View site
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </a>
         <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" target="_blank" rel="noopener">
           <div class="real-ex-text">
-            <h3>El Buen Sazón | Comida casera a tu mesa o a tu puerta</h3>
-            <p>Página de restaurante con menú, pedidos en mesa y domicilios, con envío del pedido directo por WhatsApp.</p>
+            <h3>El Buen Sazón | Home-style food at your table or your door</h3>
+            <p>A restaurant site with a menu, dine-in and delivery orders, with each order sent straight through WhatsApp.</p>
           </div>
-          <span class="real-ex-cta">Ver página
+          <span class="real-ex-cta">View site
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </a>
         <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" target="_blank" rel="noopener">
           <div class="real-ex-text">
-            <h3>ToyLandia — Juguetes para toda la familia</h3>
-            <p>Tienda digital de juguetes con catálogo de productos y botón de "Pide ya" para cada uno.</p>
+            <h3>ToyLandia — Toys for the whole family</h3>
+            <p>An online toy store with a product catalog and an "Order now" button for each item.</p>
           </div>
-          <span class="real-ex-cta">Ver página
+          <span class="real-ex-cta">View site
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </a>
         <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-barberia-/Casa-Navaja-Barbershop.html" target="_blank" rel="noopener">
           <div class="real-ex-text">
             <h3>Casa Navaja Barbershop</h3>
-            <p>Página de barbería con carta de servicios y precios, galería de trabajos, equipo de barberos, reseñas y botón de "Reservar" en cada servicio.</p>
+            <p>A barbershop site with a service and price list, work gallery, barber team, reviews and a "Book" button for each service.</p>
           </div>
-          <span class="real-ex-cta">Ver página
+          <span class="real-ex-cta">View site
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
         </a>
@@ -1282,13 +1449,13 @@
   <section>
     <div class="wrap">
       <div class="cta-panel reveal">
-        <span class="kicker">Empecemos hoy</span>
-        <h2>¿Listo para llevar tu negocio a Internet?</h2>
-        <p>Cuéntanos sobre tu negocio por WhatsApp y te ayudamos a definir qué necesitas: página web, tienda virtual, catálogo digital o mantenimiento. Sin compromisos, directo y sin vueltas.</p>
-        <a href="https://wa.me/573161838836?text=Hola%2C%20quiero%20crear%20mi%20p%C3%A1gina%20web%20o%20tienda%20virtual%20con%20WebZipe.%20%C2%BFC%C3%B3mo%20empezamos%3F"
+        <span class="kicker">Let's get started</span>
+        <h2>Ready to take your business online?</h2>
+        <p>Tell us about your business on WhatsApp and we'll help you figure out what you need: a website, online store, digital catalog or maintenance. No strings attached, straight to the point.</p>
+        <a href="https://wa.me/573102363531?text=Hi%2C%20I%20want%20to%20build%20my%20website%20or%20online%20store%20with%20WebZipe.%20How%20do%20we%20get%20started%3F"
            class="btn btn-primary btn-lg" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
-          Crear mi solución digital
+          Build my digital solution
         </a>
       </div>
     </div>
@@ -1298,42 +1465,42 @@
   <section id="preguntas">
     <div class="wrap">
       <div class="sec-head center reveal">
-        <span class="kicker">Preguntas</span>
-        <h2>Todo lo que quizás quieras saber</h2>
-        <p>Si tienes otra duda que no está aquí, escríbenos directamente por WhatsApp.</p>
+        <span class="kicker">FAQ</span>
+        <h2>Everything you might want to know</h2>
+        <p>If you have a question that isn't answered here, message us directly on WhatsApp.</p>
       </div>
       <div class="faq reveal">
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">¿Qué tipo de negocios pueden tener una página web?<span class="pm" aria-hidden="true"></span></button>
-          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Cualquier tipo: restaurantes, tiendas, emprendimientos, profesionales independientes, empresas de servicios y mucho más. Si tienes un negocio, una página web puede ayudarte a mostrarlo mejor.</p></div></div>
+          <button class="faq-q" aria-expanded="false">What kinds of businesses can have a website?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Any kind: restaurants, shops, startups, independent professionals, service companies and much more. If you have a business, a website can help you show it off better.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">¿La página funciona en celulares?<span class="pm" aria-hidden="true"></span></button>
-          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Sí. Todas las páginas que diseñamos son 100% responsive: se adaptan y funcionan correctamente en celulares, tablets y computadores.</p></div></div>
+          <button class="faq-q" aria-expanded="false">Will my website work on phones?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Yes. Every site we design is fully responsive: it adapts to and works properly on phones, tablets and computers.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">¿Puedo agregar WhatsApp a mi página?<span class="pm" aria-hidden="true"></span></button>
-          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Claro, de hecho es una de las integraciones que más recomendamos. Es la forma más rápida y directa para que tus clientes te contacten.</p></div></div>
+          <button class="faq-q" aria-expanded="false">Can I add WhatsApp to my website?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Absolutely. In fact, it's one of the integrations we recommend most. It's the fastest, most direct way for customers to reach you.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">¿Puedo solicitar cambios en el diseño?<span class="pm" aria-hidden="true"></span></button>
-          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Sí. El diseño se ajusta a lo que necesites: cuéntanos tu idea, tus colores y tu estilo, y lo desarrollamos contigo hasta que quede como lo imaginas.</p></div></div>
+          <button class="faq-q" aria-expanded="false">Can I request design changes?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Yes. The design adapts to what you need: tell us your idea, your colors and your style, and we'll work on it with you until it looks the way you pictured it.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">¿Cuánto tarda en realizarse una página?<span class="pm" aria-hidden="true"></span></button>
-          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Depende de la complejidad y el alcance de tu proyecto. Una vez conozcamos los detalles de tu negocio, te damos un tiempo estimado por WhatsApp.</p></div></div>
+          <button class="faq-q" aria-expanded="false">How long does it take to build a website?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>It depends on the complexity and scope of your project. Once we know the details of your business, we'll give you an estimated timeline on WhatsApp.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">¿Qué información necesitan para comenzar?<span class="pm" aria-hidden="true"></span></button>
-          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Nos ayuda conocer a qué se dedica tu negocio, qué productos o servicios ofreces y cómo prefieres que tus clientes te contacten. Con eso ya podemos empezar a diseñar.</p></div></div>
+          <button class="faq-q" aria-expanded="false">What information do you need to get started?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>It helps to know what your business does, what products or services you offer and how you'd like customers to contact you. With that, we can start designing.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">¿Puedo personalizar la página para mi negocio?<span class="pm" aria-hidden="true"></span></button>
-          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Sí, siempre. Cada página se adapta a la identidad, los colores y el contenido específico de tu negocio: no usamos plantillas fijas.</p></div></div>
+          <button class="faq-q" aria-expanded="false">Can I customize the website for my business?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>Yes, always. Every site is tailored to your business's identity, colors and content. We don't use fixed templates.</p></div></div>
         </div>
         <div class="faq-item" data-open="false">
-          <button class="faq-q" aria-expanded="false">¿Solo hacen páginas web o también tiendas virtuales y otros servicios?<span class="pm" aria-hidden="true"></span></button>
-          <div class="faq-a-wrap"><div class="faq-a-inner"><p>También creamos tiendas virtuales, catálogos digitales, formularios y sistemas de reservas, integración con redes sociales, posicionamiento SEO básico y mantenimiento continuo. Cuéntanos qué necesita tu negocio y te asesoramos sobre la mejor opción.</p></div></div>
+          <button class="faq-q" aria-expanded="false">Do you only build websites, or also online stores and other services?<span class="pm" aria-hidden="true"></span></button>
+          <div class="faq-a-wrap"><div class="faq-a-inner"><p>We also build online stores, digital catalogs, forms and booking systems, social media integration, basic SEO and ongoing maintenance. Tell us what your business needs and we'll recommend the best option.</p></div></div>
         </div>
       </div>
     </div>
@@ -1344,29 +1511,40 @@
     <div class="wrap">
       <div class="start-panel reveal">
         <div class="start-copy">
-          <span class="kicker">Cuéntanos qué necesitas</span>
-          <h2>¿Qué plan estás buscando?</h2>
-          <p>Déjanos tu nombre, tu correo y el plan que te interesa. Te contactamos para afinar los detalles de tu página web, sin compromiso.</p>
+          <span class="kicker">Tell us what you need</span>
+          <h2>Which plan are you looking for?</h2>
+          <p>Leave us your name, email and the plan you're interested in. We'll reach out to fine-tune the details of your website, no strings attached.</p>
         </div>
         <form class="start-form" id="startForm" novalidate>
-          <label>Tu nombre
-            <input type="text" name="nombre" id="f-nombre" required autocomplete="name" placeholder="Nombre y apellido">
+          <label>Your name
+            <input type="text" name="nombre" id="f-nombre" required autocomplete="name" placeholder="First and last name">
           </label>
-          <label>Tu correo electrónico
-            <input type="email" name="email" id="f-email" required autocomplete="email" placeholder="tucorreo@ejemplo.com">
+          <label>Your WhatsApp number
+            <input type="tel" name="telefono" id="f-telefono" required autocomplete="tel" inputmode="tel" placeholder="e.g. +57 300 123 4567">
           </label>
-          <label>Plan que te interesa
+          <label>Your email
+            <input type="email" name="email" id="f-email" required autocomplete="email" placeholder="you@example.com">
+          </label>
+          <label>Plan you're interested in
             <select name="plan" id="f-plan" required>
-              <option value="" disabled selected>Selecciona un plan</option>
-              <option value="Paquete Básico (landing page + formulario de contacto)">Paquete Básico — landing page + formulario</option>
-              <option value="Paquete Profesional (sitio completo + catálogo digital + SEO básico + redes sociales)">Paquete Profesional — sitio + catálogo + SEO</option>
-              <option value="Paquete Premium (sitio + tienda virtual + mantenimiento + marketing digital)">Paquete Premium — tienda virtual + mantenimiento</option>
-              <option value="Aún no estoy seguro">Aún no estoy seguro / quiero asesoría</option>
+              <option value="" disabled selected>Select a plan</option>
+              <option value="Basic Package (landing page + contact form)">Basic Package — landing page + form</option>
+              <option value="Professional Package (full website + digital catalog + basic SEO + social media)">Professional Package — website + catalog + SEO</option>
+              <option value="Premium Package (website + online store + maintenance + digital marketing)">Premium Package — online store + maintenance</option>
+              <option value="Not sure yet">Not sure yet / I'd like advice</option>
             </select>
           </label>
-          <button type="submit" class="btn btn-primary btn-block btn-lg">
+          <div class="f-row">
+            <label>Preferred date (optional)
+              <input type="date" name="fecha" id="f-fecha">
+            </label>
+            <label>Preferred time (optional)
+              <input type="time" name="hora" id="f-hora">
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="f-submit">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
-            Enviar y hablar por WhatsApp
+            Send and chat on WhatsApp
           </button>
           <p class="start-msg" id="f-msg" role="status" hidden></p>
         </form>
@@ -1380,62 +1558,380 @@
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="#inicio" class="logo" aria-label="WebZipe — inicio"><span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <a href="#inicio" class="logo" aria-label="WebZipe — home"><span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 42 L27 88 L42 55 L55 88 L78 26" stroke="var(--blue)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M68 44 L78 26" stroke="var(--blue-bright)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
           <circle cx="80" cy="24" r="7" fill="var(--blue-bright)"/>
         </svg></span>Web<span class="logo-accent">Zipe</span></a>
-        <p>Creamos soluciones digitales para negocios, emprendimientos y empresas: páginas web, tiendas virtuales, catálogos digitales y mantenimiento, para verse mejor en Internet y conseguir más clientes.</p>
-        <a href="https://wa.me/573161838836?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc)."
+        <p>We build digital solutions for businesses, startups and companies: websites, online stores, digital catalogs and maintenance, to help them look better online and win more customers.</p>
+        <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)."
            class="btn btn-primary" style="margin-top:22px" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
-          Escríbenos por WhatsApp
+          Message us on WhatsApp
         </a>
       </div>
       <div class="footer-col">
-        <h4>Navegación</h4>
-        <a href="#inicio">Inicio</a>
-        <a href="#beneficios">Beneficios</a>
-        <a href="#servicios">Servicios</a>
-        <a href="#paquetes">Planes</a>
-        <a href="#ejemplos">Ejemplos</a>
-        <a href="#ejemplos-paginas">Ejemplos de páginas</a>
-        <a href="#preguntas">Preguntas</a>
+        <h4>Navigation</h4>
+        <a href="#inicio">Home</a>
+        <a href="#beneficios">Benefits</a>
+        <a href="#servicios">Services</a>
+        <a href="#paquetes">Plans</a>
+        <a href="#ejemplos">Examples</a>
+        <a href="#ejemplos-paginas">Live sites</a>
+        <a href="#preguntas">FAQ</a>
       </div>
       <div class="footer-col">
-        <h4>Servicios</h4>
-        <span>Páginas web y tiendas virtuales</span>
-        <span>Catálogos digitales y SEO</span>
-        <span>Redes sociales y WhatsApp</span>
-        <span>Mantenimiento y marketing digital</span>
+        <h4>Services</h4>
+        <span>Websites and online stores</span>
+        <span>Digital catalogs and SEO</span>
+        <span>Social media and WhatsApp</span>
+        <span>Maintenance and digital marketing</span>
       </div>
       <div class="footer-col">
-        <h4>Contacto</h4>
-        <a href="https://wa.me/573161838836" target="_blank" rel="noopener">WhatsApp: +57 316 183 8836</a>
+        <h4>Contact</h4>
+        <a href="https://wa.me/573102363531" data-wa-fixed target="_blank" rel="noopener">WhatsApp: +57 310 236 3531</a>
+        <a href="https://wa.me/573117453436" data-wa-fixed target="_blank" rel="noopener">WhatsApp: +57 311 745 3436</a>
         <a href="https://www.instagram.com/webzipe/" target="_blank" rel="noopener">Instagram: @webzipe</a>
         <span>Colombia</span>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© <span id="year">2026</span> WebZipe. Todos los derechos reservados.</span>
-      <span>Diseño y desarrollo web para negocios.</span>
+      <span>© <span id="year">2026</span> WebZipe. All rights reserved.</span>
+      <span>Web design and development for businesses.</span>
     </div>
   </div>
 </footer>
 
 <a href="https://www.instagram.com/webzipe/"
-   class="ig-float" target="_blank" rel="noopener" aria-label="Ver el Instagram de WebZipe">
+   class="ig-float" target="_blank" rel="noopener" aria-label="View WebZipe on Instagram">
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/><circle cx="17.15" cy="6.85" r="1.15" fill="currentColor"/></svg>
 </a>
 
-<a href="https://wa.me/573161838836?text=Hola%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios%20de%20WebZipe."
-   class="wa-float" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp a WebZipe">
+<a href="https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20more%20information%20about%20WebZipe%27s%20services."
+   class="wa-float" target="_blank" rel="noopener" aria-label="Message WebZipe on WhatsApp">
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.6 6.6 0 0 1 5.6-10.13 6.55 6.55 0 0 1 6.55 6.56 6.6 6.6 0 0 1-6.55 6.67Zm3.6-4.92c-.2-.1-1.17-.58-1.35-.64-.18-.07-.32-.1-.45.1-.13.19-.51.64-.63.77-.11.13-.23.14-.43.05-.2-.1-.83-.31-1.58-1-.58-.52-.98-1.16-1.09-1.36-.11-.19-.01-.3.09-.4.09-.09.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.45-1.08-.61-1.48-.16-.39-.33-.33-.45-.34h-.38c-.13 0-.34.05-.52.24-.18.19-.68.67-.68 1.63 0 .96.7 1.89.8 2.02.1.13 1.37 2.1 3.33 2.94.46.2.83.32 1.11.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.17-.46.17-.86.12-.94-.05-.09-.18-.14-.38-.24Z" fill="currentColor"/></svg>
 </a>
+
+<button type="button" class="ia-float" id="ia-open" aria-controls="ia-panel" aria-expanded="false" hidden>
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8.8-1.9Z" fill="currentColor"/></svg>
+  Ask the AI
+</button>
+
+<section class="ia-panel" id="ia-panel" role="dialog" aria-label="WebZipe AI assistant" aria-hidden="true" hidden>
+  <div class="ia-head">
+    <span class="ia-avatar" aria-hidden="true">Z</span>
+    <div>
+      <strong>Zipe · WebZipe AI</strong>
+      <small>Researches every question on the web and learns from the community</small>
+    </div>
+    <button type="button" class="ia-close" id="ia-close" aria-label="Close assistant">×</button>
+  </div>
+  <div class="ia-log" id="ia-log" aria-live="polite">
+    <div class="ia-msg bot">Hi! I'm Zipe 👋 Ask me anything: I'll research the answer online in real time and share my sources.</div>
+  </div>
+  <form class="ia-form" id="ia-form">
+    <textarea id="ia-input" rows="1" maxlength="1500" placeholder="Type your question…" aria-label="Your question"></textarea>
+    <button type="submit" id="ia-send" aria-label="Send question">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5L4 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </button>
+  </form>
+  <p class="ia-note">Questions are stored anonymously so the AI can learn and give better answers to other visitors. Please don't share personal information.</p>
+</section>
+
+<script type="application/json" id="i18n-es">{"WebZipe builds digital solutions for businesses: websites, online stores, digital catalogs, SEO, social media integration, forms, booking and maintenance, with direct contact via WhatsApp.": "WebZipe crea soluciones digitales para negocios: páginas web, tiendas virtuales, catálogos digitales, posicionamiento SEO, integración con redes sociales, formularios, reservas y mantenimiento, con contacto directo por WhatsApp.", "Skip to content": "Saltar al contenido", "WebZipe — home": "WebZipe — inicio", "Main navigation": "Navegación principal", "Home": "Inicio", "Benefits": "Beneficios", "Services": "Servicios", "Plans": "Planes", "Examples": "Ejemplos", "Live sites": "Ejemplos de páginas", "FAQ": "Preguntas", "See plans": "Ver planes", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).": "https://wa.me/573102363531?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc).", "Message us": "Escríbenos", "Open menu": "Abrir menú", "Message us on WhatsApp": "Escríbenos por WhatsApp", "A digital solutions studio for businesses": "Estudio de soluciones digitales para negocios", "We build the digital solution your business needs to": "Creamos la solución digital que tu negocio necesita para", "grow": "crecer", "At WebZipe we design websites, online stores and digital catalogs, with basic SEO, social media integration, forms, booking and ongoing maintenance. All tailored to your business, with direct contact via WhatsApp.": "En WebZipe diseñamos páginas web, tiendas virtuales y catálogos digitales, con SEO básico, integración a tus redes sociales, formularios, reservas y mantenimiento. Todo hecho a la medida de tu negocio, con contacto directo por WhatsApp.", "https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Hola%2C%20quiero%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F", "Get my digital solution": "Quiero mi solución digital", "See examples": "Ver ejemplos", "Websites and online stores": "Páginas web y tiendas virtuales", "SEO and social media built in": "SEO y redes sociales integradas", "Direct contact via WhatsApp": "Contacto directo por WhatsApp", "yourbusiness.com": "tunegocio.com", "Fast loading": "Carga rápida", "Fully responsive": "100% responsive", "Custom websites": "Páginas web a la medida", "Online stores": "Tiendas virtuales", "Digital catalogs": "Catálogos digitales", "SEO": "Posicionamiento SEO", "Social media integration": "Integración con redes sociales", "Forms and booking": "Formularios y reservas", "Maintenance and digital marketing": "Mantenimiento y marketing digital", "WhatsApp integration": "Integración con WhatsApp", "Why WebZipe": "Por qué WebZipe", "A studio that starts with you, not with a catalog of templates": "Un estudio que empieza contigo, no con un catálogo de plantillas", "We don't just hand you a website: we help you figure out what your business actually needs (a website, online store, catalog, forms or booking) to look professional online and win more customers.": "No solo te entregamos una página: te asesoramos sobre qué necesita tu negocio (página web, tienda virtual, catálogo, formularios o reservas) para verse profesional en Internet y conseguir más clientes.", "Modern design, tailored to your business": "Diseño moderno, hecho a la medida de tu negocio", "No recycled generic templates. Every site is designed around your business's identity, voice and goals.": "Nada de plantillas genéricas reutilizadas. Cada página se diseña pensando en la identidad, el tono y los objetivos de tu negocio.", "BRAND PALETTE": "PALETA DE MARCA", "Looks great on any screen": "Perfecta en cualquier pantalla", "Most of your customers will find you on their phone. Your site looks and works just as well on phones, tablets and computers.": "La mayoría de tus clientes te buscará desde el teléfono. Tu página se ve y funciona igual de bien en celular, tablet y computador.", "A lawyer's website viewed on a phone": "Página web de una abogada vista en un celular", "A lawyer's website viewed on a tablet": "Página web de una abogada vista en una tablet", "A lawyer's website viewed on a computer": "Página web de una abogada vista en un computador", "Built to turn visitors into customers": "Pensada para convertir visitas en clientes", "Every section, button and line of copy has one purpose: guiding visitors until they reach out to you.": "Cada sección, botón y texto está diseñado con un propósito: guiar al visitante hasta que te escribe.", "LEADS THIS MONTH": "CONTACTOS ESTE MES", "leads": "contactos", "Strategically placed buttons in every section so customers can message you in one click, with no long forms.": "Botones estratégicos en cada sección para que tus clientes te escriban en un solo clic, sin formularios largos.", "Your online presence works 24/7": "Tu presencia trabaja 24/7", "Your site shows what you offer around the clock, even when you're not available to reply.": "Tu página muestra lo que ofreces a cualquier hora, incluso cuando tú no estás disponible para responder.", "AVAILABLE": "DISPONIBLE", "Online now": "En línea ahora", "We're a young studio": "Somos un estudio que está comenzando", ", which means every project gets our full attention: no assembly lines and no waiting lists. You work directly with the person who actually designs your site.": ", y eso significa que cada proyecto recibe toda nuestra atención: sin procesos en serie ni clientes en espera. Trabajas de cerca con quien realmente diseña tu página.", "The shift": "El cambio", "Social media alone isn't enough anymore": "Tener redes sociales ya no es suficiente", "Many businesses today want an online presence but aren't sure how to get there: they run Instagram or Facebook, but they don't have their own website, online store or catalog where customers can really get to know their products and services.": "Hoy a muchos negocios les interesa tener presencia en Internet, pero no siempre saben cómo lograrlo: manejan Instagram o Facebook, pero no tienen un sitio propio, una tienda virtual o un catálogo donde sus clientes conozcan a fondo sus servicios y productos.", "Without a website": "Sin página web", "What usually happens": "Lo que suele pasar", "Customers look for information and only find an Instagram bio.": "Tus clientes buscan información y solo encuentran una bio de Instagram.", "Your business depends entirely on the reach of an algorithm you don't control.": "Tu negocio depende por completo del alcance de un algoritmo que no controlas.", "There's no clear place to showcase all your products or services.": "No hay un lugar claro para mostrar todos tus servicios o productos.", "Your business looks less professional than the competition.": "La imagen del negocio se siente menos profesional frente a la competencia.", "You have no space of your own online that represents your business.": "No existe un espacio propio en Internet que represente al negocio.", "With WebZipe": "Con WebZipe", "What changes with a website": "Lo que cambia con una página web", "You present your products and services in a clear, organized way.": "Presentas tus servicios y productos de forma clara y ordenada.", "You make it easy to reach you with direct WhatsApp buttons.": "Facilitas el contacto con botones directos a WhatsApp.", "You project a far more professional, trustworthy image.": "Proyectas una imagen mucho más profesional y confiable.", "You're available to customers any time, every day.": "Estás disponible para tus clientes a cualquier hora, todos los días.", "You own a space online that doesn't depend on any algorithm.": "Tienes un espacio propio en Internet que no depende de ningún algoritmo.", "Digital solutions to help your business grow": "Soluciones digitales para hacer crecer tu negocio", "We don't just build websites: we help you solve what your business needs to be present online, showcase your products or services and win more customers.": "No solo hacemos páginas web: te ayudamos a resolver lo que tu negocio necesita para tener presencia en Internet, mostrar tus productos o servicios y conseguir más clientes.", "Modern, original designs tailored to each business's visual identity and voice. No cookie-cutter templates.": "Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio. Nada de plantillas repetidas.", "Online stores and digital catalogs": "Tiendas virtuales y catálogos digitales", "Showcase and sell your products with a digital catalog or a full online store, without relying on social media alone.": "Muestra y vende tus productos con un catálogo digital o una tienda virtual completa, sin depender solo de las redes sociales.", "We set up the essentials so your site shows up in Google searches and customers can find you more easily.": "Configuramos lo básico para que tu página aparezca en las búsquedas de Google y tus clientes te encuentren más fácil.", "WhatsApp and social media": "WhatsApp y redes sociales", "Direct WhatsApp contact buttons and links to your social profiles, so customers can reach you in one click from any section.": "Botones de contacto directo a WhatsApp y enlaces a tus redes sociales, para que tus clientes te escriban en un clic desde cualquier sección.", "Contact forms and booking or appointment scheduling systems, right from your website.": "Formularios de contacto y sistemas de reservas o agendamiento de citas, directamente desde tu página.", "We keep your site up to date, support you after launch and gradually add digital marketing strategies.": "Actualizamos tu página, te acompañamos después de la entrega y lo complementamos poco a poco con estrategias de marketing digital.", "A package for every stage of your business": "Un paquete para cada etapa de tu negocio", "Choose your starting point: a website, online store or digital catalog. The scope can be adjusted to fit your needs, so message us and we'll define it together.": "Elige tu punto de partida: página web, tienda virtual o catálogo digital. El alcance se puede ajustar según lo que necesites: escríbenos y lo definimos juntos.", "Basic Package": "Paquete Básico", "A 1–3 page landing site with a contact form. Ideal for getting started with a clear, direct, professional presence.": "Landing page de 1 a 3 páginas con formulario de contacto. Ideal para empezar con una presencia profesional, clara y directa.", "Delivered in 5–7 days": "Entrega en 5-7 días", "1–3 page landing site": "Landing page de 1 a 3 páginas", "Fully responsive design": "Diseño 100% responsive", "Contact form + WhatsApp": "Formulario de contacto + WhatsApp", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Basic%20Package%20(landing%20page%20%2B%20contact%20form).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Hola%2C%20me%20interesa%20el%20Paquete%20B%C3%A1sico%20(landing%20page%20%2B%20formulario%20de%20contacto).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F", "Get the Basic Package": "Quiero el Paquete Básico", "Most popular": "Más popular", "Professional Package": "Paquete Profesional", "A full website with a digital catalog, basic SEO and social media integration, so customers can find you and see everything you offer.": "Sitio web completo con catálogo digital, SEO básico e integración con tus redes sociales, para que tus clientes te encuentren y conozcan todo lo que ofreces.", "Delivered in 10–15 days": "Entrega en 10-15 días", "Full website (multiple sections)": "Sitio web completo (varias secciones)", "Digital catalog + basic SEO": "Catálogo digital + SEO básico", "Social media + WhatsApp integration": "Redes sociales + WhatsApp integrados", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20Package%20(full%20website%20%2B%20digital%20catalog%20%2B%20basic%20SEO%20%2B%20social%20media).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Hola%2C%20me%20interesa%20el%20Paquete%20Profesional%20(sitio%20completo%20%2B%20cat%C3%A1logo%20digital%20%2B%20SEO%20b%C3%A1sico%20%2B%20redes%20sociales).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F", "Get the Professional Package": "Quiero el Paquete Profesional", "Premium Package": "Paquete Premium", "A full website with an online store or booking system, monthly maintenance and ongoing digital marketing support.": "Sitio completo con tienda virtual o sistema de reservas, mantenimiento mensual y acompañamiento en marketing digital.", "Ongoing service": "Servicio recurrente", "Everything in the Professional Package": "Todo lo del Paquete Profesional", "Online store and/or booking system": "Tienda virtual y/o sistema de reservas", "Monthly maintenance + digital marketing": "Mantenimiento mensual + marketing digital", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Premium%20Package%20(website%20%2B%20online%20store%20%2B%20maintenance%20%2B%20digital%20marketing).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Hola%2C%20me%20interesa%20el%20Paquete%20Premium%20(sitio%20%2B%20tienda%20virtual%20%2B%20mantenimiento%20%2B%20marketing%20digital).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F", "Get the Premium Package": "Quiero el Paquete Premium", "Not sure which one to choose?": "¿No sabes cuál elegir?", "Leave us your details": "Déjanos tus datos", "and we'll help you decide, no strings attached.": "y te asesoramos sin compromiso.", "This is how good your website could look": "Así de bien podría verse tu página web", "These are": "Estos son", "concept examples": "ejemplos conceptuales", "showing design possibilities for different types of businesses, not real WebZipe client projects.": "para mostrarte posibilidades de diseño según el tipo de negocio, no proyectos reales de clientes de WebZipe.", "Note:": "Aviso:", "the layouts below are concept mockups created to illustrate design styles, not screenshots of delivered sites.": "las composiciones de abajo son mockups conceptuales creados para ilustrar estilos de diseño, no capturas de páginas ya entregadas.", "Restaurants and cafés": "Restaurantes y cafés", "A visual menu, location and reservations or orders straight through WhatsApp. A site that works up an appetite before customers even walk in.": "Menú visual, ubicación y reservas o pedidos directos por WhatsApp. Una página que abre el apetito antes de que el cliente llegue.", "https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business.": "https://wa.me/573102363531?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio.", "I want something like this": "Quiero algo así", "Concept example of a website for a coffee shop": "Ejemplo conceptual de una página web para una cafetería", "Shops and small businesses": "Tiendas y emprendimientos", "A clear product catalog with a buy or inquire button. Ideal for selling without relying on social media alone.": "Catálogo de productos claro, con botón de compra o consulta directa. Ideal para vender sin depender solo de las redes.", "Concept example of an online clothing store": "Ejemplo conceptual de una tienda de ropa online", "Professionals and services": "Profesionales y servicios", "Your services, experience and an easy way to book an appointment or consultation. Builds trust from the very first second.": "Presentación de servicios, experiencia y forma de agendar una cita o consulta. Transmite confianza desde el primer segundo.", "Concept example of a website for a service professional": "Ejemplo conceptual de una web para una profesional de servicios", "Check out some sites we've built": "Mira algunas páginas que hemos creado", "These are real links to demo sites. Click any of them to see it live.": "Estos son enlaces reales a páginas de prueba. Haz clic en cada una para verla en vivo.", "Clothing Catalog": "Catálogo de Ropa", "A clothing catalog with prices and an \"Order now\" button for each item.": "Catálogo de modelos de ropa con precios y botón de \"Pedir ahora\" para cada prenda.", "View site": "Ver página", "Javier Restrepo | Family Lawyer": "Javier Restrepo | Abogado de Familia", "A site for an independent professional: \"We defend what matters most: your family.\" Includes practice areas, experience and a free consultation via WhatsApp.": "Página para un profesional independiente: \"Defendemos lo que más importa: tu familia\". Incluye áreas de práctica, experiencia y consulta gratuita por WhatsApp.", "El Buen Sazón | Home-style food at your table or your door": "El Buen Sazón | Comida casera a tu mesa o a tu puerta", "A restaurant site with a menu, dine-in and delivery orders, with each order sent straight through WhatsApp.": "Página de restaurante con menú, pedidos en mesa y domicilios, con envío del pedido directo por WhatsApp.", "ToyLandia — Toys for the whole family": "ToyLandia — Juguetes para toda la familia", "An online toy store with a product catalog and an \"Order now\" button for each item.": "Tienda digital de juguetes con catálogo de productos y botón de \"Pide ya\" para cada uno.", "A barbershop site with a service and price list, work gallery, barber team, reviews and a \"Book\" button for each service.": "Página de barbería con carta de servicios y precios, galería de trabajos, equipo de barberos, reseñas y botón de \"Reservar\" en cada servicio.", "Let's get started": "Empecemos hoy", "Ready to take your business online?": "¿Listo para llevar tu negocio a Internet?", "Tell us about your business on WhatsApp and we'll help you figure out what you need: a website, online store, digital catalog or maintenance. No strings attached, straight to the point.": "Cuéntanos sobre tu negocio por WhatsApp y te ayudamos a definir qué necesitas: página web, tienda virtual, catálogo digital o mantenimiento. Sin compromisos, directo y sin vueltas.", "https://wa.me/573102363531?text=Hi%2C%20I%20want%20to%20build%20my%20website%20or%20online%20store%20with%20WebZipe.%20How%20do%20we%20get%20started%3F": "https://wa.me/573102363531?text=Hola%2C%20quiero%20crear%20mi%20p%C3%A1gina%20web%20o%20tienda%20virtual%20con%20WebZipe.%20%C2%BFC%C3%B3mo%20empezamos%3F", "Build my digital solution": "Crear mi solución digital", "Everything you might want to know": "Todo lo que quizás quieras saber", "If you have a question that isn't answered here, message us directly on WhatsApp.": "Si tienes otra duda que no está aquí, escríbenos directamente por WhatsApp.", "What kinds of businesses can have a website?": "¿Qué tipo de negocios pueden tener una página web?", "Any kind: restaurants, shops, startups, independent professionals, service companies and much more. If you have a business, a website can help you show it off better.": "Cualquier tipo: restaurantes, tiendas, emprendimientos, profesionales independientes, empresas de servicios y mucho más. Si tienes un negocio, una página web puede ayudarte a mostrarlo mejor.", "Will my website work on phones?": "¿La página funciona en celulares?", "Yes. Every site we design is fully responsive: it adapts to and works properly on phones, tablets and computers.": "Sí. Todas las páginas que diseñamos son 100% responsive: se adaptan y funcionan correctamente en celulares, tablets y computadores.", "Can I add WhatsApp to my website?": "¿Puedo agregar WhatsApp a mi página?", "Absolutely. In fact, it's one of the integrations we recommend most. It's the fastest, most direct way for customers to reach you.": "Claro, de hecho es una de las integraciones que más recomendamos. Es la forma más rápida y directa para que tus clientes te contacten.", "Can I request design changes?": "¿Puedo solicitar cambios en el diseño?", "Yes. The design adapts to what you need: tell us your idea, your colors and your style, and we'll work on it with you until it looks the way you pictured it.": "Sí. El diseño se ajusta a lo que necesites: cuéntanos tu idea, tus colores y tu estilo, y lo desarrollamos contigo hasta que quede como lo imaginas.", "How long does it take to build a website?": "¿Cuánto tarda en realizarse una página?", "It depends on the complexity and scope of your project. Once we know the details of your business, we'll give you an estimated timeline on WhatsApp.": "Depende de la complejidad y el alcance de tu proyecto. Una vez conozcamos los detalles de tu negocio, te damos un tiempo estimado por WhatsApp.", "What information do you need to get started?": "¿Qué información necesitan para comenzar?", "It helps to know what your business does, what products or services you offer and how you'd like customers to contact you. With that, we can start designing.": "Nos ayuda conocer a qué se dedica tu negocio, qué productos o servicios ofreces y cómo prefieres que tus clientes te contacten. Con eso ya podemos empezar a diseñar.", "Can I customize the website for my business?": "¿Puedo personalizar la página para mi negocio?", "Yes, always. Every site is tailored to your business's identity, colors and content. We don't use fixed templates.": "Sí, siempre. Cada página se adapta a la identidad, los colores y el contenido específico de tu negocio: no usamos plantillas fijas.", "Do you only build websites, or also online stores and other services?": "¿Solo hacen páginas web o también tiendas virtuales y otros servicios?", "We also build online stores, digital catalogs, forms and booking systems, social media integration, basic SEO and ongoing maintenance. Tell us what your business needs and we'll recommend the best option.": "También creamos tiendas virtuales, catálogos digitales, formularios y sistemas de reservas, integración con redes sociales, posicionamiento SEO básico y mantenimiento continuo. Cuéntanos qué necesita tu negocio y te asesoramos sobre la mejor opción.", "Tell us what you need": "Cuéntanos qué necesitas", "Which plan are you looking for?": "¿Qué plan estás buscando?", "Leave us your name, email and the plan you're interested in. We'll reach out to fine-tune the details of your website, no strings attached.": "Déjanos tu nombre, tu correo y el plan que te interesa. Te contactamos para afinar los detalles de tu página web, sin compromiso.", "Your name": "Tu nombre", "First and last name": "Nombre y apellido", "Your email": "Tu correo electrónico", "you@example.com": "tucorreo@ejemplo.com", "Plan you're interested in": "Plan que te interesa", "Select a plan": "Selecciona un plan", "Basic Package (landing page + contact form)": "Paquete Básico (landing page + formulario de contacto)", "Basic Package — landing page + form": "Paquete Básico — landing page + formulario", "Professional Package (full website + digital catalog + basic SEO + social media)": "Paquete Profesional (sitio completo + catálogo digital + SEO básico + redes sociales)", "Professional Package — website + catalog + SEO": "Paquete Profesional — sitio + catálogo + SEO", "Premium Package (website + online store + maintenance + digital marketing)": "Paquete Premium (sitio + tienda virtual + mantenimiento + marketing digital)", "Premium Package — online store + maintenance": "Paquete Premium — tienda virtual + mantenimiento", "Not sure yet": "Aún no estoy seguro", "Not sure yet / I'd like advice": "Aún no estoy seguro / quiero asesoría", "Send and chat on WhatsApp": "Enviar y hablar por WhatsApp", "We build digital solutions for businesses, startups and companies: websites, online stores, digital catalogs and maintenance, to help them look better online and win more customers.": "Creamos soluciones digitales para negocios, emprendimientos y empresas: páginas web, tiendas virtuales, catálogos digitales y mantenimiento, para verse mejor en Internet y conseguir más clientes.", "Navigation": "Navegación", "Digital catalogs and SEO": "Catálogos digitales y SEO", "Social media and WhatsApp": "Redes sociales y WhatsApp", "Contact": "Contacto", "WebZipe. All rights reserved.": "WebZipe. Todos los derechos reservados.", "Web design and development for businesses.": "Diseño y desarrollo web para negocios.", "View WebZipe on Instagram": "Ver el Instagram de WebZipe", "Message WebZipe on WhatsApp": "Escribir por WhatsApp a WebZipe", "https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20more%20information%20about%20WebZipe%27s%20services.": "https://wa.me/573102363531?text=Hola%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios%20de%20WebZipe.", "Ask the AI": "Pregúntale a la IA", "WebZipe AI assistant": "Asistente de inteligencia artificial de WebZipe", "Zipe · WebZipe AI": "Zipe · IA de WebZipe", "Researches every question on the web and learns from the community": "Investiga en la web cada pregunta y aprende de la comunidad", "Close assistant": "Cerrar asistente", "Hi! I'm Zipe 👋 Ask me anything: I'll research the answer online in real time and share my sources.": "¡Hola! Soy Zipe 👋 Pregúntame lo que quieras: investigo la respuesta en internet en tiempo real y te dejo las fuentes.", "Your question": "Tu pregunta", "Type your question…": "Escribe tu pregunta…", "Send question": "Enviar pregunta", "Questions are stored anonymously so the AI can learn and give better answers to other visitors. Please don't share personal information.": "Las preguntas se guardan de forma anónima para que la IA aprenda y responda mejor a otros visitantes. No compartas datos personales.", "Translate": "Traducir", "Page theme": "Tema de página", "Theme": "Tema", "Dark": "Oscuro", "Light": "Claro", "Close menu": "Cerrar menú", "Please enter your name, a valid email and choose a plan.": "Completa tu nombre, un correo válido y elige un plan.", "I'm interested in the": "Me interesa el", "I'm not sure which plan to choose yet and would like some advice.": "Aún no sé qué plan elegir y me gustaría recibir asesoría.", "Hi, I'm": "Hola, soy", "My email is": "Mi correo es", "Could you send me more information?": "¿Podrían darme más información?", "Redirecting you to WhatsApp with your details… If it doesn't open,": "Te estamos redirigiendo a WhatsApp con tus datos… Si no se abre,", "click here": "haz clic aquí", "Researching the web…": "Investigando en la web…", "Sources:": "Fuentes:", "The AI couldn't answer this time. Please try again in a moment.": "La IA no pudo responder esta vez. Intenta de nuevo en un momento.", "The research took too long. Try asking a more specific question.": "La investigación tardó demasiado. Intenta con una pregunta más concreta.", "I couldn't connect to the AI. Please try again in a moment.": "No pude conectarme con la IA. Intenta de nuevo en un momento.", "Your WhatsApp number": "Tu número de WhatsApp", "e.g. +57 300 123 4567": "ej. +57 300 123 4567", "Preferred date (optional)": "Fecha preferida (opcional)", "Preferred time (optional)": "Hora preferida (opcional)", "Please enter your name, a valid WhatsApp number, a valid email and choose a plan.": "Completa tu nombre, un número de WhatsApp válido, un correo válido y elige un plan.", "My WhatsApp is": "Mi WhatsApp es", "and my email is": "y mi correo es", "I'd like to schedule for": "Me gustaría agendar para el", "Saving your request…": "Guardando tu solicitud…", "Request": "Solicitud"}</script>
+<script type="application/json" id="i18n-fr">{"WebZipe builds digital solutions for businesses: websites, online stores, digital catalogs, SEO, social media integration, forms, booking and maintenance, with direct contact via WhatsApp.": "WebZipe crée des solutions digitales pour les entreprises : sites web, boutiques en ligne, catalogues numériques, référencement SEO, intégration aux réseaux sociaux, formulaires, réservations et maintenance, avec un contact direct par WhatsApp.", "Skip to content": "Aller au contenu", "WebZipe — home": "WebZipe — accueil", "Main navigation": "Navigation principale", "Home": "Accueil", "Benefits": "Avantages", "Services": "Services", "Plans": "Formules", "Examples": "Exemples", "Live sites": "Sites en ligne", "FAQ": "FAQ", "See plans": "Voir les formules", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).": "https://wa.me/573102363531?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20une%20solution%20digitale%20pour%20mon%20entreprise%20(site%20web%2C%20boutique%20en%20ligne%2C%20etc.).", "Message us": "Écrivez-nous", "Open menu": "Ouvrir le menu", "Message us on WhatsApp": "Écrivez-nous sur WhatsApp", "A digital solutions studio for businesses": "Un studio de solutions digitales pour les entreprises", "We build the digital solution your business needs to": "Nous créons la solution digitale dont votre entreprise a besoin pour", "grow": "grandir", "At WebZipe we design websites, online stores and digital catalogs, with basic SEO, social media integration, forms, booking and ongoing maintenance. All tailored to your business, with direct contact via WhatsApp.": "Chez WebZipe, nous concevons des sites web, des boutiques en ligne et des catalogues numériques, avec un SEO de base, l'intégration à vos réseaux sociaux, des formulaires, des réservations et une maintenance continue. Le tout sur mesure pour votre entreprise, avec un contact direct par WhatsApp.", "https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20souhaite%20une%20solution%20digitale%20pour%20mon%20entreprise%20(site%20web%2C%20boutique%20en%20ligne%2C%20etc.).%20Pourriez-vous%20m%27envoyer%20plus%20d%27informations%20%3F", "Get my digital solution": "Je veux ma solution digitale", "See examples": "Voir des exemples", "Websites and online stores": "Sites web et boutiques en ligne", "SEO and social media built in": "SEO et réseaux sociaux intégrés", "Direct contact via WhatsApp": "Contact direct par WhatsApp", "yourbusiness.com": "votreentreprise.fr", "Fast loading": "Chargement rapide", "Fully responsive": "100 % responsive", "Custom websites": "Sites web sur mesure", "Online stores": "Boutiques en ligne", "Digital catalogs": "Catalogues numériques", "SEO": "Référencement SEO", "Social media integration": "Intégration aux réseaux sociaux", "Forms and booking": "Formulaires et réservations", "Maintenance and digital marketing": "Maintenance et marketing digital", "WhatsApp integration": "Intégration WhatsApp", "Why WebZipe": "Pourquoi WebZipe", "A studio that starts with you, not with a catalog of templates": "Un studio qui part de vous, pas d'un catalogue de modèles", "We don't just hand you a website: we help you figure out what your business actually needs (a website, online store, catalog, forms or booking) to look professional online and win more customers.": "Nous ne nous contentons pas de vous livrer un site : nous vous aidons à définir ce dont votre entreprise a vraiment besoin (site web, boutique en ligne, catalogue, formulaires ou réservations) pour paraître professionnelle en ligne et gagner plus de clients.", "Modern design, tailored to your business": "Un design moderne, sur mesure pour votre entreprise", "No recycled generic templates. Every site is designed around your business's identity, voice and goals.": "Aucun modèle générique recyclé. Chaque site est conçu autour de l'identité, du ton et des objectifs de votre entreprise.", "BRAND PALETTE": "PALETTE DE MARQUE", "Looks great on any screen": "Parfait sur tous les écrans", "Most of your customers will find you on their phone. Your site looks and works just as well on phones, tablets and computers.": "La plupart de vos clients vous trouveront depuis leur téléphone. Votre site s'affiche et fonctionne aussi bien sur mobile, tablette et ordinateur.", "A lawyer's website viewed on a phone": "Site web d'une avocate vu sur un téléphone", "A lawyer's website viewed on a tablet": "Site web d'une avocate vu sur une tablette", "A lawyer's website viewed on a computer": "Site web d'une avocate vu sur un ordinateur", "Built to turn visitors into customers": "Pensé pour transformer les visiteurs en clients", "Every section, button and line of copy has one purpose: guiding visitors until they reach out to you.": "Chaque section, bouton et texte a un seul objectif : guider le visiteur jusqu'à ce qu'il vous contacte.", "LEADS THIS MONTH": "CONTACTS CE MOIS-CI", "leads": "contacts", "Strategically placed buttons in every section so customers can message you in one click, with no long forms.": "Des boutons placés stratégiquement dans chaque section pour que vos clients vous écrivent en un clic, sans longs formulaires.", "Your online presence works 24/7": "Votre présence en ligne travaille 24 h/24, 7 j/7", "Your site shows what you offer around the clock, even when you're not available to reply.": "Votre site présente votre offre à toute heure, même quand vous n'êtes pas disponible pour répondre.", "AVAILABLE": "DISPONIBLE", "Online now": "En ligne maintenant", "We're a young studio": "Nous sommes un jeune studio", ", which means every project gets our full attention: no assembly lines and no waiting lists. You work directly with the person who actually designs your site.": ", ce qui signifie que chaque projet reçoit toute notre attention : pas de travail à la chaîne ni de liste d'attente. Vous travaillez directement avec la personne qui conçoit votre site.", "The shift": "Le changement", "Social media alone isn't enough anymore": "Les réseaux sociaux ne suffisent plus", "Many businesses today want an online presence but aren't sure how to get there: they run Instagram or Facebook, but they don't have their own website, online store or catalog where customers can really get to know their products and services.": "Aujourd'hui, beaucoup d'entreprises veulent être présentes en ligne sans toujours savoir comment s'y prendre : elles gèrent Instagram ou Facebook, mais n'ont pas leur propre site, leur boutique en ligne ou leur catalogue où les clients peuvent vraiment découvrir leurs produits et services.", "Without a website": "Sans site web", "What usually happens": "Ce qui se passe souvent", "Customers look for information and only find an Instagram bio.": "Vos clients cherchent des informations et ne trouvent qu'une bio Instagram.", "Your business depends entirely on the reach of an algorithm you don't control.": "Votre entreprise dépend entièrement de la portée d'un algorithme que vous ne contrôlez pas.", "There's no clear place to showcase all your products or services.": "Il n'existe aucun endroit clair pour présenter tous vos produits ou services.", "Your business looks less professional than the competition.": "Votre entreprise paraît moins professionnelle que la concurrence.", "You have no space of your own online that represents your business.": "Vous n'avez aucun espace à vous en ligne qui représente votre entreprise.", "With WebZipe": "Avec WebZipe", "What changes with a website": "Ce qui change avec un site web", "You present your products and services in a clear, organized way.": "Vous présentez vos produits et services de façon claire et organisée.", "You make it easy to reach you with direct WhatsApp buttons.": "Vous facilitez le contact grâce à des boutons WhatsApp directs.", "You project a far more professional, trustworthy image.": "Vous projetez une image bien plus professionnelle et digne de confiance.", "You're available to customers any time, every day.": "Vous êtes disponible pour vos clients à toute heure, tous les jours.", "You own a space online that doesn't depend on any algorithm.": "Vous possédez un espace en ligne qui ne dépend d'aucun algorithme.", "Digital solutions to help your business grow": "Des solutions digitales pour faire grandir votre entreprise", "We don't just build websites: we help you solve what your business needs to be present online, showcase your products or services and win more customers.": "Nous ne faisons pas que des sites web : nous vous aidons à résoudre ce dont votre entreprise a besoin pour être présente en ligne, présenter ses produits ou services et gagner plus de clients.", "Modern, original designs tailored to each business's visual identity and voice. No cookie-cutter templates.": "Des designs modernes et originaux, adaptés à l'identité visuelle et au ton de chaque entreprise. Pas de modèles tout faits.", "Online stores and digital catalogs": "Boutiques en ligne et catalogues numériques", "Showcase and sell your products with a digital catalog or a full online store, without relying on social media alone.": "Présentez et vendez vos produits avec un catalogue numérique ou une boutique en ligne complète, sans dépendre uniquement des réseaux sociaux.", "We set up the essentials so your site shows up in Google searches and customers can find you more easily.": "Nous configurons l'essentiel pour que votre site apparaisse dans les recherches Google et que vos clients vous trouvent plus facilement.", "WhatsApp and social media": "WhatsApp et réseaux sociaux", "Direct WhatsApp contact buttons and links to your social profiles, so customers can reach you in one click from any section.": "Des boutons de contact WhatsApp directs et des liens vers vos réseaux sociaux, pour que vos clients vous écrivent en un clic depuis n'importe quelle section.", "Contact forms and booking or appointment scheduling systems, right from your website.": "Des formulaires de contact et des systèmes de réservation ou de prise de rendez-vous, directement depuis votre site.", "We keep your site up to date, support you after launch and gradually add digital marketing strategies.": "Nous maintenons votre site à jour, vous accompagnons après la livraison et ajoutons progressivement des stratégies de marketing digital.", "A package for every stage of your business": "Une formule pour chaque étape de votre entreprise", "Choose your starting point: a website, online store or digital catalog. The scope can be adjusted to fit your needs, so message us and we'll define it together.": "Choisissez votre point de départ : site web, boutique en ligne ou catalogue numérique. Le périmètre s'ajuste à vos besoins : écrivez-nous et nous le définirons ensemble.", "Basic Package": "Formule Basique", "A 1–3 page landing site with a contact form. Ideal for getting started with a clear, direct, professional presence.": "Une landing page de 1 à 3 pages avec formulaire de contact. Idéale pour démarrer avec une présence professionnelle, claire et directe.", "Delivered in 5–7 days": "Livraison en 5 à 7 jours", "1–3 page landing site": "Landing page de 1 à 3 pages", "Fully responsive design": "Design 100 % responsive", "Contact form + WhatsApp": "Formulaire de contact + WhatsApp", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Basic%20Package%20(landing%20page%20%2B%20contact%20form).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20la%20Formule%20Basique%20(landing%20page%20%2B%20formulaire%20de%20contact).%20Pourriez-vous%20m%27envoyer%20plus%20d%27informations%20%3F", "Get the Basic Package": "Je veux la Formule Basique", "Most popular": "La plus populaire", "Professional Package": "Formule Professionnelle", "A full website with a digital catalog, basic SEO and social media integration, so customers can find you and see everything you offer.": "Un site web complet avec catalogue numérique, SEO de base et intégration à vos réseaux sociaux, pour que vos clients vous trouvent et découvrent tout ce que vous proposez.", "Delivered in 10–15 days": "Livraison en 10 à 15 jours", "Full website (multiple sections)": "Site web complet (plusieurs sections)", "Digital catalog + basic SEO": "Catalogue numérique + SEO de base", "Social media + WhatsApp integration": "Réseaux sociaux + WhatsApp intégrés", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20Package%20(full%20website%20%2B%20digital%20catalog%20%2B%20basic%20SEO%20%2B%20social%20media).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20la%20Formule%20Professionnelle%20(site%20complet%20%2B%20catalogue%20num%C3%A9rique%20%2B%20SEO%20de%20base%20%2B%20r%C3%A9seaux%20sociaux).%20Pourriez-vous%20m%27envoyer%20plus%20d%27informations%20%3F", "Get the Professional Package": "Je veux la Formule Professionnelle", "Premium Package": "Formule Premium", "A full website with an online store or booking system, monthly maintenance and ongoing digital marketing support.": "Un site complet avec boutique en ligne ou système de réservation, maintenance mensuelle et accompagnement en marketing digital.", "Ongoing service": "Service récurrent", "Everything in the Professional Package": "Tout le contenu de la Formule Professionnelle", "Online store and/or booking system": "Boutique en ligne et/ou système de réservation", "Monthly maintenance + digital marketing": "Maintenance mensuelle + marketing digital", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Premium%20Package%20(website%20%2B%20online%20store%20%2B%20maintenance%20%2B%20digital%20marketing).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20la%20Formule%20Premium%20(site%20%2B%20boutique%20en%20ligne%20%2B%20maintenance%20%2B%20marketing%20digital).%20Pourriez-vous%20m%27envoyer%20plus%20d%27informations%20%3F", "Get the Premium Package": "Je veux la Formule Premium", "Not sure which one to choose?": "Vous ne savez pas laquelle choisir ?", "Leave us your details": "Laissez-nous vos coordonnées", "and we'll help you decide, no strings attached.": "et nous vous conseillerons, sans engagement.", "This is how good your website could look": "Voici à quoi pourrait ressembler votre site web", "These are": "Ce sont des", "concept examples": "exemples conceptuels", "showing design possibilities for different types of businesses, not real WebZipe client projects.": "qui montrent des possibilités de design selon le type d'entreprise, et non de vrais projets clients de WebZipe.", "Note:": "Remarque :", "the layouts below are concept mockups created to illustrate design styles, not screenshots of delivered sites.": "les compositions ci-dessous sont des maquettes conceptuelles créées pour illustrer des styles de design, et non des captures de sites livrés.", "Restaurants and cafés": "Restaurants et cafés", "A visual menu, location and reservations or orders straight through WhatsApp. A site that works up an appetite before customers even walk in.": "Un menu visuel, l'adresse et des réservations ou commandes directement par WhatsApp. Un site qui met en appétit avant même l'arrivée du client.", "https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business.": "https://wa.me/573102363531?text=Bonjour%2C%20j%27ai%20vu%20vos%20exemples%20de%20sites%20web%20et%20je%20voudrais%20quelque%20chose%20de%20similaire%20pour%20mon%20entreprise.", "I want something like this": "Je veux quelque chose comme ça", "Concept example of a website for a coffee shop": "Exemple conceptuel de site web pour un café", "Shops and small businesses": "Boutiques et petites entreprises", "A clear product catalog with a buy or inquire button. Ideal for selling without relying on social media alone.": "Un catalogue de produits clair avec un bouton d'achat ou de demande directe. Idéal pour vendre sans dépendre uniquement des réseaux sociaux.", "Concept example of an online clothing store": "Exemple conceptuel de boutique de vêtements en ligne", "Professionals and services": "Professionnels et services", "Your services, experience and an easy way to book an appointment or consultation. Builds trust from the very first second.": "Vos services, votre expérience et un moyen simple de prendre rendez-vous ou de demander une consultation. Inspire confiance dès la première seconde.", "Concept example of a website for a service professional": "Exemple conceptuel de site web pour une professionnelle de services", "Check out some sites we've built": "Découvrez quelques sites que nous avons créés", "These are real links to demo sites. Click any of them to see it live.": "Ce sont de vrais liens vers des sites de démonstration. Cliquez sur chacun pour le voir en ligne.", "Clothing Catalog": "Catalogue de vêtements", "A clothing catalog with prices and an \"Order now\" button for each item.": "Un catalogue de vêtements avec les prix et un bouton « Commander » pour chaque article.", "View site": "Voir le site", "Javier Restrepo | Family Lawyer": "Javier Restrepo | Avocat en droit de la famille", "A site for an independent professional: \"We defend what matters most: your family.\" Includes practice areas, experience and a free consultation via WhatsApp.": "Un site pour un professionnel indépendant : « Nous défendons ce qui compte le plus : votre famille. » Comprend les domaines d'intervention, l'expérience et une consultation gratuite par WhatsApp.", "El Buen Sazón | Home-style food at your table or your door": "El Buen Sazón | Cuisine maison à votre table ou à votre porte", "A restaurant site with a menu, dine-in and delivery orders, with each order sent straight through WhatsApp.": "Un site de restaurant avec menu, commandes sur place et livraisons, chaque commande étant envoyée directement par WhatsApp.", "ToyLandia — Toys for the whole family": "ToyLandia — Des jouets pour toute la famille", "An online toy store with a product catalog and an \"Order now\" button for each item.": "Une boutique de jouets en ligne avec catalogue de produits et un bouton « Commander » pour chacun.", "A barbershop site with a service and price list, work gallery, barber team, reviews and a \"Book\" button for each service.": "Un site de barbier avec la liste des services et des prix, une galerie de réalisations, l'équipe de barbiers, des avis et un bouton « Réserver » pour chaque service.", "Let's get started": "Commençons", "Ready to take your business online?": "Prêt à mettre votre entreprise en ligne ?", "Tell us about your business on WhatsApp and we'll help you figure out what you need: a website, online store, digital catalog or maintenance. No strings attached, straight to the point.": "Parlez-nous de votre entreprise sur WhatsApp et nous vous aiderons à définir ce dont vous avez besoin : site web, boutique en ligne, catalogue numérique ou maintenance. Sans engagement, simplement et directement.", "https://wa.me/573102363531?text=Hi%2C%20I%20want%20to%20build%20my%20website%20or%20online%20store%20with%20WebZipe.%20How%20do%20we%20get%20started%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20veux%20cr%C3%A9er%20mon%20site%20web%20ou%20ma%20boutique%20en%20ligne%20avec%20WebZipe.%20Comment%20commen%C3%A7ons-nous%20%3F", "Build my digital solution": "Créer ma solution digitale", "Everything you might want to know": "Tout ce que vous voudriez savoir", "If you have a question that isn't answered here, message us directly on WhatsApp.": "Si vous avez une autre question qui ne figure pas ici, écrivez-nous directement sur WhatsApp.", "What kinds of businesses can have a website?": "Quels types d'entreprises peuvent avoir un site web ?", "Any kind: restaurants, shops, startups, independent professionals, service companies and much more. If you have a business, a website can help you show it off better.": "Tous : restaurants, boutiques, jeunes entreprises, professionnels indépendants, entreprises de services et bien plus. Si vous avez une entreprise, un site web peut vous aider à mieux la mettre en valeur.", "Will my website work on phones?": "Mon site fonctionnera-t-il sur mobile ?", "Yes. Every site we design is fully responsive: it adapts to and works properly on phones, tablets and computers.": "Oui. Tous les sites que nous concevons sont 100 % responsive : ils s'adaptent et fonctionnent correctement sur mobile, tablette et ordinateur.", "Can I add WhatsApp to my website?": "Puis-je ajouter WhatsApp à mon site ?", "Absolutely. In fact, it's one of the integrations we recommend most. It's the fastest, most direct way for customers to reach you.": "Bien sûr. C'est même l'une des intégrations que nous recommandons le plus : c'est le moyen le plus rapide et le plus direct pour que vos clients vous contactent.", "Can I request design changes?": "Puis-je demander des modifications du design ?", "Yes. The design adapts to what you need: tell us your idea, your colors and your style, and we'll work on it with you until it looks the way you pictured it.": "Oui. Le design s'adapte à vos besoins : partagez-nous votre idée, vos couleurs et votre style, et nous le développons avec vous jusqu'à ce qu'il ressemble à ce que vous imaginez.", "How long does it take to build a website?": "Combien de temps faut-il pour créer un site web ?", "It depends on the complexity and scope of your project. Once we know the details of your business, we'll give you an estimated timeline on WhatsApp.": "Cela dépend de la complexité et de l'ampleur de votre projet. Dès que nous connaissons les détails de votre entreprise, nous vous donnons un délai estimé par WhatsApp.", "What information do you need to get started?": "De quelles informations avez-vous besoin pour commencer ?", "It helps to know what your business does, what products or services you offer and how you'd like customers to contact you. With that, we can start designing.": "Il nous est utile de savoir ce que fait votre entreprise, quels produits ou services vous proposez et comment vous préférez que vos clients vous contactent. Avec cela, nous pouvons commencer à concevoir.", "Can I customize the website for my business?": "Puis-je personnaliser le site pour mon entreprise ?", "Yes, always. Every site is tailored to your business's identity, colors and content. We don't use fixed templates.": "Oui, toujours. Chaque site s'adapte à l'identité, aux couleurs et au contenu de votre entreprise : nous n'utilisons pas de modèles figés.", "Do you only build websites, or also online stores and other services?": "Faites-vous uniquement des sites web, ou aussi des boutiques en ligne et d'autres services ?", "We also build online stores, digital catalogs, forms and booking systems, social media integration, basic SEO and ongoing maintenance. Tell us what your business needs and we'll recommend the best option.": "Nous créons aussi des boutiques en ligne, des catalogues numériques, des formulaires et systèmes de réservation, l'intégration aux réseaux sociaux, le SEO de base et la maintenance continue. Dites-nous ce dont votre entreprise a besoin et nous vous conseillerons la meilleure option.", "Tell us what you need": "Dites-nous ce dont vous avez besoin", "Which plan are you looking for?": "Quelle formule recherchez-vous ?", "Leave us your name, email and the plan you're interested in. We'll reach out to fine-tune the details of your website, no strings attached.": "Laissez-nous votre nom, votre e-mail et la formule qui vous intéresse. Nous vous contacterons pour affiner les détails de votre site web, sans engagement.", "Your name": "Votre nom", "First and last name": "Prénom et nom", "Your email": "Votre e-mail", "you@example.com": "vous@exemple.com", "Plan you're interested in": "Formule qui vous intéresse", "Select a plan": "Choisissez une formule", "Basic Package (landing page + contact form)": "Formule Basique (landing page + formulaire de contact)", "Basic Package — landing page + form": "Formule Basique — landing page + formulaire", "Professional Package (full website + digital catalog + basic SEO + social media)": "Formule Professionnelle (site complet + catalogue numérique + SEO de base + réseaux sociaux)", "Professional Package — website + catalog + SEO": "Formule Professionnelle — site + catalogue + SEO", "Premium Package (website + online store + maintenance + digital marketing)": "Formule Premium (site + boutique en ligne + maintenance + marketing digital)", "Premium Package — online store + maintenance": "Formule Premium — boutique en ligne + maintenance", "Not sure yet": "Je ne sais pas encore", "Not sure yet / I'd like advice": "Je ne sais pas encore / je souhaite être conseillé(e)", "Send and chat on WhatsApp": "Envoyer et discuter sur WhatsApp", "We build digital solutions for businesses, startups and companies: websites, online stores, digital catalogs and maintenance, to help them look better online and win more customers.": "Nous créons des solutions digitales pour les commerces, jeunes entreprises et sociétés : sites web, boutiques en ligne, catalogues numériques et maintenance, pour mieux paraître en ligne et gagner plus de clients.", "Navigation": "Navigation", "Digital catalogs and SEO": "Catalogues numériques et SEO", "Social media and WhatsApp": "Réseaux sociaux et WhatsApp", "Contact": "Contact", "WebZipe. All rights reserved.": "WebZipe. Tous droits réservés.", "Web design and development for businesses.": "Conception et développement web pour les entreprises.", "View WebZipe on Instagram": "Voir WebZipe sur Instagram", "Message WebZipe on WhatsApp": "Écrire à WebZipe sur WhatsApp", "https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20more%20information%20about%20WebZipe%27s%20services.": "https://wa.me/573102363531?text=Bonjour%2C%20je%20voudrais%20plus%20d%27informations%20sur%20les%20services%20de%20WebZipe.", "Ask the AI": "Demandez à l'IA", "WebZipe AI assistant": "Assistant d'intelligence artificielle de WebZipe", "Zipe · WebZipe AI": "Zipe · IA de WebZipe", "Researches every question on the web and learns from the community": "Recherche chaque question sur le web et apprend de la communauté", "Close assistant": "Fermer l'assistant", "Hi! I'm Zipe 👋 Ask me anything: I'll research the answer online in real time and share my sources.": "Bonjour ! Je suis Zipe 👋 Posez-moi n'importe quelle question : je recherche la réponse en ligne en temps réel et je vous indique mes sources.", "Your question": "Votre question", "Type your question…": "Écrivez votre question…", "Send question": "Envoyer la question", "Questions are stored anonymously so the AI can learn and give better answers to other visitors. Please don't share personal information.": "Les questions sont enregistrées de façon anonyme pour que l'IA apprenne et réponde mieux aux autres visiteurs. Ne partagez pas d'informations personnelles.", "Translate": "Traduire", "Page theme": "Thème de la page", "Theme": "Thème", "Dark": "Sombre", "Light": "Clair", "Close menu": "Fermer le menu", "Please enter your name, a valid email and choose a plan.": "Veuillez indiquer votre nom, un e-mail valide et choisir une formule.", "I'm interested in the": "Je suis intéressé(e) par la", "I'm not sure which plan to choose yet and would like some advice.": "Je ne sais pas encore quelle formule choisir et j'aimerais être conseillé(e).", "Hi, I'm": "Bonjour, je suis", "My email is": "Mon e-mail est", "Could you send me more information?": "Pourriez-vous m'envoyer plus d'informations ?", "Redirecting you to WhatsApp with your details… If it doesn't open,": "Nous vous redirigeons vers WhatsApp avec vos informations… Si cela ne s'ouvre pas,", "click here": "cliquez ici", "Researching the web…": "Recherche sur le web…", "Sources:": "Sources :", "The AI couldn't answer this time. Please try again in a moment.": "L'IA n'a pas pu répondre cette fois. Réessayez dans un instant.", "The research took too long. Try asking a more specific question.": "La recherche a pris trop de temps. Essayez une question plus précise.", "I couldn't connect to the AI. Please try again in a moment.": "Je n'ai pas pu me connecter à l'IA. Réessayez dans un instant.", "Your WhatsApp number": "Votre numéro WhatsApp", "e.g. +57 300 123 4567": "ex. +57 300 123 4567", "Preferred date (optional)": "Date souhaitée (facultatif)", "Preferred time (optional)": "Heure souhaitée (facultatif)", "Please enter your name, a valid WhatsApp number, a valid email and choose a plan.": "Veuillez indiquer votre nom, un numéro WhatsApp valide, un e-mail valide et choisir une formule.", "My WhatsApp is": "Mon WhatsApp est le", "and my email is": "et mon e-mail est", "I'd like to schedule for": "J'aimerais prendre rendez-vous le", "Saving your request…": "Enregistrement de votre demande…", "Request": "Demande"}</script>
+<script>
+/* ============================================================
+   TEMA — oscuro (original) o claro, guardado en el navegador.
+   ============================================================ */
+(function(){
+  "use strict";
+  var btn = document.getElementById("themeBtn");
+  var menu = document.getElementById("themeMenu");
+  if(!btn || !menu) return;
+  var items = menu.querySelectorAll("[data-theme-opt]");
+
+  function apply(t){
+    if(t === "light") document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+    items.forEach(function(b){ b.setAttribute("aria-checked", String(b.getAttribute("data-theme-opt") === t)); });
+    try { localStorage.setItem("wz-theme", t); } catch(e){}
+  }
+  function toggleMenu(open){
+    menu.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+  }
+  btn.addEventListener("click", function(e){
+    e.stopPropagation();
+    var langMenu = document.getElementById("langMenu"), langBtn = document.getElementById("langBtn");
+    if(langMenu && !langMenu.hidden){ langMenu.hidden = true; langBtn.setAttribute("aria-expanded", "false"); }
+    toggleMenu(menu.hidden);
+  });
+  var langBtn = document.getElementById("langBtn");
+  if(langBtn) langBtn.addEventListener("click", function(){ toggleMenu(false); });
+  items.forEach(function(b){
+    b.addEventListener("click", function(){ apply(b.getAttribute("data-theme-opt")); toggleMenu(false); btn.focus(); });
+  });
+  document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contains(e.target)) toggleMenu(false); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !menu.hidden){ toggleMenu(false); btn.focus(); } });
+
+  apply(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark");
+})();
+</script>
+
+<script>
+/* ============================================================
+   WHATSAPP — cada contacto se envía al azar a uno de los dos
+   números del equipo para repartir los clientes.
+   ============================================================ */
+(function(){
+  "use strict";
+  var WA_NUMBERS = ["573102363531", "573117453436"];
+  window.wzWaNumber = function(){
+    return WA_NUMBERS[Math.floor(Math.random() * WA_NUMBERS.length)];
+  };
+  // Justo antes de abrir un enlace de WhatsApp, cambia el número por uno al azar.
+  function pick(e){
+    var a = e.target.closest && e.target.closest('a[href^="https://wa.me/"]');
+    if(!a || a.hasAttribute("data-wa-fixed")) return;
+    a.href = a.href.replace(/wa\.me\/\d+/, "wa.me/" + window.wzWaNumber());
+  }
+  document.addEventListener("click", pick, true);
+  document.addEventListener("auxclick", pick, true);
+})();
+</script>
+
+<script>
+/* ============================================================
+   IDIOMAS — inglés (EE. UU.) es el original; inglés (Reino Unido)
+   se deriva con reglas de ortografía; el español y el francés salen
+   de los diccionarios de arriba (texto original → traducción).
+   ============================================================ */
+(function(){
+  "use strict";
+  // Diccionarios: texto original en inglés → traducción.
+  var DICT = {};
+  ["es", "fr"].forEach(function(l){
+    try { DICT[l] = JSON.parse(document.getElementById("i18n-" + l).textContent); } catch(e){ DICT[l] = {}; }
+  });
+  var lang = "en-US";
+
+  // Ortografía británica sobre el texto en inglés de EE. UU.
+  var GB = [
+    [/\b([Cc])atalog(s?)\b/g, "$1atalogue$2"],
+    [/\b([Cc])olor(s?)\b/g, "$1olour$2"],
+    [/\b([Cc])ustomiz/g, "$1ustomis"],
+    [/\b([Oo])rganiz/g, "$1rganis"],
+    [/\b(online|toy|clothing) store(s?)\b/gi, "$1 shop$2"]
+  ];
+  function gb(s){ GB.forEach(function(r){ s = s.replace(r[0], r[1]); }); return s; }
+
+  function tr(s, to){
+    to = to || lang;
+    if(to === "en-US" || !s) return s;
+    var m = /^(\s*)([\s\S]*?)(\s*)$/.exec(s);
+    var core = m[2].replace(/\s+/g, " ");
+    var d = DICT[to];
+    var out = d ? (d.hasOwnProperty(core) ? d[core] : core) : gb(core);
+    return m[1] + out + m[3];
+  }
+  function trHref(href, to){
+    var d = DICT[to];
+    if(d) return d.hasOwnProperty(href) ? d[href] : href;
+    if(to !== "en-GB") return href;
+    var i = href.indexOf("?text=");
+    if(i < 0) return href;
+    return href.slice(0, i + 6) + encodeURIComponent(gb(decodeURIComponent(href.slice(i + 6))));
+  }
+  window.wzT = function(s){ return tr(s); };
+
+  // Guarda el texto original de cada nodo y atributo traducible.
+  var targets = [];
+  var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode: function(n){
+      var p = n.parentNode && n.parentNode.nodeName;
+      if(p === "SCRIPT" || p === "STYLE" || p === "NOSCRIPT" || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  while(walker.nextNode()) targets.push({ node: walker.currentNode, orig: walker.currentNode.nodeValue });
+  ["alt", "placeholder", "aria-label"].forEach(function(a){
+    document.querySelectorAll("body [" + a + "]").forEach(function(el){
+      targets.push({ el: el, attr: a, orig: el.getAttribute(a) });
+    });
+  });
+  document.querySelectorAll('a[href^="https://wa.me/"]').forEach(function(el){
+    targets.push({ el: el, attr: "href", orig: el.getAttribute("href"), href: true });
+  });
+  var desc = document.querySelector('meta[name="description"]');
+  if(desc) targets.push({ el: desc, attr: "content", orig: desc.getAttribute("content") });
+
+  var btn = document.getElementById("langBtn");
+  var menu = document.getElementById("langMenu");
+  var items = menu ? menu.querySelectorAll("[data-lang]") : [];
+
+  function apply(to){
+    lang = to;
+    document.documentElement.lang = to;
+    targets.forEach(function(t){
+      var v = t.href ? trHref(t.orig, to) : tr(t.orig, to);
+      if(t.node) t.node.nodeValue = v; else t.el.setAttribute(t.attr, v);
+    });
+    items.forEach(function(b){ b.setAttribute("aria-checked", String(b.getAttribute("data-lang") === to)); });
+    try { localStorage.setItem("wz-lang", to); } catch(e){}
+  }
+
+  function toggleMenu(open){
+    menu.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+  }
+  if(btn && menu){
+    btn.addEventListener("click", function(e){ e.stopPropagation(); toggleMenu(menu.hidden); });
+    items.forEach(function(b){
+      b.addEventListener("click", function(){ apply(b.getAttribute("data-lang")); toggleMenu(false); btn.focus(); });
+    });
+    document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contains(e.target)) toggleMenu(false); });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !menu.hidden){ toggleMenu(false); btn.focus(); } });
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem("wz-lang"); } catch(e){}
+  if(saved === "en-GB" || DICT.hasOwnProperty(saved)) apply(saved);
+})();
+</script>
+
+<script>
+/* ============================================================
+   ASISTENTE IA — cambia esta URL por la de tu proyecto en Vercel
+   ============================================================ */
+(function(){
+  "use strict";
+  var T = function(x){ return window.wzT ? window.wzT(x) : x; };
+  var IA_API_URL = "https://TU-PROYECTO.vercel.app/api/chat";
+
+  var openBtn = document.getElementById("ia-open");
+  var panel = document.getElementById("ia-panel");
+  var closeBtn = document.getElementById("ia-close");
+  var log = document.getElementById("ia-log");
+  var form = document.getElementById("ia-form");
+  var input = document.getElementById("ia-input");
+  var send = document.getElementById("ia-send");
+  var history = [];
+  var TIMEOUT_MS = 130000;
+
+  // Mientras no haya un servidor configurado, el botón no aparece.
+  if(!openBtn || !panel || /TU-PROYECTO/.test(IA_API_URL)) return;
+  openBtn.hidden = false;
+  panel.hidden = false;
+
+  function toggle(open){
+    panel.classList.toggle("is-open", open);
+    panel.setAttribute("aria-hidden", String(!open));
+    openBtn.setAttribute("aria-expanded", String(open));
+    if(open) input.focus(); else openBtn.focus();
+  }
+  openBtn.addEventListener("click", function(){ toggle(true); });
+  closeBtn.addEventListener("click", function(){ toggle(false); });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && panel.classList.contains("is-open")) toggle(false);
+  });
+
+  function escapeHtml(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+  // Formato mínimo: **negrita**, listas con "- " y saltos de línea.
+  function format(text){
+    return escapeHtml(text)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/^#{1,6}\s*(.+)$/gm, "<strong>$1</strong>")
+      .replace(/^[-*]\s+/gm, "• ")
+      .replace(/\n/g, "<br>");
+  }
+  function safeUrl(u){ return /^https?:\/\//i.test(String(u || "")) ? u : "#"; }
+
+  function addMsg(cls, html){
+    var el = document.createElement("div");
+    el.className = "ia-msg " + cls;
+    el.innerHTML = html;
+    log.appendChild(el);
+    log.scrollTop = log.scrollHeight;
+    return el;
+  }
+
+  input.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && !e.shiftKey && !e.isComposing){
+      e.preventDefault();
+      if(form.requestSubmit) form.requestSubmit();
+      else form.dispatchEvent(new Event("submit", { cancelable: true }));
+    }
+  });
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var q = input.value.trim();
+    if(!q || send.disabled) return;
+    addMsg("user", escapeHtml(q));
+    input.value = "";
+    send.disabled = true;
+    var wait = addMsg("bot", '<span class="ia-typing" aria-label="Researching"><i></i><i></i><i></i></span> <small>' + T("Researching the web…") + '</small>');
+
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, TIMEOUT_MS) : null;
+
+    fetch(IA_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: q, history: history }),
+      signal: ctrl ? ctrl.signal : undefined
+    })
+    .then(function(r){
+      // Si el servidor responde algo que no es JSON (p. ej. una página de error), no rompemos.
+      return r.json().catch(function(){ return {}; }).then(function(data){ return { ok: r.ok, data: data || {} }; });
+    })
+    .then(function(res){
+      if(!res.ok || typeof res.data.answer !== "string"){
+        var srvErr = new Error(res.data.error || T("The AI couldn't answer this time. Please try again in a moment."));
+        srvErr.fromServer = true;
+        throw srvErr;
+      }
+      var d = res.data;
+      var html = format(d.answer);
+      var meta = [];
+      if(d.learned > 0) meta.push("🧠 I used what I learned from " + d.learned + " question" + (d.learned > 1 ? "s" : "") + " by other visitors.");
+      if(Array.isArray(d.sources) && d.sources.length){
+        meta.push(T("Sources:") + "<ol>" + d.sources.map(function(s){
+          return '<li><a href="' + escapeHtml(safeUrl(s.url)) + '" target="_blank" rel="noopener nofollow">' + escapeHtml(s.title || s.url) + "</a></li>";
+        }).join("") + "</ol>");
+      }
+      if(meta.length) html += '<div class="ia-meta">' + meta.join("<br>") + "</div>";
+      wait.innerHTML = html;
+      history.push({ role: "user", content: q }, { role: "assistant", content: d.answer });
+      history = history.slice(-8);
+    })
+    .catch(function(err){
+      wait.classList.add("err");
+      wait.textContent = err && err.fromServer
+        ? err.message
+        : err && err.name === "AbortError"
+          ? T("The research took too long. Try asking a more specific question.")
+          : T("I couldn't connect to the AI. Please try again in a moment.");
+    })
+    .finally(function(){
+      if(timer) clearTimeout(timer);
+      send.disabled = false;
+      log.scrollTop = log.scrollHeight;
+      input.focus();
+    });
+  });
+})();
+</script>
 
 <script>
 (function(){
   "use strict";
+  var T = function(x){ return window.wzT ? window.wzT(x) : x; };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
@@ -1460,13 +1956,13 @@
   var panel = document.getElementById("mobilePanel");
   function closeMenu(){
     burger.setAttribute("aria-expanded","false");
-    burger.setAttribute("aria-label","Abrir menú");
+    burger.setAttribute("aria-label",T("Open menu"));
     panel.classList.remove("open");
     document.body.style.overflow = "";
   }
   function openMenu(){
     burger.setAttribute("aria-expanded","true");
-    burger.setAttribute("aria-label","Cerrar menú");
+    burger.setAttribute("aria-label",T("Close menu"));
     panel.classList.add("open");
     document.body.style.overflow = "hidden";
   }
@@ -1560,33 +2056,131 @@
   var yearEl = document.getElementById("year");
   if(yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* Formulario "¿qué plan buscas?" -> abre WhatsApp con los datos */
+  /* Formulario "¿qué plan buscas?" -> guarda la solicitud en Supabase
+     (la base de datos asigna al azar uno de los dos números del equipo)
+     y abre WhatsApp con ese número y los datos del cliente. */
   var startForm = document.getElementById("startForm");
   if(startForm){
-    var WA_NUMBER = "573161838836";
+    // Supabase → Project Settings → API. La clave "anon" es pública por diseño:
+    // la base de datos solo deja llamar a la función create_reservation.
+    var SUPABASE_URL = "https://jsllxsbfkwaxdxstheew.supabase.co";
+    var SUPABASE_ANON_KEY = "sb_publishable_IjIg-Yrdel6tjR6D4t5rpA__PW_RDLp";  // clave pública ("publishable")
     var msgEl = document.getElementById("f-msg");
+    var submitBtn = document.getElementById("f-submit");
+    var idemKey = null; // misma clave mientras los datos no cambien: evita duplicados por doble clic
+    var sending = false;
+
+    function uuid(){
+      if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c){
+        var r = Math.random() * 16 | 0; return (c === "x" ? r : (r & 3 | 8)).toString(16);
+      });
+    }
+    startForm.addEventListener("input", function(){ idemKey = null; });
+
+    function saveReservation(data){
+      if(!SUPABASE_URL || !SUPABASE_ANON_KEY) return Promise.reject(new Error("NOT_CONFIGURED"));
+      var ctrl = window.AbortController ? new AbortController() : null;
+      var timer = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 10000);
+      return fetch(SUPABASE_URL.replace(/\/+$/, "") + "/rest/v1/rpc/create_reservation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": "Bearer " + SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify(data),
+        signal: ctrl ? ctrl.signal : undefined
+      }).then(function(res){
+        clearTimeout(timer);
+        return res.json().then(function(body){
+          if(!res.ok) throw new Error((body && body.message) || ("HTTP " + res.status));
+          var row = Array.isArray(body) ? body[0] : body;
+          if(!row || !row.assigned_phone) throw new Error("NO_ASSIGNMENT");
+          return row;
+        });
+      }, function(err){ clearTimeout(timer); throw err; });
+    }
+
+    function showMsg(kind, text){
+      msgEl.hidden = false;
+      msgEl.className = "start-msg " + kind;
+      msgEl.textContent = text;
+    }
+
     startForm.addEventListener("submit", function(e){
       e.preventDefault();
+      if(sending) return;
       var nombre = document.getElementById("f-nombre").value.trim();
+      var telRaw = document.getElementById("f-telefono").value.trim();
       var email = document.getElementById("f-email").value.trim();
       var plan = document.getElementById("f-plan").value;
+      var fecha = document.getElementById("f-fecha").value;
+      var hora = document.getElementById("f-hora").value;
+      var telefono = (telRaw.charAt(0) === "+" ? "+" : "") + telRaw.replace(/\D/g, "");
       var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      var telOk = /^\+?[0-9]{7,15}$/.test(telefono);
 
-      if(!nombre || !emailOk || !plan){
-        msgEl.hidden = false;
-        msgEl.className = "start-msg err";
-        msgEl.textContent = "Completa tu nombre, un correo válido y elige un plan.";
+      if(nombre.length < 2 || !telOk || !emailOk || !plan){
+        showMsg("err", T("Please enter your name, a valid WhatsApp number, a valid email and choose a plan."));
         return;
       }
 
-      var texto = "Hola, soy " + nombre + ". Me interesa el " + plan +
-        ". Mi correo es " + email + ". ¿Podrían darme más información?";
-      var url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(texto);
+      var interes = plan !== "Not sure yet"
+        ? T("I'm interested in the") + " " + T(plan) + "."
+        : T("I'm not sure which plan to choose yet and would like some advice.");
+      var texto = T("Hi, I'm") + " " + nombre + ". " + interes +
+        " " + T("My WhatsApp is") + " " + telRaw + " " + T("and my email is") + " " + email + ".";
+      if(fecha || hora){
+        texto += " " + T("I'd like to schedule for") + " " + [fecha, hora].filter(Boolean).join(" ") + ".";
+      }
+      texto += " " + T("Could you send me more information?");
 
-      msgEl.hidden = false;
-      msgEl.className = "start-msg ok";
-      msgEl.textContent = "Te estamos redirigiendo a WhatsApp con tus datos…";
-      window.open(url, "_blank", "noopener");
+      // La pestaña se abre ya (dentro del clic) para que el navegador no la bloquee;
+      // cuando la base de datos responde, se lleva al WhatsApp asignado.
+      var win = window.open("", "_blank");
+      if(win){ try { win.opener = null; } catch(err){} }
+
+      if(!idemKey) idemKey = uuid();
+      sending = true;
+      submitBtn.disabled = true;
+      showMsg("ok", T("Saving your request…"));
+
+      saveReservation({
+        p_customer_name: nombre,
+        p_phone: telefono,
+        p_email: email,
+        p_reservation_date: fecha || null,
+        p_reservation_time: hora || null,
+        p_request_type: plan,
+        p_message: texto,
+        p_idempotency_key: idemKey
+      }).then(function(row){
+        return { number: String(row.assigned_phone).replace(/\D/g, ""), ref: row.reservation_id };
+      }, function(err){
+        // Si la base de datos no responde, el cliente igual llega a uno de los dos números.
+        if(window.console) console.warn("[WebZipe] No se pudo guardar la solicitud:", err && err.message);
+        return { number: window.wzWaNumber(), ref: null };
+      }).then(function(r){
+        var finalText = r.ref ? texto + " (" + T("Request") + " #" + String(r.ref).slice(0, 8) + ")" : texto;
+        var url = "https://wa.me/" + r.number + "?text=" + encodeURIComponent(finalText);
+        if(win && !win.closed) win.location.href = url;
+
+        // Enlace de respaldo por si el navegador bloqueó la ventana nueva.
+        showMsg("ok", T("Redirecting you to WhatsApp with your details… If it doesn't open,") + " ");
+        var fallback = document.createElement("a");
+        fallback.href = url;
+        fallback.target = "_blank";
+        fallback.rel = "noopener";
+        fallback.setAttribute("data-wa-fixed", "");
+        fallback.textContent = T("click here");
+        fallback.style.textDecoration = "underline";
+        msgEl.appendChild(fallback);
+        msgEl.appendChild(document.createTextNode("."));
+      }).then(function(){
+        sending = false;
+        submitBtn.disabled = false;
+      });
     });
   }
 })();
