@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barbería Clásica | Cortes, fades y barba</title>
+  <meta name="description" content="Barbería de caballeros: fades, cortes clásicos, barba y afeitado con toalla caliente. Reserva tu cita.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">Barbería Clásica<span>BARBERSHOP</span></a>
+      <nav class="nav">
+        <a href="#inicio" class="active">Inicio</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="resenas.html">Reseñas</a>
+        <a href="#reservar" class="btn">Reservar</a>
+      </nav>
+      <div class="lang">
+        <button class="lang-btn" aria-haspopup="true" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm6.9 6h-2.9a15.7 15.7 0 00-1.4-3.6A8 8 0 0118.9 8zM12 4c.8 1.2 1.5 2.5 1.9 4h-3.8c.4-1.5 1.1-2.8 1.9-4zM4.3 14a8.2 8.2 0 010-4h3.4a16.5 16.5 0 000 4H4.3zm.8 2h2.9c.3 1.3.8 2.5 1.4 3.6A8 8 0 015.1 16zM8 8H5.1a8 8 0 014.3-3.6C8.8 5.5 8.3 6.7 8 8zm4 12c-.8-1.2-1.5-2.5-1.9-4h3.8c-.4 1.5-1.1 2.8-1.9 4zm2.3-6H9.7a14.7 14.7 0 010-4h4.6a14.7 14.7 0 010 4zm.3 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.9a8 8 0 01-4.3 3.6zm1.7-5.6a16.5 16.5 0 000-4h3.4a8.2 8.2 0 010 4h-3.4z"/></svg>
+          <span>Traducción</span>
+        </button>
+        <div class="lang-menu" role="menu">
+          <button role="menuitem" data-lang="en">English</button>
+          <button role="menuitem" data-lang="es">Español</button>
+        </div>
+      </div>
+      <button class="menu-toggle" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    </div>
+    <div class="pole"></div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="container">
+      <div class="hero-content reveal">
+        <span class="eyebrow">Barbería de caballeros</span>
+        <h1>Fade fresco, <em>look impecable.</em></h1>
+        <p>Reserva tu silla antes de que se agote. Cortes precisos, barba perfilada y un ambiente hecho para relajarte.</p>
+        <div class="hero-actions">
+          <a href="#reservar" class="btn">Reservar cita</a>
+          <a href="#servicios" class="btn btn-outline">Ver servicios</a>
+        </div>
+      </div>
+    </div>
+
+    <aside class="hero-quote reveal">
+      <div class="stars">★★★★★</div>
+      <p>“Me encantó el servicio. La próxima vez vengo con mi esposo.”</p>
+      <div class="who">— Karla Gómez</div>
+      <a href="resenas.html">Ver todas las reseñas →</a>
+    </aside>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="services" id="servicios">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Nuestros servicios</span>
+        <h2>El arte del <em>buen corte</em></h2>
+        <p>Cada servicio incluye lavado, asesoría de estilo y acabado con productos premium.</p>
+      </div>
+      <div class="service-grid">
+        <div class="service reveal"><div><h3>Corte clásico</h3><small>Tijera y máquina, acabado a navaja</small></div><span class="dots"></span><span class="price">$180</span></div>
+        <div class="service reveal"><div><h3>Skin fade</h3><small>Degradado a piel con diseño a medida</small></div><span class="dots"></span><span class="price">$220</span></div>
+        <div class="service reveal"><div><h3>Arreglo de barba</h3><small>Perfilado, recorte y aceite hidratante</small></div><span class="dots"></span><span class="price">$150</span></div>
+        <div class="service reveal"><div><h3>Afeitado tradicional</h3><small>Toalla caliente y navaja libre</small></div><span class="dots"></span><span class="price">$200</span></div>
+        <div class="service reveal"><div><h3>Corte + barba</h3><small>El servicio completo del caballero</small></div><span class="dots"></span><span class="price">$300</span></div>
+        <div class="service reveal"><div><h3>Corte infantil</h3><small>Menores de 12 años</small></div><span class="dots"></span><span class="price">$140</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section class="about" id="nosotros">
+    <div class="container about-grid">
+      <div class="about-img reveal">
+        <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1000&q=80" alt="Barbero trabajando en la barbería" loading="lazy">
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">Sobre nosotros</span>
+        <h2>Tradición, técnica y <em>estilo</em></h2>
+        <p>Somos una barbería dedicada al cuidado del caballero moderno. Combinamos las técnicas clásicas de la barbería tradicional con las tendencias actuales para darte un corte que habla por ti.</p>
+        <p>Aquí no solo vienes a cortarte el cabello: vienes a tomarte un momento para ti, con buena música, buena plática y el cuidado que mereces.</p>
+        <div class="stats">
+          <div><strong>8+</strong><span>Años de oficio</span></div>
+          <div><strong>5k</strong><span>Clientes felices</span></div>
+          <div><strong>4.9</strong><span>Calificación</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVA -->
+  <section class="booking" id="reservar">
+    <div class="container">
+      <div class="booking-box reveal">
+        <div class="section-head" style="margin-bottom:44px">
+          <span class="eyebrow">Reservaciones</span>
+          <h2>Aparta tu <em>silla</em></h2>
+          <p>Completa el formulario y confirmamos tu cita por WhatsApp.</p>
+        </div>
+        <form id="booking-form" class="form-grid">
+          <div><label for="nombre">Nombre</label><input id="nombre" name="nombre" required placeholder="Tu nombre"></div>
+          <div>
+            <label for="servicio">Servicio</label>
+            <select id="servicio" name="servicio" required>
+              <option>Corte clásico</option>
+              <option>Skin fade</option>
+              <option>Arreglo de barba</option>
+              <option>Afeitado tradicional</option>
+              <option>Corte + barba</option>
+              <option>Corte infantil</option>
+            </select>
+          </div>
+          <div><label for="fecha">Fecha</label><input type="date" id="fecha" name="fecha" required></div>
+          <div>
+            <label for="hora">Hora</label>
+            <select id="hora" name="hora" required>
+              <option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option>
+              <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option>
+            </select>
+          </div>
+          <div class="full"><label for="notas">Notas (opcional)</label><textarea id="notas" name="notas" placeholder="¿Algún estilo en mente?"></textarea></div>
+          <div class="full form-foot">
+            <small>Te responderemos en minutos para confirmar.</small>
+            <button type="submit" class="btn">Reservar por WhatsApp</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER / CONTACTO -->
+  <footer class="footer" id="contacto">
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="logo" style="margin-bottom:20px">Barbería Clásica<span>BARBERSHOP</span></a>
+        <p>Cortes de precisión y cuidado de barba para el caballero moderno.</p>
+        <div class="socials">
+          <a data-wa aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1 3 .8 3.6.8.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2S21.8 6.6 21.8 12 17.4 21.8 12 21.8zM12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6c1.8 1 3.8 1.5 5.8 1.5 6.6 0 12-5.4 12-12S18.6 0 12 0z"/></svg></a>
+          <a data-ig aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7 1.2.1 1.6.1 4.9.1s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 100 12.4 6.2 6.2 0 000-12.4zM12 16a4 4 0 110-8 4 4 0 010 8zm6.4-11.8a1.4 1.4 0 100 2.9 1.4 1.4 0 000-2.9z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Horario</h4>
+        <ul>
+          <li><span>Lun – Vie</span><span>10:00 – 20:00</span></li>
+          <li><span>Sábado</span><span>9:00 – 19:00</span></li>
+          <li><span>Domingo</span><span>Cerrado</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visítanos</h4>
+        <p>Av. Principal 123<br>Col. Centro, Tu Ciudad</p>
+        <p style="margin-top:14px">+52 123 456 7890</p>
+      </div>
+    </div>
+    <div class="copyright">© <span data-year></span> Barbería Clásica · Todos los derechos reservados</div>
+  </footer>
+
+  <a data-ig class="ig-float" aria-label="Síguenos en Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7 1.2.1 1.6.1 4.9.1s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 100 12.4 6.2 6.2 0 000-12.4zM12 16a4 4 0 110-8 4 4 0 010 8zm6.4-11.8a1.4 1.4 0 100 2.9 1.4 1.4 0 000-2.9z"/></svg></a>
+  <a data-wa class="wa-float" aria-label="Escríbenos por WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1 3 .8 3.6.8.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2S21.8 6.6 21.8 12 17.4 21.8 12 21.8zM12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6c1.8 1 3.8 1.5 5.8 1.5 6.6 0 12-5.4 12-12S18.6 0 12 0z"/></svg></a>
+
+  <script src="script.js"></script>
+</body>
+</html>
