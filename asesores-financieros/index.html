@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu Futuro | Asesoría financiera</title>
+  <meta name="description" content="Tu Futuro: asesoría financiera personalizada. Organiza tus finanzas, define metas y construye un plan adaptado a tus necesidades.">
+  <meta name="theme-color" content="#0a3d91">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="progress" aria-hidden="true"></div>
+
+  <!-- BARRA SUPERIOR -->
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a href="tel:+573000000000" class="topbar-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg>
+        +57 300 000 0000
+      </a>
+      <a href="mailto:tufuroesgrande@gmail.com" class="topbar-item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4.2l-8 5-8-5V6l8 5 8-5z"/></svg>
+        tufuroesgrande@gmail.com
+      </a>
+      <span class="topbar-note" data-t>Lunes a viernes · 8:00 a. m. – 6:00 p. m.</span>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#inicio" class="logo" aria-label="Tu Futuro — inicio">
+        <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M32 4l24 14v28L32 60 8 46V18z" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" opacity=".55"/>
+          <rect x="17" y="36" width="7" height="14" rx="1.5" fill="#7cc6ff"/>
+          <rect x="28" y="28" width="7" height="22" rx="1.5" fill="#3d8bff"/>
+          <rect x="39" y="20" width="7" height="30" rx="1.5" fill="#1f6ff2"/>
+          <path d="M12 42c10-3 22-11 34-26" fill="none" stroke="#f5b700" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M40 14l8-1-1 8" fill="none" stroke="#f5b700" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="logo-text">Tu Futuro<small data-t>Asesoría financiera</small></span>
+      </a>
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#asesoria" data-t>Sobre la asesoría</a>
+        <a href="#servicios" data-t>Servicios</a>
+        <a href="#beneficios" data-t>Beneficios</a>
+        <a href="#clientes" data-t>Clientes</a>
+        <a href="#contacto" data-t>Contacto</a>
+      </nav>
+      <div class="header-actions">
+        <button class="lang-btn" type="button" aria-label="Cambiar idioma" data-t-aria="Cambiar idioma">EN</button>
+        <a href="#contacto" class="btn btn-primary btn-sm header-cta" data-t>Solicitar asesoría</a>
+        <button class="menu-toggle" type="button" aria-label="Abrir menú" data-t-aria="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+      <div class="hero-bg" aria-hidden="true">
+        <span class="orb orb-1"></span><span class="orb orb-2"></span><span class="orb orb-3"></span>
+        <div class="grid-lines"></div>
+        <svg class="hero-wave" viewBox="0 0 1440 320" preserveAspectRatio="none"><path d="M0 220C240 300 480 140 720 170s480 120 720 40v110H0z" fill="url(#gw)"/><path d="M0 220C240 300 480 140 720 170s480 120 720 40" fill="none" stroke="#f5b700" stroke-width="3"/><defs><linearGradient id="gw" x1="0" x2="1"><stop offset="0" stop-color="#1f6ff2"/><stop offset="1" stop-color="#0a3d91"/></linearGradient></defs></svg>
+      </div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow reveal"><span class="eyebrow-line"></span><span data-t>Tu bienestar financiero es nuestra prioridad</span></p>
+          <h1 class="reveal">
+            <span data-t>Toma las mejores</span><br>
+            <em class="shine" data-t>decisiones con</em><br>
+            <span data-t>tu dinero</span>
+          </h1>
+          <p class="hero-lead reveal" data-t>Te ayudamos a organizar tus finanzas, establecer objetivos y construir un plan adaptado a tus necesidades.</p>
+          <div class="hero-buttons reveal">
+            <a href="#contacto" class="btn btn-gold magnetic">
+              <span data-t>Solicitar asesoría</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#servicios" class="btn btn-ghost" data-t>Ver servicios</a>
+          </div>
+          <ul class="hero-trust reveal">
+            <li><strong><span class="count" data-to="500">0</span>+</strong><span data-t>familias asesoradas</span></li>
+            <li><strong><span class="count" data-to="12">0</span></strong><span data-t>años de experiencia</span></li>
+            <li><strong><span class="count" data-to="98">0</span>%</strong><span data-t>clientes satisfechos</span></li>
+          </ul>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="photo-frame tilt">
+            <img src="img/asesoria-tablet.jpg" alt="Asesor revisando gráficos financieros en una tableta" width="600" height="760">
+            <div class="photo-glow" aria-hidden="true"></div>
+          </div>
+          <div class="float-card fc-1">
+            <span class="fc-icon up">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M15 7h6v6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <div><small data-t>Ahorro anual</small><strong>+<span class="count" data-to="24">0</span>%</strong></div>
+          </div>
+          <div class="float-card fc-2">
+            <svg class="mini-chart" viewBox="0 0 120 48" aria-hidden="true">
+              <path class="draw" d="M2 40L20 34 36 37 52 24 68 28 84 14 100 18 118 4" fill="none" stroke="#3d8bff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><small data-t>Meta: vivienda propia</small><div class="bar"><span style="--w:72%"></span></div></div>
+          </div>
+        </div>
+      </div>
+      <a href="#asesoria" class="scroll-hint" aria-label="Bajar"><span></span></a>
+    </section>
+
+    <!-- CITA -->
+    <section class="quote-band">
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span data-t>Organización financiera</span><i>◆</i><span data-t>Planificación</span><i>◆</i><span data-t>Control de gastos</span><i>◆</i><span data-t>Metas financieras</span><i>◆</i><span data-t>Protección familiar</span><i>◆</i>
+          <span data-t>Organización financiera</span><i>◆</i><span data-t>Planificación</span><i>◆</i><span data-t>Control de gastos</span><i>◆</i><span data-t>Metas financieras</span><i>◆</i><span data-t>Protección familiar</span><i>◆</i>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE LA ASESORÍA -->
+    <section class="section about" id="asesoria">
+      <div class="container about-grid">
+        <div class="about-media reveal">
+          <div class="about-img">
+            <img src="img/analisis-pantallas.jpg" alt="Pantallas con análisis financiero y gráficos" loading="lazy" width="640" height="300">
+          </div>
+          <div class="dash-card">
+            <div class="dash-head">
+              <span data-t>Tu plan financiero</span>
+              <span class="pill" data-t>En curso</span>
+            </div>
+            <div class="donut-wrap">
+              <svg class="donut" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="48" class="donut-bg"/>
+                <circle cx="60" cy="60" r="48" class="donut-seg s1" style="--p:50"/>
+                <circle cx="60" cy="60" r="48" class="donut-seg s2" style="--p:30;--o:50"/>
+                <circle cx="60" cy="60" r="48" class="donut-seg s3" style="--p:20;--o:80"/>
+              </svg>
+              <ul class="legend">
+                <li><i class="l1"></i><span data-t>Necesidades</span> <b>50%</b></li>
+                <li><i class="l2"></i><span data-t>Estilo de vida</span> <b>30%</b></li>
+                <li><i class="l3"></i><span data-t>Ahorro e inversión</span> <b>20%</b></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="about-copy">
+          <span class="kicker reveal" data-t>Sobre la asesoría</span>
+          <h2 class="reveal" data-t>Un acompañamiento cercano para que tu dinero trabaje para ti</h2>
+          <p class="reveal" data-t>En Tu Futuro ofrecemos asesoría financiera para personas de todo tipo, ayudándoles a gestionar sus finanzas y alcanzar sus objetivos.</p>
+          <p class="reveal" data-t>Te acompañamos a construir un futuro financiero más sólido, proteger a tu familia y conocer las alternativas más adecuadas para tus objetivos, con atención cercana y personalizada.</p>
+          <blockquote class="quote reveal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h4v4c0 3-1.5 5-4 6l-.8-1.4C7.6 14.8 8.4 13.6 8.5 12H7zm8 0h4v4c0 3-1.5 5-4 6l-.8-1.4c1.4-.8 2.2-2 2.3-3.6H15z"/></svg>
+            <p data-t>"No trabajes toda la vida por dinero, haz que tu dinero trabaje toda la vida por ti."</p>
+          </blockquote>
+          <a href="#contacto" class="btn btn-primary reveal">
+            <span data-t>Agenda tu primera cita</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="section services" id="servicios">
+      <div class="services-banner">
+        <div class="container">
+          <span class="kicker light reveal" data-t>Servicios</span>
+          <h2 class="reveal"><span data-t>Soluciones financieras</span><br><em data-t>para cada etapa de tu vida</em></h2>
+          <p class="reveal" data-t>Ofrecemos servicios diseñados para ayudarte a organizar tus finanzas, alcanzar tus metas y tomar decisiones con mayor seguridad.</p>
+        </div>
+      </div>
+      <div class="container">
+        <div class="service-grid">
+          <article class="service-card reveal tilt">
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 14h28a4 4 0 014 4v18a4 4 0 01-4 4H10a4 4 0 01-4-4V12a4 4 0 014-4h22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 24h12v8H30a4 4 0 010-8z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><circle cx="32" cy="28" r="1.6" fill="currentColor"/></svg>
+            </div>
+            <h3 data-t>Organización financiera</h3>
+            <p data-t>Analizamos tus ingresos y gastos para ayudarte a establecer una estructura financiera clara.</p>
+            <span class="service-num">01</span>
+          </article>
+          <article class="service-card reveal tilt">
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40h34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><rect x="11" y="28" width="6" height="12" rx="1" fill="currentColor" opacity=".55"/><rect x="21" y="22" width="6" height="18" rx="1" fill="currentColor" opacity=".75"/><rect x="31" y="15" width="6" height="25" rx="1" fill="currentColor"/><path d="M8 24l10-8 7 4 14-12M33 8h6v6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 data-t>Planificación financiera</h3>
+            <p data-t>Define objetivos financieros y crea un plan para alcanzarlos con mayor seguridad.</p>
+            <span class="service-num">02</span>
+          </article>
+          <article class="service-card reveal tilt">
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 6h18l8 8v26a2 2 0 01-2 2H12a2 2 0 01-2-2V8a2 2 0 012-2z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M30 6v8h8M16 22h16M16 28h16M16 34h10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 data-t>Control de gastos</h3>
+            <p data-t>Identifica tus principales gastos y encuentra oportunidades para administrar mejor tus recursos.</p>
+            <span class="service-num">03</span>
+          </article>
+          <article class="service-card reveal tilt">
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="22" cy="26" r="16" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="22" cy="26" r="10" fill="none" stroke="currentColor" stroke-width="2.6"/><circle cx="22" cy="26" r="4" fill="currentColor"/><path d="M22 26L40 8M34 8h6v6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 data-t>Metas financieras</h3>
+            <p data-t>Convierte tus objetivos en pasos concretos y medibles, con un plan adaptado a ti.</p>
+            <span class="service-num">04</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICIOS -->
+    <section class="section benefits" id="beneficios">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker reveal" data-t>Beneficios</span>
+          <h2 class="reveal" data-t>¿Por qué elegir Tu Futuro?</h2>
+          <p class="reveal" data-t>Más que números: te damos claridad, tranquilidad y un camino concreto hacia tus metas.</p>
+        </div>
+        <div class="benefit-grid">
+          <div class="benefit reveal">
+            <span class="b-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"/></svg></span>
+            <h3 data-t>Atención personalizada</h3>
+            <p data-t>Un asesor dedicado que conoce tu situación y te acompaña en cada decisión.</p>
+          </div>
+          <div class="benefit reveal">
+            <span class="b-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5zm-1.2 13.6l5.7-5.7-1.4-1.4-4.3 4.3-2-2-1.4 1.4z"/></svg></span>
+            <h3 data-t>Protección para tu familia</h3>
+            <p data-t>Te ayudamos a prever imprevistos y a proteger lo que más quieres.</p>
+          </div>
+          <div class="benefit reveal">
+            <span class="b-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v2H4zm0 4h10v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg></span>
+            <h3 data-t>Información clara</h3>
+            <p data-t>Explicamos cada alternativa en palabras sencillas, sin letra pequeña.</p>
+          </div>
+          <div class="benefit reveal">
+            <span class="b-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5v4.6l3.5 2.1-1 1.6L11 12.6V7z"/></svg></span>
+            <h3 data-t>Seguimiento constante</h3>
+            <p data-t>Revisamos tu plan periódicamente y lo ajustamos a medida que cambian tus metas.</p>
+          </div>
+        </div>
+
+        <!-- PROCESO -->
+        <div class="process">
+          <h3 class="process-title reveal" data-t>Así trabajamos contigo</h3>
+          <ol class="steps">
+            <li class="step reveal"><span class="step-n">1</span><h4 data-t>Diagnóstico</h4><p data-t>Conocemos tus ingresos, gastos, deudas y sueños.</p></li>
+            <li class="step reveal"><span class="step-n">2</span><h4 data-t>Plan a tu medida</h4><p data-t>Diseñamos una estrategia realista con metas claras.</p></li>
+            <li class="step reveal"><span class="step-n">3</span><h4 data-t>Acción</h4><p data-t>Te guiamos paso a paso para ponerlo en marcha.</p></li>
+            <li class="step reveal"><span class="step-n">4</span><h4 data-t>Seguimiento</h4><p data-t>Medimos tu avance y celebramos cada logro.</p></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIMULADOR -->
+    <section class="section simulator">
+      <div class="container sim-grid">
+        <div class="sim-copy">
+          <span class="kicker light reveal" data-t>Simulador de ahorro</span>
+          <h2 class="reveal" data-t>Descubre cuánto puede crecer tu dinero</h2>
+          <p class="reveal" data-t>Mueve los controles y mira cómo un hábito de ahorro constante se convierte en un gran resultado. Es solo una estimación ilustrativa.</p>
+          <div class="sim-controls reveal">
+            <label>
+              <span><span data-t>Ahorro mensual</span> <output id="outMonthly">$300.000</output></span>
+              <input type="range" id="monthly" min="50000" max="3000000" step="50000" value="300000">
+            </label>
+            <label>
+              <span><span data-t>Tiempo</span> <output id="outYears">10</output> <span data-t>años</span></span>
+              <input type="range" id="years" min="1" max="30" step="1" value="10">
+            </label>
+            <label>
+              <span><span data-t>Rentabilidad anual estimada</span> <output id="outRate">8</output>%</span>
+              <input type="range" id="rate" min="0" max="14" step="0.5" value="8">
+            </label>
+          </div>
+        </div>
+        <div class="sim-result reveal">
+          <small data-t>Podrías acumular</small>
+          <strong id="simTotal">$0</strong>
+          <div class="sim-split">
+            <div><i class="dot d1"></i><span data-t>Tus aportes</span><b id="simPaid">$0</b></div>
+            <div><i class="dot d2"></i><span data-t>Rendimientos</span><b id="simGain">$0</b></div>
+          </div>
+          <svg class="sim-chart" viewBox="0 0 300 140" preserveAspectRatio="none" aria-hidden="true">
+            <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d8bff" stop-opacity=".55"/><stop offset="1" stop-color="#3d8bff" stop-opacity="0"/></linearGradient></defs>
+            <path id="simArea" fill="url(#sg)"/>
+            <path id="simPaidLine" fill="none" stroke="#f5b700" stroke-width="2" stroke-dasharray="5 5"/>
+            <path id="simLine" fill="none" stroke="#7cc6ff" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <a href="#contacto" class="btn btn-gold" data-t>Quiero un plan como este</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENTES -->
+    <section class="section clients" id="clientes">
+      <div class="container">
+        <div class="section-head">
+          <span class="kicker reveal" data-t>Clientes</span>
+          <h2 class="reveal" data-t>Personas que ya están construyendo su futuro</h2>
+        </div>
+        <div class="slider reveal">
+          <div class="slides">
+            <figure class="testimonial">
+              <div class="stars" aria-label="5 de 5">★★★★★</div>
+              <blockquote data-t>"Por primera vez sé exactamente a dónde va mi dinero. En seis meses pagué mis tarjetas y empecé a ahorrar."</blockquote>
+              <figcaption><span class="avatar">LM</span><span><b>Laura M.</b><small data-t>Docente</small></span></figcaption>
+            </figure>
+            <figure class="testimonial">
+              <div class="stars" aria-label="5 de 5">★★★★★</div>
+              <blockquote data-t>"Nos ayudaron a armar un plan para la cuota inicial de nuestra casa. La atención fue cercana y muy clara."</blockquote>
+              <figcaption><span class="avatar">CR</span><span><b>Carlos y Ana R.</b><small data-t>Familia</small></span></figcaption>
+            </figure>
+            <figure class="testimonial">
+              <div class="stars" aria-label="5 de 5">★★★★★</div>
+              <blockquote data-t>"Como independiente nunca sabía cuánto separar. Ahora tengo un fondo de emergencia y metas medibles."</blockquote>
+              <figcaption><span class="avatar">JP</span><span><b>Juan P.</b><small data-t>Emprendedor</small></span></figcaption>
+            </figure>
+          </div>
+          <div class="slider-dots" role="tablist" aria-label="Testimonios"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="section contact" id="contacto">
+      <div class="container contact-grid">
+        <div class="contact-copy">
+          <span class="kicker reveal" data-t>Contacto</span>
+          <h2 class="reveal" data-t>Da el primer paso hacia tu tranquilidad financiera</h2>
+          <p class="reveal" data-t>Cuéntanos qué quieres lograr y un asesor te contactará para agendar tu primera cita sin costo.</p>
+          <ul class="contact-list reveal">
+            <li><span class="c-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg></span><a href="tel:+573000000000">+57 300 000 0000</a></li>
+            <li><span class="c-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4.2l-8 5-8-5V6l8 5 8-5z"/></svg></span><a href="mailto:tufuroesgrande@gmail.com">tufuroesgrande@gmail.com</a></li>
+            <li><span class="c-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 5v4.6l3.5 2.1-1 1.6L11 12.6V7z"/></svg></span><span data-t>Lunes a viernes · 8:00 a. m. – 6:00 p. m.</span></li>
+          </ul>
+        </div>
+        <form class="contact-form reveal" id="contactForm" novalidate>
+          <div class="field">
+            <input type="text" id="fName" name="nombre" placeholder=" " required autocomplete="name">
+            <label for="fName" data-t>Nombre completo</label>
+          </div>
+          <div class="field">
+            <input type="tel" id="fPhone" name="telefono" placeholder=" " required autocomplete="tel">
+            <label for="fPhone" data-t>Teléfono / WhatsApp</label>
+          </div>
+          <div class="field">
+            <select id="fService" name="servicio" required>
+              <option value="" disabled selected hidden></option>
+              <option data-t>Organización financiera</option>
+              <option data-t>Planificación financiera</option>
+              <option data-t>Control de gastos</option>
+              <option data-t>Metas financieras</option>
+              <option data-t>Protección familiar</option>
+            </select>
+            <label for="fService" data-t>¿En qué te podemos ayudar?</label>
+          </div>
+          <div class="field">
+            <textarea id="fMsg" name="mensaje" rows="4" placeholder=" "></textarea>
+            <label for="fMsg" data-t>Cuéntanos tu objetivo (opcional)</label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0012.05 4a7.94 7.94 0 00-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 003.85 1h.01A7.94 7.94 0 0020 12.06a7.9 7.9 0 00-2.4-5.74z" fill="currentColor"/></svg>
+            <span data-t>Solicitar asesoría por WhatsApp</span>
+          </button>
+          <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-text">Tu Futuro<small data-t>Asesoría financiera</small></span>
+        <p data-t>Tu bienestar financiero es nuestra prioridad.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Pie de página">
+        <a href="#asesoria" data-t>Sobre la asesoría</a>
+        <a href="#servicios" data-t>Servicios</a>
+        <a href="#beneficios" data-t>Beneficios</a>
+        <a href="#contacto" data-t>Contacto</a>
+      </nav>
+      <p class="footer-legal">© <span data-year></span> Tu Futuro. <span data-t>Sitio de ejemplo diseñado por</span> <a href="../" class="credit">WebZipe</a>.</p>
+    </div>
+  </footer>
+
+  <a class="wa-float" data-wa href="#" aria-label="Escríbenos por WhatsApp" data-t-aria="Escríbenos por WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0012.05 4a7.94 7.94 0 00-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 003.85 1h.01A7.94 7.94 0 0020 12.06a7.9 7.9 0 00-2.4-5.74z" fill="currentColor"/></svg>
+  </a>
+  <button class="to-top" type="button" aria-label="Volver arriba" data-t-aria="Volver arriba">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>
