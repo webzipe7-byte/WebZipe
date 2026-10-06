@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mis Finanzas</title>
+  <meta name="theme-color" content="#0f766e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Finanzas">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- AUTH -->
+  <main id="auth" class="auth hidden">
+    <div class="card auth-card">
+      <img src="icons/icon-192.png" alt="" width="72" height="72" class="logo">
+      <h1>Mis Finanzas</h1>
+      <p class="muted">Controla tus gastos, tu límite y tus notas.</p>
+      <div class="tabs">
+        <button class="tab active" data-mode="login">Entrar</button>
+        <button class="tab" data-mode="register">Crear cuenta</button>
+      </div>
+      <form id="authForm" autocomplete="on">
+        <label>Usuario <input id="authUser" name="username" autocomplete="username" required minlength="3"></label>
+        <label>Contraseña <input id="authPass" name="password" type="password" autocomplete="current-password" required minlength="6"></label>
+        <label id="confirmWrap" class="hidden">Repetir contraseña <input id="authPass2" type="password" autocomplete="new-password" minlength="6"></label>
+        <p id="authError" class="error" role="alert"></p>
+        <button class="btn primary" type="submit" id="authSubmit">Entrar</button>
+      </form>
+      <button class="btn link" id="installBtn2" hidden>📲 Instalar la aplicación</button>
+    </div>
+  </main>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <header class="topbar">
+      <div class="brand"><img src="icons/icon-192.png" alt="" width="28" height="28"> <span>Mis Finanzas</span></div>
+      <div class="top-actions">
+        <button class="btn small" id="installBtn" hidden>📲 Instalar</button>
+        <span id="whoami" class="muted"></span>
+        <button class="btn small" id="logoutBtn">Salir</button>
+      </div>
+    </header>
+
+    <div id="alertBanner" class="banner hidden" role="alert"></div>
+    <div id="notifBanner" class="banner info hidden">
+      🔔 Activa las notificaciones para recibir avisos de límite y recordatorios.
+      <button class="btn small primary" id="enableNotif">Activar</button>
+    </div>
+
+    <main class="container">
+      <section id="tab-resumen" class="panel">
+        <div class="grid3">
+          <div class="card stat"><span class="muted">Ingresos del mes</span><strong id="sumIn" class="pos">0</strong></div>
+          <div class="card stat"><span class="muted">Gastos del mes</span><strong id="sumOut" class="neg">0</strong></div>
+          <div class="card stat"><span class="muted">Balance</span><strong id="sumBal">0</strong></div>
+        </div>
+
+        <div class="card">
+          <h2>Límite mensual de gasto</h2>
+          <form id="limitForm" class="row">
+            <input id="limitInput" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ej. 800">
+            <button class="btn primary" type="submit">Guardar límite</button>
+          </form>
+          <div class="meter"><div id="meterBar"></div></div>
+          <p id="meterText" class="muted"></p>
+        </div>
+
+        <div class="card">
+          <h2>Gastos por categoría (este mes)</h2>
+          <div id="catChart"></div>
+        </div>
+      </section>
+
+      <section id="tab-movs" class="panel hidden">
+        <div class="card">
+          <h2>Nuevo movimiento</h2>
+          <form id="txForm" class="form-grid">
+            <label>Tipo
+              <select id="txType"><option value="gasto">Gasto</option><option value="ingreso">Ingreso</option></select>
+            </label>
+            <label>Monto <input id="txAmount" type="number" min="0.01" step="0.01" inputmode="decimal" required></label>
+            <label>Categoría <input id="txCat" list="cats" placeholder="Comida, Renta, Sueldo…" required></label>
+            <datalist id="cats"></datalist>
+            <label>Fecha <input id="txDate" type="date" required></label>
+            <label class="span2">Descripción <input id="txDesc" placeholder="Opcional"></label>
+            <button class="btn primary span2" type="submit">Agregar</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="row between">
+            <h2>Movimientos</h2>
+            <input id="txMonth" type="month" aria-label="Mes">
+          </div>
+          <ul id="txList" class="list"></ul>
+          <p id="txEmpty" class="muted">No hay movimientos este mes.</p>
+        </div>
+      </section>
+
+      <section id="tab-notas" class="panel hidden">
+        <div class="card">
+          <h2>Nueva nota</h2>
+          <form id="noteForm" class="form-grid">
+            <label class="span2">Título <input id="noteTitle" required></label>
+            <label class="span2">Contenido <textarea id="noteBody" rows="3"></textarea></label>
+            <label class="span2">Recordarme el <input id="noteRemind" type="datetime-local"></label>
+            <button class="btn primary span2" type="submit">Guardar nota</button>
+          </form>
+        </div>
+        <ul id="noteList" class="list notes"></ul>
+        <p id="noteEmpty" class="muted">Aún no tienes notas.</p>
+      </section>
+
+      <section id="tab-ajustes" class="panel hidden">
+        <div class="card">
+          <h2>Ajustes</h2>
+          <label>Moneda
+            <select id="currencySel">
+              <option>USD</option><option>EUR</option><option>MXN</option><option>COP</option>
+              <option>ARS</option><option>CLP</option><option>PEN</option><option>DOP</option><option>GBP</option>
+            </select>
+          </label>
+          <div class="row wrap">
+            <button class="btn" id="exportBtn">⬇️ Exportar datos (JSON)</button>
+            <label class="btn">⬆️ Importar<input id="importFile" type="file" accept="application/json" hidden></label>
+            <button class="btn danger" id="deleteAcc">Eliminar mi cuenta</button>
+          </div>
+          <p class="muted">Tus datos se guardan solo en este dispositivo. Usa Exportar para llevarlos a otro.</p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottomnav">
+      <button class="nav active" data-tab="resumen">📊<span>Resumen</span></button>
+      <button class="nav" data-tab="movs">💸<span>Movimientos</span></button>
+      <button class="nav" data-tab="notas">📝<span>Notas</span></button>
+      <button class="nav" data-tab="ajustes">⚙️<span>Ajustes</span></button>
+    </nav>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
