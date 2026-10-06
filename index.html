@@ -948,6 +948,17 @@
   html[data-theme="light"] .s-card:nth-child(1){background:linear-gradient(160deg,#0a8bff,#0653c9)}
   html[data-theme="light"] .cta-panel{background:radial-gradient(70% 90% at 50% 110%,rgba(10,139,255,.35),transparent 70%),var(--panel)}
   html[data-theme="light"] .cv-main{box-shadow:0 30px 80px -30px rgba(10,60,160,.4)}
+
+  /* Fondos alternados: negro (blanco en tema claro) y azul, empezando por el inicio azul */
+  html .band-blue{
+    background:linear-gradient(160deg,#0a8bff,#0653c9) !important;
+    --text:#fff;--text-soft:rgba(255,255,255,.88);--text-mute:rgba(255,255,255,.72);
+    --bg:#0653c9;--bg-2:#0a2a6e;--panel:#0b2158;--panel-2:#0f2b70;--panel-hover:#12348a;
+    --line:rgba(255,255,255,.24);--line-soft:rgba(255,255,255,.14);
+    --blue-bright:#cfe0ff;--gold-line:rgba(255,255,255,.4);
+    color:#fff;
+  }
+  html .band-blue .kicker{color:#dbe8ff}
   @media (prefers-reduced-motion:reduce){ .cv{transform:none} }
 </style>
 <noscript><style>.reveal,.reveal-stagger > *{opacity:1 !important;transform:none !important}</style></noscript>
@@ -1147,7 +1158,7 @@
   </section>
 
   <!-- ============================================================ PROBLEMA → SOLUCIÓN ============================================================ -->
-  <section id="problema-solucion">
+  <section id="problema-solucion" class="band-blue">
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="kicker">The shift</span>
@@ -1225,7 +1236,7 @@
   </section>
 
   <!-- ============================================================ PLANES ============================================================ -->
-  <section id="paquetes">
+  <section id="paquetes" class="band-blue">
     <div class="wrap">
       <div class="sec-head center reveal">
         <span class="kicker">Plans</span>
@@ -1351,7 +1362,7 @@
   </section>
 
   <!-- ============================================================ EJEMPLOS DE PÁGINAS (enlaces reales) ============================================================ -->
-  <section id="ejemplos-paginas">
+  <section id="ejemplos-paginas" class="band-blue">
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="kicker">Live sites</span>
@@ -1445,7 +1456,7 @@
   </section>
 
   <!-- ============================================================ FAQ ============================================================ -->
-  <section id="preguntas">
+  <section id="preguntas" class="band-blue">
     <div class="wrap">
       <div class="sec-head center reveal">
         <span class="kicker">FAQ</span>
@@ -1537,7 +1548,7 @@
 </main>
 
 <!-- ============================================================ FOOTER ============================================================ -->
-<footer id="contacto">
+<footer id="contacto" class="band-blue">
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
