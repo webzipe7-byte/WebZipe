@@ -3,341 +3,749 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#000000">
 <meta name="description" content="WebZipe builds digital solutions for businesses: websites, online stores, digital catalogs, SEO, social media integration, forms, booking and maintenance, with direct contact via WhatsApp.">
 <title>WebZipe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   WEBZIPE — estilo oscuro y minimalista (inspirado en Framer):
-   fondo negro, titulares enormes y compactos en Inter, etiquetas
-   azules por sección, tarjetas oscuras y botones tipo píldora.
-   ============================================================ */
-:root{
-  --bg:#000;
-  --card:#0d0d0f;
-  --card-2:#131316;
-  --line:#1f1f24;
-  --line-2:#2c2c33;
-  --blue:#0a8cff;
-  --blue-deep:#0063c4;
-  --text:#fff;
-  --text-soft:#a1a1aa;
-  --text-mute:#6b6b75;
-  --ok:#34c77b;
-  --danger:#ee6b61;
-  --wa:#25d366;
-  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:32px;
-  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  --ease:cubic-bezier(.16,1,.3,1);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:80px;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-img,video,svg{display:block;max-width:100%}
-a{color:inherit;text-decoration:none}
-button,input,select{font:inherit;color:inherit}
-button{cursor:pointer;background:none;border:0}
-ul{list-style:none}
-:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
-::selection{background:var(--blue);color:#fff}
+  /* ============================================================
+     WEBZIPE — IDENTIDAD VISUAL
+     Fondo casi negro, titulares en serif editorial (Instrument Serif),
+     texto en Inter, botones tipo píldora y mucho aire.
+     Azul zafiro de WebZipe como acento; dorado como destello mínimo.
+     WhatsApp se mantiene verde para reconocer el canal.
+     ============================================================ */
+    :root{
+    --bg:#08080a;
+    --bg-2:#0f0f12;
+    --panel:#111114;
+    --panel-2:#16161a;
+    --panel-hover:#1a1a1f;
+    --line:#26262c;
+    --line-soft:#1b1b20;
 
-.wrap{width:min(1200px,100% - 40px);margin-inline:auto}
-section{padding:clamp(56px,7vw,96px) 0}
-.skip{position:absolute;left:-999px;top:8px;background:#fff;color:#000;padding:8px 14px;border-radius:999px;z-index:200}
-.skip:focus{left:12px}
+    --blue:#4f6df0;          /* azul WebZipe: rellenos */
+    --blue-bright:#8fa8ff;   /* azul WebZipe: texto e iconos de acento */
+    --blue-deep:#18244f;
+    --navy:#18244f;
+    --gold:#c9a15c;
+    --gold-bright:#e3c58f;
+    --gold-line:rgba(143,168,255,.45);
+    --accent:#4f6df0;
+    --accent-deep:#26348c;
 
-/* ---------- Tipografía ---------- */
-h1,h2,h3,h4{font-weight:600;letter-spacing:-.035em;line-height:1.05}
-h1{font-size:clamp(42px,7vw,88px);letter-spacing:-.05em;line-height:.98}
-h2{font-size:clamp(32px,4.6vw,56px)}
-h3{font-size:20px;letter-spacing:-.02em;line-height:1.25}
-.lead{font-size:clamp(16px,1.6vw,19px);color:var(--text-soft);max-width:600px;margin-inline:auto}
-.tag{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-size:14px;font-weight:600;letter-spacing:0}
-.tag::before{content:"";width:18px;height:18px;border-radius:5px;background:var(--blue);opacity:.9;box-shadow:0 0 18px rgba(10,140,255,.55)}
-.head{max-width:760px;margin-bottom:56px}
-.head h2{margin:16px 0 18px}
-.head p{color:var(--text-soft);font-size:18px}
-.head.center{margin-inline:auto;text-align:center}
+    --text:#f4f4f1;
+    --text-soft:#a3a3ad;
+    --text-mute:#70707b;
 
-/* ---------- Botones ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:11px 22px;border-radius:999px;font-weight:600;font-size:15px;line-height:1.2;transition:transform .25s var(--ease),background .25s,border-color .25s,opacity .25s}
-.btn svg{width:17px;height:17px;flex:none}
-.btn:hover{transform:translateY(-1px)}
-.btn-primary{background:#fff;color:#000}
-.btn-primary:hover{background:#e6e6e6}
-.btn-blue{background:var(--blue);color:#fff}
-.btn-blue:hover{background:#2a9dff}
-.btn-ghost{background:#1a1a1e;color:#fff}
-.btn-ghost:hover{background:#26262c}
-.btn-lg{padding:15px 30px;font-size:16px}
-.btn-block{display:flex;width:100%}
-.reveal-link{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:var(--blue)}
-.reveal-link svg{width:16px;height:16px;transition:transform .25s var(--ease)}
-.reveal-link:hover svg{transform:translateX(4px)}
+    --ok:#34c77b;
+    --danger:#ee6b61;
+    --wa:#25d366;
 
-/* ---------- Header ---------- */
-#siteHeader{position:fixed;inset:0 0 auto 0;z-index:100;transition:background .3s,border-color .3s,backdrop-filter .3s;border-bottom:1px solid transparent}
-#siteHeader.scrolled{background:rgba(0,0,0,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-color:var(--line)}
-.nav-row{display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px}
-.logo{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:19px;letter-spacing:-.03em}
-.logo .mark{width:24px;height:24px}
-.logo-accent{color:var(--blue)}
-.nav-links{display:flex;gap:4px}
-.nav-links a{padding:8px 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--text-soft);transition:color .2s,background .2s}
-.nav-links a:hover,.nav-links a.active{color:#fff;background:#141417}
-.nav-end{display:flex;align-items:center;gap:10px}
-.lang{position:relative}
-.lang-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;font-size:14px;font-weight:500;color:var(--text-soft);transition:color .2s,background .2s}
-.lang-btn:hover{color:#fff;background:#141417}
-.lang-btn svg{width:17px;height:17px}
-.lang-menu{position:absolute;right:0;top:calc(100% + 8px);min-width:170px;background:var(--card-2);border:1px solid var(--line-2);border-radius:var(--r-md);padding:6px;box-shadow:0 24px 60px rgba(0,0,0,.7)}
-.lang-menu[hidden]{display:none}
-.lang-menu button{display:block;width:100%;text-align:left;padding:9px 12px;border-radius:10px;font-size:14px;color:var(--text-soft)}
-.lang-menu button:hover{background:#1c1c21;color:#fff}
-.lang-menu button[aria-checked="true"]{color:#fff;background:#1c1c21}
-.burger{display:none;width:40px;height:40px;border-radius:50%;background:#141417;align-items:center;justify-content:center;flex-direction:column;gap:5px}
-.burger span{width:16px;height:1.6px;background:#fff;border-radius:2px;transition:transform .3s var(--ease),opacity .2s}
-.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.6px) rotate(45deg)}
-.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
-.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.6px) rotate(-45deg)}
-.mobile-panel{position:fixed;inset:64px 0 0 0;z-index:99;background:rgba(0,0,0,.97);padding:24px 20px;display:flex;flex-direction:column;gap:4px;transform:translateY(-12px);opacity:0;visibility:hidden;transition:all .3s var(--ease)}
-.mobile-panel.open{transform:none;opacity:1;visibility:visible}
-.mobile-panel a:not(.btn){padding:16px 4px;font-size:26px;font-weight:600;letter-spacing:-.03em;border-bottom:1px solid var(--line)}
-.mobile-panel .btn{margin-top:20px}
+    --pill-bg:#ececea;       /* botón principal: píldora clara */
+    --pill-fg:#08080a;
+    --pill-2:#26262b;        /* botón secundario: píldora gris */
+    --on-blue:#ffffff;
 
-/* ---------- Hero ---------- */
-.hero{position:relative;padding:clamp(120px,14vw,170px) 0 0;text-align:center;overflow:hidden}
-.hero::before{content:"";position:absolute;left:50%;top:-340px;width:1400px;height:760px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(10,140,255,.55),rgba(10,60,160,.22) 55%,transparent 80%);filter:blur(30px);pointer-events:none}
-.hero .wrap{position:relative}
-.hero h1{max-width:1040px;margin:0 auto 26px}
-.hero h1 .grad{color:var(--blue)}
-.hero .lead{margin-bottom:34px}
-.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.hero-trust{display:flex;gap:10px 26px;justify-content:center;flex-wrap:wrap;margin-top:30px;color:var(--text-mute);font-size:14px}
-.hero-trust span{display:inline-flex;align-items:center;gap:7px}
-.hero-trust svg{width:15px;height:15px;color:var(--blue)}
+    --r-sm:10px; --r-md:16px; --r-lg:22px; --r-xl:30px;
+    --font-display:'Instrument Serif','Fraunces',Georgia,'Times New Roman',serif;
+    --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --shadow-md:none;
+    --shadow-lg:0 40px 80px -40px rgba(0,0,0,.8);
+    --ring:0 0 0 1px rgba(143,168,255,.55);
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
 
-.collage{position:relative;margin-top:72px;display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:70px;gap:14px;text-align:left;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent);padding-bottom:40px}
-.tile{position:relative;border-radius:var(--r-md);overflow:hidden;background:var(--card);border:1px solid var(--line)}
-.tile img,.tile video{width:100%;height:100%;object-fit:cover;object-position:top}
-.t-a img{object-position:80% 40%}
-.t-b img{object-position:78% 30%}
-.t-video{grid-column:4 / 10;grid-row:1 / 7;border-radius:var(--r-lg);border-color:var(--line-2);box-shadow:0 40px 120px -30px rgba(10,140,255,.45)}
-.t-video .bar{position:absolute;inset:0 0 auto 0;z-index:2;height:34px;display:flex;align-items:center;gap:6px;padding:0 14px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px)}
-.t-video .bar i{width:9px;height:9px;border-radius:50%;background:#3a3a42}
-.t-video .bar span{margin-left:10px;font-size:12px;color:var(--text-soft)}
-.t-video video{padding-top:34px;object-position:center}
-.t-a{grid-column:1 / 4;grid-row:2 / 6}
-.t-b{grid-column:10 / 13;grid-row:2 / 6}
-.t-c{grid-column:1 / 3;grid-row:6 / 9;margin-top:-14px}
-.t-d{grid-column:11 / 13;grid-row:6 / 9;margin-top:-14px}
-.t-e{grid-column:3 / 5;grid-row:6 / 10}
-.t-f{grid-column:9 / 11;grid-row:6 / 10}
-.chip{position:absolute;z-index:3;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;background:rgba(20,20,24,.85);backdrop-filter:blur(10px);border:1px solid var(--line-2);font-size:13px;font-weight:600}
-.chip svg{width:14px;height:14px;color:var(--blue)}
-.chip.a{right:14px;bottom:18px}
-.chip.b{left:14px;bottom:18px}
+/* ---------- RESET ---------- */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;color-scheme:dark}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-size:16px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+    position:relative;
+  }
+  img,svg,video{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+  ul{list-style:none}
+  h1,h2,h3,h4{font-family:var(--font-body);line-height:1.2;text-wrap:balance;font-weight:600}
+  /* Serif editorial solo para titulares grandes */
+  h1,h2,.row-text h3,.ps-card h3,.plan h3,.row-num{
+    font-family:var(--font-display);font-weight:400;letter-spacing:-.02em;
+  }
+  p{text-wrap:pretty}
+  ::selection{background:var(--blue);color:#fff}
+  :focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
+  section[id]{scroll-margin-top:92px}
 
-/* ---------- Franja de servicios ---------- */
-.strip{border-block:1px solid var(--line);overflow:hidden;padding:26px 0;background:#000}
-.strip-track{display:flex;gap:56px;width:max-content;animation:slide 40s linear infinite}
-.strip-track span{font-size:20px;font-weight:600;letter-spacing:-.03em;color:#8a8a94;white-space:nowrap}
-@keyframes slide{to{transform:translateX(-50%)}}
+  .skip{
+    position:absolute;left:16px;top:-48px;z-index:200;
+    background:var(--blue);color:#fff;padding:10px 16px;border-radius:999px;
+    font-weight:600;
+  }
+  .skip:focus{top:16px}
 
-/* ---------- Beneficios (bento) ---------- */
-.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
-.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px;overflow:hidden;transition:border-color .3s,background .3s}
-.card:hover{border-color:var(--line-2);background:var(--card-2)}
-.card .num{font-size:13px;font-weight:600;color:var(--blue);letter-spacing:.04em}
-.card h3{margin:14px 0 10px}
-.card p{color:var(--text-soft);font-size:15px}
-.span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}
-.devices{position:relative;height:210px;margin-top:30px}
-.devices img{position:absolute;bottom:-34px;border-radius:12px;border:1px solid var(--line-2);box-shadow:0 30px 60px -20px #000}
-.d-desk{left:0;width:64%}
-.d-tab{left:44%;width:28%;z-index:2}
-.d-phone{right:2%;width:17%;z-index:3}
-.note{margin-top:16px;display:flex;align-items:center;gap:16px;padding:22px 26px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card)}
-.note .avatar{flex:none;width:40px;height:40px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-weight:700}
-.note p{color:var(--text-soft);font-size:15px}
-.note strong{color:#fff}
+  .scroll-progress{
+    position:fixed;top:0;left:0;height:3px;width:0%;z-index:210;
+    background:var(--blue);
+    transition:width .12s linear;pointer-events:none;
+  }
+  .page-frame{display:none}
+  .wrap{width:100%;max-width:1200px;margin-inline:auto;padding-inline:24px}
+  section{position:relative;padding-block:96px}
+  @media (max-width:720px){ section{padding-block:64px} }
 
-/* ---------- Problema / solución ---------- */
-.ps{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.ps .card{padding:36px}
-.ps .tag{margin-bottom:6px}
-.ps .problem .tag{color:var(--danger)}
-.ps .problem .tag::before{background:var(--danger);box-shadow:0 0 18px rgba(238,107,97,.5)}
-.ps .solution{background:linear-gradient(160deg,#06284a,#050a12 70%);border-color:#0d3a68}
-.ps h3{font-size:26px;margin:10px 0 22px}
-.ps-list{display:grid;gap:14px}
-.ps-list li{display:flex;gap:12px;align-items:flex-start;color:var(--text-soft);font-size:15px}
-.ps-list svg{flex:none;width:18px;height:18px;margin-top:3px}
-.problem .ps-list svg{color:var(--danger)}
-.solution .ps-list svg{color:var(--blue)}
-.solution .ps-list li{color:#d7e6f5}
+  /* ---------- ETIQUETAS / TÍTULOS ---------- */
+  .kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--font-body);font-weight:500;text-transform:uppercase;
+    font-size:.74rem;letter-spacing:.14em;
+    color:var(--text-mute);
+  }
+  .sec-head{max-width:680px;margin-bottom:56px}
+  .sec-head.center{margin-inline:auto;text-align:center}
+  .sec-head.center .kicker{justify-content:center}
+  .sec-head h2{
+    font-size:clamp(2.7rem,4vw + 1.4rem,4.2rem);line-height:1;
+    margin-top:16px;
+  }
+  .sec-head p{margin-top:18px;color:var(--text-soft);font-size:1.06rem;max-width:56ch}
+  .sec-head.center p{margin-inline:auto}
 
-/* ---------- Servicios ---------- */
-.services{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.s-ico{width:46px;height:46px;border-radius:13px;background:#16161a;border:1px solid var(--line-2);display:grid;place-items:center;margin-bottom:60px;color:var(--blue)}
-.s-ico svg{width:22px;height:22px}
-.services .card .num{position:absolute;top:30px;right:30px;color:var(--text-mute)}
-.services .card:first-child{background:var(--blue);border-color:var(--blue)}
-.services .card:first-child .s-ico{background:rgba(255,255,255,.18);border-color:transparent;color:#fff}
-.services .card:first-child .num{color:rgba(255,255,255,.7)}
-.services .card:first-child p{color:rgba(255,255,255,.88)}
-.services .card:first-child:hover{background:#2a9dff}
+  /* ---------- BOTONES ---------- */
+  .btn{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    padding:13px 24px;border-radius:999px;
+    font-family:var(--font-body);font-weight:500;font-size:1rem;
+    white-space:nowrap;
+    transition:transform .25s var(--ease),background-color .2s,filter .2s;
+  }
+  .btn svg{width:18px;height:18px;flex-shrink:0;transition:transform .3s var(--ease)}
+  .btn:active{transform:scale(.97)}
+  .btn-primary{background:var(--pill-bg);color:var(--pill-fg)}
+  .btn-primary:hover{filter:brightness(.92);transform:translateY(-1px)}
+  .btn-primary:hover svg{transform:translateX(3px)}
+  .btn-ghost{background:var(--pill-2);color:var(--text)}
+  .btn-ghost:hover{filter:brightness(1.25);transform:translateY(-1px)}
+  .btn-ghost:hover svg{transform:translateX(3px)}
+  .btn-lg{padding:17px 34px;font-size:1.02rem}
+  .btn-block{width:100%}
 
-/* ---------- Planes ---------- */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
-.plan{display:flex;flex-direction:column;padding:34px}
-.plan .desc{margin:12px 0 22px;min-height:96px}
-.plan .meta{display:inline-flex;align-items:center;gap:8px;color:var(--text-mute);font-size:13.5px;font-weight:500;margin-bottom:22px}
-.plan .meta svg{width:16px;height:16px}
-.plan ul{display:grid;gap:12px;margin-bottom:30px;flex:1}
-.plan li{display:flex;gap:11px;font-size:15px;color:#d4d4da}
-.plan li svg{flex:none;width:17px;height:17px;margin-top:4px;color:var(--blue)}
-.plan.featured{background:var(--blue);border-color:var(--blue)}
-.plan.featured:hover{background:#2a9dff}
-.plan.featured p,.plan.featured li,.plan.featured .meta{color:rgba(255,255,255,.92)}
-.plan.featured li svg{color:#fff}
-.plan-flag{position:absolute;top:22px;right:22px;padding:5px 12px;border-radius:999px;background:#000;color:#fff;font-size:12px;font-weight:600}
-.plans-foot{margin-top:30px;text-align:center;color:var(--text-soft)}
-.plans-foot a{color:#fff;text-decoration:underline;text-underline-offset:4px}
+  /* ============================================================
+     HEADER
+     ============================================================ */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding-block:20px;border-bottom:1px solid transparent;
+    transition:padding .3s var(--ease),background-color .3s var(--ease),border-color .3s var(--ease),backdrop-filter .3s;
+  }
+  header.scrolled{
+    padding-block:12px;
+    background:rgba(8,8,10,.8);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border-color:var(--line-soft);
+  }
+  .nav-row{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .logo{
+    display:flex;align-items:center;gap:0;
+    font-family:var(--font-display);font-weight:400;font-size:1.9rem;letter-spacing:-.01em;line-height:1;
+  }
+  .logo .mark{
+    width:32px;height:32px;border-radius:9px;flex-shrink:0;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .logo .mark{margin-right:10px}
+  .logo .mark svg{width:66%;height:66%}
+  .logo-accent{color:var(--blue-bright);font-style:italic}
+  .nav-links{display:flex;align-items:center;gap:4px}
+  .nav-links a{
+    font-size:.92rem;font-weight:500;color:var(--text-soft);
+    padding:8px 14px;border-radius:999px;
+    transition:color .2s,box-shadow .2s;position:relative;
+  }
+  .nav-links a:hover{color:var(--text)}
+  .nav-links a.active{color:var(--text);background:var(--pill-2)}
+  .nav-cta{display:flex;align-items:center;gap:10px}
+  .nav-end{display:flex;align-items:center;gap:10px}
 
-/* ---------- Ejemplos (galería) ---------- */
-.gallery{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
-.g-item{border-radius:var(--r-lg);overflow:hidden;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;transition:border-color .3s}
-.g-item:hover{border-color:var(--line-2)}
-.g-shot{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0a0a0c}
-.g-shot img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .8s var(--ease)}
-.g-item:hover .g-shot img{transform:scale(1.04)}
-.g-mini{position:absolute;right:16px;bottom:-24px;width:15%;border-radius:12px;border:1px solid var(--line-2);box-shadow:0 20px 40px #000;overflow:hidden}
-.g-mini img{height:auto;object-fit:initial}
-.g-body{padding:26px 28px 30px;display:flex;flex-direction:column;gap:10px;flex:1}
-.g-body p{color:var(--text-soft);font-size:15px;flex:1;margin-bottom:8px}
-.g-item:nth-child(1){grid-column:span 4}
-.g-item:nth-child(2){grid-column:span 2}
-.g-item:nth-child(2) .g-shot{aspect-ratio:4/3}
-.g-item:nth-child(3){grid-column:span 6;flex-direction:row}
-.g-item:nth-child(3) .g-shot{flex:1.4;aspect-ratio:auto;min-height:300px}
-.g-item:nth-child(3) .g-body{flex:1;justify-content:center;padding:40px}
-.g-note{display:flex;gap:12px;align-items:flex-start;margin-bottom:28px;color:var(--text-soft);font-size:14.5px;padding:16px 20px;border:1px dashed var(--line-2);border-radius:var(--r-md)}
-.g-note svg{flex:none;width:19px;height:19px;color:var(--blue);margin-top:2px}
-.g-note strong{color:#fff}
+  /* Selector de idioma */
+  .lang{position:relative}
+  .lang-btn{
+    display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:999px;
+    background:var(--pill-2);border:1px solid transparent;
+    font-size:.87rem;font-weight:600;color:var(--text);
+    transition:border-color .25s,background-color .25s;
+  }
+  .lang-btn:hover,.lang-btn[aria-expanded="true"]{border-color:var(--blue-bright);background:var(--panel)}
+  .lang-btn svg{width:18px;height:18px;color:var(--blue-bright)}
+  .lang-menu{
+    position:absolute;top:calc(100% + 10px);right:0;min-width:190px;z-index:120;
+    display:flex;flex-direction:column;padding:6px;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md);
+    box-shadow:var(--shadow-lg);
+  }
+  .lang-menu[hidden]{display:none}
+  .lang-menu button{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px 14px;border-radius:6px;text-align:left;
+    font-size:.92rem;font-weight:500;color:var(--text-soft);
+  }
+  .lang-menu button:hover{background:var(--bg-2);color:var(--text)}
+  .lang-menu button[aria-checked="true"]{color:var(--blue-bright)}
+  .lang-menu button[aria-checked="true"]::after{content:"✓";font-weight:700}
+  @media (max-width:560px){ .lang-btn{padding:0 13px} }
 
-.live{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.live a{display:flex;flex-direction:column;justify-content:space-between;gap:26px;padding:28px;border-radius:var(--r-lg);background:var(--card);border:1px solid var(--line);transition:border-color .3s,background .3s,transform .4s var(--ease)}
-.live a:hover{border-color:var(--blue);background:var(--card-2);transform:translateY(-3px)}
-.live a:last-child:nth-child(3n+1){grid-column:1 / -1}
-.live h3{margin-bottom:8px}
-.live p{color:var(--text-soft);font-size:14.5px}
-.live .go{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-weight:600;font-size:14.5px}
-.live .go svg{width:16px;height:16px;transition:transform .25s var(--ease)}
-.live a:hover .go svg{transform:translateX(4px)}
+  /* Selector de tema (reutiliza el estilo del selector de idioma) */
+  .theme{position:relative}
+  .lang-btn{white-space:nowrap;flex-shrink:0}
+  .lang-btn svg{flex-shrink:0}
+  .theme .lang-menu{min-width:160px}
+  .theme-ico-light,.theme .t-short{display:none}
+  html[data-theme="light"] .theme-ico-dark{display:none}
+  html[data-theme="light"] .theme-ico-light{display:block}
+  @media (max-width:560px){ .nav-end{gap:6px} .lang:not(.theme) .lang-btn span{display:none} .lang-btn{padding:0 12px} .theme .lang-btn{padding:0 10px;gap:5px} .theme .t-long{display:none} .theme .t-short{display:inline} .nav-row{gap:8px} }
+  @media (max-width:370px){ .theme .t-short{display:none} }
 
-/* ---------- CTA final ---------- */
-.cta{position:relative;text-align:center;padding:clamp(60px,9vw,110px) 28px;border-radius:var(--r-xl);border:1px solid #0d3a68;overflow:hidden;background:radial-gradient(120% 140% at 50% 120%,rgba(10,140,255,.5),transparent 60%),#04080f}
-.cta h2{font-size:clamp(34px,5.4vw,68px);margin:16px auto 20px;max-width:760px;letter-spacing:-.045em}
-.cta p{color:#b6c6d8;max-width:560px;margin:0 auto 32px;font-size:17px}
+  .nav-cta .btn{padding:11px 22px;font-size:.92rem}
+  header .wrap{max-width:1480px}
+  @media (max-width:1560px){ .nav-links{gap:0} .nav-cta .btn-ghost{display:none} }
 
-/* ---------- FAQ ---------- */
-.faq{max-width:820px;margin-inline:auto}
-.faq-item{border-bottom:1px solid var(--line)}
-.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 0;text-align:left;font-size:19px;font-weight:600;letter-spacing:-.02em}
-.pm{position:relative;flex:none;width:30px;height:30px;border-radius:50%;background:#16161a}
-.pm::before,.pm::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.6px;background:#fff;transform:translate(-50%,-50%);transition:transform .3s var(--ease)}
-.pm::after{transform:translate(-50%,-50%) rotate(90deg)}
-.faq-item[data-open="true"] .pm::after{transform:translate(-50%,-50%) rotate(0)}
-.faq-a-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease)}
-.faq-item[data-open="true"] .faq-a-wrap{grid-template-rows:1fr}
-.faq-a-inner{overflow:hidden}
-.faq-a-inner p{padding-bottom:26px;color:var(--text-soft);max-width:680px}
+  .burger{
+    display:none;width:44px;height:44px;border-radius:999px;flex-shrink:0;
+    background:var(--pill-2);border:none;position:relative;
+  }
+  .burger span{
+    position:absolute;left:11px;right:11px;height:2px;background:var(--text);border-radius:1px;
+    transition:transform .3s var(--ease),opacity .3s var(--ease),top .3s var(--ease);
+  }
+  .burger span:nth-child(1){top:14px}
+  .burger span:nth-child(2){top:19px}
+  .burger span:nth-child(3){top:24px}
+  .burger[aria-expanded="true"] span:nth-child(1){top:19px;transform:rotate(45deg)}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .burger[aria-expanded="true"] span:nth-child(3){top:19px;transform:rotate(-45deg)}
 
-/* ---------- Formulario ---------- */
-.start{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(30px,6vw,80px);align-items:start;padding:clamp(30px,5vw,56px);border-radius:var(--r-xl);background:var(--card);border:1px solid var(--line)}
-.start h2{margin:16px 0 18px}
-.start-copy p{color:var(--text-soft);font-size:17px}
-.start-form{display:grid;gap:16px}
-.start-form label{display:grid;gap:7px;font-size:13.5px;font-weight:500;color:var(--text-soft)}
-.start-form input,.start-form select{width:100%;padding:13px 16px;border-radius:12px;background:#000;border:1px solid var(--line-2);color:#fff;font-size:15px;transition:border-color .2s}
-.start-form input::placeholder{color:var(--text-mute)}
-.start-form input:focus,.start-form select:focus{outline:0;border-color:var(--blue)}
-.start-form select option{background:#111}
-.start-form input[type="date"],.start-form input[type="time"]{color-scheme:dark}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.start-msg{font-size:14px;padding:12px 14px;border-radius:12px}
-.start-msg[hidden]{display:none}
-.start-msg.ok{background:rgba(52,199,123,.1);color:#7be0a9}
-.start-msg.err{background:rgba(238,107,97,.1);color:#ff9c94}
+  .mobile-panel{
+    position:fixed;inset:0;z-index:99;background:var(--bg);
+    display:flex;flex-direction:column;padding:104px 24px 40px;
+    transform:translateY(-8px);opacity:0;visibility:hidden;
+    transition:opacity .3s var(--ease),transform .3s var(--ease),visibility 0s linear .3s;
+  }
+  .mobile-panel.open{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .3s var(--ease),transform .3s var(--ease),visibility 0s}
+  .mobile-panel a{
+    font-family:var(--font-display);font-size:2.2rem;font-weight:400;
+    padding-block:12px;border-bottom:1px solid var(--line);color:var(--text);
+  }
+  .mobile-panel .btn{margin-top:28px;font-family:var(--font-body);font-size:1rem;font-weight:500;border-bottom:none;padding:16px 24px}
 
-/* ---------- Footer ---------- */
-footer{border-top:1px solid var(--line);padding:72px 0 32px}
-.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:44px}
-.footer-brand p{color:var(--text-soft);font-size:15px;margin-top:18px;max-width:340px}
-.footer-brand .btn{margin-top:22px}
-.footer-col{display:flex;flex-direction:column;gap:11px;font-size:14.5px;color:var(--text-soft)}
-.footer-col h4{font-size:13px;letter-spacing:0;color:#fff;margin-bottom:6px}
-.footer-col a:hover{color:#fff}
-.footer-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:56px;padding-top:24px;border-top:1px solid var(--line);color:var(--text-mute);font-size:13.5px}
-.wa-float{position:fixed;right:20px;bottom:20px;z-index:90;width:56px;height:56px;border-radius:50%;background:var(--wa);color:#fff;display:grid;place-items:center;box-shadow:0 12px 30px rgba(37,211,102,.4);transition:transform .3s var(--ease)}
-.wa-float:hover{transform:scale(1.07)}
-.wa-float svg{width:28px;height:28px}
+  @media (max-width:1380px){
+    .nav-links,.nav-cta .btn-ghost{display:none}
+    .burger{display:block}
+  }
+  @media (max-width:560px){
+    .nav-cta{display:none}
+  }
 
-/* ---------- Reveal ---------- */
-.reveal,.reveal-stagger>*{opacity:0;transform:translateY(24px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
-.reveal.is-in,.reveal-stagger.is-in>*{opacity:1;transform:none}
-.reveal-stagger.is-in>*:nth-child(2){transition-delay:.08s}
-.reveal-stagger.is-in>*:nth-child(3){transition-delay:.16s}
-.reveal-stagger.is-in>*:nth-child(4){transition-delay:.24s}
-.reveal-stagger.is-in>*:nth-child(5){transition-delay:.32s}
-.reveal-stagger.is-in>*:nth-child(6){transition-delay:.4s}
-@media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important}
-  .reveal,.reveal-stagger>*{opacity:1;transform:none}
-  html{scroll-behavior:auto}
-}
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero{padding-top:160px;padding-bottom:72px;text-align:center;overflow:hidden}
+  .hero .kicker{justify-content:center}
+  .hero h1{
+    font-size:clamp(3.4rem,7vw + .8rem,6.2rem);line-height:.98;letter-spacing:-.025em;
+    margin-top:22px;max-width:15ch;margin-inline:auto;
+  }
+  .hero h1 .grad{color:var(--blue-bright);font-style:italic}
+  .hero .lead{margin-top:28px;font-size:1.06rem;color:var(--text-soft);max-width:58ch;margin-inline:auto}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:36px}
+  .hero-trust{
+    display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;
+    margin-top:32px;color:var(--text-soft);font-size:.88rem;font-weight:500;
+  }
+  .hero-trust span{display:flex;align-items:center;gap:8px}
+  .hero-trust svg{width:16px;height:16px;color:var(--blue-bright)}
 
-/* ---------- Responsive ---------- */
-@media (max-width:1020px){
-  .nav-links{display:none}
-  .burger{display:flex}
-  .nav-cta .btn-ghost{display:none}
-  .bento .span-2{grid-column:span 3}
-  .bento .span-4{grid-column:span 6}
-  .bento .span-2:first-child{grid-column:span 6}
-  .services,.plans,.live{grid-template-columns:repeat(2,1fr)}
-  .plans .plan:last-child{grid-column:span 2}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .collage{grid-auto-rows:54px}
-}
-@media (max-width:760px){
-  .nav-cta{display:none}
-  .lang-btn span{display:none}
-  .bento,.ps,.services,.plans,.live,.start,.gallery{grid-template-columns:1fr}
-  .bento>*,.plans .plan:last-child,.g-item:nth-child(n){grid-column:auto!important}
-  .g-item:nth-child(3){flex-direction:column}
-  .g-item:nth-child(3) .g-body{padding:26px 28px 30px}
-  .g-item:nth-child(3) .g-shot{aspect-ratio:16/10;min-height:0;flex:none}
-  .devices{height:190px}
-  .plan .desc{min-height:0}
-  .collage{grid-template-columns:repeat(6,1fr);grid-auto-rows:46px;gap:10px;margin-top:48px}
-  .t-video{grid-column:1 / 7;grid-row:1 / 6}
-  .t-a{grid-column:1 / 3;grid-row:6 / 9}
-  .t-b{grid-column:3 / 5;grid-row:6 / 9}
-  .t-c{grid-column:5 / 7;grid-row:6 / 9;margin:0}
-  .t-d,.t-e,.t-f{display:none}
-  .f-row{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr}
-  .services .card .s-ico{margin-bottom:36px}
-}
+  /* Entrada escalonada del hero al cargar la página */
+  .hero .kicker,.hero h1,.hero .lead,.hero-actions,.hero-trust,.hero-stage{
+    opacity:0;animation:hero-up .85s var(--ease) forwards;
+  }
+  .hero .kicker{animation-delay:.05s}
+  .hero h1{animation-delay:.16s}
+  .hero .lead{animation-delay:.28s}
+  .hero-actions{animation-delay:.4s}
+  .hero-trust{animation-delay:.5s}
+  .hero-stage{animation-delay:.6s}
+  @keyframes hero-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+  .hero-stage{margin-top:64px;position:relative}
+  /* Ventana de app estilo macOS */
+  .hero-frame{
+    position:relative;max-width:940px;margin-inline:auto;
+    border:1px solid var(--line);border-radius:var(--r-lg);
+    background:var(--bg-2);
+    padding:6px 12px 12px;
+    box-shadow:var(--shadow-lg);
+    text-align:left;
+  }
+  .browser-top{
+    display:flex;align-items:center;gap:8px;padding:10px 6px 12px;
+  }
+  .browser-top i{width:11px;height:11px;border-radius:50%;background:var(--line);display:block}
+  .browser-top i:nth-child(1){background:#ff5f57}
+  .browser-top i:nth-child(2){background:#febc2e}
+  .browser-top i:nth-child(3){background:#28c840}
+  .browser-top .url{
+    margin-left:12px;flex:1;max-width:300px;
+    background:var(--panel);border:1px solid var(--line);border-radius:999px;
+    padding:4px 14px;font-size:.74rem;color:var(--text-mute);text-align:left;
+  }
+  .hero-frame video,.hero-frame .fallback{
+    width:100%;display:block;border-radius:var(--r-md);border:1px solid var(--line);
+    aspect-ratio:16/9;object-fit:cover;background:#0b1226;
+  }
+  /* Status pills */
+  .hero-chip{
+    position:absolute;display:flex;align-items:center;gap:8px;
+    padding:8px 14px;border-radius:999px;font-size:.84rem;font-weight:500;
+    box-shadow:var(--shadow-md);z-index:3;
+    animation:floaty 6s ease-in-out infinite alternate;
+  }
+  .hero-chip svg{width:16px;height:16px}
+  .hero-chip.a{top:30px;left:-14px;background:var(--pill-bg);color:var(--pill-fg);animation-delay:.2s}
+  .hero-chip.b{bottom:34px;right:-14px;background:var(--panel-2);color:var(--text);border:1px solid var(--line);animation-delay:.9s}
+  .hero-chip.b svg{color:var(--blue-bright)}
+  @keyframes floaty{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+
+  @media (max-width:720px){
+    .hero-frame{padding:4px 8px 8px}
+    .hero-chip{display:none}
+  }
+
+  /* ============================================================
+     MARQUEE
+     ============================================================ */
+  .marquee{background:transparent;overflow:hidden;padding-block:18px;
+    border-block:1px solid var(--line-soft)}
+  .marquee-track{display:flex;gap:44px;width:max-content;animation:scroll-left 32s linear infinite}
+  .marquee span{
+    font-family:var(--font-display);font-size:1.25rem;font-weight:400;
+    color:var(--text-soft);white-space:nowrap;display:flex;align-items:center;gap:44px;
+  }
+  .marquee span::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--blue-bright);display:block}
+  @keyframes scroll-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ============================================================
+     BENEFICIOS — filas alternadas
+     ============================================================ */
+  .rows{display:flex;flex-direction:column;gap:32px;margin-top:12px}
+  .row{
+    display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:32px;box-shadow:var(--shadow-md);
+    transition:border-color .3s var(--ease),transform .3s var(--ease);
+  }
+  .row:hover{border-color:var(--blue-bright);transform:translateY(-3px)}
+  .row:nth-child(even){grid-template-columns:.95fr 1.05fr}
+  .row:nth-child(even) .row-media{order:-1}
+  .row-num{
+    font-size:2.6rem;color:var(--blue-bright);line-height:1;display:block;
+  }
+  .row-text h3{font-size:2.6rem;line-height:1.02;margin:12px 0 14px}
+  .row-text p{color:var(--text-soft);font-size:1rem}
+  .row-media{
+    border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line);
+    background:var(--bg);
+    aspect-ratio:16/10;position:relative;
+  }
+  .row-media > svg,.row-media > img{width:100%;height:100%;object-fit:cover;display:block}
+  .devices{
+    display:flex;gap:12px;align-items:flex-end;justify-content:center;
+    padding:18px;height:100%;
+  }
+  .devices img{
+    border-radius:8px;border:1px solid var(--line);object-fit:cover;object-position:top;
+    box-shadow:var(--shadow-md);
+  }
+  .devices .d-phone{width:26%;aspect-ratio:9/17}
+  .devices .d-tab{width:34%;aspect-ratio:3/4}
+  .devices .d-desk{width:40%;aspect-ratio:16/10}
+
+  .note-card{
+    margin-top:32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+    background:var(--panel);
+    border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 28px;
+    box-shadow:var(--shadow-md);
+  }
+  .note-card .avatar{
+    width:52px;height:52px;border-radius:6px;flex-shrink:0;
+    background:var(--blue);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:400;font-size:2.2rem;line-height:1;color:var(--on-blue);
+  }
+  .note-card p{color:var(--text-soft);font-size:.96rem}
+  .note-card strong{color:var(--text)}
+
+  @media (max-width:860px){
+    .row,.row:nth-child(even){grid-template-columns:1fr;gap:24px;padding:24px}
+    .row:nth-child(even) .row-media{order:0}
+  }
+
+  /* ============================================================
+     PROBLEMA → SOLUCIÓN
+     ============================================================ */
+  .ps{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .ps-card{border-radius:var(--r-lg);padding:36px 32px;border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow-md)}
+  .ps-card.solution{border-color:var(--blue-bright)}
+  .ps-card .tag{
+    font-family:var(--font-body);font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+    display:inline-block;margin-bottom:14px;
+  }
+  .ps-card.problem .tag{color:var(--danger)}
+  .ps-card.solution .tag{color:var(--blue-bright)}
+  .ps-card h3{font-size:2.4rem;line-height:1.05;margin-bottom:22px}
+  .ps-list li{display:flex;gap:12px;padding-block:12px;border-top:1px solid var(--line-soft);color:var(--text-soft);font-size:.95rem}
+  .ps-list li:first-child{border-top:none}
+  .ps-list svg{width:19px;height:19px;flex-shrink:0;margin-top:2px}
+  .ps-card.problem svg{color:var(--danger)}
+  .ps-card.solution svg{color:var(--blue-bright)}
+  .ps-card.solution li{color:var(--text)}
+  @media (max-width:820px){ .ps{grid-template-columns:1fr} }
+
+  /* ============================================================
+     SERVICIOS
+     ============================================================ */
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .s-card{
+    background:var(--panel);
+    border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:28px 24px;position:relative;overflow:hidden;
+    box-shadow:var(--shadow-md);
+    transition:transform .3s var(--ease),border-color .3s var(--ease);
+  }
+  .s-card:hover{transform:translateY(-4px);border-color:var(--blue-bright)}
+  .s-num{font-family:var(--font-body);font-weight:600;font-size:.8rem;color:var(--text-mute);display:block;margin-bottom:14px;letter-spacing:.06em}
+  .s-ico{
+    width:46px;height:46px;border-radius:14px;margin-bottom:16px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--bg);
+    border:1px solid var(--line);color:var(--blue-bright);
+    transition:transform .3s var(--ease);
+  }
+  .s-card:hover .s-ico{transform:translateY(-2px)}
+  .s-ico svg{width:22px;height:22px}
+  .s-card h3{font-size:1.1rem;margin-bottom:8px}
+  .s-card p{color:var(--text-soft);font-size:.92rem}
+  @media (max-width:900px){ .services{grid-template-columns:1fr 1fr} }
+  @media (max-width:600px){ .services{grid-template-columns:1fr} }
+
+  /* ============================================================
+     PLANES
+     ============================================================ */
+  .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+  .plan{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:32px 26px;display:flex;flex-direction:column;gap:16px;position:relative;min-width:0;
+    box-shadow:var(--shadow-md);
+    transition:transform .3s var(--ease),border-color .3s var(--ease);
+  }
+  .plan:hover{transform:translateY(-4px);border-color:var(--blue-bright)}
+  .plan.featured{border-color:var(--blue-bright);box-shadow:var(--shadow-lg)}
+  .plan-flag{
+    position:absolute;top:-13px;left:26px;
+    font-family:var(--font-body);font-weight:600;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;
+    background:var(--pill-bg);color:var(--pill-fg);
+    padding:6px 14px;border-radius:999px;
+  }
+  .plan h3{font-size:2.4rem;line-height:1}
+  .plan .desc{color:var(--text-soft);font-size:.94rem}
+  .plan .meta{
+    display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
+    font-family:var(--font-body);font-weight:600;font-size:.78rem;color:var(--blue-bright);
+    background:var(--bg);border:1px solid var(--line);
+    padding:6px 14px;border-radius:999px;
+  }
+  .plan .meta svg{width:15px;height:15px}
+  .plan ul{display:flex;flex-direction:column;gap:10px;margin-top:2px}
+  .plan ul::before{
+    content:"What's included";
+    font-family:var(--font-body);font-weight:700;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--text-mute);margin-bottom:4px;display:block;
+  }
+  html[lang="es"] .plan ul::before{content:"Qué incluye"}
+  html[lang="fr"] .plan ul::before{content:"Ce qui est inclus"}
+  .plan li{display:flex;gap:10px;color:var(--text-soft);font-size:.9rem;line-height:1.5}
+  .plan li svg{width:17px;height:17px;color:var(--blue-bright);flex-shrink:0;margin-top:2px}
+  .plan .btn{margin-top:auto}
+  .plans-foot{text-align:center;margin-top:36px;color:var(--text-soft);font-size:.95rem}
+  .plans-foot a{color:var(--blue-bright);font-weight:600;border-bottom:1px solid var(--blue-bright)}
+  @media (max-width:900px){ .plans{grid-template-columns:minmax(0,1fr);max-width:440px;margin-inline:auto} }
+
+  /* ============================================================
+     EJEMPLOS
+     ============================================================ */
+  .ex-note{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--panel);border:1px dashed var(--line);border-radius:var(--r-md);
+    padding:16px 18px;margin-bottom:40px;max-width:640px;
+  }
+  .ex-note svg{width:18px;height:18px;color:var(--blue-bright);flex-shrink:0;margin-top:2px}
+  .ex-note p{font-size:.88rem;color:var(--text-soft)}
+  .ex-note strong{color:var(--text)}
+
+  .ex-rows{display:flex;flex-direction:column;gap:28px}
+  .ex-row{
+    display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    padding:24px;box-shadow:var(--shadow-md);
+    transition:border-color .3s var(--ease),transform .3s var(--ease);
+  }
+  .ex-row:hover{border-color:var(--blue-bright);transform:translateY(-3px)}
+  .ex-row:nth-child(even){grid-template-columns:.85fr 1.15fr}
+  .ex-row:nth-child(even) .ex-shot{order:-1}
+  .ex-shot{
+    border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line);position:relative;
+    background:var(--bg-2);
+  }
+  .ex-shot img{width:100%;display:block;aspect-ratio:16/10;object-fit:cover;object-position:top}
+  .ex-badge{
+    position:absolute;top:12px;left:12px;z-index:2;
+    font-family:var(--font-body);font-weight:500;font-size:.74rem;
+    background:rgba(8,8,10,.75);border:1px solid var(--line);color:var(--text-soft);
+    padding:5px 12px;border-radius:999px;
+  }
+  .ex-mini{
+    position:absolute;bottom:-1px;right:16px;z-index:2;width:19%;min-width:52px;max-width:96px;
+    border-radius:8px 8px 0 0;overflow:hidden;border:1px solid var(--line);border-bottom:none;
+  }
+  .ex-mini img{width:100%;display:block;aspect-ratio:9/17;object-fit:cover;object-position:top}
+  .ex-info h3{font-size:1.2rem;margin-bottom:8px}
+  .ex-info p{color:var(--text-soft);font-size:.94rem;margin-bottom:18px}
+  .ex-info a{
+    display:inline-flex;align-items:center;gap:8px;color:var(--blue-bright);
+    font-family:var(--font-body);font-weight:700;font-size:.95rem;
+  }
+  .ex-info a:hover{text-decoration:underline;text-underline-offset:4px}
+  .ex-info a svg{width:16px;height:16px;transition:transform .3s var(--ease)}
+  .ex-info a:hover svg{transform:translateX(4px)}
+  @media (max-width:860px){
+    .ex-row,.ex-row:nth-child(even){grid-template-columns:1fr;gap:22px}
+    .ex-row:nth-child(even) .ex-shot{order:0}
+  }
+
+  /* ============================================================
+     EJEMPLOS DE PÁGINAS (enlaces reales)
+     ============================================================ */
+  .real-ex-list{display:flex;flex-direction:column;gap:16px}
+  .real-ex-item{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-md);
+    padding:26px 28px;box-shadow:var(--shadow-md);
+    transition:border-color .3s var(--ease),transform .3s var(--ease);
+  }
+  .real-ex-item:hover{border-color:var(--blue-bright);transform:translateY(-3px)}
+  .real-ex-text h3{font-size:1.15rem;margin-bottom:6px}
+  .real-ex-text p{color:var(--text-soft);font-size:.92rem;max-width:56ch}
+  .real-ex-cta{
+    display:inline-flex;align-items:center;gap:8px;flex-shrink:0;
+    color:var(--blue-bright);font-family:var(--font-body);font-weight:700;font-size:.95rem;
+  }
+  .real-ex-cta svg{width:16px;height:16px;transition:transform .3s var(--ease)}
+  .real-ex-item:hover .real-ex-cta svg{transform:translateX(4px)}
+  @media (max-width:600px){ .real-ex-item{padding:22px 22px} }
+
+  /* ============================================================
+     CTA FINAL
+     ============================================================ */
+  .cta-panel{
+    position:relative;overflow:hidden;text-align:center;
+    background:radial-gradient(60% 80% at 50% 0%,rgba(79,109,240,.2),transparent 70%),var(--panel);
+    border:1px solid var(--line);border-radius:var(--r-xl);
+    padding:72px 40px;
+    box-shadow:var(--shadow-lg);
+  }
+  .cta-panel .kicker{justify-content:center;position:relative}
+  .cta-panel h2{font-size:clamp(2.8rem,4vw + 1.4rem,4.4rem);line-height:1;margin-top:16px;max-width:16ch;margin-inline:auto;position:relative}
+  .cta-panel p{color:var(--text-soft);font-size:1.06rem;max-width:52ch;margin:20px auto 0;position:relative}
+  .cta-panel .btn{margin-top:32px;position:relative}
+
+  /* ============================================================
+     FAQ
+     ============================================================ */
+  .faq{max-width:760px;margin-inline:auto;display:flex;flex-direction:column;gap:12px}
+  .faq-item{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-md)}
+  .faq-item[data-open="true"]{border-color:var(--blue-bright)}
+  .faq-q{
+    width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:20px 22px;text-align:left;font-family:var(--font-body);font-weight:500;font-size:1.02rem;
+  }
+  .faq-q .pm{width:30px;height:30px;border-radius:50%;background:var(--bg);border:1px solid var(--line);flex-shrink:0;position:relative}
+  .faq-q .pm::before,.faq-q .pm::after{
+    content:"";position:absolute;background:var(--blue);
+    top:50%;left:50%;transform:translate(-50%,-50%);transition:transform .3s var(--ease),opacity .3s;
+  }
+  .faq-q .pm::before{width:12px;height:2px}
+  .faq-q .pm::after{width:2px;height:12px}
+  .faq-item[data-open="true"] .pm::after{transform:translate(-50%,-50%) rotate(90deg);opacity:0}
+  .faq-a-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
+  .faq-item[data-open="true"] .faq-a-wrap{grid-template-rows:1fr}
+  .faq-a-inner{overflow:hidden}
+  .faq-a-wrap p{padding:0 22px 22px;color:var(--text-soft);font-size:.95rem;line-height:1.65;max-width:64ch}
+
+  /* ============================================================
+     FORMULARIO
+     ============================================================ */
+  .start-panel{
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+    background:var(--panel);
+    border:1px solid var(--line);border-radius:var(--r-xl);padding:52px 48px;
+    box-shadow:var(--shadow-lg);
+  }
+  .start-copy h2{font-size:clamp(2.4rem,2.6vw + 1.4rem,3.4rem);line-height:1;margin-top:14px}
+  .start-copy p{margin-top:16px;color:var(--text-soft);font-size:1.02rem;max-width:44ch}
+  .start-form{display:flex;flex-direction:column;gap:16px}
+  .start-form label{display:flex;flex-direction:column;gap:8px;font-size:.82rem;font-weight:500;color:var(--text-soft)}
+  .start-form input,.start-form select{
+    font-family:var(--font-body);font-size:.98rem;color:var(--text);
+    background:var(--bg-2);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;width:100%;transition:border-color .2s,box-shadow .2s;
+  }
+  .start-form input::placeholder{color:var(--text-mute)}
+  .start-form input:focus,.start-form select:focus{outline:none;border-color:var(--blue-bright);box-shadow:0 0 0 3px rgba(79,109,240,.25)}
+  .start-form select{
+    appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:42px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238fa8ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;background-size:16px;
+  }
+  .start-form .btn{margin-top:6px}
+  .start-form .btn[disabled]{opacity:.7;cursor:progress}
+  .f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .f-row > label{min-width:0}
+  .start-form input{color-scheme:dark}
+  @media (max-width:420px){ .f-row{grid-template-columns:1fr} }
+  .start-msg{font-size:.84rem;margin-top:2px}
+  .start-msg.err{color:var(--danger)}
+  .start-msg.ok{color:var(--ok)}
+  .start-panel > *{min-width:0}
+  .start-form select{max-width:100%;text-overflow:ellipsis}
+  @media (max-width:820px){ .start-panel{grid-template-columns:1fr;gap:32px;padding:40px 26px} }
+
+  /* ============================================================
+     FLOATING WHATSAPP
+     ============================================================ */
+  .wa-float{
+    position:fixed;right:22px;bottom:22px;z-index:90;
+    width:60px;height:60px;border-radius:50%;
+    background:#25d366;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow-lg);
+    transition:transform .25s var(--ease);
+  }
+  .wa-float:hover{transform:translateY(-4px)}
+  .wa-float svg{width:28px;height:28px;color:#fff}
+  .wa-float::before{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    border:2px solid #25d366;animation:pulse-ring 2.4s ease-out infinite;
+  }
+  @keyframes pulse-ring{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.5);opacity:0}}
+  @media (max-width:520px){ .wa-float{width:54px;height:54px;right:16px;bottom:16px} .wa-float svg{width:25px;height:25px} }
+
+  /* ============================================================
+     FLOATING INSTAGRAM
+     ============================================================ */
+  .ig-float{
+    position:fixed;right:22px;bottom:112px;z-index:90;
+    width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(135deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow-lg);
+    transition:transform .25s var(--ease);
+  }
+  .ig-float:hover{transform:translateY(-4px)}
+  .ig-float svg{width:24px;height:24px;color:#fff}
+  @media (max-width:520px){ .ig-float{width:46px;height:46px;right:16px;bottom:90px} .ig-float svg{width:21px;height:21px} }
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer{padding-block:72px 36px;background:var(--bg-2);border-top:1px solid var(--line-soft);position:relative}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.1fr;gap:40px}
+  .footer-brand p{color:var(--text-soft);font-size:.92rem;margin-top:14px;max-width:34ch}
+  .footer-col h4{font-family:var(--font-body);font-weight:500;text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;color:var(--text-mute);margin-bottom:14px}
+  .footer-col a,.footer-col span{display:block;color:var(--text-soft);font-size:.92rem;padding-block:6px;transition:color .2s}
+  .footer-col a:hover{color:var(--text)}
+  .footer-bottom{
+    margin-top:56px;padding-top:24px;border-top:1px solid var(--line-soft);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:.84rem;color:var(--text-mute);
+  }
+  @media (max-width:820px){ .footer-grid{grid-template-columns:1fr 1fr;gap:36px} }
+  @media (max-width:520px){ .footer-grid{grid-template-columns:1fr} }
+
+  /* ============================================================
+     TEMA CLARO (opcional, desde el selector de tema)
+     ============================================================ */
+  html[data-theme="light"]{
+    color-scheme:light;
+    --bg:#fafaf8;
+    --bg-2:#f2f2ef;
+    --panel:#ffffff;
+    --panel-2:#f2f2ef;
+    --panel-hover:#f7f7f5;
+    --line:#e2e2de;
+    --line-soft:#ebebe7;
+    --blue:#3d5fe0;
+    --blue-bright:#3d5fe0;
+    --gold-line:rgba(61,95,224,.45);
+    --text:#14141a;
+    --text-soft:#555560;
+    --text-mute:#85858f;
+    --pill-bg:#14141a;
+    --pill-fg:#ffffff;
+    --pill-2:#e9e9e5;
+    --shadow-lg:0 40px 80px -40px rgba(20,30,70,.25);
+  }
+  html[data-theme="light"] header.scrolled{background:rgba(250,250,248,.85)}
+  html[data-theme="light"] .ex-badge{background:rgba(255,255,255,.85)}
+  html[data-theme="light"] .plan.featured{background:linear-gradient(180deg,rgba(61,95,224,.08),transparent 45%),var(--panel)}
+  html[data-theme="light"] .ps-card.solution{background:linear-gradient(180deg,rgba(61,95,224,.07),transparent 45%),var(--panel)}
+  html[data-theme="light"] .cta-panel{background:radial-gradient(60% 80% at 50% 0%,rgba(61,95,224,.12),transparent 70%),var(--panel)}
+  html[data-theme="light"] .start-form input{color-scheme:light}
+
+  /* ============================================================
+     SCROLL REVEAL
+     ============================================================ */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.is-in{opacity:1;transform:translateY(0)}
+  .reveal-stagger > *{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .reveal-stagger.is-in > *{opacity:1;transform:translateY(0)}
+  .reveal-stagger.is-in > *:nth-child(1){transition-delay:.04s}
+  .reveal-stagger.is-in > *:nth-child(2){transition-delay:.1s}
+  .reveal-stagger.is-in > *:nth-child(3){transition-delay:.16s}
+  .reveal-stagger.is-in > *:nth-child(4){transition-delay:.22s}
+  .reveal-stagger.is-in > *:nth-child(5){transition-delay:.28s}
+  .reveal-stagger.is-in > *:nth-child(6){transition-delay:.34s}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.15s !important}
+    .reveal,.reveal-stagger > *{opacity:1 !important;transform:none !important}
+    .marquee-track{animation:none}
+    .hero .kicker,.hero h1,.hero .lead,.hero-actions,.hero-trust,.hero-stage{opacity:1 !important;transform:none !important}
+    .hero-chip{animation:none}
+  }
 </style>
 <noscript><style>.reveal,.reveal-stagger > *{opacity:1 !important;transform:none !important}</style></noscript>
+<script>try{if(localStorage.getItem("wz-theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
 </head>
 <body>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 <a class="skip" href="#inicio">Skip to content</a>
 
 <!-- ============================================================ HEADER ============================================================ -->
@@ -346,58 +754,91 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
     <a href="#inicio" class="logo" aria-label="WebZipe — home">
       <span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M10 42 L27 88 L42 55 L55 88 L78 26" stroke="var(--blue)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M68 44 L78 26" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="80" cy="24" r="7" fill="#fff"/>
-      </svg></span><span>Web<span class="logo-accent">Zipe</span></span>
+        <path d="M68 44 L78 26" stroke="var(--blue-bright)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="80" cy="24" r="7" fill="var(--blue-bright)"/>
+      </svg></span>Web<span class="logo-accent">Zipe</span>
     </a>
     <nav class="nav-links" aria-label="Main navigation">
+      <a href="#inicio">Home</a>
       <a href="#beneficios">Benefits</a>
       <a href="#servicios">Services</a>
       <a href="#paquetes">Plans</a>
       <a href="#ejemplos">Examples</a>
+      <a href="#ejemplos-paginas">Live sites</a>
       <a href="#preguntas">FAQ</a>
     </nav>
     <div class="nav-end">
-      <div class="lang" id="langSwitch">
-        <button type="button" class="lang-btn" id="langBtn" aria-label="Translate" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z" stroke="currentColor" stroke-width="1.7"/></svg>
-          <span>Translate</span>
-        </button>
-        <div class="lang-menu" id="langMenu" role="menu" hidden>
-          <button type="button" role="menuitemradio" data-lang="en-US" aria-checked="true">English (US)</button>
-          <button type="button" role="menuitemradio" data-lang="en-GB" aria-checked="false">English (UK)</button>
-          <button type="button" role="menuitemradio" data-lang="es" aria-checked="false">Español</button>
-          <button type="button" role="menuitemradio" data-lang="fr" aria-checked="false">Français</button>
-        </div>
-      </div>
-      <div class="nav-cta">
-        <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)." class="btn btn-primary" target="_blank" rel="noopener">Message us</a>
-      </div>
-      <button class="burger" id="burgerBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
-        <span></span><span></span><span></span>
+    <div class="lang theme" id="themeSwitch">
+      <button type="button" class="lang-btn" id="themeBtn" aria-label="Page theme" aria-haspopup="true" aria-expanded="false" aria-controls="themeMenu">
+        <svg class="theme-ico-dark" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        <svg class="theme-ico-light" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="t-long">Page theme</span><span class="t-short">Theme</span>
       </button>
+      <div class="lang-menu" id="themeMenu" role="menu" hidden>
+        <button type="button" role="menuitemradio" data-theme-opt="dark" aria-checked="true">Dark</button>
+        <button type="button" role="menuitemradio" data-theme-opt="light" aria-checked="false">Light</button>
+      </div>
+    </div>
+    <div class="lang" id="langSwitch">
+      <button type="button" class="lang-btn" id="langBtn" aria-label="Translate" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span>Translate</span>
+      </button>
+      <div class="lang-menu" id="langMenu" role="menu" hidden>
+        <button type="button" role="menuitemradio" data-lang="en-US" aria-checked="true">English (US)</button>
+        <button type="button" role="menuitemradio" data-lang="en-GB" aria-checked="false">English (UK)</button>
+        <button type="button" role="menuitemradio" data-lang="es" aria-checked="false">Español</button>
+        <button type="button" role="menuitemradio" data-lang="fr" aria-checked="false">Français</button>
+      </div>
+    </div>
+    <div class="nav-cta">
+      <a href="#paquetes" class="btn btn-ghost">See plans</a>
+      <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)."
+         class="btn btn-primary" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
+        Message us
+      </a>
+    </div>
+    <button class="burger" id="burgerBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
     </div>
   </div>
 </header>
 
 <div class="mobile-panel" id="mobilePanel">
+  <a href="#inicio">Home</a>
   <a href="#beneficios">Benefits</a>
   <a href="#servicios">Services</a>
   <a href="#paquetes">Plans</a>
   <a href="#ejemplos">Examples</a>
+  <a href="#ejemplos-paginas">Live sites</a>
   <a href="#preguntas">FAQ</a>
-  <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)." class="btn btn-primary btn-block" target="_blank" rel="noopener">Message us on WhatsApp</a>
+  <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)."
+     class="btn btn-primary btn-block" target="_blank" rel="noopener">Message us on WhatsApp</a>
 </div>
 
 <main>
   <!-- ============================================================ HERO ============================================================ -->
   <section id="inicio" class="hero">
+    
     <div class="wrap">
+      <span class="kicker">A digital solutions studio for businesses</span>
       <h1>We build the digital solution your business needs to <span class="grad">grow</span></h1>
-      <p class="lead">At WebZipe we design websites, online stores and digital catalogs, with basic SEO, social media integration, forms, booking and ongoing maintenance. All tailored to your business, with direct contact via WhatsApp.</p>
+      <p class="lead">
+        At WebZipe we design websites, online stores and digital catalogs, with basic SEO,
+        social media integration, forms, booking and ongoing maintenance. All tailored
+        to your business, with direct contact via WhatsApp.
+      </p>
       <div class="hero-actions">
-        <a href="https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).%20Could%20you%20send%20me%20more%20information%3F" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Get my digital solution</a>
-        <a href="#ejemplos" class="btn btn-ghost btn-lg">See examples</a>
+        <a href="https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).%20Could%20you%20send%20me%20more%20information%3F"
+           class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
+          Get my digital solution
+        </a>
+        <a href="#ejemplos" class="btn btn-ghost btn-lg">See examples
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
       <div class="hero-trust">
         <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Websites and online stores</span>
@@ -405,72 +846,173 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
         <span><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Direct contact via WhatsApp</span>
       </div>
 
-      <div class="collage" aria-hidden="true">
-        <div class="tile t-a"><img src="ejemplo-cafeteria.png" alt="" decoding="async"></div>
-        <div class="tile t-b"><img src="ejemplo-tienda.png" alt="" decoding="async"></div>
-        <div class="tile t-video">
-          <div class="bar"><i></i><i></i><i></i><span>yourbusiness.com</span></div>
-          <video src="hero-video.mp4" poster="ejemplo-profesional.png" autoplay muted loop playsinline preload="metadata"></video>
-          <span class="chip b"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" fill="currentColor"/></svg>Fast loading</span>
-          <span class="chip a"><svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Fully responsive</span>
+      <div class="hero-stage">
+        <div class="hero-frame">
+          <div class="browser-top" aria-hidden="true">
+            <i></i><i></i><i></i>
+            <span class="url">yourbusiness.com</span>
+          </div>
+          <video src="hero-video.mp4" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+          <span class="hero-chip a" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z" fill="currentColor"/></svg>
+            Fast loading
+          </span>
+          <span class="hero-chip b" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="7" y="2" width="10" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Fully responsive
+          </span>
         </div>
-        <div class="tile t-c"><img src="dispositivo-celular.png" alt="" decoding="async"></div>
-        <div class="tile t-d"><img src="cafeteria-celular.png" alt="" decoding="async"></div>
-        <div class="tile t-e"><img src="tienda-celular.png" alt="" decoding="async"></div>
-        <div class="tile t-f"><img src="tienda-tablet.png" alt="" decoding="async"></div>
       </div>
     </div>
   </section>
 
-  <div class="strip" role="presentation">
-    <div class="strip-track" aria-hidden="true">
-      <span>Custom websites</span><span>Online stores</span><span>Digital catalogs</span><span>SEO</span><span>Social media integration</span><span>Forms and booking</span><span>Maintenance and digital marketing</span><span>WhatsApp integration</span><span>Custom websites</span><span>Online stores</span><span>Digital catalogs</span><span>SEO</span><span>Social media integration</span><span>Forms and booking</span><span>Maintenance and digital marketing</span><span>WhatsApp integration</span>
+  <div class="marquee" role="presentation">
+    <div class="marquee-track" aria-hidden="true">
+      <span>Custom websites</span><span>Online stores</span><span>Digital catalogs</span>
+      <span>SEO</span><span>Social media integration</span><span>Forms and booking</span>
+      <span>Maintenance and digital marketing</span><span>WhatsApp integration</span>
+      <span>Custom websites</span><span>Online stores</span><span>Digital catalogs</span>
+      <span>SEO</span><span>Social media integration</span><span>Forms and booking</span>
+      <span>Maintenance and digital marketing</span><span>WhatsApp integration</span>
     </div>
   </div>
 
   <!-- ============================================================ BENEFICIOS ============================================================ -->
   <section id="beneficios">
     <div class="wrap">
-      <div class="head reveal">
-        <span class="tag">Why WebZipe</span>
+      <div class="sec-head reveal">
+        <span class="kicker">Why WebZipe</span>
         <h2>A studio that starts with you, not with a catalog of templates</h2>
         <p>We don't just hand you a website: we help you figure out what your business actually needs (a website, online store, catalog, forms or booking) to look professional online and win more customers.</p>
       </div>
 
-      <div class="bento">
-        <article class="card span-2 reveal">
-          <span class="num">01</span>
-          <h3>Modern design, tailored to your business</h3>
-          <p>No recycled generic templates. Every site is designed around your business's identity, voice and goals.</p>
-        </article>
-        <article class="card span-4 reveal">
-          <span class="num">02</span>
-          <h3>Looks great on any screen</h3>
-          <p>Most of your customers will find you on their phone. Your site looks and works just as well on phones, tablets and computers.</p>
-          <div class="devices">
-            <img class="d-desk" src="ejemplo-profesional.png" alt="A lawyer's website viewed on a computer" loading="lazy" decoding="async">
-            <img class="d-tab" src="dispositivo-tablet.png" alt="A lawyer's website viewed on a tablet" loading="lazy" decoding="async">
-            <img class="d-phone" src="dispositivo-celular.png" alt="A lawyer's website viewed on a phone" loading="lazy" decoding="async">
+      <div class="rows">
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">01</span>
+            <h3>Modern design, tailored to your business</h3>
+            <p>No recycled generic templates. Every site is designed around your business's identity, voice and goals.</p>
+          </div>
+          <div class="row-media">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id="g1a" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="var(--blue-bright)"/><stop offset="1" stop-color="var(--blue)"/>
+                </linearGradient>
+              </defs>
+              <rect width="320" height="200" fill="var(--bg-2)"/>
+              <rect x="24" y="26" width="272" height="148" rx="14" fill="var(--panel-2)" stroke="var(--line)"/>
+              <text x="44" y="58" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="9" letter-spacing="2">BRAND PALETTE</text>
+              <circle cx="52" cy="82" r="13" fill="url(#g1a)"/>
+              <circle cx="84" cy="82" r="13" fill="var(--gold)"/>
+              <circle cx="116" cy="82" r="13" fill="#f2ede4"/>
+              <rect x="44" y="106" width="150" height="10" rx="5" fill="var(--text-soft)" opacity=".85"/>
+              <rect x="44" y="124" width="104" height="7" rx="3.5" fill="var(--line)"/>
+              <rect x="44" y="144" width="88" height="20" rx="10" fill="var(--gold)"/>
+              <rect x="212" y="70" width="64" height="86" rx="10" fill="var(--bg-2)" stroke="var(--line)"/>
+              <rect x="222" y="80" width="44" height="30" rx="4" fill="url(#g1a)" opacity=".8"/>
+              <rect x="222" y="118" width="34" height="6" rx="3" fill="var(--text-soft)"/>
+              <rect x="222" y="130" width="24" height="5" rx="2.5" fill="var(--line)"/>
+              <rect x="222" y="142" width="30" height="9" rx="4.5" fill="var(--gold)"/>
+            </svg>
           </div>
         </article>
-        <article class="card span-2 reveal">
-          <span class="num">03</span>
-          <h3>Built to turn visitors into customers</h3>
-          <p>Every section, button and line of copy has one purpose: guiding visitors until they reach out to you.</p>
+
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">02</span>
+            <h3>Looks great on any screen</h3>
+            <p>Most of your customers will find you on their phone. Your site looks and works just as well on phones, tablets and computers.</p>
+          </div>
+          <div class="row-media">
+            <div class="devices">
+              <img class="d-phone" src="dispositivo-celular.png" alt="A lawyer's website viewed on a phone" loading="lazy" decoding="async">
+              <img class="d-tab" src="dispositivo-tablet.png" alt="A lawyer's website viewed on a tablet" loading="lazy" decoding="async">
+              <img class="d-desk" src="ejemplo-profesional.png" alt="A lawyer's website viewed on a computer" loading="lazy" decoding="async">
+            </div>
+          </div>
         </article>
-        <article class="card span-2 reveal">
-          <span class="num">04</span>
-          <h3>Direct contact via WhatsApp</h3>
-          <p>Strategically placed buttons in every section so customers can message you in one click, with no long forms.</p>
+
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">03</span>
+            <h3>Built to turn visitors into customers</h3>
+            <p>Every section, button and line of copy has one purpose: guiding visitors until they reach out to you.</p>
+          </div>
+          <div class="row-media">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id="g3a" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="var(--gold)" stop-opacity=".55"/><stop offset="1" stop-color="var(--gold)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <rect width="320" height="200" fill="var(--bg-2)"/>
+              <rect x="24" y="24" width="272" height="152" rx="14" fill="var(--panel-2)" stroke="var(--line)"/>
+              <text x="46" y="54" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="9" letter-spacing="2">LEADS THIS MONTH</text>
+              <path d="M46 140 L46 150 L266 150 L266 140 L210 110 L172 128 L120 78 L46 140Z" fill="url(#g3a)"/>
+              <path d="M46 140 L120 78 L172 128 L210 110 L266 140" fill="none" stroke="var(--gold-bright)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="266" cy="140" r="4.5" fill="var(--gold-bright)"/>
+              <rect x="196" y="58" width="70" height="38" rx="10" fill="var(--bg-2)" stroke="var(--gold-line)"/>
+              <text x="231" y="78" text-anchor="middle" fill="var(--gold-bright)" font-family="'Instrument Serif',serif" font-weight="600" font-size="15">+38%</text>
+              <text x="231" y="90" text-anchor="middle" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="7">leads</text>
+              <rect x="46" y="156" width="100" height="9" rx="4.5" fill="var(--blue)"/>
+            </svg>
+          </div>
         </article>
-        <article class="card span-2 reveal">
-          <span class="num">05</span>
-          <h3>Your online presence works 24/7</h3>
-          <p>Your site shows what you offer around the clock, even when you're not available to reply.</p>
+
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">04</span>
+            <h3>Direct contact via WhatsApp</h3>
+            <p>Strategically placed buttons in every section so customers can message you in one click, with no long forms.</p>
+          </div>
+          <div class="row-media">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <rect width="320" height="200" fill="var(--bg-2)"/>
+              <rect x="96" y="20" width="128" height="160" rx="20" fill="var(--panel-2)" stroke="var(--line)"/>
+              <rect x="96" y="20" width="128" height="30" rx="20" fill="var(--bg-2)"/>
+              <circle cx="160" cy="35" r="4" fill="var(--wa)"/>
+              <rect x="112" y="66" width="70" height="24" rx="12" fill="var(--line)"/>
+              <rect x="122" y="74" width="50" height="7" rx="3.5" fill="var(--text-soft)"/>
+              <rect x="138" y="98" width="74" height="24" rx="12" fill="var(--wa)"/>
+              <rect x="148" y="106" width="54" height="7" rx="3.5" fill="#0d2b1e" opacity=".8"/>
+              <rect x="112" y="130" width="60" height="24" rx="12" fill="var(--line)"/>
+              <rect x="122" y="138" width="40" height="7" rx="3.5" fill="var(--text-soft)"/>
+              <circle cx="230" cy="150" r="26" fill="var(--wa)"/>
+              <g transform="translate(217,137)"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="#fff" transform="scale(1.05)"/></g>
+            </svg>
+          </div>
+        </article>
+
+        <article class="row reveal">
+          <div class="row-text">
+            <span class="row-num">05</span>
+            <h3>Your online presence works 24/7</h3>
+            <p>Your site shows what you offer around the clock, even when you're not available to reply.</p>
+          </div>
+          <div class="row-media">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id="g5a" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="var(--gold-bright)"/><stop offset="1" stop-color="var(--blue)"/>
+                </linearGradient>
+              </defs>
+              <rect width="320" height="200" fill="var(--bg-2)"/>
+              <circle cx="160" cy="100" r="58" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+              <circle cx="160" cy="100" r="58" fill="none" stroke="url(#g5a)" stroke-width="2.5" stroke-dasharray="14 10" stroke-linecap="round"/>
+              <circle cx="160" cy="100" r="40" fill="var(--panel-2)" stroke="var(--line)"/>
+              <text x="160" y="94" text-anchor="middle" fill="var(--text)" font-family="'Instrument Serif',serif" font-weight="600" font-size="21">24/7</text>
+              <text x="160" y="112" text-anchor="middle" fill="var(--text-mute)" font-family="'Inter',sans-serif" font-size="7.5" letter-spacing="1.5">AVAILABLE</text>
+              <circle cx="160" cy="42" r="5" fill="var(--gold-bright)"/>
+              <rect x="118" y="164" width="84" height="22" rx="11" fill="var(--panel-2)" stroke="rgba(52,199,123,.4)"/>
+              <circle cx="132" cy="175" r="4" fill="var(--ok)"/>
+              <text x="142" y="179" fill="var(--text-soft)" font-family="'Inter',sans-serif" font-size="8">Online now</text>
+            </svg>
+          </div>
         </article>
       </div>
 
-      <div class="note reveal">
+      <div class="note-card reveal">
         <span class="avatar" aria-hidden="true">W</span>
         <p><strong>We're a young studio</strong>, which means every project gets our full attention: no assembly lines and no waiting lists. You work directly with the person who actually designs your site.</p>
       </div>
@@ -480,24 +1022,32 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
   <!-- ============================================================ PROBLEMA → SOLUCIÓN ============================================================ -->
   <section id="problema-solucion">
     <div class="wrap">
-      <div class="head reveal">
-        <span class="tag">The shift</span>
+      <div class="sec-head reveal">
+        <span class="kicker">The shift</span>
         <h2>Social media alone isn't enough anymore</h2>
         <p>Many businesses today want an online presence but aren't sure how to get there: they run Instagram or Facebook, but they don't have their own website, online store or catalog where customers can really get to know their products and services.</p>
       </div>
       <div class="ps">
-        <div class="card problem reveal">
+        <div class="ps-card problem reveal">
           <span class="tag">Without a website</span>
           <h3>What usually happens</h3>
           <ul class="ps-list">
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Customers look for information and only find an Instagram bio.</li><li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Your business depends entirely on the reach of an algorithm you don't control.</li><li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>There's no clear place to showcase all your products or services.</li><li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Your business looks less professional than the competition.</li><li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>You have no space of your own online that represents your business.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Customers look for information and only find an Instagram bio.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Your business depends entirely on the reach of an algorithm you don't control.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>There's no clear place to showcase all your products or services.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Your business looks less professional than the competition.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>You have no space of your own online that represents your business.</li>
           </ul>
         </div>
-        <div class="card solution reveal">
+        <div class="ps-card solution reveal">
           <span class="tag">With WebZipe</span>
           <h3>What changes with a website</h3>
           <ul class="ps-list">
-            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>You present your products and services in a clear, organized way.</li><li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>You make it easy to reach you with direct WhatsApp buttons.</li><li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>You project a far more professional, trustworthy image.</li><li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>You're available to customers any time, every day.</li><li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>You own a space online that doesn't depend on any algorithm.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You present your products and services in a clear, organized way.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You make it easy to reach you with direct WhatsApp buttons.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You project a far more professional, trustworthy image.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You're available to customers any time, every day.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>You own a space online that doesn't depend on any algorithm.</li>
           </ul>
         </div>
       </div>
@@ -507,44 +1057,44 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
   <!-- ============================================================ SERVICIOS ============================================================ -->
   <section id="servicios">
     <div class="wrap">
-      <div class="head reveal">
-        <span class="tag">Services</span>
+      <div class="sec-head reveal">
+        <span class="kicker">Services</span>
         <h2>Digital solutions to help your business grow</h2>
         <p>We don't just build websites: we help you solve what your business needs to be present online, showcase your products or services and win more customers.</p>
       </div>
       <div class="services reveal-stagger">
-        <article class="card">
-          <span class="num">01</span>
+        <article class="s-card">
+          <span class="s-num">01</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
           <h3>Custom websites</h3>
           <p>Modern, original designs tailored to each business's visual identity and voice. No cookie-cutter templates.</p>
         </article>
-        <article class="card">
-          <span class="num">02</span>
+        <article class="s-card">
+          <span class="s-num">02</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6"/></svg></div>
           <h3>Online stores and digital catalogs</h3>
           <p>Showcase and sell your products with a digital catalog or a full online store, without relying on social media alone.</p>
         </article>
-        <article class="card">
-          <span class="num">03</span>
+        <article class="s-card">
+          <span class="s-num">03</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
           <h3>SEO</h3>
           <p>We set up the essentials so your site shows up in Google searches and customers can find you more easily.</p>
         </article>
-        <article class="card">
-          <span class="num">04</span>
+        <article class="s-card">
+          <span class="s-num">04</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" stroke="currentColor" stroke-width="1.6"/></svg></div>
           <h3>WhatsApp and social media</h3>
           <p>Direct WhatsApp contact buttons and links to your social profiles, so customers can reach you in one click from any section.</p>
         </article>
-        <article class="card">
-          <span class="num">05</span>
+        <article class="s-card">
+          <span class="s-num">05</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4.5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 3.5v3M16 3.5v3M3.5 10h17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 14.5l2.2 2.2L16 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <h3>Forms and booking</h3>
           <p>Contact forms and booking or appointment scheduling systems, right from your website.</p>
         </article>
-        <article class="card">
-          <span class="num">06</span>
+        <article class="s-card">
+          <span class="s-num">06</span>
           <div class="s-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.7-2.8 2.9-4.5 5.5-4.5s4.8 1.7 5.5 4.5M15.5 8.4a3 3 0 1 1 3.3 4.6M17 14.3c2.1.4 3.6 1.8 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
           <h3>Maintenance and digital marketing</h3>
           <p>We keep your site up to date, support you after launch and gradually add digital marketing strategies.</p>
@@ -556,13 +1106,13 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
   <!-- ============================================================ PLANES ============================================================ -->
   <section id="paquetes">
     <div class="wrap">
-      <div class="head center reveal">
-        <span class="tag">Plans</span>
+      <div class="sec-head center reveal">
+        <span class="kicker">Plans</span>
         <h2>A package for every stage of your business</h2>
         <p>Choose your starting point: a website, online store or digital catalog. The scope can be adjusted to fit your needs, so message us and we'll define it together.</p>
       </div>
       <div class="plans reveal-stagger">
-        <article class="card plan">
+        <article class="plan">
           <h3>Basic Package</h3>
           <p class="desc">A 1–3 page landing site with a contact form. Ideal for getting started with a clear, direct, professional presence.</p>
           <span class="meta">
@@ -574,9 +1124,11 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Fully responsive design</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Contact form + WhatsApp</li>
           </ul>
-          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Basic%20Package%20(landing%20page%20%2B%20contact%20form).%20Could%20you%20send%20me%20more%20information%3F" class="btn btn-ghost btn-block" target="_blank" rel="noopener">Get the Basic Package</a>
+          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Basic%20Package%20(landing%20page%20%2B%20contact%20form).%20Could%20you%20send%20me%20more%20information%3F"
+             class="btn btn-ghost btn-block" target="_blank" rel="noopener">Get the Basic Package</a>
         </article>
-        <article class="card plan featured">
+
+        <article class="plan featured">
           <span class="plan-flag">Most popular</span>
           <h3>Professional Package</h3>
           <p class="desc">A full website with a digital catalog, basic SEO and social media integration, so customers can find you and see everything you offer.</p>
@@ -589,9 +1141,11 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Digital catalog + basic SEO</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Social media + WhatsApp integration</li>
           </ul>
-          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20Package%20(full%20website%20%2B%20digital%20catalog%20%2B%20basic%20SEO%20%2B%20social%20media).%20Could%20you%20send%20me%20more%20information%3F" class="btn btn-primary btn-block" target="_blank" rel="noopener">Get the Professional Package</a>
+          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20Package%20(full%20website%20%2B%20digital%20catalog%20%2B%20basic%20SEO%20%2B%20social%20media).%20Could%20you%20send%20me%20more%20information%3F"
+             class="btn btn-primary btn-block" target="_blank" rel="noopener">Get the Professional Package</a>
         </article>
-        <article class="card plan">
+
+        <article class="plan">
           <h3>Premium Package</h3>
           <p class="desc">A full website with an online store or booking system, monthly maintenance and ongoing digital marketing support.</p>
           <span class="meta">
@@ -603,7 +1157,8 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Online store and/or booking system</li>
             <li><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Monthly maintenance + digital marketing</li>
           </ul>
-          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Premium%20Package%20(website%20%2B%20online%20store%20%2B%20maintenance%20%2B%20digital%20marketing).%20Could%20you%20send%20me%20more%20information%3F" class="btn btn-ghost btn-block" target="_blank" rel="noopener">Get the Premium Package</a>
+          <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Premium%20Package%20(website%20%2B%20online%20store%20%2B%20maintenance%20%2B%20digital%20marketing).%20Could%20you%20send%20me%20more%20information%3F"
+             class="btn btn-ghost btn-block" target="_blank" rel="noopener">Get the Premium Package</a>
         </article>
       </div>
       <p class="plans-foot reveal">Not sure which one to choose? <a href="#empezar">Leave us your details</a> and we'll help you decide, no strings attached.</p>
@@ -613,42 +1168,61 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
   <!-- ============================================================ EJEMPLOS ============================================================ -->
   <section id="ejemplos">
     <div class="wrap">
-      <div class="head reveal">
-        <span class="tag">Examples</span>
+      <div class="sec-head reveal">
+        <span class="kicker">Examples</span>
         <h2>This is how good your website could look</h2>
-        <p>These are <strong style="color:#fff">concept examples</strong> showing design possibilities for different types of businesses, not real WebZipe client projects.</p>
+        <p>These are <strong style="color:var(--text)">concept examples</strong> showing design possibilities for different types of businesses, not real WebZipe client projects.</p>
       </div>
-      <p class="g-note reveal"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 8h.01M11 11h1v5h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span><strong>Note:</strong> the layouts below are concept mockups created to illustrate design styles, not screenshots of delivered sites.</span></p>
-      <div class="gallery reveal-stagger">
-        <article class="g-item">
-          <div class="g-shot">
-            <img src="ejemplo-cafeteria.png" alt="Concept example of a website for a coffee shop" loading="lazy" decoding="async">
-            <div class="g-mini" aria-hidden="true"><img src="cafeteria-celular.png" alt="" loading="lazy" decoding="async"></div>
-          </div>
-          <div class="g-body">
+
+      <div class="ex-note reveal">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 8h.01M11 11h1v5h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <p><strong>Note:</strong> the layouts below are concept mockups created to illustrate design styles, not screenshots of delivered sites.</p>
+      </div>
+
+      <div class="ex-rows reveal-stagger">
+        <article class="ex-row">
+          <div class="ex-info">
             <h3>Restaurants and cafés</h3>
             <p>A visual menu, location and reservations or orders straight through WhatsApp. A site that works up an appetite before customers even walk in.</p>
-            <a class="reveal-link" href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business." target="_blank" rel="noopener">I want something like this <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business."
+               target="_blank" rel="noopener">I want something like this
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+          <div class="ex-shot">
+            <span class="ex-badge">Ejemplo conceptual</span>
+            <img src="ejemplo-cafeteria.png" alt="Concept example of a website for a coffee shop" loading="lazy" decoding="async">
+            <div class="ex-mini" aria-hidden="true">
+              <img src="cafeteria-celular.png" alt="" loading="lazy" decoding="async">
+            </div>
           </div>
         </article>
-        <article class="g-item">
-          <div class="g-shot">
-            <img src="ejemplo-tienda.png" alt="Concept example of an online clothing store" loading="lazy" decoding="async">
-          </div>
-          <div class="g-body">
+        <article class="ex-row">
+          <div class="ex-info">
             <h3>Shops and small businesses</h3>
             <p>A clear product catalog with a buy or inquire button. Ideal for selling without relying on social media alone.</p>
-            <a class="reveal-link" href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business." target="_blank" rel="noopener">I want something like this <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business."
+               target="_blank" rel="noopener">I want something like this
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+          <div class="ex-shot">
+            <span class="ex-badge">Ejemplo conceptual</span>
+            <img src="ejemplo-tienda.png" alt="Concept example of an online clothing store" loading="lazy" decoding="async">
           </div>
         </article>
-        <article class="g-item">
-          <div class="g-shot">
-            <img src="ejemplo-profesional.png" alt="Concept example of a website for a service professional" loading="lazy" decoding="async">
-          </div>
-          <div class="g-body">
+        <article class="ex-row">
+          <div class="ex-info">
             <h3>Professionals and services</h3>
             <p>Your services, experience and an easy way to book an appointment or consultation. Builds trust from the very first second.</p>
-            <a class="reveal-link" href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business." target="_blank" rel="noopener">I want something like this <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <a href="https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business."
+               target="_blank" rel="noopener">I want something like this
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+          <div class="ex-shot">
+            <span class="ex-badge">Ejemplo conceptual</span>
+            <img src="ejemplo-profesional.png" alt="Concept example of a website for a service professional" loading="lazy" decoding="async">
           </div>
         </article>
       </div>
@@ -656,84 +1230,104 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
   </section>
 
   <!-- ============================================================ EJEMPLOS DE PÁGINAS (enlaces reales) ============================================================ -->
-  <section id="ejemplos-paginas" style="padding-top:0">
+  <section id="ejemplos-paginas">
     <div class="wrap">
-      <div class="head reveal">
-        <span class="tag">Live sites</span>
+      <div class="sec-head reveal">
+        <span class="kicker">Live sites</span>
         <h2>Check out some sites we've built</h2>
         <p>These are real links to demo sites. Click any of them to see it live.</p>
       </div>
-      <div class="live reveal-stagger">
-        <a href="https://webzipe7-byte.github.io/prueba-ropa-" target="_blank" rel="noopener">
-          <div>
+
+      <div class="real-ex-list reveal-stagger">
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-ropa-" target="_blank" rel="noopener">
+          <div class="real-ex-text">
             <h3>Clothing Catalog</h3>
             <p>A clothing catalog with prices and an "Order now" button for each item.</p>
           </div>
-          <span class="go">View site <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="real-ex-cta">View site
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </a>
-        <a href="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" target="_blank" rel="noopener">
-          <div>
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" target="_blank" rel="noopener">
+          <div class="real-ex-text">
             <h3>Javier Restrepo | Family Lawyer</h3>
             <p>A site for an independent professional: "We defend what matters most: your family." Includes practice areas, experience and a free consultation via WhatsApp.</p>
           </div>
-          <span class="go">View site <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="real-ex-cta">View site
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </a>
-        <a href="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" target="_blank" rel="noopener">
-          <div>
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" target="_blank" rel="noopener">
+          <div class="real-ex-text">
             <h3>El Buen Sazón | Home-style food at your table or your door</h3>
             <p>A restaurant site with a menu, dine-in and delivery orders, with each order sent straight through WhatsApp.</p>
           </div>
-          <span class="go">View site <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="real-ex-cta">View site
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </a>
-        <a href="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" target="_blank" rel="noopener">
-          <div>
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" target="_blank" rel="noopener">
+          <div class="real-ex-text">
             <h3>ToyLandia — Toys for the whole family</h3>
             <p>An online toy store with a product catalog and an "Order now" button for each item.</p>
           </div>
-          <span class="go">View site <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="real-ex-cta">View site
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </a>
-        <a href="https://webzipe7-byte.github.io/prueba-barberia-/Casa-Navaja-Barbershop.html" target="_blank" rel="noopener">
-          <div>
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/prueba-barberia-/Casa-Navaja-Barbershop.html" target="_blank" rel="noopener">
+          <div class="real-ex-text">
             <h3>Casa Navaja Barbershop</h3>
             <p>A barbershop site with a service and price list, work gallery, barber team, reviews and a "Book" button for each service.</p>
           </div>
-          <span class="go">View site <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="real-ex-cta">View site
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </a>
-        <a href="barberia-clasica/" target="_blank" rel="noopener">
-          <div>
+        <a class="real-ex-item" href="barberia-clasica/" target="_blank" rel="noopener">
+          <div class="real-ex-text">
             <h3>Barbería Clásica</h3>
             <p>A barbershop site with services and prices, an about section, an appointment booking form and a reviews page where customers can leave their opinion.</p>
           </div>
-          <span class="go">View site <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="real-ex-cta">View site
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </a>
-        <a href="https://webzipe7-byte.github.io/asesores-financieros/" target="_blank" rel="noopener">
-          <div>
+        <a class="real-ex-item" href="https://webzipe7-byte.github.io/asesores-financieros/" target="_blank" rel="noopener">
+          <div class="real-ex-text">
             <h3>Tu Futuro | Financial advisory</h3>
             <p>A financial advisory site with services, benefits and a contact form to request a free consultation.</p>
           </div>
-          <span class="go">View site <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="real-ex-cta">View site
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </a>
       </div>
     </div>
   </section>
 
   <!-- ============================================================ CTA FINAL ============================================================ -->
-  <section style="padding-top:0">
+  <section>
     <div class="wrap">
-      <div class="cta reveal">
-        <span class="tag">Let's get started</span>
+      <div class="cta-panel reveal">
+        
+        <span class="kicker">Let's get started</span>
         <h2>Ready to take your business online?</h2>
         <p>Tell us about your business on WhatsApp and we'll help you figure out what you need: a website, online store, digital catalog or maintenance. No strings attached, straight to the point.</p>
-        <a href="https://wa.me/573102363531?text=Hi%2C%20I%20want%20to%20build%20my%20website%20or%20online%20store%20with%20WebZipe.%20How%20do%20we%20get%20started%3F" class="btn btn-primary btn-lg" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>Build my digital solution</a>
+        <a href="https://wa.me/573102363531?text=Hi%2C%20I%20want%20to%20build%20my%20website%20or%20online%20store%20with%20WebZipe.%20How%20do%20we%20get%20started%3F"
+           class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
+          Build my digital solution
+        </a>
       </div>
     </div>
   </section>
 
   <!-- ============================================================ FAQ ============================================================ -->
-  <section id="preguntas" style="padding-top:0">
+  <section id="preguntas">
     <div class="wrap">
-      <div class="head center reveal">
-        <span class="tag">FAQ</span>
+      <div class="sec-head center reveal">
+        <span class="kicker">FAQ</span>
         <h2>Everything you might want to know</h2>
         <p>If you have a question that isn't answered here, message us directly on WhatsApp.</p>
       </div>
@@ -775,11 +1369,11 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
   </section>
 
   <!-- ============================================================ FORMULARIO ============================================================ -->
-  <section id="empezar" style="padding-top:0">
+  <section id="empezar">
     <div class="wrap">
-      <div class="start reveal">
+      <div class="start-panel reveal">
         <div class="start-copy">
-          <span class="tag">Tell us what you need</span>
+          <span class="kicker">Tell us what you need</span>
           <h2>Which plan are you looking for?</h2>
           <p>Leave us your name, email and the plan you're interested in. We'll reach out to fine-tune the details of your website, no strings attached.</p>
         </div>
@@ -810,7 +1404,10 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
               <input type="time" name="hora" id="f-hora">
             </label>
           </div>
-          <button type="submit" class="btn btn-blue btn-block btn-lg" id="f-submit"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>Send and chat on WhatsApp</button>
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="f-submit">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
+            Send and chat on WhatsApp
+          </button>
           <p class="start-msg" id="f-msg" role="status" hidden></p>
         </form>
       </div>
@@ -824,12 +1421,16 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="#inicio" class="logo" aria-label="WebZipe — home"><span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 42 L27 88 L42 55 L55 88 L78 26" stroke="var(--blue)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M68 44 L78 26" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="80" cy="24" r="7" fill="#fff"/>
-      </svg></span><span>Web<span class="logo-accent">Zipe</span></span></a>
+          <path d="M10 42 L27 88 L42 55 L55 88 L78 26" stroke="var(--blue)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M68 44 L78 26" stroke="var(--blue-bright)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="80" cy="24" r="7" fill="var(--blue-bright)"/>
+        </svg></span>Web<span class="logo-accent">Zipe</span></a>
         <p>We build digital solutions for businesses, startups and companies: websites, online stores, digital catalogs and maintenance, to help them look better online and win more customers.</p>
-        <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)." class="btn btn-primary" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>Message us on WhatsApp</a>
+        <a href="https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.)."
+           class="btn btn-primary" style="margin-top:22px" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg>
+          Message us on WhatsApp
+        </a>
       </div>
       <div class="footer-col">
         <h4>Navigation</h4>
@@ -863,10 +1464,56 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
   </div>
 </footer>
 
-<a href="https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20more%20information%20about%20WebZipe%27s%20services." class="wa-float" target="_blank" rel="noopener" aria-label="Message WebZipe on WhatsApp"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Z" fill="currentColor"/></svg></a>
+<a href="https://www.instagram.com/webzipe/"
+   class="ig-float" target="_blank" rel="noopener" aria-label="View WebZipe on Instagram">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/><circle cx="17.15" cy="6.85" r="1.15" fill="currentColor"/></svg>
+</a>
+
+<a href="https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20more%20information%20about%20WebZipe%27s%20services."
+   class="wa-float" target="_blank" rel="noopener" aria-label="Message WebZipe on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.87 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.9 7.9 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.6 6.6 0 0 1 5.6-10.13 6.55 6.55 0 0 1 6.55 6.56 6.6 6.6 0 0 1-6.55 6.67Zm3.6-4.92c-.2-.1-1.17-.58-1.35-.64-.18-.07-.32-.1-.45.1-.13.19-.51.64-.63.77-.11.13-.23.14-.43.05-.2-.1-.83-.31-1.58-1-.58-.52-.98-1.16-1.09-1.36-.11-.19-.01-.3.09-.4.09-.09.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.45-1.08-.61-1.48-.16-.39-.33-.33-.45-.34h-.38c-.13 0-.34.05-.52.24-.18.19-.68.67-.68 1.63 0 .96.7 1.89.8 2.02.1.13 1.37 2.1 3.33 2.94.46.2.83.32 1.11.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.17-.46.17-.86.12-.94-.05-.09-.18-.14-.38-.24Z" fill="currentColor"/></svg>
+</a>
 
 <script type="application/json" id="i18n-es">{"A barbershop site with services and prices, an about section, an appointment booking form and a reviews page where customers can leave their opinion.": "Página de barbería con servicios y precios, sección \"Nosotros\", formulario para reservar cita y página de reseñas donde los clientes dejan su opinión.", "WebZipe builds digital solutions for businesses: websites, online stores, digital catalogs, SEO, social media integration, forms, booking and maintenance, with direct contact via WhatsApp.": "WebZipe crea soluciones digitales para negocios: páginas web, tiendas virtuales, catálogos digitales, posicionamiento SEO, integración con redes sociales, formularios, reservas y mantenimiento, con contacto directo por WhatsApp.", "Skip to content": "Saltar al contenido", "WebZipe — home": "WebZipe — inicio", "Main navigation": "Navegación principal", "Home": "Inicio", "Benefits": "Beneficios", "Services": "Servicios", "Plans": "Planes", "Examples": "Ejemplos", "Live sites": "Ejemplos de páginas", "FAQ": "Preguntas", "See plans": "Ver planes", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).": "https://wa.me/573102363531?text=Hola%2C%20estoy%20interesado%20en%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc).", "Message us": "Escríbenos", "Open menu": "Abrir menú", "Message us on WhatsApp": "Escríbenos por WhatsApp", "A digital solutions studio for businesses": "Estudio de soluciones digitales para negocios", "We build the digital solution your business needs to": "Creamos la solución digital que tu negocio necesita para", "grow": "crecer", "At WebZipe we design websites, online stores and digital catalogs, with basic SEO, social media integration, forms, booking and ongoing maintenance. All tailored to your business, with direct contact via WhatsApp.": "En WebZipe diseñamos páginas web, tiendas virtuales y catálogos digitales, con SEO básico, integración a tus redes sociales, formularios, reservas y mantenimiento. Todo hecho a la medida de tu negocio, con contacto directo por WhatsApp.", "https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Hola%2C%20quiero%20una%20soluci%C3%B3n%20digital%20para%20mi%20negocio%20(p%C3%A1gina%20web%2C%20tienda%20virtual%2C%20etc).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F", "Get my digital solution": "Quiero mi solución digital", "See examples": "Ver ejemplos", "Websites and online stores": "Páginas web y tiendas virtuales", "SEO and social media built in": "SEO y redes sociales integradas", "Direct contact via WhatsApp": "Contacto directo por WhatsApp", "yourbusiness.com": "tunegocio.com", "Fast loading": "Carga rápida", "Fully responsive": "100% responsive", "Custom websites": "Páginas web a la medida", "Online stores": "Tiendas virtuales", "Digital catalogs": "Catálogos digitales", "SEO": "Posicionamiento SEO", "Social media integration": "Integración con redes sociales", "Forms and booking": "Formularios y reservas", "Maintenance and digital marketing": "Mantenimiento y marketing digital", "WhatsApp integration": "Integración con WhatsApp", "Why WebZipe": "Por qué WebZipe", "A studio that starts with you, not with a catalog of templates": "Un estudio que empieza contigo, no con un catálogo de plantillas", "We don't just hand you a website: we help you figure out what your business actually needs (a website, online store, catalog, forms or booking) to look professional online and win more customers.": "No solo te entregamos una página: te asesoramos sobre qué necesita tu negocio (página web, tienda virtual, catálogo, formularios o reservas) para verse profesional en Internet y conseguir más clientes.", "Modern design, tailored to your business": "Diseño moderno, hecho a la medida de tu negocio", "No recycled generic templates. Every site is designed around your business's identity, voice and goals.": "Nada de plantillas genéricas reutilizadas. Cada página se diseña pensando en la identidad, el tono y los objetivos de tu negocio.", "BRAND PALETTE": "PALETA DE MARCA", "Looks great on any screen": "Perfecta en cualquier pantalla", "Most of your customers will find you on their phone. Your site looks and works just as well on phones, tablets and computers.": "La mayoría de tus clientes te buscará desde el teléfono. Tu página se ve y funciona igual de bien en celular, tablet y computador.", "A lawyer's website viewed on a phone": "Página web de una abogada vista en un celular", "A lawyer's website viewed on a tablet": "Página web de una abogada vista en una tablet", "A lawyer's website viewed on a computer": "Página web de una abogada vista en un computador", "Built to turn visitors into customers": "Pensada para convertir visitas en clientes", "Every section, button and line of copy has one purpose: guiding visitors until they reach out to you.": "Cada sección, botón y texto está diseñado con un propósito: guiar al visitante hasta que te escribe.", "LEADS THIS MONTH": "CONTACTOS ESTE MES", "leads": "contactos", "Strategically placed buttons in every section so customers can message you in one click, with no long forms.": "Botones estratégicos en cada sección para que tus clientes te escriban en un solo clic, sin formularios largos.", "Your online presence works 24/7": "Tu presencia trabaja 24/7", "Your site shows what you offer around the clock, even when you're not available to reply.": "Tu página muestra lo que ofreces a cualquier hora, incluso cuando tú no estás disponible para responder.", "AVAILABLE": "DISPONIBLE", "Online now": "En línea ahora", "We're a young studio": "Somos un estudio que está comenzando", ", which means every project gets our full attention: no assembly lines and no waiting lists. You work directly with the person who actually designs your site.": ", y eso significa que cada proyecto recibe toda nuestra atención: sin procesos en serie ni clientes en espera. Trabajas de cerca con quien realmente diseña tu página.", "The shift": "El cambio", "Social media alone isn't enough anymore": "Tener redes sociales ya no es suficiente", "Many businesses today want an online presence but aren't sure how to get there: they run Instagram or Facebook, but they don't have their own website, online store or catalog where customers can really get to know their products and services.": "Hoy a muchos negocios les interesa tener presencia en Internet, pero no siempre saben cómo lograrlo: manejan Instagram o Facebook, pero no tienen un sitio propio, una tienda virtual o un catálogo donde sus clientes conozcan a fondo sus servicios y productos.", "Without a website": "Sin página web", "What usually happens": "Lo que suele pasar", "Customers look for information and only find an Instagram bio.": "Tus clientes buscan información y solo encuentran una bio de Instagram.", "Your business depends entirely on the reach of an algorithm you don't control.": "Tu negocio depende por completo del alcance de un algoritmo que no controlas.", "There's no clear place to showcase all your products or services.": "No hay un lugar claro para mostrar todos tus servicios o productos.", "Your business looks less professional than the competition.": "La imagen del negocio se siente menos profesional frente a la competencia.", "You have no space of your own online that represents your business.": "No existe un espacio propio en Internet que represente al negocio.", "With WebZipe": "Con WebZipe", "What changes with a website": "Lo que cambia con una página web", "You present your products and services in a clear, organized way.": "Presentas tus servicios y productos de forma clara y ordenada.", "You make it easy to reach you with direct WhatsApp buttons.": "Facilitas el contacto con botones directos a WhatsApp.", "You project a far more professional, trustworthy image.": "Proyectas una imagen mucho más profesional y confiable.", "You're available to customers any time, every day.": "Estás disponible para tus clientes a cualquier hora, todos los días.", "You own a space online that doesn't depend on any algorithm.": "Tienes un espacio propio en Internet que no depende de ningún algoritmo.", "Digital solutions to help your business grow": "Soluciones digitales para hacer crecer tu negocio", "We don't just build websites: we help you solve what your business needs to be present online, showcase your products or services and win more customers.": "No solo hacemos páginas web: te ayudamos a resolver lo que tu negocio necesita para tener presencia en Internet, mostrar tus productos o servicios y conseguir más clientes.", "Modern, original designs tailored to each business's visual identity and voice. No cookie-cutter templates.": "Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio. Nada de plantillas repetidas.", "Online stores and digital catalogs": "Tiendas virtuales y catálogos digitales", "Showcase and sell your products with a digital catalog or a full online store, without relying on social media alone.": "Muestra y vende tus productos con un catálogo digital o una tienda virtual completa, sin depender solo de las redes sociales.", "We set up the essentials so your site shows up in Google searches and customers can find you more easily.": "Configuramos lo básico para que tu página aparezca en las búsquedas de Google y tus clientes te encuentren más fácil.", "WhatsApp and social media": "WhatsApp y redes sociales", "Direct WhatsApp contact buttons and links to your social profiles, so customers can reach you in one click from any section.": "Botones de contacto directo a WhatsApp y enlaces a tus redes sociales, para que tus clientes te escriban en un clic desde cualquier sección.", "Contact forms and booking or appointment scheduling systems, right from your website.": "Formularios de contacto y sistemas de reservas o agendamiento de citas, directamente desde tu página.", "We keep your site up to date, support you after launch and gradually add digital marketing strategies.": "Actualizamos tu página, te acompañamos después de la entrega y lo complementamos poco a poco con estrategias de marketing digital.", "A package for every stage of your business": "Un paquete para cada etapa de tu negocio", "Choose your starting point: a website, online store or digital catalog. The scope can be adjusted to fit your needs, so message us and we'll define it together.": "Elige tu punto de partida: página web, tienda virtual o catálogo digital. El alcance se puede ajustar según lo que necesites: escríbenos y lo definimos juntos.", "Basic Package": "Paquete Básico", "A 1–3 page landing site with a contact form. Ideal for getting started with a clear, direct, professional presence.": "Landing page de 1 a 3 páginas con formulario de contacto. Ideal para empezar con una presencia profesional, clara y directa.", "Delivered in 5–7 days": "Entrega en 5-7 días", "1–3 page landing site": "Landing page de 1 a 3 páginas", "Fully responsive design": "Diseño 100% responsive", "Contact form + WhatsApp": "Formulario de contacto + WhatsApp", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Basic%20Package%20(landing%20page%20%2B%20contact%20form).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Hola%2C%20me%20interesa%20el%20Paquete%20B%C3%A1sico%20(landing%20page%20%2B%20formulario%20de%20contacto).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F", "Get the Basic Package": "Quiero el Paquete Básico", "Most popular": "Más popular", "Professional Package": "Paquete Profesional", "A full website with a digital catalog, basic SEO and social media integration, so customers can find you and see everything you offer.": "Sitio web completo con catálogo digital, SEO básico e integración con tus redes sociales, para que tus clientes te encuentren y conozcan todo lo que ofreces.", "Delivered in 10–15 days": "Entrega en 10-15 días", "Full website (multiple sections)": "Sitio web completo (varias secciones)", "Digital catalog + basic SEO": "Catálogo digital + SEO básico", "Social media + WhatsApp integration": "Redes sociales + WhatsApp integrados", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20Package%20(full%20website%20%2B%20digital%20catalog%20%2B%20basic%20SEO%20%2B%20social%20media).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Hola%2C%20me%20interesa%20el%20Paquete%20Profesional%20(sitio%20completo%20%2B%20cat%C3%A1logo%20digital%20%2B%20SEO%20b%C3%A1sico%20%2B%20redes%20sociales).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F", "Get the Professional Package": "Quiero el Paquete Profesional", "Premium Package": "Paquete Premium", "A full website with an online store or booking system, monthly maintenance and ongoing digital marketing support.": "Sitio completo con tienda virtual o sistema de reservas, mantenimiento mensual y acompañamiento en marketing digital.", "Ongoing service": "Servicio recurrente", "Everything in the Professional Package": "Todo lo del Paquete Profesional", "Online store and/or booking system": "Tienda virtual y/o sistema de reservas", "Monthly maintenance + digital marketing": "Mantenimiento mensual + marketing digital", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Premium%20Package%20(website%20%2B%20online%20store%20%2B%20maintenance%20%2B%20digital%20marketing).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Hola%2C%20me%20interesa%20el%20Paquete%20Premium%20(sitio%20%2B%20tienda%20virtual%20%2B%20mantenimiento%20%2B%20marketing%20digital).%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F", "Get the Premium Package": "Quiero el Paquete Premium", "Not sure which one to choose?": "¿No sabes cuál elegir?", "Leave us your details": "Déjanos tus datos", "and we'll help you decide, no strings attached.": "y te asesoramos sin compromiso.", "This is how good your website could look": "Así de bien podría verse tu página web", "These are": "Estos son", "concept examples": "ejemplos conceptuales", "showing design possibilities for different types of businesses, not real WebZipe client projects.": "para mostrarte posibilidades de diseño según el tipo de negocio, no proyectos reales de clientes de WebZipe.", "Note:": "Aviso:", "the layouts below are concept mockups created to illustrate design styles, not screenshots of delivered sites.": "las composiciones de abajo son mockups conceptuales creados para ilustrar estilos de diseño, no capturas de páginas ya entregadas.", "Restaurants and cafés": "Restaurantes y cafés", "A visual menu, location and reservations or orders straight through WhatsApp. A site that works up an appetite before customers even walk in.": "Menú visual, ubicación y reservas o pedidos directos por WhatsApp. Una página que abre el apetito antes de que el cliente llegue.", "https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business.": "https://wa.me/573102363531?text=Hola%2C%20vi%20los%20ejemplos%20de%20p%C3%A1ginas%20web%20y%20quiero%20algo%20similar%20para%20mi%20negocio.", "I want something like this": "Quiero algo así", "Concept example of a website for a coffee shop": "Ejemplo conceptual de una página web para una cafetería", "Shops and small businesses": "Tiendas y emprendimientos", "A clear product catalog with a buy or inquire button. Ideal for selling without relying on social media alone.": "Catálogo de productos claro, con botón de compra o consulta directa. Ideal para vender sin depender solo de las redes.", "Concept example of an online clothing store": "Ejemplo conceptual de una tienda de ropa online", "Professionals and services": "Profesionales y servicios", "Your services, experience and an easy way to book an appointment or consultation. Builds trust from the very first second.": "Presentación de servicios, experiencia y forma de agendar una cita o consulta. Transmite confianza desde el primer segundo.", "Concept example of a website for a service professional": "Ejemplo conceptual de una web para una profesional de servicios", "Check out some sites we've built": "Mira algunas páginas que hemos creado", "These are real links to demo sites. Click any of them to see it live.": "Estos son enlaces reales a páginas de prueba. Haz clic en cada una para verla en vivo.", "Clothing Catalog": "Catálogo de Ropa", "A clothing catalog with prices and an \"Order now\" button for each item.": "Catálogo de modelos de ropa con precios y botón de \"Pedir ahora\" para cada prenda.", "View site": "Ver página", "Javier Restrepo | Family Lawyer": "Javier Restrepo | Abogado de Familia", "A site for an independent professional: \"We defend what matters most: your family.\" Includes practice areas, experience and a free consultation via WhatsApp.": "Página para un profesional independiente: \"Defendemos lo que más importa: tu familia\". Incluye áreas de práctica, experiencia y consulta gratuita por WhatsApp.", "El Buen Sazón | Home-style food at your table or your door": "El Buen Sazón | Comida casera a tu mesa o a tu puerta", "A restaurant site with a menu, dine-in and delivery orders, with each order sent straight through WhatsApp.": "Página de restaurante con menú, pedidos en mesa y domicilios, con envío del pedido directo por WhatsApp.", "ToyLandia — Toys for the whole family": "ToyLandia — Juguetes para toda la familia", "An online toy store with a product catalog and an \"Order now\" button for each item.": "Tienda digital de juguetes con catálogo de productos y botón de \"Pide ya\" para cada uno.", "A barbershop site with a service and price list, work gallery, barber team, reviews and a \"Book\" button for each service.": "Página de barbería con carta de servicios y precios, galería de trabajos, equipo de barberos, reseñas y botón de \"Reservar\" en cada servicio.", "Let's get started": "Empecemos hoy", "Ready to take your business online?": "¿Listo para llevar tu negocio a Internet?", "Tell us about your business on WhatsApp and we'll help you figure out what you need: a website, online store, digital catalog or maintenance. No strings attached, straight to the point.": "Cuéntanos sobre tu negocio por WhatsApp y te ayudamos a definir qué necesitas: página web, tienda virtual, catálogo digital o mantenimiento. Sin compromisos, directo y sin vueltas.", "https://wa.me/573102363531?text=Hi%2C%20I%20want%20to%20build%20my%20website%20or%20online%20store%20with%20WebZipe.%20How%20do%20we%20get%20started%3F": "https://wa.me/573102363531?text=Hola%2C%20quiero%20crear%20mi%20p%C3%A1gina%20web%20o%20tienda%20virtual%20con%20WebZipe.%20%C2%BFC%C3%B3mo%20empezamos%3F", "Build my digital solution": "Crear mi solución digital", "Everything you might want to know": "Todo lo que quizás quieras saber", "If you have a question that isn't answered here, message us directly on WhatsApp.": "Si tienes otra duda que no está aquí, escríbenos directamente por WhatsApp.", "What kinds of businesses can have a website?": "¿Qué tipo de negocios pueden tener una página web?", "Any kind: restaurants, shops, startups, independent professionals, service companies and much more. If you have a business, a website can help you show it off better.": "Cualquier tipo: restaurantes, tiendas, emprendimientos, profesionales independientes, empresas de servicios y mucho más. Si tienes un negocio, una página web puede ayudarte a mostrarlo mejor.", "Will my website work on phones?": "¿La página funciona en celulares?", "Yes. Every site we design is fully responsive: it adapts to and works properly on phones, tablets and computers.": "Sí. Todas las páginas que diseñamos son 100% responsive: se adaptan y funcionan correctamente en celulares, tablets y computadores.", "Can I add WhatsApp to my website?": "¿Puedo agregar WhatsApp a mi página?", "Absolutely. In fact, it's one of the integrations we recommend most. It's the fastest, most direct way for customers to reach you.": "Claro, de hecho es una de las integraciones que más recomendamos. Es la forma más rápida y directa para que tus clientes te contacten.", "Can I request design changes?": "¿Puedo solicitar cambios en el diseño?", "Yes. The design adapts to what you need: tell us your idea, your colors and your style, and we'll work on it with you until it looks the way you pictured it.": "Sí. El diseño se ajusta a lo que necesites: cuéntanos tu idea, tus colores y tu estilo, y lo desarrollamos contigo hasta que quede como lo imaginas.", "How long does it take to build a website?": "¿Cuánto tarda en realizarse una página?", "It depends on the complexity and scope of your project. Once we know the details of your business, we'll give you an estimated timeline on WhatsApp.": "Depende de la complejidad y el alcance de tu proyecto. Una vez conozcamos los detalles de tu negocio, te damos un tiempo estimado por WhatsApp.", "What information do you need to get started?": "¿Qué información necesitan para comenzar?", "It helps to know what your business does, what products or services you offer and how you'd like customers to contact you. With that, we can start designing.": "Nos ayuda conocer a qué se dedica tu negocio, qué productos o servicios ofreces y cómo prefieres que tus clientes te contacten. Con eso ya podemos empezar a diseñar.", "Can I customize the website for my business?": "¿Puedo personalizar la página para mi negocio?", "Yes, always. Every site is tailored to your business's identity, colors and content. We don't use fixed templates.": "Sí, siempre. Cada página se adapta a la identidad, los colores y el contenido específico de tu negocio: no usamos plantillas fijas.", "Do you only build websites, or also online stores and other services?": "¿Solo hacen páginas web o también tiendas virtuales y otros servicios?", "We also build online stores, digital catalogs, forms and booking systems, social media integration, basic SEO and ongoing maintenance. Tell us what your business needs and we'll recommend the best option.": "También creamos tiendas virtuales, catálogos digitales, formularios y sistemas de reservas, integración con redes sociales, posicionamiento SEO básico y mantenimiento continuo. Cuéntanos qué necesita tu negocio y te asesoramos sobre la mejor opción.", "Tell us what you need": "Cuéntanos qué necesitas", "Which plan are you looking for?": "¿Qué plan estás buscando?", "Leave us your name, email and the plan you're interested in. We'll reach out to fine-tune the details of your website, no strings attached.": "Déjanos tu nombre, tu correo y el plan que te interesa. Te contactamos para afinar los detalles de tu página web, sin compromiso.", "Your name": "Tu nombre", "First and last name": "Nombre y apellido", "Your email": "Tu correo electrónico", "you@example.com": "tucorreo@ejemplo.com", "Plan you're interested in": "Plan que te interesa", "Select a plan": "Selecciona un plan", "Basic Package (landing page + contact form)": "Paquete Básico (landing page + formulario de contacto)", "Basic Package — landing page + form": "Paquete Básico — landing page + formulario", "Professional Package (full website + digital catalog + basic SEO + social media)": "Paquete Profesional (sitio completo + catálogo digital + SEO básico + redes sociales)", "Professional Package — website + catalog + SEO": "Paquete Profesional — sitio + catálogo + SEO", "Premium Package (website + online store + maintenance + digital marketing)": "Paquete Premium (sitio + tienda virtual + mantenimiento + marketing digital)", "Premium Package — online store + maintenance": "Paquete Premium — tienda virtual + mantenimiento", "Not sure yet": "Aún no estoy seguro", "Not sure yet / I'd like advice": "Aún no estoy seguro / quiero asesoría", "Send and chat on WhatsApp": "Enviar y hablar por WhatsApp", "We build digital solutions for businesses, startups and companies: websites, online stores, digital catalogs and maintenance, to help them look better online and win more customers.": "Creamos soluciones digitales para negocios, emprendimientos y empresas: páginas web, tiendas virtuales, catálogos digitales y mantenimiento, para verse mejor en Internet y conseguir más clientes.", "Navigation": "Navegación", "Digital catalogs and SEO": "Catálogos digitales y SEO", "Social media and WhatsApp": "Redes sociales y WhatsApp", "Contact": "Contacto", "WebZipe. All rights reserved.": "WebZipe. Todos los derechos reservados.", "Web design and development for businesses.": "Diseño y desarrollo web para negocios.", "View WebZipe on Instagram": "Ver el Instagram de WebZipe", "Message WebZipe on WhatsApp": "Escribir por WhatsApp a WebZipe", "https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20more%20information%20about%20WebZipe%27s%20services.": "https://wa.me/573102363531?text=Hola%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20los%20servicios%20de%20WebZipe.", "Ask the AI": "Pregúntale a la IA", "WebZipe AI assistant": "Asistente de inteligencia artificial de WebZipe", "Zipe · WebZipe AI": "Zipe · IA de WebZipe", "Researches every question on the web and learns from the community": "Investiga en la web cada pregunta y aprende de la comunidad", "Close assistant": "Cerrar asistente", "Hi! I'm Zipe 👋 Ask me anything: I'll research the answer online in real time and share my sources.": "¡Hola! Soy Zipe 👋 Pregúntame lo que quieras: investigo la respuesta en internet en tiempo real y te dejo las fuentes.", "Your question": "Tu pregunta", "Type your question…": "Escribe tu pregunta…", "Send question": "Enviar pregunta", "Questions are stored anonymously so the AI can learn and give better answers to other visitors. Please don't share personal information.": "Las preguntas se guardan de forma anónima para que la IA aprenda y responda mejor a otros visitantes. No compartas datos personales.", "Translate": "Traducir", "Page theme": "Tema de página", "Theme": "Tema", "Dark": "Oscuro", "Light": "Claro", "Close menu": "Cerrar menú", "Please enter your name, a valid email and choose a plan.": "Completa tu nombre, un correo válido y elige un plan.", "I'm interested in the": "Me interesa el", "I'm not sure which plan to choose yet and would like some advice.": "Aún no sé qué plan elegir y me gustaría recibir asesoría.", "Hi, I'm": "Hola, soy", "My email is": "Mi correo es", "Could you send me more information?": "¿Podrían darme más información?", "Redirecting you to WhatsApp with your details… If it doesn't open,": "Te estamos redirigiendo a WhatsApp con tus datos… Si no se abre,", "click here": "haz clic aquí", "Researching the web…": "Investigando en la web…", "Sources:": "Fuentes:", "The AI couldn't answer this time. Please try again in a moment.": "La IA no pudo responder esta vez. Intenta de nuevo en un momento.", "The research took too long. Try asking a more specific question.": "La investigación tardó demasiado. Intenta con una pregunta más concreta.", "I couldn't connect to the AI. Please try again in a moment.": "No pude conectarme con la IA. Intenta de nuevo en un momento.", "Your WhatsApp number": "Tu número de WhatsApp", "e.g. +57 300 123 4567": "ej. +57 300 123 4567", "Preferred date (optional)": "Fecha preferida (opcional)", "Preferred time (optional)": "Hora preferida (opcional)", "Please enter your name, a valid WhatsApp number, a valid email and choose a plan.": "Completa tu nombre, un número de WhatsApp válido, un correo válido y elige un plan.", "My WhatsApp is": "Mi WhatsApp es", "and my email is": "y mi correo es", "I'd like to schedule for": "Me gustaría agendar para el", "Saving your request…": "Guardando tu solicitud…", "Request": "Solicitud", "Tu Futuro | Financial advisory": "Tu Futuro | Asesoría financiera", "A financial advisory site with services, benefits and a contact form to request a free consultation.": "Página de asesoría financiera con servicios, beneficios y un formulario de contacto para solicitar una asesoría sin compromiso."}</script>
 <script type="application/json" id="i18n-fr">{"A barbershop site with services and prices, an about section, an appointment booking form and a reviews page where customers can leave their opinion.": "Un site de barbier avec services et prix, une section « À propos », un formulaire de réservation et une page d'avis où les clients laissent leur opinion.", "WebZipe builds digital solutions for businesses: websites, online stores, digital catalogs, SEO, social media integration, forms, booking and maintenance, with direct contact via WhatsApp.": "WebZipe crée des solutions digitales pour les entreprises : sites web, boutiques en ligne, catalogues numériques, référencement SEO, intégration aux réseaux sociaux, formulaires, réservations et maintenance, avec un contact direct par WhatsApp.", "Skip to content": "Aller au contenu", "WebZipe — home": "WebZipe — accueil", "Main navigation": "Navigation principale", "Home": "Accueil", "Benefits": "Avantages", "Services": "Services", "Plans": "Formules", "Examples": "Exemples", "Live sites": "Sites en ligne", "FAQ": "FAQ", "See plans": "Voir les formules", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).": "https://wa.me/573102363531?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20une%20solution%20digitale%20pour%20mon%20entreprise%20(site%20web%2C%20boutique%20en%20ligne%2C%20etc.).", "Message us": "Écrivez-nous", "Open menu": "Ouvrir le menu", "Message us on WhatsApp": "Écrivez-nous sur WhatsApp", "A digital solutions studio for businesses": "Un studio de solutions digitales pour les entreprises", "We build the digital solution your business needs to": "Nous créons la solution digitale dont votre entreprise a besoin pour", "grow": "grandir", "At WebZipe we design websites, online stores and digital catalogs, with basic SEO, social media integration, forms, booking and ongoing maintenance. All tailored to your business, with direct contact via WhatsApp.": "Chez WebZipe, nous concevons des sites web, des boutiques en ligne et des catalogues numériques, avec un SEO de base, l'intégration à vos réseaux sociaux, des formulaires, des réservations et une maintenance continue. Le tout sur mesure pour votre entreprise, avec un contact direct par WhatsApp.", "https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20a%20digital%20solution%20for%20my%20business%20(website%2C%20online%20store%2C%20etc.).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20souhaite%20une%20solution%20digitale%20pour%20mon%20entreprise%20(site%20web%2C%20boutique%20en%20ligne%2C%20etc.).%20Pourriez-vous%20m%27envoyer%20plus%20d%27informations%20%3F", "Get my digital solution": "Je veux ma solution digitale", "See examples": "Voir des exemples", "Websites and online stores": "Sites web et boutiques en ligne", "SEO and social media built in": "SEO et réseaux sociaux intégrés", "Direct contact via WhatsApp": "Contact direct par WhatsApp", "yourbusiness.com": "votreentreprise.fr", "Fast loading": "Chargement rapide", "Fully responsive": "100 % responsive", "Custom websites": "Sites web sur mesure", "Online stores": "Boutiques en ligne", "Digital catalogs": "Catalogues numériques", "SEO": "Référencement SEO", "Social media integration": "Intégration aux réseaux sociaux", "Forms and booking": "Formulaires et réservations", "Maintenance and digital marketing": "Maintenance et marketing digital", "WhatsApp integration": "Intégration WhatsApp", "Why WebZipe": "Pourquoi WebZipe", "A studio that starts with you, not with a catalog of templates": "Un studio qui part de vous, pas d'un catalogue de modèles", "We don't just hand you a website: we help you figure out what your business actually needs (a website, online store, catalog, forms or booking) to look professional online and win more customers.": "Nous ne nous contentons pas de vous livrer un site : nous vous aidons à définir ce dont votre entreprise a vraiment besoin (site web, boutique en ligne, catalogue, formulaires ou réservations) pour paraître professionnelle en ligne et gagner plus de clients.", "Modern design, tailored to your business": "Un design moderne, sur mesure pour votre entreprise", "No recycled generic templates. Every site is designed around your business's identity, voice and goals.": "Aucun modèle générique recyclé. Chaque site est conçu autour de l'identité, du ton et des objectifs de votre entreprise.", "BRAND PALETTE": "PALETTE DE MARQUE", "Looks great on any screen": "Parfait sur tous les écrans", "Most of your customers will find you on their phone. Your site looks and works just as well on phones, tablets and computers.": "La plupart de vos clients vous trouveront depuis leur téléphone. Votre site s'affiche et fonctionne aussi bien sur mobile, tablette et ordinateur.", "A lawyer's website viewed on a phone": "Site web d'une avocate vu sur un téléphone", "A lawyer's website viewed on a tablet": "Site web d'une avocate vu sur une tablette", "A lawyer's website viewed on a computer": "Site web d'une avocate vu sur un ordinateur", "Built to turn visitors into customers": "Pensé pour transformer les visiteurs en clients", "Every section, button and line of copy has one purpose: guiding visitors until they reach out to you.": "Chaque section, bouton et texte a un seul objectif : guider le visiteur jusqu'à ce qu'il vous contacte.", "LEADS THIS MONTH": "CONTACTS CE MOIS-CI", "leads": "contacts", "Strategically placed buttons in every section so customers can message you in one click, with no long forms.": "Des boutons placés stratégiquement dans chaque section pour que vos clients vous écrivent en un clic, sans longs formulaires.", "Your online presence works 24/7": "Votre présence en ligne travaille 24 h/24, 7 j/7", "Your site shows what you offer around the clock, even when you're not available to reply.": "Votre site présente votre offre à toute heure, même quand vous n'êtes pas disponible pour répondre.", "AVAILABLE": "DISPONIBLE", "Online now": "En ligne maintenant", "We're a young studio": "Nous sommes un jeune studio", ", which means every project gets our full attention: no assembly lines and no waiting lists. You work directly with the person who actually designs your site.": ", ce qui signifie que chaque projet reçoit toute notre attention : pas de travail à la chaîne ni de liste d'attente. Vous travaillez directement avec la personne qui conçoit votre site.", "The shift": "Le changement", "Social media alone isn't enough anymore": "Les réseaux sociaux ne suffisent plus", "Many businesses today want an online presence but aren't sure how to get there: they run Instagram or Facebook, but they don't have their own website, online store or catalog where customers can really get to know their products and services.": "Aujourd'hui, beaucoup d'entreprises veulent être présentes en ligne sans toujours savoir comment s'y prendre : elles gèrent Instagram ou Facebook, mais n'ont pas leur propre site, leur boutique en ligne ou leur catalogue où les clients peuvent vraiment découvrir leurs produits et services.", "Without a website": "Sans site web", "What usually happens": "Ce qui se passe souvent", "Customers look for information and only find an Instagram bio.": "Vos clients cherchent des informations et ne trouvent qu'une bio Instagram.", "Your business depends entirely on the reach of an algorithm you don't control.": "Votre entreprise dépend entièrement de la portée d'un algorithme que vous ne contrôlez pas.", "There's no clear place to showcase all your products or services.": "Il n'existe aucun endroit clair pour présenter tous vos produits ou services.", "Your business looks less professional than the competition.": "Votre entreprise paraît moins professionnelle que la concurrence.", "You have no space of your own online that represents your business.": "Vous n'avez aucun espace à vous en ligne qui représente votre entreprise.", "With WebZipe": "Avec WebZipe", "What changes with a website": "Ce qui change avec un site web", "You present your products and services in a clear, organized way.": "Vous présentez vos produits et services de façon claire et organisée.", "You make it easy to reach you with direct WhatsApp buttons.": "Vous facilitez le contact grâce à des boutons WhatsApp directs.", "You project a far more professional, trustworthy image.": "Vous projetez une image bien plus professionnelle et digne de confiance.", "You're available to customers any time, every day.": "Vous êtes disponible pour vos clients à toute heure, tous les jours.", "You own a space online that doesn't depend on any algorithm.": "Vous possédez un espace en ligne qui ne dépend d'aucun algorithme.", "Digital solutions to help your business grow": "Des solutions digitales pour faire grandir votre entreprise", "We don't just build websites: we help you solve what your business needs to be present online, showcase your products or services and win more customers.": "Nous ne faisons pas que des sites web : nous vous aidons à résoudre ce dont votre entreprise a besoin pour être présente en ligne, présenter ses produits ou services et gagner plus de clients.", "Modern, original designs tailored to each business's visual identity and voice. No cookie-cutter templates.": "Des designs modernes et originaux, adaptés à l'identité visuelle et au ton de chaque entreprise. Pas de modèles tout faits.", "Online stores and digital catalogs": "Boutiques en ligne et catalogues numériques", "Showcase and sell your products with a digital catalog or a full online store, without relying on social media alone.": "Présentez et vendez vos produits avec un catalogue numérique ou une boutique en ligne complète, sans dépendre uniquement des réseaux sociaux.", "We set up the essentials so your site shows up in Google searches and customers can find you more easily.": "Nous configurons l'essentiel pour que votre site apparaisse dans les recherches Google et que vos clients vous trouvent plus facilement.", "WhatsApp and social media": "WhatsApp et réseaux sociaux", "Direct WhatsApp contact buttons and links to your social profiles, so customers can reach you in one click from any section.": "Des boutons de contact WhatsApp directs et des liens vers vos réseaux sociaux, pour que vos clients vous écrivent en un clic depuis n'importe quelle section.", "Contact forms and booking or appointment scheduling systems, right from your website.": "Des formulaires de contact et des systèmes de réservation ou de prise de rendez-vous, directement depuis votre site.", "We keep your site up to date, support you after launch and gradually add digital marketing strategies.": "Nous maintenons votre site à jour, vous accompagnons après la livraison et ajoutons progressivement des stratégies de marketing digital.", "A package for every stage of your business": "Une formule pour chaque étape de votre entreprise", "Choose your starting point: a website, online store or digital catalog. The scope can be adjusted to fit your needs, so message us and we'll define it together.": "Choisissez votre point de départ : site web, boutique en ligne ou catalogue numérique. Le périmètre s'ajuste à vos besoins : écrivez-nous et nous le définirons ensemble.", "Basic Package": "Formule Basique", "A 1–3 page landing site with a contact form. Ideal for getting started with a clear, direct, professional presence.": "Une landing page de 1 à 3 pages avec formulaire de contact. Idéale pour démarrer avec une présence professionnelle, claire et directe.", "Delivered in 5–7 days": "Livraison en 5 à 7 jours", "1–3 page landing site": "Landing page de 1 à 3 pages", "Fully responsive design": "Design 100 % responsive", "Contact form + WhatsApp": "Formulaire de contact + WhatsApp", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Basic%20Package%20(landing%20page%20%2B%20contact%20form).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20la%20Formule%20Basique%20(landing%20page%20%2B%20formulaire%20de%20contact).%20Pourriez-vous%20m%27envoyer%20plus%20d%27informations%20%3F", "Get the Basic Package": "Je veux la Formule Basique", "Most popular": "La plus populaire", "Professional Package": "Formule Professionnelle", "A full website with a digital catalog, basic SEO and social media integration, so customers can find you and see everything you offer.": "Un site web complet avec catalogue numérique, SEO de base et intégration à vos réseaux sociaux, pour que vos clients vous trouvent et découvrent tout ce que vous proposez.", "Delivered in 10–15 days": "Livraison en 10 à 15 jours", "Full website (multiple sections)": "Site web complet (plusieurs sections)", "Digital catalog + basic SEO": "Catalogue numérique + SEO de base", "Social media + WhatsApp integration": "Réseaux sociaux + WhatsApp intégrés", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20Package%20(full%20website%20%2B%20digital%20catalog%20%2B%20basic%20SEO%20%2B%20social%20media).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20la%20Formule%20Professionnelle%20(site%20complet%20%2B%20catalogue%20num%C3%A9rique%20%2B%20SEO%20de%20base%20%2B%20r%C3%A9seaux%20sociaux).%20Pourriez-vous%20m%27envoyer%20plus%20d%27informations%20%3F", "Get the Professional Package": "Je veux la Formule Professionnelle", "Premium Package": "Formule Premium", "A full website with an online store or booking system, monthly maintenance and ongoing digital marketing support.": "Un site complet avec boutique en ligne ou système de réservation, maintenance mensuelle et accompagnement en marketing digital.", "Ongoing service": "Service récurrent", "Everything in the Professional Package": "Tout le contenu de la Formule Professionnelle", "Online store and/or booking system": "Boutique en ligne et/ou système de réservation", "Monthly maintenance + digital marketing": "Maintenance mensuelle + marketing digital", "https://wa.me/573102363531?text=Hi%2C%20I%27m%20interested%20in%20the%20Premium%20Package%20(website%20%2B%20online%20store%20%2B%20maintenance%20%2B%20digital%20marketing).%20Could%20you%20send%20me%20more%20information%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20la%20Formule%20Premium%20(site%20%2B%20boutique%20en%20ligne%20%2B%20maintenance%20%2B%20marketing%20digital).%20Pourriez-vous%20m%27envoyer%20plus%20d%27informations%20%3F", "Get the Premium Package": "Je veux la Formule Premium", "Not sure which one to choose?": "Vous ne savez pas laquelle choisir ?", "Leave us your details": "Laissez-nous vos coordonnées", "and we'll help you decide, no strings attached.": "et nous vous conseillerons, sans engagement.", "This is how good your website could look": "Voici à quoi pourrait ressembler votre site web", "These are": "Ce sont des", "concept examples": "exemples conceptuels", "showing design possibilities for different types of businesses, not real WebZipe client projects.": "qui montrent des possibilités de design selon le type d'entreprise, et non de vrais projets clients de WebZipe.", "Note:": "Remarque :", "the layouts below are concept mockups created to illustrate design styles, not screenshots of delivered sites.": "les compositions ci-dessous sont des maquettes conceptuelles créées pour illustrer des styles de design, et non des captures de sites livrés.", "Restaurants and cafés": "Restaurants et cafés", "A visual menu, location and reservations or orders straight through WhatsApp. A site that works up an appetite before customers even walk in.": "Un menu visuel, l'adresse et des réservations ou commandes directement par WhatsApp. Un site qui met en appétit avant même l'arrivée du client.", "https://wa.me/573102363531?text=Hi%2C%20I%20saw%20your%20website%20examples%20and%20I%27d%20like%20something%20similar%20for%20my%20business.": "https://wa.me/573102363531?text=Bonjour%2C%20j%27ai%20vu%20vos%20exemples%20de%20sites%20web%20et%20je%20voudrais%20quelque%20chose%20de%20similaire%20pour%20mon%20entreprise.", "I want something like this": "Je veux quelque chose comme ça", "Concept example of a website for a coffee shop": "Exemple conceptuel de site web pour un café", "Shops and small businesses": "Boutiques et petites entreprises", "A clear product catalog with a buy or inquire button. Ideal for selling without relying on social media alone.": "Un catalogue de produits clair avec un bouton d'achat ou de demande directe. Idéal pour vendre sans dépendre uniquement des réseaux sociaux.", "Concept example of an online clothing store": "Exemple conceptuel de boutique de vêtements en ligne", "Professionals and services": "Professionnels et services", "Your services, experience and an easy way to book an appointment or consultation. Builds trust from the very first second.": "Vos services, votre expérience et un moyen simple de prendre rendez-vous ou de demander une consultation. Inspire confiance dès la première seconde.", "Concept example of a website for a service professional": "Exemple conceptuel de site web pour une professionnelle de services", "Check out some sites we've built": "Découvrez quelques sites que nous avons créés", "These are real links to demo sites. Click any of them to see it live.": "Ce sont de vrais liens vers des sites de démonstration. Cliquez sur chacun pour le voir en ligne.", "Clothing Catalog": "Catalogue de vêtements", "A clothing catalog with prices and an \"Order now\" button for each item.": "Un catalogue de vêtements avec les prix et un bouton « Commander » pour chaque article.", "View site": "Voir le site", "Javier Restrepo | Family Lawyer": "Javier Restrepo | Avocat en droit de la famille", "A site for an independent professional: \"We defend what matters most: your family.\" Includes practice areas, experience and a free consultation via WhatsApp.": "Un site pour un professionnel indépendant : « Nous défendons ce qui compte le plus : votre famille. » Comprend les domaines d'intervention, l'expérience et une consultation gratuite par WhatsApp.", "El Buen Sazón | Home-style food at your table or your door": "El Buen Sazón | Cuisine maison à votre table ou à votre porte", "A restaurant site with a menu, dine-in and delivery orders, with each order sent straight through WhatsApp.": "Un site de restaurant avec menu, commandes sur place et livraisons, chaque commande étant envoyée directement par WhatsApp.", "ToyLandia — Toys for the whole family": "ToyLandia — Des jouets pour toute la famille", "An online toy store with a product catalog and an \"Order now\" button for each item.": "Une boutique de jouets en ligne avec catalogue de produits et un bouton « Commander » pour chacun.", "A barbershop site with a service and price list, work gallery, barber team, reviews and a \"Book\" button for each service.": "Un site de barbier avec la liste des services et des prix, une galerie de réalisations, l'équipe de barbiers, des avis et un bouton « Réserver » pour chaque service.", "Let's get started": "Commençons", "Ready to take your business online?": "Prêt à mettre votre entreprise en ligne ?", "Tell us about your business on WhatsApp and we'll help you figure out what you need: a website, online store, digital catalog or maintenance. No strings attached, straight to the point.": "Parlez-nous de votre entreprise sur WhatsApp et nous vous aiderons à définir ce dont vous avez besoin : site web, boutique en ligne, catalogue numérique ou maintenance. Sans engagement, simplement et directement.", "https://wa.me/573102363531?text=Hi%2C%20I%20want%20to%20build%20my%20website%20or%20online%20store%20with%20WebZipe.%20How%20do%20we%20get%20started%3F": "https://wa.me/573102363531?text=Bonjour%2C%20je%20veux%20cr%C3%A9er%20mon%20site%20web%20ou%20ma%20boutique%20en%20ligne%20avec%20WebZipe.%20Comment%20commen%C3%A7ons-nous%20%3F", "Build my digital solution": "Créer ma solution digitale", "Everything you might want to know": "Tout ce que vous voudriez savoir", "If you have a question that isn't answered here, message us directly on WhatsApp.": "Si vous avez une autre question qui ne figure pas ici, écrivez-nous directement sur WhatsApp.", "What kinds of businesses can have a website?": "Quels types d'entreprises peuvent avoir un site web ?", "Any kind: restaurants, shops, startups, independent professionals, service companies and much more. If you have a business, a website can help you show it off better.": "Tous : restaurants, boutiques, jeunes entreprises, professionnels indépendants, entreprises de services et bien plus. Si vous avez une entreprise, un site web peut vous aider à mieux la mettre en valeur.", "Will my website work on phones?": "Mon site fonctionnera-t-il sur mobile ?", "Yes. Every site we design is fully responsive: it adapts to and works properly on phones, tablets and computers.": "Oui. Tous les sites que nous concevons sont 100 % responsive : ils s'adaptent et fonctionnent correctement sur mobile, tablette et ordinateur.", "Can I add WhatsApp to my website?": "Puis-je ajouter WhatsApp à mon site ?", "Absolutely. In fact, it's one of the integrations we recommend most. It's the fastest, most direct way for customers to reach you.": "Bien sûr. C'est même l'une des intégrations que nous recommandons le plus : c'est le moyen le plus rapide et le plus direct pour que vos clients vous contactent.", "Can I request design changes?": "Puis-je demander des modifications du design ?", "Yes. The design adapts to what you need: tell us your idea, your colors and your style, and we'll work on it with you until it looks the way you pictured it.": "Oui. Le design s'adapte à vos besoins : partagez-nous votre idée, vos couleurs et votre style, et nous le développons avec vous jusqu'à ce qu'il ressemble à ce que vous imaginez.", "How long does it take to build a website?": "Combien de temps faut-il pour créer un site web ?", "It depends on the complexity and scope of your project. Once we know the details of your business, we'll give you an estimated timeline on WhatsApp.": "Cela dépend de la complexité et de l'ampleur de votre projet. Dès que nous connaissons les détails de votre entreprise, nous vous donnons un délai estimé par WhatsApp.", "What information do you need to get started?": "De quelles informations avez-vous besoin pour commencer ?", "It helps to know what your business does, what products or services you offer and how you'd like customers to contact you. With that, we can start designing.": "Il nous est utile de savoir ce que fait votre entreprise, quels produits ou services vous proposez et comment vous préférez que vos clients vous contactent. Avec cela, nous pouvons commencer à concevoir.", "Can I customize the website for my business?": "Puis-je personnaliser le site pour mon entreprise ?", "Yes, always. Every site is tailored to your business's identity, colors and content. We don't use fixed templates.": "Oui, toujours. Chaque site s'adapte à l'identité, aux couleurs et au contenu de votre entreprise : nous n'utilisons pas de modèles figés.", "Do you only build websites, or also online stores and other services?": "Faites-vous uniquement des sites web, ou aussi des boutiques en ligne et d'autres services ?", "We also build online stores, digital catalogs, forms and booking systems, social media integration, basic SEO and ongoing maintenance. Tell us what your business needs and we'll recommend the best option.": "Nous créons aussi des boutiques en ligne, des catalogues numériques, des formulaires et systèmes de réservation, l'intégration aux réseaux sociaux, le SEO de base et la maintenance continue. Dites-nous ce dont votre entreprise a besoin et nous vous conseillerons la meilleure option.", "Tell us what you need": "Dites-nous ce dont vous avez besoin", "Which plan are you looking for?": "Quelle formule recherchez-vous ?", "Leave us your name, email and the plan you're interested in. We'll reach out to fine-tune the details of your website, no strings attached.": "Laissez-nous votre nom, votre e-mail et la formule qui vous intéresse. Nous vous contacterons pour affiner les détails de votre site web, sans engagement.", "Your name": "Votre nom", "First and last name": "Prénom et nom", "Your email": "Votre e-mail", "you@example.com": "vous@exemple.com", "Plan you're interested in": "Formule qui vous intéresse", "Select a plan": "Choisissez une formule", "Basic Package (landing page + contact form)": "Formule Basique (landing page + formulaire de contact)", "Basic Package — landing page + form": "Formule Basique — landing page + formulaire", "Professional Package (full website + digital catalog + basic SEO + social media)": "Formule Professionnelle (site complet + catalogue numérique + SEO de base + réseaux sociaux)", "Professional Package — website + catalog + SEO": "Formule Professionnelle — site + catalogue + SEO", "Premium Package (website + online store + maintenance + digital marketing)": "Formule Premium (site + boutique en ligne + maintenance + marketing digital)", "Premium Package — online store + maintenance": "Formule Premium — boutique en ligne + maintenance", "Not sure yet": "Je ne sais pas encore", "Not sure yet / I'd like advice": "Je ne sais pas encore / je souhaite être conseillé(e)", "Send and chat on WhatsApp": "Envoyer et discuter sur WhatsApp", "We build digital solutions for businesses, startups and companies: websites, online stores, digital catalogs and maintenance, to help them look better online and win more customers.": "Nous créons des solutions digitales pour les commerces, jeunes entreprises et sociétés : sites web, boutiques en ligne, catalogues numériques et maintenance, pour mieux paraître en ligne et gagner plus de clients.", "Navigation": "Navigation", "Digital catalogs and SEO": "Catalogues numériques et SEO", "Social media and WhatsApp": "Réseaux sociaux et WhatsApp", "Contact": "Contact", "WebZipe. All rights reserved.": "WebZipe. Tous droits réservés.", "Web design and development for businesses.": "Conception et développement web pour les entreprises.", "View WebZipe on Instagram": "Voir WebZipe sur Instagram", "Message WebZipe on WhatsApp": "Écrire à WebZipe sur WhatsApp", "https://wa.me/573102363531?text=Hi%2C%20I%27d%20like%20more%20information%20about%20WebZipe%27s%20services.": "https://wa.me/573102363531?text=Bonjour%2C%20je%20voudrais%20plus%20d%27informations%20sur%20les%20services%20de%20WebZipe.", "Ask the AI": "Demandez à l'IA", "WebZipe AI assistant": "Assistant d'intelligence artificielle de WebZipe", "Zipe · WebZipe AI": "Zipe · IA de WebZipe", "Researches every question on the web and learns from the community": "Recherche chaque question sur le web et apprend de la communauté", "Close assistant": "Fermer l'assistant", "Hi! I'm Zipe 👋 Ask me anything: I'll research the answer online in real time and share my sources.": "Bonjour ! Je suis Zipe 👋 Posez-moi n'importe quelle question : je recherche la réponse en ligne en temps réel et je vous indique mes sources.", "Your question": "Votre question", "Type your question…": "Écrivez votre question…", "Send question": "Envoyer la question", "Questions are stored anonymously so the AI can learn and give better answers to other visitors. Please don't share personal information.": "Les questions sont enregistrées de façon anonyme pour que l'IA apprenne et réponde mieux aux autres visiteurs. Ne partagez pas d'informations personnelles.", "Translate": "Traduire", "Page theme": "Thème de la page", "Theme": "Thème", "Dark": "Sombre", "Light": "Clair", "Close menu": "Fermer le menu", "Please enter your name, a valid email and choose a plan.": "Veuillez indiquer votre nom, un e-mail valide et choisir une formule.", "I'm interested in the": "Je suis intéressé(e) par la", "I'm not sure which plan to choose yet and would like some advice.": "Je ne sais pas encore quelle formule choisir et j'aimerais être conseillé(e).", "Hi, I'm": "Bonjour, je suis", "My email is": "Mon e-mail est", "Could you send me more information?": "Pourriez-vous m'envoyer plus d'informations ?", "Redirecting you to WhatsApp with your details… If it doesn't open,": "Nous vous redirigeons vers WhatsApp avec vos informations… Si cela ne s'ouvre pas,", "click here": "cliquez ici", "Researching the web…": "Recherche sur le web…", "Sources:": "Sources :", "The AI couldn't answer this time. Please try again in a moment.": "L'IA n'a pas pu répondre cette fois. Réessayez dans un instant.", "The research took too long. Try asking a more specific question.": "La recherche a pris trop de temps. Essayez une question plus précise.", "I couldn't connect to the AI. Please try again in a moment.": "Je n'ai pas pu me connecter à l'IA. Réessayez dans un instant.", "Your WhatsApp number": "Votre numéro WhatsApp", "e.g. +57 300 123 4567": "ex. +57 300 123 4567", "Preferred date (optional)": "Date souhaitée (facultatif)", "Preferred time (optional)": "Heure souhaitée (facultatif)", "Please enter your name, a valid WhatsApp number, a valid email and choose a plan.": "Veuillez indiquer votre nom, un numéro WhatsApp valide, un e-mail valide et choisir une formule.", "My WhatsApp is": "Mon WhatsApp est le", "and my email is": "et mon e-mail est", "I'd like to schedule for": "J'aimerais prendre rendez-vous le", "Saving your request…": "Enregistrement de votre demande…", "Request": "Demande", "Tu Futuro | Financial advisory": "Tu Futuro | Conseil financier", "A financial advisory site with services, benefits and a contact form to request a free consultation.": "Un site de conseil financier avec services, avantages et un formulaire de contact pour demander une consultation sans engagement."}</script>
+<script>
+/* ============================================================
+   TEMA — oscuro (por defecto) o claro, guardado en el navegador.
+   ============================================================ */
+(function(){
+  "use strict";
+  var btn = document.getElementById("themeBtn");
+  var menu = document.getElementById("themeMenu");
+  if(!btn || !menu) return;
+  var items = menu.querySelectorAll("[data-theme-opt]");
+
+  function apply(t){
+    if(t === "light") document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+    items.forEach(function(b){ b.setAttribute("aria-checked", String(b.getAttribute("data-theme-opt") === t)); });
+    try { localStorage.setItem("wz-theme", t); } catch(e){}
+  }
+  function toggleMenu(open){
+    menu.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+  }
+  btn.addEventListener("click", function(e){
+    e.stopPropagation();
+    var langMenu = document.getElementById("langMenu"), langBtn = document.getElementById("langBtn");
+    if(langMenu && !langMenu.hidden){ langMenu.hidden = true; langBtn.setAttribute("aria-expanded", "false"); }
+    toggleMenu(menu.hidden);
+  });
+  var langBtn = document.getElementById("langBtn");
+  if(langBtn) langBtn.addEventListener("click", function(){ toggleMenu(false); });
+  items.forEach(function(b){
+    b.addEventListener("click", function(){ apply(b.getAttribute("data-theme-opt")); toggleMenu(false); btn.focus(); });
+  });
+  document.addEventListener("click", function(e){ if(!menu.hidden && !menu.contains(e.target)) toggleMenu(false); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !menu.hidden){ toggleMenu(false); btn.focus(); } });
+
+  apply(document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark");
+})();
+</script>
 
 <script>
 /* ============================================================
@@ -889,7 +1536,6 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
   document.addEventListener("auxclick", pick, true);
 })();
 </script>
-
 
 <script>
 /* ============================================================
@@ -990,7 +1636,6 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
 })();
 </script>
 
-
 <script>
 (function(){
   "use strict";
@@ -1000,9 +1645,16 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
 
   /* Sticky header + barra de progreso de scroll */
   var header = document.getElementById("siteHeader");
+  var progressBar = document.getElementById("scrollProgress");
   var onScroll = function(){
     if(window.scrollY > 12){ header.classList.add("scrolled"); }
     else{ header.classList.remove("scrolled"); }
+    if(progressBar){
+      var doc = document.documentElement;
+      var max = (doc.scrollHeight - doc.clientHeight) || 1;
+      var pct = Math.min(100, Math.max(0, (window.scrollY / max) * 100));
+      progressBar.style.width = pct + "%";
+    }
   };
   document.addEventListener("scroll", onScroll, {passive:true});
   onScroll();
@@ -1057,6 +1709,36 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
       });
     }, {threshold:.15, rootMargin:"0px 0px -60px 0px"});
     revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  /* Tilt 3D del mockup del hero, siguiendo el cursor */
+  var heroStage = document.querySelector(".hero-stage");
+  var heroFrame = document.querySelector(".hero-frame");
+  if(heroStage && heroFrame && !reduceMotion && hasFinePointer){
+    heroStage.addEventListener("mousemove", function(e){
+      var r = heroStage.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width;
+      var py = (e.clientY - r.top) / r.height;
+      var tiltX = (px - .5) * 14;
+      var tiltY = (.5 - py) * 8;
+      heroFrame.style.setProperty("--tilt-x", tiltX.toFixed(2) + "deg");
+      heroFrame.style.setProperty("--tilt-y", tiltY.toFixed(2) + "deg");
+    });
+    heroStage.addEventListener("mouseleave", function(){
+      heroFrame.style.setProperty("--tilt-x", "0deg");
+      heroFrame.style.setProperty("--tilt-y", "0deg");
+    });
+  }
+
+  /* Brillo tipo "foco" que sigue el cursor en tarjetas de servicios y planes */
+  if(!reduceMotion && hasFinePointer){
+    document.querySelectorAll(".s-card, .plan").forEach(function(card){
+      card.addEventListener("mousemove", function(e){
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        card.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+    });
   }
 
   /* Resalta el enlace de navegación de la sección visible */
@@ -1212,3 +1894,5 @@ footer{border-top:1px solid var(--line);padding:72px 0 32px}
 })();
 </script>
 
+</body>
+</html>
