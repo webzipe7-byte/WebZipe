@@ -896,12 +896,13 @@
   @media (max-width:900px){ .rows{grid-template-columns:1fr} .row,.row:nth-child(n){grid-column:auto;grid-template-columns:1fr} }
 
   /* SERVICIOS → bento con tarjeta azul destacada */
-  .services{grid-template-columns:repeat(3,1fr)}
+  @media (min-width:901px){ .services{grid-template-columns:repeat(3,1fr)} }
   .s-card{padding:30px;border-radius:var(--r-lg)}
   .s-card:nth-child(1){background:linear-gradient(160deg,#0a8bff,#0653c9);border-color:transparent;grid-row:span 1;color:#fff}
   .s-card:nth-child(1) p,.s-card:nth-child(1) .s-num{color:rgba(255,255,255,.82)}
   .s-card:nth-child(1) .s-ico{background:rgba(255,255,255,.18);color:#fff;border-color:transparent}
   .s-card h3{font-size:1.2rem;letter-spacing:-.02em}
+  @media (max-width:600px){ .s-card{padding:24px} }
 
   /* PLANES */
   .plan{border-radius:var(--r-xl);padding:34px 30px}
