@@ -27,9 +27,26 @@
       <form id="authForm" autocomplete="on">
         <label>Usuario <input id="authUser" name="username" autocomplete="username" required minlength="3"></label>
         <label>Contraseña <input id="authPass" name="password" type="password" autocomplete="current-password" required minlength="6"></label>
-        <label id="confirmWrap" class="hidden">Repetir contraseña <input id="authPass2" type="password" autocomplete="new-password" minlength="6"></label>
+        <div id="regWrap" class="hidden">
+          <label>Repetir contraseña <input id="authPass2" type="password" autocomplete="new-password" minlength="6"></label>
+          <label>Correo electrónico <input id="authEmail" type="email" autocomplete="email" placeholder="tu@correo.com"></label>
+          <label>Número de teléfono <input id="authPhone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567" pattern="[0-9+()\- ]{7,20}"></label>
+        </div>
         <p id="authError" class="error" role="alert"></p>
         <button class="btn primary" type="submit" id="authSubmit">Entrar</button>
+        <button class="btn link" type="button" id="forgotBtn">¿Olvidaste tu contraseña?</button>
+      </form>
+      <form id="resetForm" class="hidden" autocomplete="off">
+        <h2>Recuperar contraseña</h2>
+        <label>Correo registrado <input id="rsEmail" type="email" required></label>
+        <button class="btn" type="button" id="rsSend">Enviar código al correo</button>
+        <div id="rsStep2" class="hidden">
+          <label>Código de 6 dígitos <input id="rsCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></label>
+          <label>Nueva contraseña <input id="rsPass" type="password" minlength="6" autocomplete="new-password"></label>
+          <button class="btn primary" type="submit">Cambiar contraseña</button>
+        </div>
+        <p id="rsMsg" class="error" role="alert"></p>
+        <button class="btn link" type="button" id="rsBack">← Volver a entrar</button>
       </form>
       <button class="btn link" id="installBtn2" hidden>📲 Instalar la aplicación</button>
     </div>
@@ -143,6 +160,7 @@
   </div>
 
   <div id="toast" class="toast hidden" role="status"></div>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -40,7 +40,8 @@ async function hashPass(pass, saltB64) {
 $$('.tab').forEach(b => b.onclick = () => {
   mode = b.dataset.mode;
   $$('.tab').forEach(x => x.classList.toggle('active', x === b));
-  $('#confirmWrap').classList.toggle('hidden', mode !== 'register');
+  $('#regWrap').classList.toggle('hidden', mode !== 'register');
+  for (const id of ['#authPass2', '#authEmail', '#authPhone']) $(id).required = mode === 'register';
   $('#authSubmit').textContent = mode === 'register' ? 'Crear cuenta' : 'Entrar';
   $('#authPass').autocomplete = mode === 'register' ? 'new-password' : 'current-password';
   $('#authError').textContent = '';
@@ -48,13 +49,17 @@ $$('.tab').forEach(b => b.onclick = () => {
 $('#authForm').onsubmit = async e => {
   e.preventDefault();
   const name = $('#authUser').value.trim().toLowerCase(), pass = $('#authPass').value, err = $('#authError');
-  err.textContent = '';
+  err.textContent = ''; err.style.color = '';
   if (!crypto.subtle) { err.textContent = 'Se necesita HTTPS para usar cuentas seguras.'; return; }
   const users = load(LS.users, {});
   if (mode === 'register') {
     if (users[name]) { err.textContent = 'Ese usuario ya existe.'; return; }
     if (pass !== $('#authPass2').value) { err.textContent = 'Las contraseñas no coinciden.'; return; }
-    users[name] = await hashPass(pass); save(LS.users, users);
+    const email = $('#authEmail').value.trim().toLowerCase(), phone = $('#authPhone').value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.textContent = 'Escribe un correo válido.'; return; }
+    if (phone.replace(/\D/g, '').length < 7) { err.textContent = 'Escribe un número de teléfono válido.'; return; }
+    if (Object.values(users).some(u => u.email === email)) { err.textContent = 'Ese correo ya está registrado.'; return; }
+    users[name] = { ...(await hashPass(pass)), email, phone }; save(LS.users, users);
     save(LS.data(name), { tx: [], notes: [], limit: 0, currency: 'USD', alerts: {} });
   } else {
     const u = users[name];
@@ -64,6 +69,41 @@ $('#authForm').onsubmit = async e => {
   $('#authForm').reset(); startApp(name);
 };
 $('#logoutBtn').onclick = () => { localStorage.removeItem(LS.session); clearInterval(startApp.timer); user = data = null; $('#app').classList.add('hidden'); $('#auth').classList.remove('hidden'); };
+
+/* ---------- Recuperar contraseña (código por correo con EmailJS) ---------- */
+let reset = null; // { name, code, exp, tries } solo en memoria
+const rsMsg = (t, ok) => { const m = $('#rsMsg'); m.textContent = t; m.style.color = ok ? 'var(--pos)' : ''; };
+$('#forgotBtn').onclick = () => { $('#authForm').classList.add('hidden'); $('#resetForm').classList.remove('hidden'); $('#rsEmail').value = $('#authUser').value.includes('@') ? $('#authUser').value : ''; rsMsg(''); };
+$('#rsBack').onclick = () => { reset = null; $('#resetForm').classList.add('hidden'); $('#rsStep2').classList.add('hidden'); $('#authForm').classList.remove('hidden'); };
+$('#rsSend').onclick = async () => {
+  const email = $('#rsEmail').value.trim().toLowerCase(), cfg = window.FIN_CONFIG?.emailjs;
+  if (!email) return rsMsg('Escribe tu correo.');
+  if (!cfg?.serviceId || !cfg?.templateId || !cfg?.publicKey) return rsMsg('El envío de correos aún no está configurado (ver README: config.js).');
+  const entry = Object.entries(load(LS.users, {})).find(([, u]) => u.email === email);
+  const msg = 'Si el correo está registrado, te enviamos un código. Revisa tu bandeja y el spam.';
+  if (!entry) return rsMsg(msg, true);
+  const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1e6).padStart(6, '0');
+  rsMsg('Enviando…', true);
+  try {
+    const r = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ service_id: cfg.serviceId, template_id: cfg.templateId, user_id: cfg.publicKey,
+        template_params: { to_email: email, username: entry[0], code, minutes: 10 } })
+    });
+    if (!r.ok) throw new Error(await r.text());
+  } catch { return rsMsg('No se pudo enviar el correo. Inténtalo más tarde.'); }
+  reset = { name: entry[0], code, exp: Date.now() + 10 * 60000, tries: 0 };
+  $('#rsStep2').classList.remove('hidden'); rsMsg(msg, true);
+};
+$('#resetForm').onsubmit = async e => {
+  e.preventDefault();
+  if (!reset || Date.now() > reset.exp) { reset = null; return rsMsg('El código expiró. Pide uno nuevo.'); }
+  if (++reset.tries > 5) { reset = null; return rsMsg('Demasiados intentos. Pide un código nuevo.'); }
+  if ($('#rsCode').value.trim() !== reset.code) return rsMsg('Código incorrecto.');
+  const pass = $('#rsPass').value; if (pass.length < 6) return rsMsg('La contraseña debe tener al menos 6 caracteres.');
+  const users = load(LS.users, {}); Object.assign(users[reset.name], await hashPass(pass)); save(LS.users, users);
+  reset = null; $('#resetForm').reset(); $('#rsBack').click(); $('#authError').textContent = '✅ Contraseña cambiada. Ya puedes entrar.'; $('#authError').style.color = 'var(--pos)';
+};
 
 /* ---------- Arranque ---------- */
 function startApp(name) {
