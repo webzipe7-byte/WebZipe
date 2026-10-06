@@ -220,12 +220,12 @@ if (bookingForm) {
     const d = Object.fromEntries(new FormData(bookingForm));
     const msg =
       `Hola, quiero reservar una cita:%0A` +
-      `• Nombre: ${d.nombre}%0A` +
-      `• Servicio: ${d.servicio}%0A` +
-      `• Fecha: ${d.fecha}%0A` +
-      `• Hora: ${d.hora}` +
+      `• Nombre: ${encodeURIComponent(d.nombre)}%0A` +
+      `• Servicio: ${encodeURIComponent(d.servicio)}%0A` +
+      `• Fecha: ${encodeURIComponent(d.fecha)}%0A` +
+      `• Hora: ${encodeURIComponent(d.hora)}` +
       (d.notas ? `%0A• Notas: ${encodeURIComponent(d.notas)}` : "");
-    window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, "_blank");
+    window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, "_blank", "noopener,noreferrer");
   });
 }
 
@@ -250,7 +250,7 @@ function loadReviews() {
   }
 }
 
-const starStr = n => "★".repeat(n) + "☆".repeat(5 - n);
+const starStr = n => { n = Math.min(5, Math.max(0, Math.floor(Number(n)) || 0)); return "★".repeat(n) + "☆".repeat(5 - n); };
 const escapeHtml = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 function renderReviews() {

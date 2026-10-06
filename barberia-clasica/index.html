@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Barbería Clásica | Cortes, fades y barba</title>
@@ -108,7 +110,7 @@
           <p>Completa el formulario y confirmamos tu cita por WhatsApp.</p>
         </div>
         <form id="booking-form" class="form-grid">
-          <div><label for="nombre">Nombre</label><input id="nombre" name="nombre" required placeholder="Tu nombre"></div>
+          <div><label for="nombre">Nombre</label><input id="nombre" name="nombre" required maxlength="60" placeholder="Tu nombre"></div>
           <div>
             <label for="servicio">Servicio</label>
             <select id="servicio" name="servicio" required>
@@ -128,7 +130,7 @@
               <option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option>
             </select>
           </div>
-          <div class="full"><label for="notas">Notas (opcional)</label><textarea id="notas" name="notas" placeholder="¿Algún estilo en mente?"></textarea></div>
+          <div class="full"><label for="notas">Notas (opcional)</label><textarea maxlength="300" id="notas" name="notas" placeholder="¿Algún estilo en mente?"></textarea></div>
           <div class="full form-foot">
             <small>Te responderemos en minutos para confirmar.</small>
             <button type="submit" class="btn">Reservar por WhatsApp</button>

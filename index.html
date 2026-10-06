@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- SEGURIDAD: la política CSP se regenera con `python3 scripts/update-csp.py` cada vez que cambies un script en línea -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-nz1BRsZiyl3DxnpO5MGNZ2nFFm8Jlhqih6J8VXzEaAU=' 'sha256-2yEVutExeWYj60+OESgwq6T72BD4ABP/Ccj07/BPTpc=' 'sha256-biM437He7qNEtmmiFAkqoXHPMG7e0PCUm+T3h9u97Jk=' 'sha256-2o8vVUZJhAJICPNVHN7ZGhOthVeNtXmJvJulBFFgxLM=' 'sha256-Q/E9Unba80Ok1wahVOdXiXzxXeZbFg9mOPOTi1AuvSU=' 'sha256-A5jqLyUg5NxnhtxtExhbPkOGgOxhqao7Fj9JF6idE1M='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src https://jsllxsbfkwaxdxstheew.supabase.co; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>if(window.top!==window.self){document.documentElement.style.display="none";try{window.top.location=window.self.location}catch(e){}}</script>
 <meta name="description" content="WebZipe builds digital solutions for businesses: websites, online stores, digital catalogs, SEO, social media integration, forms, booking and maintenance, with direct contact via WhatsApp.">
 <title>WebZipe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -735,7 +739,8 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.15s !important}
-    .reveal,.reveal-stagger > *{opacity:1 !important;transform:none !important}
+    .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .reveal,.reveal-stagger > *{opacity:1 !important;transform:none !important}
     .marquee-track{animation:none}
     .hero .kicker,.hero h1,.hero .lead,.hero-actions,.hero-trust,.hero-stage{opacity:1 !important;transform:none !important}
     .hero-chip{animation:none}
@@ -1377,15 +1382,16 @@
           <h2>Which plan are you looking for?</h2>
           <p>Leave us your name, email and the plan you're interested in. We'll reach out to fine-tune the details of your website, no strings attached.</p>
         </div>
-        <form class="start-form" id="startForm" novalidate>
+        <form class="start-form" id="startForm" novalidate autocomplete="on">
+          <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" id="f-web" tabindex="-1" autocomplete="off"></label></div>
           <label>Your name
-            <input type="text" name="nombre" id="f-nombre" required autocomplete="name" placeholder="First and last name">
+            <input type="text" name="nombre" id="f-nombre" required autocomplete="name" placeholder="First and last name" maxlength="100">
           </label>
           <label>Your WhatsApp number
-            <input type="tel" name="telefono" id="f-telefono" required autocomplete="tel" inputmode="tel" placeholder="e.g. +57 300 123 4567">
+            <input type="tel" name="telefono" id="f-telefono" required autocomplete="tel" inputmode="tel" placeholder="e.g. +57 300 123 4567" maxlength="20">
           </label>
           <label>Your email
-            <input type="email" name="email" id="f-email" required autocomplete="email" placeholder="you@example.com">
+            <input type="email" name="email" id="f-email" required autocomplete="email" placeholder="you@example.com" maxlength="120">
           </label>
           <label>Plan you're interested in
             <select name="plan" id="f-plan" required>
@@ -1777,6 +1783,7 @@
     var submitBtn = document.getElementById("f-submit");
     var idemKey = null; // misma clave mientras los datos no cambien: evita duplicados por doble clic
     var sending = false;
+    var lastSent = 0;
 
     function uuid(){
       if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -1819,6 +1826,10 @@
     startForm.addEventListener("submit", function(e){
       e.preventDefault();
       if(sending) return;
+      // Anti-spam: el campo oculto "website" solo lo llenan los bots; y se espera 20 s entre envíos.
+      var hp = document.getElementById("f-web");
+      if(hp && hp.value) return;
+      if(Date.now() - lastSent < 20000) return;
       var nombre = document.getElementById("f-nombre").value.trim();
       var telRaw = document.getElementById("f-telefono").value.trim();
       var email = document.getElementById("f-email").value.trim();
@@ -1829,7 +1840,7 @@
       var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       var telOk = /^\+?[0-9]{7,15}$/.test(telefono);
 
-      if(nombre.length < 2 || !telOk || !emailOk || !plan){
+      if(nombre.length < 2 || nombre.length > 100 || !telOk || !emailOk || email.length > 120 || !plan){
         showMsg("err", T("Please enter your name, a valid WhatsApp number, a valid email and choose a plan."));
         return;
       }
@@ -1851,6 +1862,7 @@
 
       if(!idemKey) idemKey = uuid();
       sending = true;
+      lastSent = Date.now();
       submitBtn.disabled = true;
       showMsg("ok", T("Saving your request…"));
 

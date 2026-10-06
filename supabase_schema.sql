@@ -73,6 +73,16 @@ create trigger trg_reservations_updated_at
   before update on public.reservations
   for each row execute function public.set_updated_at();
 
+-- Red de seguridad a nivel de tabla (idempotente).
+do $$ begin
+  if not exists (select 1 from pg_constraint where conname = 'reservations_lengths_chk') then
+    alter table public.reservations add constraint reservations_lengths_chk check (
+      length(customer_name) <= 100 and length(coalesce(email, '')) <= 120
+      and length(coalesce(request_type, '')) <= 200 and length(coalesce(message, '')) <= 1000
+    );
+  end if;
+end $$;
+
 -- ----------------------------------------------------------------------------
 -- 3. SEGURIDAD: bloquear acceso directo a las tablas desde el navegador.
 --    La única puerta de entrada permitida es la función create_reservation.
@@ -138,6 +148,20 @@ begin
     raise exception 'MISSING_IDEMPOTENCY_KEY';
   end if;
 
+  -- Límites de tamaño y rangos razonables: evitan que alguien llene la base
+  -- de datos con basura o textos gigantes.
+  if length(p_customer_name) > 100
+     or length(coalesce(p_email, '')) > 120
+     or length(coalesce(p_request_type, '')) > 200
+     or length(coalesce(p_message, '')) > 1000 then
+    raise exception 'FIELD_TOO_LONG';
+  end if;
+
+  if p_reservation_date is not null
+     and (p_reservation_date < current_date - 1 or p_reservation_date > current_date + 730) then
+    raise exception 'INVALID_DATE';
+  end if;
+
   -- Idempotencia (camino rápido): si esta clave ya generó una reserva,
   -- se devuelve la misma (mismo trabajador de siempre). NO se re-aleatoriza.
   select r.id, w.phone, r.status
@@ -149,6 +173,18 @@ begin
   if found then
     return query select v_existing.id, v_existing.phone, v_existing.status;
     return;
+  end if;
+
+  -- Límite de frecuencia (anti-spam): máximo 3 solicitudes por teléfono/correo
+  -- por hora y 200 en total por hora. Los reintentos de una misma solicitud
+  -- ya salieron arriba por idempotencia y no cuentan.
+  if (select count(*) from public.reservations
+       where created_at > now() - interval '1 hour'
+         and (phone = p_phone
+              or (p_email is not null and email = nullif(trim(p_email), '')))) >= 3
+     or (select count(*) from public.reservations
+          where created_at > now() - interval '1 hour') >= 200 then
+    raise exception 'RATE_LIMITED';
   end if;
 
   -- Selección aleatoria REAL (no alternancia) entre los trabajadores activos.
@@ -200,6 +236,12 @@ $$;
 -- Al ser SECURITY DEFINER, se ejecuta con permisos del dueño y sí puede
 -- leer/escribir workers y reservations, aunque esos roles no tengan acceso
 -- directo a las tablas (punto 3 de arriba).
+-- Por defecto Postgres da permiso de ejecución a PUBLIC: se quita y se concede
+-- solo a los roles que lo necesitan.
+revoke execute on function public.create_reservation(
+  text, text, text, date, time, text, text, uuid
+) from public;
+
 grant execute on function public.create_reservation(
   text, text, text, date, time, text, text, uuid
 ) to anon, authenticated;
@@ -225,4 +267,5 @@ as $$
    where r.id = p_id;
 $$;
 
+revoke execute on function public.get_reservation(uuid) from public;
 grant execute on function public.get_reservation(uuid) to anon, authenticated;
