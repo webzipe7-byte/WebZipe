@@ -887,9 +887,11 @@
   /* BENEFICIOS → bento */
   .rows{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
   .row,.row:nth-child(even){grid-template-columns:1fr;gap:22px;padding:26px;grid-column:span 2;align-content:space-between}
-  .row:nth-child(1){grid-column:span 4;grid-template-columns:1fr 1fr;align-items:center}
+  .row:nth-child(1){grid-column:span 4;grid-template-columns:1fr 1fr;align-items:stretch}
+  .row:nth-child(1) .row-text{align-self:center}
   .row:nth-child(2){grid-column:span 2}
-  .row:nth-child(1) .row-media{aspect-ratio:auto;height:100%;min-height:260px}
+  .row:nth-child(1) .row-media{aspect-ratio:auto;height:100%;min-height:300px}
+  @media (max-width:900px){ .row:nth-child(1) .row-media{aspect-ratio:16/10;min-height:0} }
   .row:nth-child(even) .row-media{order:0}
   .row-text h3{font-size:1.7rem;line-height:1.08;margin:10px 0 10px}
   .row-num{font-size:.85rem !important;color:var(--blue-bright);font-weight:600}
