@@ -226,3 +226,79 @@ as $$
 $$;
 
 grant execute on function public.get_reservation(uuid) to anon, authenticated;
+
+
+-- ============================================================================
+-- REGISTRO DE AUTORIZACIONES (Ley 1581 de 2012 — prueba del consentimiento)
+-- Guarda cuándo y cómo cada persona aceptó: cookies y formulario
+-- (términos y condiciones + política de privacidad, casillas separadas).
+-- Ejecutar este bloque en el SQL Editor de Supabase. Es idempotente.
+-- ============================================================================
+create table if not exists public.consent_log (
+  id              uuid primary key default gen_random_uuid(),
+  consent_id      uuid not null unique,      -- evita duplicados por reintentos
+  kind            text not null check (kind in ('cookies', 'form')),
+  choice          jsonb not null,            -- ej: {"preferences": true} o {"terms": true, "privacy": true}
+  policy_version  text not null,             -- versión de los documentos aceptados
+  subject_email   text,                      -- solo en el formulario
+  reservation_id  uuid references public.reservations(id) on delete set null,
+  ip_address      text,                      -- tomada de las cabeceras de la petición
+  user_agent      text,
+  page_url        text,
+  created_at      timestamptz not null default now()
+);
+
+comment on table public.consent_log is 'Prueba de la autorización del titular: fecha, hora, IP, versión y elección.';
+
+create index if not exists consent_log_email_idx on public.consent_log(subject_email);
+create index if not exists consent_log_created_idx on public.consent_log(created_at desc);
+
+alter table public.consent_log enable row level security;
+revoke all on public.consent_log from anon, authenticated;
+
+create or replace function public.log_consent(
+  p_consent_id      uuid,
+  p_kind            text,
+  p_choice          jsonb,
+  p_policy_version  text,
+  p_email           text default null,
+  p_reservation_id  uuid default null,
+  p_user_agent      text default null,
+  p_page_url        text default null
+) returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_headers json;
+  v_ip      text;
+begin
+  if p_consent_id is null then raise exception 'MISSING_CONSENT_ID'; end if;
+  if p_kind not in ('cookies', 'form') then raise exception 'INVALID_KIND'; end if;
+  if p_choice is null then raise exception 'MISSING_CHOICE'; end if;
+  if p_policy_version is null or length(p_policy_version) > 20 then raise exception 'INVALID_VERSION'; end if;
+  if p_email is not null and length(p_email) > 0
+     and p_email !~ '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$' then
+    raise exception 'INVALID_EMAIL';
+  end if;
+
+  -- La IP viene de las cabeceras que PostgREST pasa a la función (no del navegador).
+  begin
+    v_headers := current_setting('request.headers', true)::json;
+    v_ip := trim(split_part(coalesce(v_headers->>'x-forwarded-for', v_headers->>'cf-connecting-ip', ''), ',', 1));
+  exception when others then
+    v_ip := null;
+  end;
+
+  insert into public.consent_log
+    (consent_id, kind, choice, policy_version, subject_email, reservation_id, ip_address, user_agent, page_url)
+  values
+    (p_consent_id, p_kind, p_choice, p_policy_version, nullif(trim(p_email), ''), p_reservation_id,
+     nullif(v_ip, ''), left(p_user_agent, 400), left(p_page_url, 400))
+  on conflict (consent_id) do nothing;
+end;
+$$;
+
+revoke all on function public.log_consent(uuid, text, jsonb, text, text, uuid, text, text) from public;
+grant execute on function public.log_consent(uuid, text, jsonb, text, text, uuid, text, text) to anon, authenticated;
