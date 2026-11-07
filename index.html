@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/estilos.css?v=7">
+<link rel="stylesheet" href="assets/css/estilos.css?v=8">
 <script>(function(){var K="wz-consent",V="1.1";window.wzConsentVersion=V;window.wzConsentRead=function(){try{var v=JSON.parse(localStorage.getItem(K));if(v&&v.v===V&&v.ts&&Date.now()-v.ts<31536000000)return v;}catch(e){}return null};window.wzPrefs=function(){var c=window.wzConsentRead();return !!(c&&c.prefs)};})();</script>
 </head>
 <body>
@@ -87,9 +87,9 @@
   <!-- Bienvenida -->
   <section class="bienvenida" id="inicio" aria-label="Bienvenida">
     <ul class="bienvenida-fotos" aria-hidden="true">
-      <li class="is-on"><img src="ejemplo-cafeteria.png" alt=""></li>
-      <li><img src="ejemplo-tienda.png" alt="" loading="lazy"></li>
-      <li><img src="ejemplo-profesional.png" alt="" loading="lazy"></li>
+      <li class="is-on"><picture><source media="(max-width: 600px)" srcset="cafeteria-celular.png"><img src="ejemplo-cafeteria.png" alt=""></picture></li>
+      <li><picture><source media="(max-width: 600px)" srcset="tienda-celular.png"><img src="ejemplo-tienda.png" alt="" loading="lazy"></picture></li>
+      <li><picture><source media="(max-width: 600px)" srcset="dispositivo-celular.png"><img src="ejemplo-profesional.png" alt="" loading="lazy"></picture></li>
     </ul>
     <div class="bienvenida-texto">
       <span class="etiqueta">Estudio de soluciones digitales para negocios</span>
@@ -811,7 +811,7 @@
   </div>
 </div>
 
-<script src="assets/js/idiomas.js?v=7"></script>
-<script src="assets/js/main.js?v=7"></script>
+<script src="assets/js/idiomas.js?v=8"></script>
+<script src="assets/js/main.js?v=8"></script>
 </body>
 </html>
