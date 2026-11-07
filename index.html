@@ -20,23 +20,23 @@
 <div class="anuncio" id="anuncio">
   <div class="anuncio-pista">
     <a href="#planes" class="anuncio-msg is-on">Tu página lista desde 5 días hábiles</a>
-    <a href="#cotizar" class="anuncio-msg">Asesoría gratis y sin compromiso</a>
-    <a href="#proyectos" class="anuncio-msg">Mira páginas que ya hicimos</a>
+    <a href="#contacto" class="anuncio-msg">Asesoría gratis y sin compromiso</a>
+    <a href="#" data-abrir="proyectos" class="anuncio-msg">Mira páginas que ya hicimos</a>
   </div>
 </div>
 
 <!-- Cabecera -->
-<header class="cabecera" id="cabecera">
+<header class="cabecera solida" id="cabecera">
   <div class="cab-izq">
     <button type="button" class="icono-btn" id="abrirMenu" aria-label="Abrir menú" aria-controls="menuLateral" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <a class="icono-btn" href="#cotizar" aria-label="Cotizar mi página">
+    <a class="icono-btn" href="#contacto" aria-label="Cotizar mi página">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
     </a>
   </div>
 
-  <a href="#inicio" class="marca" aria-label="WebZipe, ir al inicio">
+  <a href="#planes" class="marca" aria-label="WebZipe, ir al inicio">
     <svg class="marca-w" viewBox="0 0 100 100" aria-hidden="true"><path d="M10 42 L27 88 L42 55 L55 88 L78 26"/><circle cx="80" cy="24" r="7"/></svg>
     <span>WEBZIPE</span>
   </a>
@@ -52,6 +52,7 @@
         <li><button type="button" role="menuitemradio" data-idioma="fr" aria-checked="false">Français</button></li>
       </ul>
     </div>
+    <a class="btn btn-oscuro btn-cab" href="#contacto">Contáctanos ahora</a>
     <a class="icono-btn" href="#" data-wa="Hola, quiero información sobre una página web para mi negocio." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/><path d="M9 9.5c.3 2 2.5 4.2 4.5 4.6l1.2-1.2 1.8.8-.4 1.6c-3.6.3-7.6-3.5-7.4-7.2l1.6-.4.8 1.8z" class="relleno"/></svg>
     </a>
@@ -65,277 +66,28 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
   </button>
   <ul class="menu-principal">
-    <li><a href="#proyectos">Proyectos</a></li>
-    <li><a href="#soluciones">Páginas web</a></li>
-    <li><a href="#soluciones-tiendas">Tiendas en línea</a></li>
+    <li><button type="button" data-abrir="proyectos">Proyectos</button></li>
+    <li><button type="button" data-abrir="paginas">Páginas web</button></li>
+    <li><button type="button" data-abrir="tiendas">Tiendas en línea</button></li>
     <li><a href="#planes">Planes</a></li>
-    <li class="con-sub">
-      <button type="button" class="sub-btn" aria-expanded="false" aria-controls="subServicios">Servicios <span class="mas" aria-hidden="true"></span></button>
-      <ul class="sub" id="subServicios" hidden>
-        <li><a href="#servicios">Páginas a la medida</a></li>
-        <li><a href="#servicios">Tiendas y catálogos</a></li>
-        <li><a href="#servicios">Formularios y reservas</a></li>
-        <li><a href="#servicios">Mantenimiento</a></li>
-      </ul>
-    </li>
-    <li><a href="#detras">Lo que hay detrás de una página web</a></li>
+    <li><button type="button" data-abrir="servicios">Servicios</button></li>
+    <li><button type="button" data-abrir="detras">Lo que hay detrás de una página web</button></li>
+    <li><a href="#contacto" class="menu-contacto">Contáctanos ahora</a></li>
   </ul>
   <ul class="menu-secundario">
     <li><button type="button" data-abrir="trabaja">Trabaja aquí</button></li>
     <li><button type="button" data-abrir="nosotros">Sobre nosotros</button></li>
-    <li><a href="#preguntas">Ayuda</a></li>
+    <li><button type="button" data-abrir="ayuda">Ayuda</button></li>
     <li><a href="#" data-wa="Hola, quiero saber cómo va mi proyecto con WebZipe." target="_blank" rel="noopener">Seguimiento de mi proyecto</a></li>
   </ul>
 </nav>
 
 <main id="contenido">
 
-  <!-- Portada -->
-  <section class="portada" id="inicio" aria-roledescription="carrusel" aria-label="Destacados">
-    <ul class="portada-slides">
-      <li class="slide is-on">
-        <img class="slide-media" src="ejemplo-cafeteria.png" alt="">
-        <div class="slide-texto">
-          <span class="etiqueta">Estudio de diseño web</span>
-          <h1>La página que tu negocio necesita para crecer</h1>
-          <div class="slide-acciones">
-            <a href="#" class="btn btn-claro" data-wa="Hola, quiero una página web para mi negocio. ¿Me pueden dar más información?" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
-            <a href="#proyectos" class="btn btn-linea-clara">Ver proyectos</a>
-          </div>
-        </div>
-      </li>
-      <li class="slide">
-        <img class="slide-media" src="ejemplo-tienda.png" alt="" loading="lazy">
-        <div class="slide-texto">
-          <span class="etiqueta">Tiendas en línea</span>
-          <h2>Vende tus productos sin depender solo de las redes</h2>
-          <div class="slide-acciones">
-            <a href="#planes" class="btn btn-claro">Ver planes</a>
-          </div>
-        </div>
-      </li>
-      <li class="slide">
-        <img class="slide-media" src="ejemplo-profesional.png" alt="" loading="lazy">
-        <div class="slide-texto">
-          <span class="etiqueta">Profesionales</span>
-          <h2>Una página que da confianza desde el primer segundo</h2>
-          <div class="slide-acciones">
-            <a href="#soluciones" class="btn btn-claro">Conocer más</a>
-          </div>
-        </div>
-      </li>
-    </ul>
-    <button type="button" class="portada-flecha izq" id="slideAnt" aria-label="Anterior">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-    </button>
-    <button type="button" class="portada-flecha der" id="slideSig" aria-label="Siguiente">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-    </button>
-    <div class="portada-puntos" id="slidePuntos">
-      <button type="button" class="is-on" aria-label="Destacado 1"></button>
-      <button type="button" aria-label="Destacado 2"></button>
-      <button type="button" aria-label="Destacado 3"></button>
-    </div>
-  </section>
-
-  <!-- Proyectos: carrusel tipo "NEW IN" -->
-  <section class="fila-productos" id="proyectos">
-    <div class="fila-cab">
-      <h2 class="titulo-fila">Nuevo</h2>
-      <button type="button" class="ver-todo" id="verTodo" aria-expanded="false">Ver todo</button>
-    </div>
-    <div class="carrusel" id="carrusel">
-      <button type="button" class="carrusel-flecha izq" data-dir="-1" aria-label="Anterior">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-      </button>
-      <ul class="carrusel-pista" id="carruselPista">
-        <li class="producto">
-          <a href="https://webzipe7-byte.github.io/prueba-ropa-" target="_blank" rel="noopener">
-            <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-ropa-" title="Catálogo de ropa" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
-            <span class="producto-tipo">Catálogo de ropa</span>
-            <span class="producto-nombre">Pedidos por WhatsApp</span>
-          </a>
-        </li>
-        <li class="producto">
-          <a href="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" target="_blank" rel="noopener">
-            <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" title="Javier Restrepo, abogado de familia" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
-            <span class="producto-tipo">Abogado de familia</span>
-            <span class="producto-nombre">Javier Restrepo</span>
-          </a>
-        </li>
-        <li class="producto">
-          <a href="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" target="_blank" rel="noopener">
-            <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" title="El Buen Sazón, restaurante" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
-            <span class="producto-tipo">Restaurante</span>
-            <span class="producto-nombre">El Buen Sazón</span>
-          </a>
-        </li>
-        <li class="producto">
-          <a href="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" target="_blank" rel="noopener">
-            <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" title="ToyLandia, juguetería" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
-            <span class="producto-tipo">Tienda en línea</span>
-            <span class="producto-nombre">ToyLandia</span>
-          </a>
-        </li>
-        <li class="producto">
-          <a href="https://webzipe7-byte.github.io/prueba-barberia-/Casa-Navaja-Barbershop.html" target="_blank" rel="noopener">
-            <div class="producto-foto"><iframe data-src="https://webzipe7-byte.github.io/prueba-barberia-/Casa-Navaja-Barbershop.html" title="Casa Navaja Barbershop" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
-            <span class="producto-tipo">Barbería</span>
-            <span class="producto-nombre">Casa Navaja</span>
-          </a>
-        </li>
-        <li class="producto">
-          <a href="barberia-clasica/" target="_blank" rel="noopener">
-            <div class="producto-foto"><iframe data-src="barberia-clasica/" title="Barbería Clásica" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
-            <span class="producto-tipo">Barbería con reservas</span>
-            <span class="producto-nombre">Barbería Clásica</span>
-          </a>
-        </li>
-        <li class="producto">
-          <a href="https://webzipe7-byte.github.io/asesores-financieros/" target="_blank" rel="noopener">
-            <div class="producto-foto"><iframe data-src="https://webzipe7-byte.github.io/asesores-financieros/" title="Tu Futuro, asesoría financiera" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
-            <span class="producto-tipo">Asesoría financiera</span>
-            <span class="producto-nombre">Tu Futuro</span>
-          </a>
-        </li>
-      </ul>
-      <button type="button" class="carrusel-flecha der" data-dir="1" aria-label="Siguiente">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-    <p class="nota-fina">Páginas de muestra hechas por WebZipe. Tócalas para verlas en vivo.</p>
-  </section>
-
-  <!-- Valores -->
-  <section class="valores" aria-label="Por qué WebZipe">
-    <ul>
-      <li><strong>Diseño a la medida</strong><span>Nada de plantillas repetidas</span></li>
-      <li><strong>Lista para celular</strong><span>Se ve bien en cualquier pantalla</span></li>
-      <li><strong>WhatsApp en un clic</strong><span>Tus clientes te escriben al instante</span></li>
-      <li><strong>En línea 24/7</strong><span>Tu negocio abierto a toda hora</span></li>
-    </ul>
-  </section>
-
-  <!-- Bloques de categoría -->
-  <section class="categoria" id="soluciones">
-    <div class="categoria-foto">
-      <div class="escena">
-        <figure class="marco-web"><span class="marco-barra"><i></i><i></i><i></i></span><img src="ejemplo-profesional.png" alt="Página web de una abogada hecha por WebZipe" loading="lazy"></figure>
-        <figure class="marco-cel"><img src="dispositivo-celular.png" alt="" loading="lazy"></figure>
-      </div>
-    </div>
-    <div class="categoria-texto">
-      <h2>Páginas web</h2>
-      <ul class="lista-valores">
-        <li>Diseño hecho a la medida de tu negocio</li>
-        <li>100% adaptada a celular, tablet y computador</li>
-        <li>Botones directos a WhatsApp</li>
-      </ul>
-      <a href="#planes" class="enlace-mayus">Conocer más</a>
-    </div>
-  </section>
-
-  <section class="categoria invertida" id="soluciones-tiendas">
-    <div class="categoria-foto">
-      <div class="escena">
-        <figure class="marco-tablet"><img src="tienda-tablet.png" alt="Tienda de ropa en línea hecha por WebZipe" loading="lazy"></figure>
-        <figure class="marco-cel"><img src="tienda-celular.png" alt="" loading="lazy"></figure>
-      </div>
-    </div>
-    <div class="categoria-texto">
-      <h2>Tiendas y catálogos</h2>
-      <ul class="lista-valores">
-        <li>Tus productos ordenados y con precio</li>
-        <li>Botón de pedir en cada producto</li>
-        <li>Sin depender del algoritmo de las redes</li>
-      </ul>
-      <a href="#planes" class="enlace-mayus">Conocer más</a>
-    </div>
-  </section>
-
-  <section class="categoria" id="soluciones-reservas">
-    <div class="categoria-foto">
-      <div class="escena">
-        <figure class="marco-web"><span class="marco-barra"><i></i><i></i><i></i></span><img src="ejemplo-cafeteria.png" alt="Página de una cafetería con reservas hecha por WebZipe" loading="lazy"></figure>
-        <figure class="marco-cel"><img src="cafeteria-celular.png" alt="" loading="lazy"></figure>
-      </div>
-    </div>
-    <div class="categoria-texto">
-      <h2>Reservas y formularios</h2>
-      <ul class="lista-valores">
-        <li>Tus clientes agendan sin llamarte</li>
-        <li>Formularios de contacto que sí llegan</li>
-        <li>Menú, ubicación y pedidos en un solo lugar</li>
-      </ul>
-      <a href="#planes" class="enlace-mayus">Conocer más</a>
-    </div>
-  </section>
-
-  <!-- El cambio -->
-  <section class="cambio">
-    <div class="envoltura">
-      <h2 class="titulo-seccion">Tener redes sociales ya no es suficiente</h2>
-      <p class="entrada">Muchos negocios manejan Instagram o Facebook, pero no tienen un sitio propio donde sus clientes conozcan a fondo lo que venden.</p>
-      <div class="cambio-columnas">
-        <div>
-          <h3>Sin página web</h3>
-          <ul>
-            <li>Tus clientes buscan información y solo encuentran una bio de Instagram.</li>
-            <li>Tu negocio depende por completo del alcance de un algoritmo que no controlas.</li>
-            <li>No hay un lugar claro para mostrar todos tus servicios o productos.</li>
-            <li>La imagen del negocio se siente menos profesional frente a la competencia.</li>
-          </ul>
-        </div>
-        <div class="con">
-          <h3>Con WebZipe</h3>
-          <ul>
-            <li>Presentas tus servicios y productos de forma clara y ordenada.</li>
-            <li>Facilitas el contacto con botones directos a WhatsApp.</li>
-            <li>Proyectas una imagen mucho más profesional y confiable.</li>
-            <li>Tienes un espacio propio en Internet que no depende de ningún algoritmo.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Servicios -->
-  <section class="servicios" id="servicios">
-    <div class="envoltura">
-      <h2 class="titulo-seccion">Servicios</h2>
-      <ol class="lista-servicios">
-        <li>
-          <h3>Páginas web a la medida</h3>
-          <p>Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio.</p>
-        </li>
-        <li>
-          <h3>Tiendas virtuales y catálogos digitales</h3>
-          <p>Muestra y vende tus productos con un catálogo digital o una tienda virtual completa.</p>
-        </li>
-        <li>
-          <h3>WhatsApp y redes sociales</h3>
-          <p>Botones de contacto directo a WhatsApp y enlaces a tus redes, para que te escriban en un clic.</p>
-        </li>
-        <li>
-          <h3>Formularios y reservas</h3>
-          <p>Formularios de contacto y sistemas para agendar citas, directamente desde tu página.</p>
-        </li>
-        <li>
-          <h3>Mantenimiento y marketing digital</h3>
-          <p>Actualizamos tu página, te acompañamos después de la entrega y sumamos estrategias de marketing digital.</p>
-        </li>
-        <li>
-          <h3>Código QR de tu página</h3>
-          <p>Convertimos tu página en un código QR para tus volantes, tu mostrador o tu tarjeta.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
   <!-- Planes -->
   <section class="planes" id="planes">
     <div class="envoltura">
-      <h2 class="titulo-seccion">Planes</h2>
+      <h1 class="titulo-seccion">Planes</h1>
       <p class="entrada">El alcance se puede ajustar a lo que necesites. Escríbenos y lo definimos juntos.</p>
       <div class="planes-grid">
         <article class="plan">
@@ -347,7 +99,7 @@
             <li>Diseño 100% responsive</li>
             <li>Formulario de contacto + WhatsApp</li>
           </ul>
-          <a href="#cotizar" class="btn btn-linea" data-plan="Paquete Básico">Quiero el Básico</a>
+          <a href="#contacto" class="btn btn-linea" data-plan="Paquete Básico">Quiero el Básico</a>
         </article>
         <article class="plan destacado">
           <span class="sello sello-plan">Más popular</span>
@@ -359,7 +111,7 @@
             <li>Catálogo digital</li>
             <li>Redes sociales + WhatsApp integrados</li>
           </ul>
-          <a href="#cotizar" class="btn btn-oscuro" data-plan="Paquete Profesional">Quiero el Profesional</a>
+          <a href="#contacto" class="btn btn-oscuro" data-plan="Paquete Profesional">Quiero el Profesional</a>
         </article>
         <article class="plan">
           <span class="plan-tiempo">Servicio recurrente</span>
@@ -370,79 +122,17 @@
             <li>Tienda virtual y/o sistema de reservas</li>
             <li>Mantenimiento mensual + marketing digital</li>
           </ul>
-          <a href="#cotizar" class="btn btn-linea" data-plan="Paquete Premium">Quiero el Premium</a>
+          <a href="#contacto" class="btn btn-linea" data-plan="Paquete Premium">Quiero el Premium</a>
         </article>
       </div>
       <p class="nota-fina centro">El dominio propio (tunegocio.com) se cotiza aparte.</p>
     </div>
   </section>
 
-  <!-- Lo que hay detrás -->
-  <section class="detras" id="detras">
-    <div class="detras-foto">
-      <div class="detras-pantallas" aria-hidden="true">
-        <img src="tienda-celular.png" alt="" loading="lazy">
-        <img src="cafeteria-celular.png" alt="" loading="lazy">
-        <img src="dispositivo-celular.png" alt="" loading="lazy">
-      </div>
-    </div>
-    <div class="detras-texto">
-      <h2>Lo que hay detrás de una página web</h2>
-      <ol>
-        <li><strong>Nos cuentas tu idea.</strong> A qué se dedica tu negocio, qué vendes y cómo quieres que te contacten.</li>
-        <li><strong>Diseñamos a la medida.</strong> Colores, textos e imágenes pensados para tu negocio, no una plantilla.</li>
-        <li><strong>Ajustamos contigo.</strong> Revisas el avance y pedimos tus cambios hasta que quede como la imaginas.</li>
-        <li><strong>Publicamos y acompañamos.</strong> Tu página queda en línea y seguimos disponibles para actualizarla.</li>
-      </ol>
-      <p class="detras-nota">Somos un estudio joven: trabajas directo con la persona que diseña tu página, sin filas ni intermediarios.</p>
-    </div>
-  </section>
-
-  <!-- Preguntas frecuentes -->
-  <section class="preguntas" id="preguntas">
+  <!-- Contáctanos ahora -->
+  <section class="cotizar" id="contacto">
     <div class="envoltura estrecha">
-      <h2 class="titulo-seccion">Preguntas frecuentes</h2>
-      <div class="acordeon">
-        <details>
-          <summary>¿Qué tipo de negocios pueden tener una página web?</summary>
-          <p>Cualquier tipo: restaurantes, tiendas, emprendimientos, profesionales independientes, empresas de servicios y mucho más. Si tienes un negocio, una página web puede ayudarte a mostrarlo mejor.</p>
-        </details>
-        <details>
-          <summary>¿La página funciona en celulares?</summary>
-          <p>Sí. Todas las páginas que diseñamos son 100% responsive: se adaptan y funcionan correctamente en celulares, tablets y computadores.</p>
-        </details>
-        <details>
-          <summary>¿Puedo agregar WhatsApp a mi página?</summary>
-          <p>Claro, de hecho es una de las integraciones que más recomendamos. Es la forma más rápida y directa para que tus clientes te contacten.</p>
-        </details>
-        <details>
-          <summary>¿Puedo solicitar cambios en el diseño?</summary>
-          <p>Sí. El diseño se ajusta a lo que necesites: cuéntanos tu idea, tus colores y tu estilo, y lo desarrollamos contigo hasta que quede como lo imaginas.</p>
-        </details>
-        <details>
-          <summary>¿Cuánto tarda en realizarse una página?</summary>
-          <p>Depende de la complejidad y el alcance de tu proyecto. Una vez conozcamos los detalles de tu negocio, te damos un tiempo estimado por WhatsApp.</p>
-        </details>
-        <details>
-          <summary>¿Qué información necesitan para comenzar?</summary>
-          <p>Nos ayuda conocer a qué se dedica tu negocio, qué productos o servicios ofreces y cómo prefieres que tus clientes te contacten. Con eso ya podemos empezar a diseñar.</p>
-        </details>
-        <details>
-          <summary>¿Cómo es el pago?</summary>
-          <p>Se paga un 30% de anticipo al aceptar la propuesta y el resto al entregar la página. Antes de pagar conoces el valor total por escrito.</p>
-        </details>
-        <details>
-          <summary>¿También renuevan páginas que ya existen?</summary>
-          <p>Sí. Si ya tienes una página y se ve vieja o no te trae clientes, la actualizamos o la rediseñamos por completo.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Formulario -->
-  <section class="cotizar" id="cotizar">
-    <div class="envoltura estrecha">
-      <h2 class="titulo-seccion">¿Qué plan estás buscando?</h2>
+      <h2 class="titulo-seccion">Contáctanos ahora</h2>
       <p class="entrada">Déjanos tus datos y te escribimos por WhatsApp para afinar los detalles, sin compromiso.</p>
       <form class="formulario" id="formCotizar" novalidate>
         <div class="campo">
@@ -497,7 +187,7 @@
 <!-- Pie de página -->
 <footer class="pie">
   <div class="pie-marca">
-    <a href="#inicio" class="marca marca-pie" aria-label="WebZipe, ir al inicio">
+    <a href="#planes" class="marca marca-pie" aria-label="WebZipe, ir al inicio">
       <svg class="marca-w" viewBox="0 0 100 100" aria-hidden="true"><path d="M10 42 L27 88 L42 55 L55 88 L78 26"/><circle cx="80" cy="24" r="7"/></svg>
       <span>WEBZIPE</span>
     </a>
@@ -524,8 +214,8 @@
       <h4>Sobre la marca</h4>
       <ul>
         <li><button type="button" data-abrir="nosotros">Sobre nosotros</button></li>
-        <li><a href="#detras">Lo que hay detrás de una página web</a></li>
-        <li><a href="#proyectos">Proyectos</a></li>
+        <li><button type="button" data-abrir="detras">Lo que hay detrás de una página web</button></li>
+        <li><button type="button" data-abrir="proyectos">Proyectos</button></li>
         <li><button type="button" data-abrir="trabaja">Trabaja aquí</button></li>
       </ul>
     </div>
@@ -535,7 +225,7 @@
         <li><button type="button" data-legal="retracto">Reembolsos y retracto</button></li>
         <li><button type="button" data-legal="terminos">Términos y condiciones</button></li>
         <li><button type="button" data-legal="cookies">Política de cookies</button></li>
-        <li><a href="#preguntas">Preguntas frecuentes</a></li>
+        <li><button type="button" data-abrir="ayuda">Preguntas frecuentes</button></li>
         <li><a href="#" data-wa="Hola, tengo una pregunta, queja o reclamo para WebZipe." target="_blank" rel="noopener">Escríbenos tus PQRS</a></li>
       </ul>
     </div>
@@ -553,6 +243,290 @@
 <a class="flotante" href="#" data-wa="Hola, quiero información sobre una página web para mi negocio." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/><path d="M9 9.5c.3 2 2.5 4.2 4.5 4.6l1.2-1.2 1.8.8-.4 1.6c-3.6.3-7.6-3.5-7.4-7.2l1.6-.4.8 1.8z" class="relleno"/></svg>
 </a>
+
+<!-- ============ SECCIONES EN LETRERO (se abren desde el menú) ============ -->
+
+<dialog class="letrero letrero-ancho" id="letrero-proyectos" aria-labelledby="t-proyectos">
+  <div class="letrero-caja">
+    <button type="button" class="icono-btn letrero-cerrar" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <h2 id="t-proyectos">Proyectos</h2>
+    <div class="letrero-cuerpo">
+      <ul class="galeria" id="galeria">
+        <li class="producto">
+          <a href="https://webzipe7-byte.github.io/prueba-ropa-" target="_blank" rel="noopener">
+            <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-ropa-" title="Catálogo de ropa" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+            <span class="producto-tipo">Catálogo de ropa</span>
+            <span class="producto-nombre">Pedidos por WhatsApp</span>
+          </a>
+        </li>
+        <li class="producto">
+          <a href="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" target="_blank" rel="noopener">
+            <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" title="Javier Restrepo, abogado de familia" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+            <span class="producto-tipo">Abogado de familia</span>
+            <span class="producto-nombre">Javier Restrepo</span>
+          </a>
+        </li>
+        <li class="producto">
+          <a href="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" target="_blank" rel="noopener">
+            <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" title="El Buen Sazón, restaurante" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+            <span class="producto-tipo">Restaurante</span>
+            <span class="producto-nombre">El Buen Sazón</span>
+          </a>
+        </li>
+        <li class="producto">
+          <a href="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" target="_blank" rel="noopener">
+            <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" title="ToyLandia, juguetería" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+            <span class="producto-tipo">Tienda en línea</span>
+            <span class="producto-nombre">ToyLandia</span>
+          </a>
+        </li>
+        <li class="producto">
+          <a href="https://webzipe7-byte.github.io/prueba-barberia-/Casa-Navaja-Barbershop.html" target="_blank" rel="noopener">
+            <div class="producto-foto"><iframe data-src="https://webzipe7-byte.github.io/prueba-barberia-/Casa-Navaja-Barbershop.html" title="Casa Navaja Barbershop" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+            <span class="producto-tipo">Barbería</span>
+            <span class="producto-nombre">Casa Navaja</span>
+          </a>
+        </li>
+        <li class="producto">
+          <a href="barberia-clasica/" target="_blank" rel="noopener">
+            <div class="producto-foto"><iframe data-src="barberia-clasica/" title="Barbería Clásica" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+            <span class="producto-tipo">Barbería con reservas</span>
+            <span class="producto-nombre">Barbería Clásica</span>
+          </a>
+        </li>
+        <li class="producto">
+          <a href="https://webzipe7-byte.github.io/asesores-financieros/" target="_blank" rel="noopener">
+            <div class="producto-foto"><iframe data-src="https://webzipe7-byte.github.io/asesores-financieros/" title="Tu Futuro, asesoría financiera" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
+            <span class="producto-tipo">Asesoría financiera</span>
+            <span class="producto-nombre">Tu Futuro</span>
+          </a>
+        </li>
+      </ul>
+      <p class="nota-fina">Páginas de muestra hechas por WebZipe. Tócalas para verlas en vivo.</p>
+    </div>
+  </div>
+</dialog>
+<dialog class="letrero letrero-ancho" id="letrero-paginas" aria-labelledby="t-paginas">
+  <div class="letrero-caja">
+    <button type="button" class="icono-btn letrero-cerrar" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <h2 id="t-paginas">Páginas web</h2>
+    <div class="letrero-cuerpo">
+  <section class="valores">
+    <ul>
+      <li><strong>Diseño a la medida</strong><span>Nada de plantillas repetidas</span></li>
+      <li><strong>Lista para celular</strong><span>Se ve bien en cualquier pantalla</span></li>
+      <li><strong>WhatsApp en un clic</strong><span>Tus clientes te escriben al instante</span></li>
+      <li><strong>En línea 24/7</strong><span>Tu negocio abierto a toda hora</span></li>
+    </ul>
+  </section>
+  <section class="categoria">
+    <div class="categoria-foto">
+      <div class="escena">
+        <figure class="marco-web"><span class="marco-barra"><i></i><i></i><i></i></span><img src="ejemplo-profesional.png" alt="Página web de una abogada hecha por WebZipe" loading="lazy"></figure>
+        <figure class="marco-cel"><img src="dispositivo-celular.png" alt="" loading="lazy"></figure>
+      </div>
+    </div>
+    <div class="categoria-texto">
+      <ul class="lista-valores">
+        <li>Diseño hecho a la medida de tu negocio</li>
+        <li>100% adaptada a celular, tablet y computador</li>
+        <li>Botones directos a WhatsApp</li>
+      </ul>
+      <a href="#planes" class="enlace-mayus">Conocer más</a>
+    </div>
+  </section>
+  <section class="categoria">
+    <div class="categoria-foto">
+      <div class="escena">
+        <figure class="marco-web"><span class="marco-barra"><i></i><i></i><i></i></span><img src="ejemplo-cafeteria.png" alt="Página de una cafetería con reservas hecha por WebZipe" loading="lazy"></figure>
+        <figure class="marco-cel"><img src="cafeteria-celular.png" alt="" loading="lazy"></figure>
+      </div>
+    </div>
+    <div class="categoria-texto">
+      <h2>Reservas y formularios</h2>
+      <ul class="lista-valores">
+        <li>Tus clientes agendan sin llamarte</li>
+        <li>Formularios de contacto que sí llegan</li>
+        <li>Menú, ubicación y pedidos en un solo lugar</li>
+      </ul>
+      <a href="#planes" class="enlace-mayus">Conocer más</a>
+    </div>
+  </section>
+  <section class="cambio">
+    <div class="envoltura">
+      <h2 class="titulo-seccion">Tener redes sociales ya no es suficiente</h2>
+      <p class="entrada">Muchos negocios manejan Instagram o Facebook, pero no tienen un sitio propio donde sus clientes conozcan a fondo lo que venden.</p>
+      <div class="cambio-columnas">
+        <div>
+          <h3>Sin página web</h3>
+          <ul>
+            <li>Tus clientes buscan información y solo encuentran una bio de Instagram.</li>
+            <li>Tu negocio depende por completo del alcance de un algoritmo que no controlas.</li>
+            <li>No hay un lugar claro para mostrar todos tus servicios o productos.</li>
+            <li>La imagen del negocio se siente menos profesional frente a la competencia.</li>
+          </ul>
+        </div>
+        <div class="con">
+          <h3>Con WebZipe</h3>
+          <ul>
+            <li>Presentas tus servicios y productos de forma clara y ordenada.</li>
+            <li>Facilitas el contacto con botones directos a WhatsApp.</li>
+            <li>Proyectas una imagen mucho más profesional y confiable.</li>
+            <li>Tienes un espacio propio en Internet que no depende de ningún algoritmo.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+    </div>
+  </div>
+</dialog>
+<dialog class="letrero letrero-ancho" id="letrero-tiendas" aria-labelledby="t-tiendas">
+  <div class="letrero-caja">
+    <button type="button" class="icono-btn letrero-cerrar" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <h2 id="t-tiendas">Tiendas en línea</h2>
+    <div class="letrero-cuerpo">
+  <section class="categoria invertida">
+    <div class="categoria-foto">
+      <div class="escena">
+        <figure class="marco-tablet"><img src="tienda-tablet.png" alt="Tienda de ropa en línea hecha por WebZipe" loading="lazy"></figure>
+        <figure class="marco-cel"><img src="tienda-celular.png" alt="" loading="lazy"></figure>
+      </div>
+    </div>
+    <div class="categoria-texto">
+      <ul class="lista-valores">
+        <li>Tus productos ordenados y con precio</li>
+        <li>Botón de pedir en cada producto</li>
+        <li>Sin depender del algoritmo de las redes</li>
+      </ul>
+      <a href="#planes" class="enlace-mayus">Conocer más</a>
+    </div>
+  </section>
+    </div>
+  </div>
+</dialog>
+<dialog class="letrero letrero-ancho" id="letrero-servicios" aria-labelledby="t-servicios">
+  <div class="letrero-caja">
+    <button type="button" class="icono-btn letrero-cerrar" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <h2 id="t-servicios">Servicios</h2>
+    <div class="letrero-cuerpo">
+  <section class="servicios">
+    <div class="envoltura">
+      <ol class="lista-servicios">
+        <li>
+          <h3>Páginas web a la medida</h3>
+          <p>Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio.</p>
+        </li>
+        <li>
+          <h3>Tiendas virtuales y catálogos digitales</h3>
+          <p>Muestra y vende tus productos con un catálogo digital o una tienda virtual completa.</p>
+        </li>
+        <li>
+          <h3>WhatsApp y redes sociales</h3>
+          <p>Botones de contacto directo a WhatsApp y enlaces a tus redes, para que te escriban en un clic.</p>
+        </li>
+        <li>
+          <h3>Formularios y reservas</h3>
+          <p>Formularios de contacto y sistemas para agendar citas, directamente desde tu página.</p>
+        </li>
+        <li>
+          <h3>Mantenimiento y marketing digital</h3>
+          <p>Actualizamos tu página, te acompañamos después de la entrega y sumamos estrategias de marketing digital.</p>
+        </li>
+        <li>
+          <h3>Código QR de tu página</h3>
+          <p>Convertimos tu página en un código QR para tus volantes, tu mostrador o tu tarjeta.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+    </div>
+  </div>
+</dialog>
+<dialog class="letrero letrero-ancho" id="letrero-detras" aria-labelledby="t-detras">
+  <div class="letrero-caja">
+    <button type="button" class="icono-btn letrero-cerrar" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <h2 id="t-detras">Lo que hay detrás de una página web</h2>
+    <div class="letrero-cuerpo">
+  <section class="detras">
+    <div class="detras-foto">
+      <div class="detras-pantallas" aria-hidden="true">
+        <img src="tienda-celular.png" alt="" loading="lazy">
+        <img src="cafeteria-celular.png" alt="" loading="lazy">
+        <img src="dispositivo-celular.png" alt="" loading="lazy">
+      </div>
+    </div>
+    <div class="detras-texto">
+      <ol>
+        <li><strong>Nos cuentas tu idea.</strong> A qué se dedica tu negocio, qué vendes y cómo quieres que te contacten.</li>
+        <li><strong>Diseñamos a la medida.</strong> Colores, textos e imágenes pensados para tu negocio, no una plantilla.</li>
+        <li><strong>Ajustamos contigo.</strong> Revisas el avance y pedimos tus cambios hasta que quede como la imaginas.</li>
+        <li><strong>Publicamos y acompañamos.</strong> Tu página queda en línea y seguimos disponibles para actualizarla.</li>
+      </ol>
+      <p class="detras-nota">Somos un estudio joven: trabajas directo con la persona que diseña tu página, sin filas ni intermediarios.</p>
+    </div>
+  </section>
+    </div>
+  </div>
+</dialog>
+<dialog class="letrero letrero-ancho" id="letrero-ayuda" aria-labelledby="t-ayuda">
+  <div class="letrero-caja">
+    <button type="button" class="icono-btn letrero-cerrar" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <h2 id="t-ayuda">Preguntas frecuentes</h2>
+    <div class="letrero-cuerpo">
+  <section class="preguntas">
+    <div class="envoltura estrecha">
+      <div class="acordeon">
+        <details>
+          <summary>¿Qué tipo de negocios pueden tener una página web?</summary>
+          <p>Cualquier tipo: restaurantes, tiendas, emprendimientos, profesionales independientes, empresas de servicios y mucho más. Si tienes un negocio, una página web puede ayudarte a mostrarlo mejor.</p>
+        </details>
+        <details>
+          <summary>¿La página funciona en celulares?</summary>
+          <p>Sí. Todas las páginas que diseñamos son 100% responsive: se adaptan y funcionan correctamente en celulares, tablets y computadores.</p>
+        </details>
+        <details>
+          <summary>¿Puedo agregar WhatsApp a mi página?</summary>
+          <p>Claro, de hecho es una de las integraciones que más recomendamos. Es la forma más rápida y directa para que tus clientes te contacten.</p>
+        </details>
+        <details>
+          <summary>¿Puedo solicitar cambios en el diseño?</summary>
+          <p>Sí. El diseño se ajusta a lo que necesites: cuéntanos tu idea, tus colores y tu estilo, y lo desarrollamos contigo hasta que quede como lo imaginas.</p>
+        </details>
+        <details>
+          <summary>¿Cuánto tarda en realizarse una página?</summary>
+          <p>Depende de la complejidad y el alcance de tu proyecto. Una vez conozcamos los detalles de tu negocio, te damos un tiempo estimado por WhatsApp.</p>
+        </details>
+        <details>
+          <summary>¿Qué información necesitan para comenzar?</summary>
+          <p>Nos ayuda conocer a qué se dedica tu negocio, qué productos o servicios ofreces y cómo prefieres que tus clientes te contacten. Con eso ya podemos empezar a diseñar.</p>
+        </details>
+        <details>
+          <summary>¿Cómo es el pago?</summary>
+          <p>Se paga un 30% de anticipo al aceptar la propuesta y el resto al entregar la página. Antes de pagar conoces el valor total por escrito.</p>
+        </details>
+        <details>
+          <summary>¿También renuevan páginas que ya existen?</summary>
+          <p>Sí. Si ya tienes una página y se ve vieja o no te trae clientes, la actualizamos o la rediseñamos por completo.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+    </div>
+  </div>
+</dialog>
 
 <!-- ============ LETREROS (ventanas que se abren encima y al cerrar te dejan donde estabas) ============ -->
 

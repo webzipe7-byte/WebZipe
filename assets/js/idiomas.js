@@ -10,6 +10,7 @@
   var DICCIONARIOS = {
     en: {
       "Saltar al contenido": "Skip to content",
+      "Contáctanos ahora": "Contact us now",
       "Tu página lista desde 5 días hábiles": "Your website ready in as little as 5 business days",
       "Asesoría gratis y sin compromiso": "Free advice, no strings attached",
       "Mira páginas que ya hicimos": "See websites we've already built",
@@ -239,6 +240,7 @@
 
     fr: {
       "Saltar al contenido": "Aller au contenu",
+      "Contáctanos ahora": "Contactez-nous maintenant",
       "Tu página lista desde 5 días hábiles": "Votre site prêt dès 5 jours ouvrés",
       "Asesoría gratis y sin compromiso": "Conseil gratuit et sans engagement",
       "Mira páginas que ya hicimos": "Découvrez les sites que nous avons réalisés",

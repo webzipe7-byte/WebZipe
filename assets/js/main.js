@@ -45,17 +45,6 @@
     }, 4200);
   }
 
-  /* ---------- Cabecera: transparente sobre la portada, blanca al bajar ---------- */
-  var cabecera = document.getElementById("cabecera");
-  var portada = document.getElementById("inicio");
-  function revisarCabecera() {
-    var limite = portada ? portada.offsetHeight - cabecera.offsetHeight - 40 : 40;
-    cabecera.classList.toggle("solida", window.scrollY > limite);
-  }
-  window.addEventListener("scroll", revisarCabecera, { passive: true });
-  window.addEventListener("resize", revisarCabecera);
-  revisarCabecera();
-
   /* ---------- Menú lateral ---------- */
   var menu = document.getElementById("menuLateral");
   var velo = document.getElementById("veloMenu");
@@ -99,113 +88,31 @@
     });
   });
 
-  /* ---------- Portada (slider) ---------- */
+  /* ---------- Vistas previas de proyectos ----------
+     Cada tarjeta carga la página de muestra en un iframe escalado. */
   (function () {
-    var slides = document.querySelectorAll(".slide");
-    var puntos = document.querySelectorAll("#slidePuntos button");
-    if (slides.length < 2) return;
-    var actual = 0, timer = null;
-
-    function ir(n) {
-      slides[actual].classList.remove("is-on");
-      puntos[actual].classList.remove("is-on");
-      actual = (n + slides.length) % slides.length;
-      slides[actual].classList.add("is-on");
-      puntos[actual].classList.add("is-on");
-      var v = slides[actual].querySelector("video");
-      if (v) { try { v.currentTime = 0; v.play(); } catch (e) {} }
-      reiniciar();
-    }
-    function reiniciar() {
-      clearTimeout(timer);
-      if (reducirMovimiento) return;
-      // El video se queda un poco más
-      var espera = slides[actual].querySelector("video") ? 9000 : 6500;
-      timer = setTimeout(function () { ir(actual + 1); }, espera);
-    }
-
-    document.getElementById("slideAnt").addEventListener("click", function () { ir(actual - 1); });
-    document.getElementById("slideSig").addEventListener("click", function () { ir(actual + 1); });
-    puntos.forEach(function (p, i) { p.addEventListener("click", function () { ir(i); }); });
-
-    // Deslizar con el dedo
-    var x0 = null;
-    portada.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
-    portada.addEventListener("touchend", function (e) {
-      if (x0 === null) return;
-      var dx = e.changedTouches[0].clientX - x0;
-      if (Math.abs(dx) > 50) ir(actual + (dx < 0 ? 1 : -1));
-      x0 = null;
-    });
-
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) clearTimeout(timer); else reiniciar();
-    });
-    reiniciar();
-  })();
-
-  /* ---------- Carrusel de proyectos ---------- */
-  (function () {
-    var carrusel = document.getElementById("carrusel");
-    var pista = document.getElementById("carruselPista");
-    var verTodo = document.getElementById("verTodo");
-    if (!carrusel) return;
-    var flechas = carrusel.querySelectorAll(".carrusel-flecha");
-
-    function paso() {
-      var item = pista.querySelector(".producto");
-      return item ? item.getBoundingClientRect().width + 14 : 300;
-    }
-    function revisarFlechas() {
-      var max = pista.scrollWidth - pista.clientWidth - 4;
-      flechas[0].disabled = pista.scrollLeft <= 4;
-      flechas[1].disabled = pista.scrollLeft >= max;
-    }
-    flechas.forEach(function (f) {
-      f.addEventListener("click", function () {
-        pista.scrollBy({ left: paso() * Number(f.getAttribute("data-dir")), behavior: "smooth" });
-      });
-    });
-    pista.addEventListener("scroll", revisarFlechas, { passive: true });
-    window.addEventListener("resize", revisarFlechas);
-    revisarFlechas();
-
-    verTodo.addEventListener("click", function () {
-      var grid = carrusel.classList.toggle("en-cuadricula");
-      verTodo.setAttribute("aria-expanded", String(grid));
-      verTodo.textContent = T(grid ? "Ver menos" : "Ver todo");
-      verTodo.setAttribute("data-estado", grid ? "menos" : "todo");
-      if (grid) cargarTodos();
-      escalar();
-    });
-
-    // Las vistas previas se escalan para que la página de muestra quepa en la tarjeta
-    var fotos = pista.querySelectorAll(".producto-foto");
+    var galeria = document.getElementById("galeria");
+    if (!galeria) return;
+    var fotos = galeria.querySelectorAll(".producto-foto");
     function escalar() {
       fotos.forEach(function (f) {
-        f.style.setProperty("--escala", (f.clientWidth / 390).toFixed(4));
+        if (f.clientWidth) f.style.setProperty("--escala", (f.clientWidth / 390).toFixed(4));
       });
     }
-    if ("ResizeObserver" in window) new ResizeObserver(escalar).observe(pista);
-    else window.addEventListener("resize", escalar);
-    escalar();
-
-    // Se cargan solo cuando están cerca de la pantalla
-    function cargar(iframe) {
-      if (iframe.src || !iframe.dataset.src) return;
-      iframe.src = iframe.dataset.src;
+    if ("ResizeObserver" in window) {
+      var ro = new ResizeObserver(escalar);
+      fotos.forEach(function (f) { ro.observe(f); });
     }
-    function cargarTodos() { pista.querySelectorAll("iframe").forEach(cargar); }
-    if ("IntersectionObserver" in window) {
-      var io = new IntersectionObserver(function (entradas) {
-        entradas.forEach(function (en) {
-          if (en.isIntersecting) { cargar(en.target); io.unobserve(en.target); }
-        });
-      }, { root: null, rootMargin: "200px 400px" });
-      pista.querySelectorAll("iframe").forEach(function (f) { io.observe(f); });
-    } else {
-      cargarTodos();
+    window.addEventListener("resize", escalar);
+    // Se cargan la primera vez que se abre el letrero de proyectos
+    var dlg = document.getElementById("letrero-proyectos");
+    function cargar() {
+      galeria.querySelectorAll("iframe[data-src]").forEach(function (f) {
+        if (!f.src) f.src = f.getAttribute("data-src");
+      });
+      requestAnimationFrame(escalar);
     }
+    if (dlg) dlg.addEventListener("wz-abierto", cargar);
   })();
 
   /* ---------- Botones de plan: llevan al formulario con el plan elegido ---------- */
@@ -217,7 +124,7 @@
   });
 
   /* ---------- Aparecer al hacer scroll ---------- */
-  var animables = document.querySelectorAll(".categoria-texto, .titulo-seccion, .plan, .lista-servicios li, .detras-texto, .valores li");
+  var animables = document.querySelectorAll("main .titulo-seccion, main .plan");
   if (!reducirMovimiento && "IntersectionObserver" in window) {
     var obs = new IntersectionObserver(function (entradas) {
       entradas.forEach(function (en) {
@@ -236,6 +143,9 @@
     if (typeof dlg.showModal === "function") dlg.showModal();
     else dlg.setAttribute("open", "");
     bloquear();
+    var cuerpo = dlg.querySelector(".letrero-cuerpo");
+    if (cuerpo) cuerpo.scrollTop = 0;
+    dlg.dispatchEvent(new Event("wz-abierto"));
   }
   document.querySelectorAll("dialog.letrero").forEach(function (dlg) {
     dlg.addEventListener("close", desbloquear);
@@ -245,6 +155,10 @@
     });
     dlg.querySelectorAll("[data-cerrar]").forEach(function (b) {
       b.addEventListener("click", function () { dlg.close(); });
+    });
+    // Un enlace a otra parte de la página (ej. "Conocer más" → planes) cierra el letrero
+    dlg.querySelectorAll('a[href^="#"]:not([data-wa])').forEach(function (a) {
+      a.addEventListener("click", function () { dlg.close(); });
     });
   });
 
@@ -260,7 +174,11 @@
 
   document.addEventListener("click", function (e) {
     var abre = e.target.closest("[data-abrir]");
-    if (abre) { abrirLetrero(document.getElementById("letrero-" + abre.getAttribute("data-abrir"))); return; }
+    if (abre) {
+      e.preventDefault();
+      abrirLetrero(document.getElementById("letrero-" + abre.getAttribute("data-abrir")));
+      return;
+    }
 
     var legal = e.target.closest("[data-legal]");
     if (legal) {
@@ -489,9 +407,4 @@
   var anio = document.getElementById("anio");
   if (anio) anio.textContent = new Date().getFullYear();
 
-  // Si cambian el idioma, el texto de "Ver todo / Ver menos" se actualiza
-  document.addEventListener("wz-idioma", function () {
-    var v = document.getElementById("verTodo");
-    if (v) v.textContent = T(v.getAttribute("data-estado") === "menos" ? "Ver menos" : "Ver todo");
-  });
 })();
