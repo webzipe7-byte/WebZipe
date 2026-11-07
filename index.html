@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/estilos.css?v=8">
+<link rel="stylesheet" href="assets/css/estilos.css?v=10">
 <script>(function(){var K="wz-consent",V="1.1";window.wzConsentVersion=V;window.wzConsentRead=function(){try{var v=JSON.parse(localStorage.getItem(K));if(v&&v.v===V&&v.ts&&Date.now()-v.ts<31536000000)return v;}catch(e){}return null};window.wzPrefs=function(){var c=window.wzConsentRead();return !!(c&&c.prefs)};})();</script>
 </head>
 <body>
@@ -71,7 +71,9 @@
     <li><button type="button" data-abrir="tiendas">Tiendas en línea</button></li>
     <li><a href="#planes">Planes</a></li>
     <li><button type="button" data-abrir="servicios">Servicios</button></li>
+    <li><button type="button" data-abrir="beneficios">Por qué WebZipe</button></li>
     <li><button type="button" data-abrir="detras">Lo que hay detrás de una página web</button></li>
+    <li><button type="button" data-abrir="parte-legal">La parte legal</button></li>
     <li><a href="#contacto" class="menu-contacto">Contáctanos ahora</a></li>
   </ul>
   <ul class="menu-secundario">
@@ -225,6 +227,7 @@
       <svg class="marca-w" viewBox="0 0 100 100" aria-hidden="true"><path d="M10 42 L27 88 L42 55 L55 88 L78 26"/><circle cx="80" cy="24" r="7"/></svg>
       <span>WEBZIPE</span>
     </a>
+    <p class="pie-desc">Creamos soluciones digitales para negocios, emprendimientos y empresas: páginas web, tiendas virtuales, catálogos digitales y mantenimiento, para verse mejor en Internet y conseguir más clientes.</p>
     <div class="redes">
       <a href="#" data-wa="Hola, vengo de la página de WebZipe." target="_blank" rel="noopener" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.8A8 8 0 1 1 8 19z"/></svg>
@@ -250,6 +253,8 @@
         <li><button type="button" data-abrir="nosotros">Sobre nosotros</button></li>
         <li><button type="button" data-abrir="detras">Lo que hay detrás de una página web</button></li>
         <li><button type="button" data-abrir="proyectos">Proyectos</button></li>
+        <li><button type="button" data-abrir="beneficios">Por qué WebZipe</button></li>
+        <li><button type="button" data-abrir="parte-legal">La parte legal</button></li>
         <li><button type="button" data-abrir="trabaja">Trabaja aquí</button></li>
       </ul>
     </div>
@@ -287,12 +292,41 @@
     </button>
     <h2 id="t-proyectos">Proyectos</h2>
     <div class="letrero-cuerpo">
+      <h3 class="sub-titulo primero">Así de bien podría verse tu página web</h3>
+      <p class="nota-fina">Estos son ejemplos conceptuales que muestran posibilidades de diseño para distintos tipos de negocio, no proyectos reales de clientes de WebZipe.</p>
+      <div class="conceptos">
+        <article class="concepto">
+          <img src="ejemplo-cafeteria.png" alt="Ejemplo conceptual de página para un café" loading="lazy">
+          <span class="sello">Ejemplo conceptual</span>
+          <h4>Restaurantes y cafés</h4>
+          <p>Menú visual, ubicación y reservas o pedidos directos por WhatsApp. Una página que abre el apetito antes de que el cliente llegue.</p>
+          <a href="#" class="enlace-mayus" data-wa="Hola, vi los ejemplos de páginas y quiero algo así para mi negocio." target="_blank" rel="noopener">Quiero algo así</a>
+        </article>
+        <article class="concepto">
+          <img src="ejemplo-tienda.png" alt="Ejemplo conceptual de tienda en línea" loading="lazy">
+          <span class="sello">Ejemplo conceptual</span>
+          <h4>Tiendas y emprendimientos</h4>
+          <p>Catálogo de productos claro, con botón de compra o consulta directa. Ideal para vender sin depender solo de las redes.</p>
+          <a href="#" class="enlace-mayus" data-wa="Hola, vi los ejemplos de páginas y quiero algo así para mi negocio." target="_blank" rel="noopener">Quiero algo así</a>
+        </article>
+        <article class="concepto">
+          <img src="ejemplo-profesional.png" alt="Ejemplo conceptual de página para una abogada" loading="lazy">
+          <span class="sello">Ejemplo conceptual</span>
+          <h4>Profesionales y servicios</h4>
+          <p>Presentación de servicios, experiencia y forma de agendar una cita o consulta. Transmite confianza desde el primer segundo.</p>
+          <a href="#" class="enlace-mayus" data-wa="Hola, vi los ejemplos de páginas y quiero algo así para mi negocio." target="_blank" rel="noopener">Quiero algo así</a>
+        </article>
+      </div>
+
+      <h3 class="sub-titulo">Mira algunas páginas que hemos creado</h3>
+      <p class="nota-fina">Estos son enlaces reales a páginas de prueba. Haz clic en cada una para verla en vivo.</p>
       <ul class="galeria" id="galeria">
         <li class="producto">
           <a href="https://webzipe7-byte.github.io/prueba-ropa-" target="_blank" rel="noopener">
             <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-ropa-" title="Catálogo de ropa" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
             <span class="producto-tipo">Catálogo de ropa</span>
             <span class="producto-nombre">Pedidos por WhatsApp</span>
+            <span class="producto-desc">Catálogo de modelos de ropa con precios y botón de "Pedir ahora" para cada prenda.</span>
           </a>
         </li>
         <li class="producto">
@@ -300,6 +334,7 @@
             <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-webzipe-profesionales-/" title="Javier Restrepo, abogado de familia" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
             <span class="producto-tipo">Abogado de familia</span>
             <span class="producto-nombre">Javier Restrepo</span>
+            <span class="producto-desc">Página para un profesional independiente: "Defendemos lo que más importa: tu familia". Incluye áreas de práctica, experiencia y consulta gratuita por WhatsApp.</span>
           </a>
         </li>
         <li class="producto">
@@ -307,6 +342,7 @@
             <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-webzipe-restaurante/" title="El Buen Sazón, restaurante" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
             <span class="producto-tipo">Restaurante</span>
             <span class="producto-nombre">El Buen Sazón</span>
+            <span class="producto-desc">Página de restaurante con menú, pedidos en mesa y domicilios, con envío del pedido directo por WhatsApp.</span>
           </a>
         </li>
         <li class="producto">
@@ -314,6 +350,7 @@
             <div class="producto-foto"><span class="sello">Nuevo</span><iframe data-src="https://webzipe7-byte.github.io/prueba-tiendas-digitales-webzipe/" title="ToyLandia, juguetería" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
             <span class="producto-tipo">Tienda en línea</span>
             <span class="producto-nombre">ToyLandia</span>
+            <span class="producto-desc">Tienda digital de juguetes con catálogo de productos y botón de "Pide ya" para cada uno.</span>
           </a>
         </li>
         <li class="producto">
@@ -321,6 +358,7 @@
             <div class="producto-foto"><iframe data-src="https://webzipe7-byte.github.io/prueba-barberia-/Casa-Navaja-Barbershop.html" title="Casa Navaja Barbershop" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
             <span class="producto-tipo">Barbería</span>
             <span class="producto-nombre">Casa Navaja</span>
+            <span class="producto-desc">Página de barbería con carta de servicios y precios, galería de trabajos, equipo de barberos, reseñas y botón de "Reservar" en cada servicio.</span>
           </a>
         </li>
         <li class="producto">
@@ -328,6 +366,7 @@
             <div class="producto-foto"><iframe data-src="barberia-clasica/" title="Barbería Clásica" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
             <span class="producto-tipo">Barbería con reservas</span>
             <span class="producto-nombre">Barbería Clásica</span>
+            <span class="producto-desc">Página de barbería con servicios y precios, sección "Nosotros", formulario para reservar cita y página de reseñas donde los clientes dejan su opinión.</span>
           </a>
         </li>
         <li class="producto">
@@ -335,10 +374,10 @@
             <div class="producto-foto"><iframe data-src="https://webzipe7-byte.github.io/asesores-financieros/" title="Tu Futuro, asesoría financiera" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div>
             <span class="producto-tipo">Asesoría financiera</span>
             <span class="producto-nombre">Tu Futuro</span>
+            <span class="producto-desc">Página de asesoría financiera con servicios, beneficios y un formulario de contacto para solicitar una asesoría sin compromiso.</span>
           </a>
         </li>
       </ul>
-      <p class="nota-fina">Páginas de muestra hechas por WebZipe. Tócalas para verlas en vivo.</p>
     </div>
   </div>
 </dialog>
@@ -393,23 +432,27 @@
   <section class="cambio">
     <div class="envoltura">
       <h2 class="titulo-seccion">Tener redes sociales ya no es suficiente</h2>
-      <p class="entrada">Muchos negocios manejan Instagram o Facebook, pero no tienen un sitio propio donde sus clientes conozcan a fondo lo que venden.</p>
+      <p class="entrada">Hoy a muchos negocios les interesa tener presencia en Internet, pero no siempre saben cómo lograrlo: manejan Instagram o Facebook, pero no tienen un sitio propio, una tienda virtual o un catálogo donde sus clientes conozcan a fondo sus servicios y productos.</p>
       <div class="cambio-columnas">
         <div>
           <h3>Sin página web</h3>
+          <p class="cambio-sub">Lo que suele pasar</p>
           <ul>
             <li>Tus clientes buscan información y solo encuentran una bio de Instagram.</li>
             <li>Tu negocio depende por completo del alcance de un algoritmo que no controlas.</li>
             <li>No hay un lugar claro para mostrar todos tus servicios o productos.</li>
             <li>La imagen del negocio se siente menos profesional frente a la competencia.</li>
+            <li>No existe un espacio propio en Internet que represente al negocio.</li>
           </ul>
         </div>
         <div class="con">
           <h3>Con WebZipe</h3>
+          <p class="cambio-sub">Lo que cambia con una página web</p>
           <ul>
             <li>Presentas tus servicios y productos de forma clara y ordenada.</li>
             <li>Facilitas el contacto con botones directos a WhatsApp.</li>
             <li>Proyectas una imagen mucho más profesional y confiable.</li>
+            <li>Estás disponible para tus clientes a cualquier hora, todos los días.</li>
             <li>Tienes un espacio propio en Internet que no depende de ningún algoritmo.</li>
           </ul>
         </div>
@@ -454,32 +497,39 @@
     <div class="letrero-cuerpo">
   <section class="servicios">
     <div class="envoltura">
+      <p class="entrada izq">No solo hacemos páginas web: te ayudamos a resolver lo que tu negocio necesita para tener presencia en Internet, mostrar tus productos o servicios y conseguir más clientes.</p>
       <ol class="lista-servicios">
         <li>
           <h3>Páginas web a la medida</h3>
-          <p>Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio.</p>
+          <p>Diseños modernos y originales, adaptados a la identidad visual y el tono de cada negocio. Nada de plantillas repetidas.</p>
         </li>
         <li>
           <h3>Tiendas virtuales y catálogos digitales</h3>
-          <p>Muestra y vende tus productos con un catálogo digital o una tienda virtual completa.</p>
+          <p>Muestra y vende tus productos con un catálogo digital o una tienda virtual completa, sin depender solo de las redes sociales.</p>
         </li>
         <li>
           <h3>WhatsApp y redes sociales</h3>
-          <p>Botones de contacto directo a WhatsApp y enlaces a tus redes, para que te escriban en un clic.</p>
+          <p>Botones de contacto directo a WhatsApp y enlaces a tus redes sociales, para que tus clientes te escriban en un clic desde cualquier sección.</p>
         </li>
         <li>
           <h3>Formularios y reservas</h3>
-          <p>Formularios de contacto y sistemas para agendar citas, directamente desde tu página.</p>
+          <p>Formularios de contacto y sistemas de reservas o agendamiento de citas, directamente desde tu página.</p>
         </li>
         <li>
           <h3>Mantenimiento y marketing digital</h3>
-          <p>Actualizamos tu página, te acompañamos después de la entrega y sumamos estrategias de marketing digital.</p>
+          <p>Actualizamos tu página, te acompañamos después de la entrega y lo complementamos poco a poco con estrategias de marketing digital.</p>
         </li>
         <li>
           <h3>Código QR de tu página</h3>
           <p>Convertimos tu página en un código QR para tus volantes, tu mostrador o tu tarjeta.</p>
         </li>
       </ol>
+      <div class="llamado">
+        <span class="etiqueta">Empecemos hoy</span>
+        <h3>¿Listo para llevar tu negocio a Internet?</h3>
+        <p>Cuéntanos sobre tu negocio por WhatsApp y te ayudamos a definir qué necesitas: página web, tienda virtual, catálogo digital o mantenimiento. Sin compromisos, directo y sin vueltas.</p>
+        <a href="#" class="btn btn-claro" data-wa="Hola, quiero crear una solución digital para mi negocio." target="_blank" rel="noopener">Crear mi solución digital</a>
+      </div>
     </div>
   </section>
     </div>
@@ -558,6 +608,80 @@
       </div>
     </div>
   </section>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="letrero letrero-ancho" id="letrero-beneficios" aria-labelledby="t-beneficios">
+  <div class="letrero-caja">
+    <button type="button" class="icono-btn letrero-cerrar" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <h2 id="t-beneficios">Por qué WebZipe</h2>
+    <div class="letrero-cuerpo">
+      <h3 class="sub-titulo primero">Un estudio que empieza contigo, no con un catálogo de plantillas</h3>
+      <p class="entrada izq">No solo te entregamos una página: te asesoramos sobre qué necesita tu negocio (página web, tienda virtual, catálogo, formularios o reservas) para verse profesional en Internet y conseguir más clientes.</p>
+      <ol class="lista-servicios beneficios">
+        <li>
+          <h3>Diseño moderno, hecho a la medida de tu negocio</h3>
+          <p>Nada de plantillas genéricas reutilizadas. Cada página se diseña pensando en la identidad, el tono y los objetivos de tu negocio.</p>
+        </li>
+        <li>
+          <h3>Perfecta en cualquier pantalla</h3>
+          <p>La mayoría de tus clientes te buscará desde el teléfono. Tu página se ve y funciona igual de bien en celular, tablet y computador.</p>
+        </li>
+        <li>
+          <h3>Pensada para convertir visitas en clientes</h3>
+          <p>Cada sección, botón y texto está diseñado con un propósito: guiar al visitante hasta que te escribe.</p>
+        </li>
+        <li>
+          <h3>Contacto directo por WhatsApp</h3>
+          <p>Botones estratégicos en cada sección para que tus clientes te escriban en un solo clic, sin formularios largos.</p>
+        </li>
+        <li>
+          <h3>Tu presencia trabaja 24/7</h3>
+          <p>Tu página muestra lo que ofreces a cualquier hora, incluso cuando tú no estás disponible para responder.</p>
+        </li>
+        <li class="beneficio-nota">
+          <h3>Estudio joven</h3>
+          <p>Cada proyecto recibe toda nuestra atención: sin cadenas de producción ni listas de espera. Trabajas directo con la persona que diseña tu página.</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</dialog>
+<dialog class="letrero letrero-ancho" id="letrero-parte-legal" aria-labelledby="t-parte-legal">
+  <div class="letrero-caja">
+    <button type="button" class="icono-btn letrero-cerrar" data-cerrar aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <h2 id="t-parte-legal">La parte legal</h2>
+    <div class="letrero-cuerpo">
+      <h3 class="sub-titulo primero">No quiero que mi sitio web sea demandado</h3>
+      <p class="entrada izq">Esto es lo que un abogado de startups le pediría a la IA al crear una página. Todas las semanas ve fundadores que montan su plataforma en una tarde y se olvidan de la parte legal, que es justo la que después sale cara. En WebZipe lo tenemos en cuenta en cada página que entregamos.</p>
+      <ol class="lista-legal">
+        <li>Añade términos y condiciones.</li>
+        <li>Añade una política de privacidad.</li>
+        <li>Añade una política de cookies y revisa si necesito pedir consentimiento para usarlas.</li>
+        <li><strong>En cada formulario, dos casillas separadas.</strong> Una para términos y condiciones, otra para la política de privacidad. Nada de un solo chulito para todo. Ponle un link al lado del checkbox para que pueda acceder a ambos documentos.</li>
+        <li><strong>Guarda un registro de cuándo y cómo cada persona aceptó.</strong> Que sea trazable cuando la SIC me venga a preguntar.</li>
+        <li>Añade una política de reembolso.</li>
+        <li>Pide al usuario y usa solo los datos que de verdad necesito.</li>
+        <li>Verifica que tengo los derechos de cada imagen usada en la página.</li>
+        <li>Revisa las leyes locales que aplican y asegúrate de que mi página las cumpla.</li>
+      </ol>
+      <div class="legal-destacados">
+        <div>
+          <span class="etiqueta">Ojo con el 5</span>
+          <p>Es el que casi todo el mundo se salta. En Colombia no basta con que la persona haya dicho que sí: tienes que poder probarlo. Sin registro, es como si nunca te hubieran autorizado.</p>
+        </div>
+        <div>
+          <span class="etiqueta">Y el 6</span>
+          <p>Si vendes en línea, tu cliente tiene derecho a retractarse dentro de los <strong>5 días hábiles</strong> siguientes a la compra. Eso no lo decides tú, lo dice la ley.</p>
+        </div>
+      </div>
+      <p class="entrada izq">La IA puede armar todo esto en minutos, pero no sabe qué datos recoge tu página, a quién le vendes ni qué le prometiste a tu cliente. Eso nos lo cuentas tú y lo dejamos listo.</p>
+      <p class="nota-fina">Basado en un video de @cami.el.abogado en TikTok.</p>
     </div>
   </div>
 </dialog>
@@ -811,7 +935,7 @@
   </div>
 </div>
 
-<script src="assets/js/idiomas.js?v=8"></script>
-<script src="assets/js/main.js?v=8"></script>
+<script src="assets/js/idiomas.js?v=10"></script>
+<script src="assets/js/main.js?v=10"></script>
 </body>
 </html>

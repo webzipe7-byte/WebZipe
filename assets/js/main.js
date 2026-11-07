@@ -184,6 +184,9 @@
     bloquear();
     var cuerpo = dlg.querySelector(".letrero-cuerpo");
     if (cuerpo) cuerpo.scrollTop = 0;
+    // El foco va al título, así no queda marcado el botón de cerrar
+    var titulo = dlg.querySelector("h2");
+    if (titulo) { titulo.setAttribute("tabindex", "-1"); titulo.focus(); }
     dlg.dispatchEvent(new Event("wz-abierto"));
   }
   document.querySelectorAll("dialog.letrero").forEach(function (dlg) {
