@@ -227,15 +227,6 @@
     animables.forEach(function (el) { el.classList.add("aparece"); obs.observe(el); });
   }
 
-  // El video de "lo que hay detrás" solo corre cuando se ve
-  var videoDetras = document.getElementById("videoDetras");
-  if (videoDetras && "IntersectionObserver" in window) {
-    new IntersectionObserver(function (e) {
-      if (e[0].isIntersecting) videoDetras.play().catch(function () {});
-      else videoDetras.pause();
-    }, { threshold: 0.2 }).observe(videoDetras);
-  }
-
   /* ---------- Letreros (sobre nosotros, trabaja aquí y documentos legales) ---------- */
   var letreroLegal = document.getElementById("letrero-legal");
 
