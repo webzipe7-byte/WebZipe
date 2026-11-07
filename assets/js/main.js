@@ -88,6 +88,45 @@
     });
   });
 
+  /* ---------- Bienvenida: fotos de páginas que van rotando ---------- */
+  (function () {
+    var caja = document.getElementById("inicio");
+    if (!caja) return;
+    var fotos = caja.querySelectorAll(".bienvenida-fotos li");
+    var puntos = caja.querySelectorAll(".bienvenida-puntos button");
+    var actual = 0, timer = null;
+
+    function ir(n) {
+      fotos[actual].classList.remove("is-on");
+      puntos[actual].classList.remove("is-on");
+      actual = (n + fotos.length) % fotos.length;
+      fotos[actual].classList.add("is-on");
+      puntos[actual].classList.add("is-on");
+      seguir();
+    }
+    function seguir() {
+      clearTimeout(timer);
+      if (!reducirMovimiento) timer = setTimeout(function () { ir(actual + 1); }, 6000);
+    }
+    caja.querySelectorAll("[data-paso]").forEach(function (b) {
+      b.addEventListener("click", function () { ir(actual + Number(b.getAttribute("data-paso"))); });
+    });
+    puntos.forEach(function (p, i) { p.addEventListener("click", function () { ir(i); }); });
+
+    var x0 = null;
+    caja.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    caja.addEventListener("touchend", function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) ir(actual + (dx < 0 ? 1 : -1));
+      x0 = null;
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) clearTimeout(timer); else seguir();
+    });
+    seguir();
+  })();
+
   /* ---------- Vistas previas de proyectos ----------
      Cada tarjeta carga la página de muestra en un iframe escalado. */
   (function () {

@@ -36,7 +36,7 @@
     </a>
   </div>
 
-  <a href="#planes" class="marca" aria-label="WebZipe, ir al inicio">
+  <a href="#inicio" class="marca" aria-label="WebZipe, ir al inicio">
     <svg class="marca-w" viewBox="0 0 100 100" aria-hidden="true"><path d="M10 42 L27 88 L42 55 L55 88 L78 26"/><circle cx="80" cy="24" r="7"/></svg>
     <span>WEBZIPE</span>
   </a>
@@ -84,10 +84,44 @@
 
 <main id="contenido">
 
+  <!-- Bienvenida -->
+  <section class="bienvenida" id="inicio" aria-label="Bienvenida">
+    <ul class="bienvenida-fotos" aria-hidden="true">
+      <li class="is-on"><img src="ejemplo-cafeteria.png" alt=""></li>
+      <li><img src="ejemplo-tienda.png" alt="" loading="lazy"></li>
+      <li><img src="ejemplo-profesional.png" alt="" loading="lazy"></li>
+    </ul>
+    <div class="bienvenida-texto">
+      <span class="etiqueta">Estudio de soluciones digitales para negocios</span>
+      <h1>Creamos la solución digital que tu negocio necesita para crecer</h1>
+      <p>En WebZipe diseñamos páginas web, tiendas virtuales y catálogos digitales, con integración a tus redes sociales, formularios, reservas y mantenimiento. Todo hecho a la medida de tu negocio, con contacto directo por WhatsApp.</p>
+      <div class="bienvenida-acciones">
+        <a href="#" class="btn btn-claro" data-wa="Hola, quiero una solución digital para mi negocio (página web, tienda virtual, etc.). ¿Me pueden enviar más información?" target="_blank" rel="noopener">Quiero mi solución digital</a>
+        <button type="button" class="btn btn-linea-clara" data-abrir="proyectos">Ver ejemplos</button>
+      </div>
+      <ul class="bienvenida-sellos">
+        <li>Páginas web y tiendas virtuales</li>
+        <li>Redes sociales integradas</li>
+        <li>Contacto directo por WhatsApp</li>
+      </ul>
+    </div>
+    <button type="button" class="bienvenida-flecha izq" data-paso="-1" aria-label="Anterior">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <button type="button" class="bienvenida-flecha der" data-paso="1" aria-label="Siguiente">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="bienvenida-puntos">
+      <button type="button" class="is-on" aria-label="Foto 1"></button>
+      <button type="button" aria-label="Foto 2"></button>
+      <button type="button" aria-label="Foto 3"></button>
+    </div>
+  </section>
+
   <!-- Planes -->
   <section class="planes" id="planes">
     <div class="envoltura">
-      <h1 class="titulo-seccion">Planes</h1>
+      <h2 class="titulo-seccion">Planes</h2>
       <p class="entrada">El alcance se puede ajustar a lo que necesites. Escríbenos y lo definimos juntos.</p>
       <div class="planes-grid">
         <article class="plan">
@@ -187,7 +221,7 @@
 <!-- Pie de página -->
 <footer class="pie">
   <div class="pie-marca">
-    <a href="#planes" class="marca marca-pie" aria-label="WebZipe, ir al inicio">
+    <a href="#inicio" class="marca marca-pie" aria-label="WebZipe, ir al inicio">
       <svg class="marca-w" viewBox="0 0 100 100" aria-hidden="true"><path d="M10 42 L27 88 L42 55 L55 88 L78 26"/><circle cx="80" cy="24" r="7"/></svg>
       <span>WEBZIPE</span>
     </a>
