@@ -1,6 +1,6 @@
 /**
  * Bienvenida: el camello en el desierto.
- * Crear cuenta e iniciar sesión solo se habilitan dentro de la app instalada;
+ * Crear cuenta e iniciar sesión solo aparecen dentro de la app instalada;
  * desde el navegador la única acción es descargarla.
  */
 import { icono } from '../ui/iconos.js';
@@ -48,9 +48,7 @@ export function pantallaBienvenida(raiz) {
             ? `<a class="btn btn-primario btn-bloque" href="#/registro">Crear cuenta</a>
                <a class="btn btn-texto btn-bloque" href="#/entrar">Ya tengo cuenta</a>`
             : `<button class="btn btn-primario btn-bloque" data-accion="instalar">${icono('descargar', { tamano: 20 })} Descargar la app</button>
-               <button class="btn btn-bloque btn-bloqueado" disabled>${icono('candado', { tamano: 18 })} Crear cuenta</button>
-               <button class="btn btn-bloque btn-bloqueado" disabled>${icono('candado', { tamano: 18 })} Ya tengo cuenta</button>
-               <p class="nota-instalar">Para crear tu cuenta o entrar, primero descarga la app. Es gratis y ocupa muy poco espacio.</p>`
+               <p class="nota-instalar">Gratis y ocupa muy poco espacio.</p>`
         }
       </div>
     </section>`;

@@ -469,13 +469,6 @@ button.barra-btn:active {
   margin-top: auto;
   padding: 22px 24px calc(22px + var(--abajo));
 }
-.btn-bloqueado {
-  background: rgba(255, 255, 255, 0.55);
-  color: #a07c63;
-  border: 1.5px dashed #d9b99b;
-  cursor: not-allowed;
-  min-height: 50px;
-}
 .nota-instalar {
   margin-top: 6px;
   text-align: center;
