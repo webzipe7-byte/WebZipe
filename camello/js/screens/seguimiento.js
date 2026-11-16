@@ -12,7 +12,23 @@ import { esc, dinero, fechaHora, fechaFrase } from '../ui/formato.js';
 import { ICONO_METODO } from '../services/billetera.js';
 import { abrirSeguridad } from '../ui/seguridad.js';
 import { desglosePrecio } from '../ui/precio.js';
-import { mapaSimulado, actualizarMapa } from '../ui/mapa.js';
+import { mapaReal, moverMarcas, puntoCliente, puntoMaestro } from '../ui/mapa-real.js';
+import { posicionEnVivo } from '../services/ubicacion.js';
+import { chat } from '../services/chat.js';
+
+/** Mapa del seguimiento: la casa del cliente y, si ya salió, el maestro. */
+function puntosSeguimiento(pedido, e) {
+  const casa = { ...puntoCliente(pedido), tipo: 'casa' };
+  if (['buscando', 'en_proceso', 'finalizado'].includes(e.id)) return [casa];
+  return [casa, { ...puntoMaestro(pedido, e), tipo: 'maestro' }];
+}
+
+function mapaSeguimiento(pedido, e, t) {
+  const vivo = pedido.real && posicionEnVivo(pedido.trabajadorId);
+  const nota =
+    e.id === 'buscando' ? 'Tu dirección' : e.id === 'en_proceso' ? `${t.nombre} está en tu dirección` : vivo ? `${t.nombre} en vivo` : `Ubicación aproximada de ${t.nombre}`;
+  return mapaReal(puntosSeguimiento(pedido, e), { nota });
+}
 
 /** Comparte el seguimiento con el menú del teléfono o copia el texto. */
 export async function compartirSeguimiento(pedido, t) {
@@ -64,6 +80,7 @@ export function pantallaSeguimiento(raiz, { id }) {
       return { titulo: `Llega en ${min} min`, detalle: `${t.nombre} va en camino. Ten lista la entrada.`, clase: '' };
     }
     if (e.id === 'finalizado') return { titulo: est.titulo, detalle: 'Revisa el trabajo y paga para cerrar el servicio.', clase: 'listo' };
+    if (e.id === 'buscando' && pedido.real) return { titulo: `Esperando que ${t.nombre} acepte`, detalle: 'Ya le llegó tu solicitud a su app.', clase: '' };
     return { titulo: est.titulo.replace('el maestro', t.nombre), detalle: est.detalle, clase: '' };
   }
 
@@ -74,9 +91,11 @@ export function pantallaSeguimiento(raiz, { id }) {
     const c = cabeza(e, etapa);
 
     // Solo se repinta todo cuando cambia algo visible; el mapa y el tiempo se actualizan aparte
-    const clave = `${e.id}|${etapa}|${c.titulo}`;
+    const sinLeer = chat.sinLeer(id, 'cliente');
+    const clave = `${e.id}|${etapa}|${c.titulo}|${sinLeer}`;
     if (clave === ultimaClave) {
-      if (e.id === 'en_camino') actualizarMapa(cuerpo.querySelector('.mapa'), e);
+      const fig = cuerpo.querySelector('.mapa-real');
+      if (fig && !moverMarcas(fig, puntosSeguimiento(pedido, e))) fig.outerHTML = mapaSeguimiento(pedido, e, t);
       return;
     }
     ultimaClave = clave;
@@ -89,7 +108,7 @@ export function pantallaSeguimiento(raiz, { id }) {
         ${e.id === 'buscando' ? '<span class="pulso" aria-hidden="true"></span>' : ''}
       </section>
 
-      ${enCurso && ['aceptado', 'en_camino', 'en_proceso', 'buscando'].includes(e.id) ? mapaSimulado(e) : ''}
+      ${enCurso && ['aceptado', 'en_camino', 'en_proceso', 'buscando'].includes(e.id) ? mapaSeguimiento(pedido, e, t) : ''}
 
       ${
         e.id !== 'cancelado'
@@ -113,7 +132,7 @@ export function pantallaSeguimiento(raiz, { id }) {
           enCurso && e.id !== 'buscando'
             ? `<span class="acciones-circulo">
                 <button class="circulo" data-accion="llamar" aria-label="Llamar a ${esc(t.nombre)}">${icono('telefono', { tamano: 20 })}</button>
-                <button class="circulo" data-accion="chat" aria-label="Escribir a ${esc(t.nombre)}">${icono('chat', { tamano: 20 })}</button>
+                <button class="circulo" data-accion="chat" aria-label="Escribir a ${esc(t.nombre)}">${icono('chat', { tamano: 20 })}${sinLeer ? `<span class="burbuja-num">${sinLeer}</span>` : ''}</button>
               </span>`
             : ''
         }
@@ -164,7 +183,6 @@ export function pantallaSeguimiento(raiz, { id }) {
     else pie.innerHTML = '';
     raiz.classList.toggle('sin-pie', !pie.innerHTML);
 
-    actualizarMapa(cuerpo.querySelector('.mapa'), e);
     conectar();
   }
 
@@ -214,6 +232,13 @@ export function pantallaSeguimiento(raiz, { id }) {
   }
 
   pintar();
-  const reloj = setInterval(pintar, 500);
-  return () => clearInterval(reloj);
+  const reloj = setInterval(pintar, 1000);
+  // Cambios que hace el maestro desde su app y mensajes nuevos se ven al instante
+  const dejar = pedidos.escuchar(pintar);
+  const dejarChat = chat.escuchar(id, pintar);
+  return () => {
+    clearInterval(reloj);
+    dejar();
+    dejarChat();
+  };
 }

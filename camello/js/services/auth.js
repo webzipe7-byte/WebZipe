@@ -10,6 +10,7 @@
 import { almacen, esperar, generarId } from './almacen.js';
 import { formatearTelefono } from './validar.js';
 import { derivar, verificar, intentos, minutosRestantes } from './seguridad.js';
+import { categoriaPorId } from '../data/categorias.js';
 
 const USUARIOS = 'usuarios';
 const SESION = 'sesion';
@@ -49,7 +50,19 @@ const PREDETERMINADOS = () => ({
 });
 
 /** Quita la contraseña antes de entregar el usuario a las pantallas. */
-const publico = ({ claveHash, ...resto }) => ({ ...PREDETERMINADOS(), ...resto });
+const publico = ({ claveHash, ...resto }) => ({ ...PREDETERMINADOS(), rol: 'cliente', ...resto });
+
+/** Pantalla de inicio según el tipo de cuenta. */
+export const inicioDe = (usuario) => (usuario?.rol === 'trabajador' ? '/maestro' : '/inicio');
+
+/** Lectura de un usuario por id, sin la contraseña (para mostrar el nombre del cliente al maestro y viceversa). */
+export function usuarioPublico(id) {
+  const u = usuarios().find((x) => x.id === id);
+  return u ? publico(u) : null;
+}
+
+/** Todos los maestros registrados (sin contraseñas). */
+export const maestrosRegistrados = () => usuarios().filter((u) => u.rol === 'trabajador' && u.maestro).map(publico);
 
 export class ErrorCampo extends Error {
   constructor(campo, mensaje) {
@@ -72,8 +85,18 @@ export const auth = {
     return usuario ? publico(usuario) : null;
   },
 
-  async registrar({ nombre, correo, telefono, clave }) {
+  /**
+   * rol: 'cliente' (pide servicios) o 'trabajador' (los presta).
+   * Los dos viven en la misma tabla de usuarios.
+   */
+  async registrar({ nombre, correo, telefono, clave, rol = 'cliente', oficio = '', anios = 0 }) {
     await esperar(700);
+    if (rol !== 'cliente' && rol !== 'trabajador') throw new Error('Tipo de cuenta no válido.');
+    if (rol === 'trabajador' && !categoriaPorId(oficio)) throw new ErrorCampo('oficio', 'Elige tu oficio.');
+    const aniosNum = Math.round(Number(anios));
+    if (rol === 'trabajador' && (!Number.isFinite(aniosNum) || aniosNum < 0 || aniosNum > 60)) {
+      throw new ErrorCampo('anios', 'Escribe tus años de experiencia (de 0 a 60).');
+    }
     const lista = usuarios();
     const correoNorm = correo.trim().toLowerCase();
     if (lista.some((u) => u.correo === correoNorm)) {
@@ -95,6 +118,10 @@ export const auth = {
       codigoReferido: codigoReferido(nombre),
       preferencias: { avisos: true, promociones: true, sonido: true },
       creado: Date.now(),
+      rol,
+      ...(rol === 'trabajador'
+        ? { maestro: { categoria: oficio, anios: aniosNum, conectado: false, desde: Date.now() } }
+        : {}),
     };
     guardarUsuarios([...lista, usuario]);
     abrirSesion(usuario.id);

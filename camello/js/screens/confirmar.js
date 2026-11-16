@@ -250,7 +250,7 @@ export async function pantallaConfirmar(raiz) {
       });
       if (precio.cupon) cupones.marcarUsado(sesion.usuario.id, precio.cupon, pedido.id);
       auth.recordarDireccion(sesion.usuario.id, b.direccion);
-      sesion.set(auth.usuarioActual());
+      sesion.refrescar();
       borrador.limpiar();
       ir(`/pedido/${pedido.id}`, { reemplazar: true });
     } catch {

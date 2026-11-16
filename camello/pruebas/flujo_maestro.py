@@ -1,0 +1,85 @@
+import asyncio, re
+from playwright.async_api import async_playwright
+B="http://localhost:8765/camello/"
+SIM="""const mm=window.matchMedia.bind(window);window.matchMedia=(q)=>q.includes('display-mode: standalone')?{matches:true,media:q,addEventListener(){},removeEventListener(){}}:mm(q);"""
+async def registrar(pg, nombre, correo, maestro=False):
+    await pg.goto(B); await pg.wait_for_timeout(400)
+    await pg.click("text=Crear cuenta")
+    if maestro:
+        await pg.check("[name=rol][value=trabajador]", force=True)
+        await pg.select_option("#f-oficio","cerrajero"); await pg.fill("#f-anios","8")
+    await pg.fill("#f-nombre",nombre); await pg.fill("#f-correo",correo); await pg.fill("#f-telefono","3001234567")
+    await pg.fill("#f-clave","Sol-desierto7"); await pg.fill("#f-clave2","Sol-desierto7")
+    await pg.click("button[type=submit]"); await pg.wait_for_timeout(1500)
+async def main():
+  async with async_playwright() as p:
+    b=await p.chromium.launch(executable_path="/usr/bin/google-chrome",args=["--no-sandbox"])
+    ctx=await b.new_context(viewport={"width":390,"height":844}, geolocation={"latitude":3.4372,"longitude":-76.5225}, permissions=["geolocation"])
+    await ctx.add_init_script(SIM)
+    errs=[]
+    M=await ctx.new_page(); C=await ctx.new_page()
+    for n,pg in (("M",M),("C",C)): pg.on("pageerror",lambda e,n=n: errs.append(n+": "+str(e)))
+    await registrar(M,"Carlos Rendón","carlos@maestro.com",True)
+    print("maestro en:",M.url.split('#')[1], "|", (await M.inner_text("h1")))
+    await M.click(".conexion .interruptor"); await M.wait_for_timeout(1200)
+    print("conexión:", await M.inner_text(".conexion b"), "| gps guardado:", await M.evaluate("!!localStorage.getItem('camello:ubicacion:'+JSON.parse(localStorage.getItem('camello:usuarios'))[0].id)"))
+    await M.screenshot(path="/home/claude/m1.png")
+
+    await C.goto("http://localhost:8765/"); await C.evaluate("localStorage.setItem('camello:sesion','{}')")
+    await registrar(C,"Ana Gómez","ana@correo.com")
+    print("maestro sigue en su sesión:", M.url.split('#')[1])
+    print("cliente en:",C.url.split('#')[1])
+    await C.click("[data-cat=cerrajero]"); await C.fill("textarea","Se dañó la chapa de la puerta principal"); await C.click("[data-accion=continuar]"); await C.wait_for_timeout(400)
+    await ctx.set_geolocation({"latitude":3.4300,"longitude":-76.5400})
+    await C.click("[data-accion=gps]"); await C.wait_for_timeout(800)
+    print("gps cliente:", await C.inner_text(".btn-gps"))
+    await C.fill("#f-direccion","Carrera 39 # 5-30, San Fernando")
+    await C.click("[data-accion=continuar]"); await C.wait_for_timeout(400)
+    await C.click("[data-accion=continuar]"); await C.wait_for_timeout(1500)
+    primero=C.locator(".trabajador").first
+    print("primera tarjeta:", (await primero.inner_text()).replace("\n"," | ")[:90])
+    await primero.click(); await C.wait_for_timeout(600); await C.click("[data-accion=elegir]"); await C.wait_for_timeout(900)
+    await C.click("[data-accion=confirmar]"); await C.wait_for_timeout(2200)
+    print("cliente:", await C.inner_text("#cuerpo h1"))
+    await C.screenshot(path="/home/claude/c1.png")
+
+    await M.wait_for_timeout(800)
+    print("maestro ve solicitudes:", await M.locator(".solicitud-nueva").count())
+    await M.screenshot(path="/home/claude/m2.png")
+    await ctx.set_geolocation({"latitude":3.4372,"longitude":-76.5225})
+    await M.click("[data-aceptar]"); await M.wait_for_timeout(1200)
+    print("maestro:", M.url.split('#')[1][:22], await M.inner_text("#cuerpo h1"))
+    await C.wait_for_timeout(1200); print("cliente:", await C.inner_text("#cuerpo h1"))
+
+    # chat
+    await M.click("[data-accion=chat]"); await M.wait_for_timeout(400)
+    await M.fill("#texto","Hola Ana, ya salgo para allá"); await M.press("#texto","Enter"); await M.wait_for_timeout(500)
+    await C.wait_for_timeout(500); print("cliente aviso chat:", await C.locator(".burbuja-num").count())
+    await C.click("[data-accion=chat]"); await C.wait_for_timeout(400)
+    print("cliente lee:", [t for t in await C.locator(".msg.suyo .burbuja").all_inner_texts()])
+    await C.fill("#texto","Perfecto, es el apto 302"); await C.press("#texto","Enter"); await C.wait_for_timeout(700)
+    print("maestro lee:", [t for t in await M.locator(".msg.suyo .burbuja").all_inner_texts()])
+    await C.screenshot(path="/home/claude/c2.png")
+    await M.click("[data-accion=atras]"); await C.click("[data-accion=atras]"); await M.wait_for_timeout(600)
+
+    await M.click("[data-paso=salir]"); await M.wait_for_timeout(1200)
+    await C.wait_for_timeout(800); print("cliente:", await C.inner_text("#cuerpo h1"), "| mapa:", await C.locator(".mapa-real .marca").count(),"marcas", "|", await C.inner_text(".mapa-real figcaption"))
+    await C.screenshot(path="/home/claude/c3.png"); await M.screenshot(path="/home/claude/m3.png")
+    pin=(await C.inner_text(".pin-caja strong")).strip()
+    await M.fill("#f-pin","0000"); await M.click(".pin-entrada button"); await M.wait_for_timeout(800)
+    print("pin malo:", await M.inner_text("#e-pin"))
+    await M.fill("#f-pin",pin); await M.click(".pin-entrada button"); await M.wait_for_timeout(1000)
+    print("maestro:", await M.inner_text("#cuerpo h1"))
+    await M.click("[data-paso=terminar]"); await M.wait_for_timeout(1000)
+    await C.wait_for_timeout(800); print("cliente:", await C.inner_text("#cuerpo h1"))
+    await C.click("#pie a"); await C.wait_for_timeout(800)
+    await C.click("[data-accion=pagar]") if await C.locator("[data-accion=pagar]").count() else await C.click(".pie-fijo button")
+    await C.wait_for_timeout(2500)
+    print("cliente tras pagar:", C.url.split('#')[1][:20])
+    await M.wait_for_timeout(800); print("maestro:", await M.inner_text("#cuerpo h1"), "|", await M.inner_text("#cuerpo .estado-cabeza p"))
+    await M.goto(B+"#/maestro/trabajos"); await M.wait_for_timeout(600); print("trabajos:", (await M.inner_text(".resumen-dia")).replace("\n"," "))
+    # el cliente no puede entrar a pantallas de maestro ni a chat ajeno
+    await C.goto(B+"#/maestro"); await C.wait_for_timeout(500); print("cliente en /maestro ->", C.url.split('#')[1])
+    print("ERRORES:", errs)
+    await b.close()
+asyncio.run(main())

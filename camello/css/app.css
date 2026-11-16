@@ -1250,7 +1250,7 @@ button.barra-btn:active {
   overflow: hidden;
   background: var(--mapa-fondo);
 }
-.mapa svg {
+.mapa > svg {
   width: 100%;
   height: 100%;
   display: block;
@@ -2590,4 +2590,327 @@ a.perfil-usuario {
   .app {
     box-shadow: none;
   }
+}
+
+/* ---------- Mapa con calles (OpenStreetMap) ---------- */
+.mapa-real {
+  height: auto;
+  aspect-ratio: 340 / 220;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.55) 2px, transparent 2px) 0 0 / 34px 34px,
+    linear-gradient(rgba(255, 255, 255, 0.55) 2px, transparent 2px) 0 0 / 34px 34px,
+    var(--mapa-fondo);
+  user-select: none;
+}
+.mapa-teselas,
+.mapa-real .mapa-linea {
+  position: absolute;
+  inset: 0;
+}
+.mapa-teselas i {
+  position: absolute;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+.mapa-real .mapa-linea {
+  width: 100%;
+  height: 100%;
+}
+.mapa-linea line {
+  stroke: var(--marca);
+  stroke-width: 3;
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.marca {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.35);
+  transition: left 0.9s linear, top 0.9s linear;
+  z-index: 2;
+}
+.marca-casa {
+  background: var(--marca);
+  color: #fff;
+}
+.marca-maestro {
+  background: var(--tinta);
+  color: #fff;
+  z-index: 3;
+}
+.marca .mapa-onda {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--marca);
+  opacity: 0;
+  animation: onda 2s ease-out infinite;
+  z-index: -1;
+}
+.mapa-real figcaption {
+  display: flex;
+  gap: 8px;
+  right: 10px;
+  top: auto;
+  bottom: 8px;
+  left: 10px;
+  justify-content: space-between;
+  background: none;
+  padding: 0;
+}
+.mapa-real figcaption span {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.mapa-real figcaption span:empty {
+  display: none;
+}
+.mapa-creditos {
+  margin-left: auto;
+}
+.mapa-abrir {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--tinta);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--sombra);
+}
+
+/* Botón de usar la ubicación del GPS */
+.btn-gps {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1.5px dashed var(--marca);
+  border-radius: var(--radio-sm);
+  background: transparent;
+  color: var(--marca);
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+.btn-gps small {
+  display: block;
+  font-weight: 400;
+  color: var(--tenue);
+}
+.btn-gps.listo {
+  border-style: solid;
+  background: color-mix(in srgb, var(--marca) 8%, transparent);
+}
+
+/* Registro: tipo de cuenta */
+.tipo-cuenta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+.tipo-cuenta label {
+  position: relative;
+}
+.tipo-cuenta input {
+  position: absolute;
+  opacity: 0;
+}
+.tipo-cuenta span {
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+  height: 100%;
+  padding: 14px;
+  border: 1.5px solid var(--linea);
+  border-radius: var(--radio-sm);
+  background: #fff;
+  cursor: pointer;
+}
+.tipo-cuenta small {
+  color: var(--tenue);
+  font-size: 0.78rem;
+}
+.tipo-cuenta input:checked + span {
+  border-color: var(--marca);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--marca) 18%, transparent);
+}
+.tipo-cuenta input:focus-visible + span {
+  outline: 2px solid var(--marca);
+  outline-offset: 2px;
+}
+.campo select {
+  width: 100%;
+  font: inherit;
+  padding: 12px 14px;
+  border: 1.5px solid var(--linea);
+  border-radius: var(--radio-sm);
+  background: #fff;
+}
+
+/* ---------- Panel del maestro ---------- */
+.maestro-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 16px;
+}
+.maestro-cabeza h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+.maestro-cabeza p {
+  margin: 2px 0 0;
+}
+.conexion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  margin: 0 0 16px;
+  border-radius: var(--radio);
+  background: var(--tinta);
+  color: #fff;
+}
+.conexion.activa {
+  background: #166534;
+}
+.conexion b {
+  display: block;
+  font-size: 1.05rem;
+}
+.conexion small {
+  opacity: 0.85;
+}
+.conexion .interruptor {
+  margin: 0 0 0 auto;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+.resumen-dia {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 0 0 18px;
+}
+.resumen-dia li {
+  display: grid;
+  gap: 2px;
+  padding: 12px;
+  border-radius: var(--radio-sm);
+  background: #fff;
+  box-shadow: var(--sombra);
+  text-align: center;
+}
+.resumen-dia b {
+  font-size: 1.05rem;
+}
+.resumen-dia span {
+  font-size: 0.72rem;
+  color: var(--tenue);
+}
+.solicitud-nueva {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  margin: 0 0 12px;
+  border: 2px solid var(--marca);
+  animation: aparece 0.35s ease-out;
+}
+@keyframes aparece {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+}
+.solicitud-nueva header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.solicitud-nueva header b {
+  display: block;
+}
+.solicitud-nueva .valor {
+  margin-left: auto;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.solicitud-nueva p {
+  margin: 0;
+}
+.dos-botones {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 8px;
+}
+.en-linea {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #166534;
+}
+.en-linea::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+.pin-entrada {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  margin: 0 0 16px;
+  border-radius: var(--radio);
+  background: #fff7ed;
+}
+.pin-entrada input {
+  font: inherit;
+  font-size: 1.6rem;
+  letter-spacing: 0.5em;
+  text-align: center;
+  padding: 10px;
+  border: 1.5px solid var(--linea);
+  border-radius: var(--radio-sm);
+}
+.pin-entrada .campo-error {
+  margin: 0;
+}
+.burbuja-num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 4px;
+  border-radius: 9px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+.conexion .interruptor input:checked + i {
+  background: #22c55e;
 }

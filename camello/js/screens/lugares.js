@@ -52,7 +52,7 @@ export function pantallaLugares(raiz) {
       } else {
         // Una dirección reciente pasa a ser la primera
         auth.recordarDireccion(u.id, u.direcciones[Number(c.slice(1))]);
-        sesion.set(auth.usuarioActual());
+        sesion.refrescar();
         almacen.borrar('lugarInicio');
       }
       ir('/inicio', { reemplazar: true });

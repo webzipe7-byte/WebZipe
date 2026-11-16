@@ -6,7 +6,54 @@
 import { TRABAJADORES } from '../data/trabajadores.js';
 import { categoriaPorId } from '../data/categorias.js';
 import { RECARGO_URGENCIA } from '../config.js';
-import { esperar } from './almacen.js';
+import { almacen, esperar } from './almacen.js';
+import { maestrosRegistrados, usuarioPublico } from './auth.js';
+import { distanciaKm, posicionEnVivo } from './ubicacion.js';
+
+const COLORES = ['#7a3519', '#0F766E', '#B45309', '#7C3AED', '#0369A1', '#4D7C0F'];
+
+/**
+ * Convierte la cuenta de un maestro registrado en la ficha que ven los clientes.
+ * La calificación y el número de trabajos salen de sus pedidos reales.
+ */
+export function fichaMaestro(u, desde = null) {
+  if (!u?.maestro) return null;
+  const suyos = almacen.leer('pedidos', []).filter((p) => p.trabajadorId === u.id);
+  const calificados = suyos.filter((p) => p.calificacion?.estrellas);
+  const promedio = calificados.length ? calificados.reduce((s, p) => s + p.calificacion.estrellas, 0) / calificados.length : 5;
+  const [nombre, ...resto] = u.nombre.split(' ');
+  const cat = categoriaPorId(u.maestro.categoria);
+  const aqui = posicionEnVivo(u.id);
+  const km = desde && aqui ? distanciaKm(desde, aqui) : 1.5;
+  return {
+    id: u.id,
+    real: true,
+    categoria: u.maestro.categoria,
+    nombre,
+    apellido: resto.join(' '),
+    anios: u.maestro.anios,
+    calificacion: Math.round(promedio * 10) / 10,
+    trabajos: suyos.filter((p) => p.pago).length,
+    distanciaKm: Math.round(Math.max(0.2, km) * 10) / 10,
+    factorPrecio: 1,
+    especialidades: cat ? [cat.nombre] : [],
+    verificado: false,
+    mujer: false,
+    color: COLORES[u.id.length % COLORES.length],
+    enLinea: !!u.maestro.conectado,
+    resenas: calificados
+      .slice(-3)
+      .reverse()
+      .map((p) => ({
+        cliente: (usuarioPublico(p.usuarioId)?.nombre || 'Cliente').split(' ')[0],
+        estrellas: p.calificacion.estrellas,
+        texto: p.calificacion.comentario || 'Sin comentario.',
+        hace: new Date(p.calificacion.fecha).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }),
+      })),
+  };
+}
+
+const maestroPorId = (id) => fichaMaestro(maestrosRegistrados().find((u) => u.id === id));
 
 /** Redondea a miles, como se cobra en la vida real. */
 const aMiles = (n) => Math.round(n / 1000) * 1000;
@@ -23,9 +70,13 @@ export function cotizar(trabajador, { urgente }) {
 }
 
 export const trabajadores = {
-  async disponibles(categoriaId, { urgente = true } = {}) {
+  /** desde: punto del cliente, para calcular la distancia a los maestros conectados. */
+  async disponibles(categoriaId, { urgente = true, desde = null } = {}) {
     await esperar(900);
-    return TRABAJADORES.filter((t) => t.categoria === categoriaId).map((t) => ({
+    const enLinea = maestrosRegistrados()
+      .filter((u) => u.maestro.conectado && u.maestro.categoria === categoriaId)
+      .map((u) => fichaMaestro(u, desde));
+    return [...enLinea, ...TRABAJADORES.filter((t) => t.categoria === categoriaId)].map((t) => ({
       ...t,
       minutos: minutosLlegada(t.distanciaKm),
       precio: cotizar(t, { urgente }),
@@ -34,13 +85,15 @@ export const trabajadores = {
 
   async porId(id) {
     await esperar(300);
-    const t = TRABAJADORES.find((x) => x.id === id);
+    const t = TRABAJADORES.find((x) => x.id === id) || maestroPorId(id);
     if (!t) throw new Error('No encontramos a este trabajador.');
     return { ...t, minutos: minutosLlegada(t.distanciaKm) };
   },
 
   /** Versión sin espera, para pantallas que ya tienen el pedido cargado. */
-  buscarLocal: (id) => TRABAJADORES.find((x) => x.id === id),
+  buscarLocal: (id) =>
+    TRABAJADORES.find((x) => x.id === id) ||
+    maestroPorId(id) || { id, nombre: 'Maestro', apellido: '', categoria: 'cerrajero', calificacion: 5, trabajos: 0, anios: 0, especialidades: [], resenas: [], color: '#7a3519' },
 };
 
 export const ORDENES = {

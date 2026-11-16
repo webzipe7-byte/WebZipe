@@ -9,6 +9,7 @@ import { barra, pasos, iconoCategoria, campo, marcarError } from '../ui/componen
 import { icono } from '../ui/iconos.js';
 import { esc, fecha } from '../ui/formato.js';
 import { RECARGO_URGENCIA } from '../config.js';
+import { miUbicacion, puntoAproximado } from '../services/ubicacion.js';
 
 /** Casa, Trabajo y direcciones recientes, sin repetir. */
 function direccionesGuardadas(u) {
@@ -117,6 +118,10 @@ export function pantallaSolicitud(raiz, { categoria }) {
           : ''
       }
       <div class="nueva-dir" ${guardadas.length && !usarNueva ? 'hidden' : ''}>
+        <button type="button" class="btn-gps${b.gps ? ' listo' : ''}" data-accion="gps">
+          ${icono('ubicacion', { tamano: 22 })}
+          <span>${b.gps ? 'Ubicación lista' : 'Usar mi ubicación actual'}<small>${b.gps ? 'El maestro verá tu punto exacto en el mapa' : 'Para que el maestro llegue sin perderse'}</small></span>
+        </button>
         ${campo({ id: 'direccion', etiqueta: 'Dirección', valor: usarNueva ? elegida?.texto || '' : '', auto: 'street-address', ayuda: 'Ej: Calle 5 # 38-20, San Fernando' })}
         ${campo({ id: 'detalle', etiqueta: 'Apto, casa o referencia (opcional)', valor: usarNueva ? elegida?.detalle || '' : '' })}
       </div>`;
@@ -187,6 +192,23 @@ export function pantallaSolicitud(raiz, { categoria }) {
           if (r.value === 'nueva') raiz.querySelector('#f-direccion').focus();
         })
       );
+      const gps = raiz.querySelector('[data-accion="gps"]');
+      gps.addEventListener('click', async () => {
+        gps.disabled = true;
+        gps.querySelector('span').firstChild.textContent = 'Buscando tu ubicación…';
+        try {
+          const punto = await miUbicacion();
+          b = borrador.guardar({ gps: punto });
+          const input = raiz.querySelector('#f-direccion');
+          if (!input.value.trim()) input.value = 'Mi ubicación actual';
+          gps.classList.add('listo');
+          gps.querySelector('span').innerHTML = 'Ubicación lista<small>El maestro verá tu punto exacto en el mapa</small>';
+          marcarError(raiz, 'direccion', '');
+        } catch (err) {
+          gps.querySelector('span').innerHTML = `Usar mi ubicación actual<small>${esc(err.message)}</small>`;
+        }
+        gps.disabled = false;
+      });
     }
 
     if (paso === 3) {
@@ -232,7 +254,7 @@ export function pantallaSolicitud(raiz, { categoria }) {
       const sel = raiz.querySelector('[name="dir"]:checked');
       if (sel && sel.value !== 'nueva') {
         const d = direccionesGuardadas(sesion.usuario)[Number(sel.value)];
-        borrador.guardar({ direccion: { texto: d.texto, detalle: d.detalle || '' } });
+        borrador.guardar({ direccion: { texto: d.texto, detalle: d.detalle || '', coords: d.coords || puntoAproximado(d.texto) } });
         return irPaso(3);
       }
       const texto = raiz.querySelector('#f-direccion').value.trim();
@@ -241,7 +263,9 @@ export function pantallaSolicitud(raiz, { categoria }) {
         raiz.querySelector('#f-direccion').focus();
         return;
       }
-      borrador.guardar({ direccion: { texto, detalle: raiz.querySelector('#f-detalle').value.trim() } });
+      // Punto en el mapa: el GPS si lo compartió; si no, uno aproximado según la dirección
+      const coords = borrador.leer().gps || puntoAproximado(texto);
+      borrador.guardar({ direccion: { texto, detalle: raiz.querySelector('#f-detalle').value.trim(), coords } });
       return irPaso(3);
     }
 

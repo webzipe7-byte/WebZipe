@@ -61,7 +61,8 @@ export async function pantallaTrabajadores(raiz) {
         : `<li>${vacio({ icono: 'buscar', titulo: 'No hay maestros libres ahora', texto: 'Prueba programar el servicio para otro momento.', accion: 'Cambiar horario', ruta: `#/solicitud/${b.categoria}` })}</li>`;
       return;
     }
-    const ordenada = [...visibles].sort(ORDENES[orden].fn);
+    // Los maestros conectados ahora mismo van primero
+    const ordenada = [...visibles].sort((x, y) => (y.enLinea ? 1 : 0) - (x.enLinea ? 1 : 0) || ORDENES[orden].fn(x, y));
     ul.innerHTML = ordenada
       .map(
         (t) => `
@@ -70,6 +71,7 @@ export async function pantallaTrabajadores(raiz) {
           ${avatar(t, 58)}
           <span class="trabajador-info">
             <b>${esc(t.nombre)} ${esc(t.apellido)}</b>
+            ${t.enLinea ? '<span class="en-linea">En línea ahora</span>' : ''}
             <span class="fila-datos">${calificacion(t.calificacion)}<span>${t.trabajos} trabajos</span></span>
             <span class="fila-datos tenue">${String(t.distanciaKm).replace('.', ',')} km${urgente ? ` · llega en ${t.minutos} min` : ''}</span>
           </span>
@@ -100,7 +102,7 @@ export async function pantallaTrabajadores(raiz) {
   async function cargar() {
     ul.innerHTML = esqueletoTarjetas(4);
     try {
-      lista = await trabajadores.disponibles(b.categoria, { urgente });
+      lista = await trabajadores.disponibles(b.categoria, { urgente, desde: b.direccion?.coords });
       pintar();
     } catch (err) {
       ul.innerHTML = `<li>${errorVista(err.message)}</li>`;
@@ -162,6 +164,7 @@ export async function pantallaTrabajador(raiz, { id }) {
 
       <section class="bloque">
         <h2>Lo que dicen sus clientes</h2>
+        ${t.resenas.length ? '' : '<p class="tenue">Todavía no tiene reseñas. ¡Puedes ser su primer cliente!</p>'}
         <ul class="resenas">
           ${t.resenas
             .map(

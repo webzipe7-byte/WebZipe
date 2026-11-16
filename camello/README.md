@@ -177,3 +177,40 @@ Por eso lo único que recibe a todos a la vez es el hosting de los archivos.
 GitHub Pages tiene un límite suave de 100 GB al mes, así que a esta escala hay que
 pasar el hosting a Cloudflare Pages (ancho de banda y solicitudes estáticas sin límite
 en el plan gratis). Los archivos se suben tal cual, no hay que cambiar código.
+
+## App del maestro (misma app, misma base de datos)
+
+Camello es una sola app con dos tipos de cuenta. Al crear la cuenta se elige
+**Necesito un maestro** o **Soy maestro** (con oficio y años de experiencia).
+La página de descarga es la misma para los dos.
+
+**Maestro**
+- Botón para conectarse o desconectarse. Si está conectado, aparece de primero en la
+  lista del cliente con la marca "En línea ahora".
+- Las solicitudes nuevas llegan al instante, con vibración. Puede aceptarlas o rechazarlas.
+- Pasos del trabajo: Aceptar → Salir hacia el cliente → Confirmar llegada con el código
+  de 4 números del cliente (5 intentos y bloqueo de 5 min) → Terminé el trabajo.
+- Mapa con la dirección del cliente, su propia ubicación y el botón "Cómo llegar" (Google Maps).
+- Historial con lo ganado, los servicios y las propinas.
+
+**Ubicación**
+- El cliente puede usar el GPS ("Usar mi ubicación actual"). Si no, se ubica un punto
+  aproximado según la dirección.
+- El maestro conectado comparte su GPS. El cliente lo ve moverse en el mapa en vivo.
+- El mapa usa calles reales de OpenStreetMap.
+
+**Chat**
+- El chat de cada pedido es el mismo para el cliente y el maestro. Los mensajes llegan
+  al instante, con un contador de mensajes sin leer.
+- Solo lo pueden abrir el cliente y el maestro de ese pedido. Máximo 300 caracteres por mensaje.
+
+**Base de datos**
+- Todo está en una sola base (`js/services/almacen.js`): `usuarios` (clientes y maestros),
+  `pedidos`, `chat:<pedido>` y `ubicacion:<maestro>`.
+- Hoy se guarda en el navegador. Para probar en un solo computador, abre la app en dos
+  pestañas (una de cliente y otra de maestro) y verás los cambios al instante.
+- Para que funcione entre teléfonos distintos, solo hay que cambiar `almacen.js` por una base
+  en la nube (Firebase o Supabase). Las funciones son las mismas.
+
+Pruebas: `pruebas/flujo_maestro.py` (pedido completo cliente ↔ maestro) y
+`pruebas/ataques_maestro.py` (permisos, chat, código de llegada).

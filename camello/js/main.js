@@ -28,6 +28,8 @@ import {
   pantallaTrabaja,
 } from './screens/menu.js';
 import { pantallaPerfil } from './screens/perfil.js';
+import { pantallaMaestro, pantallaTrabajoMaestro, pantallaTrabajosMaestro, pantallaCuentaMaestro } from './screens/maestro.js';
+import { inicioDe } from './services/auth.js';
 
 // Pantallas públicas (sin sesión)
 ruta('/bienvenida', pantallaBienvenida, { publica: true, soloSinSesion: true });
@@ -35,31 +37,39 @@ ruta('/bienvenida', pantallaBienvenida, { publica: true, soloSinSesion: true });
 ruta('/registro', pantallaRegistro, { publica: true, soloSinSesion: true, soloApp: true });
 ruta('/entrar', pantallaEntrar, { publica: true, soloSinSesion: true, soloApp: true });
 
-// Pantallas con sesión
-ruta('/inicio', pantallaInicio);
-ruta('/solicitud/:categoria', pantallaSolicitud);
-ruta('/trabajadores', pantallaTrabajadores);
-ruta('/trabajador/:id', pantallaTrabajador);
-ruta('/confirmar', pantallaConfirmar);
-ruta('/pedido/:id', pantallaSeguimiento);
-ruta('/pagar/:id', pantallaPagar);
-ruta('/calificar/:id', pantallaCalificar);
+// Pantallas con sesión. C = solo clientes; las demás las usan también los maestros
+const C = { rol: 'cliente' };
+ruta('/inicio', pantallaInicio, C);
+ruta('/solicitud/:categoria', pantallaSolicitud, C);
+ruta('/trabajadores', pantallaTrabajadores, C);
+ruta('/trabajador/:id', pantallaTrabajador, C);
+ruta('/confirmar', pantallaConfirmar, C);
+ruta('/pedido/:id', pantallaSeguimiento, C);
+ruta('/pagar/:id', pantallaPagar, C);
+ruta('/calificar/:id', pantallaCalificar, C);
 ruta('/chat/:id', pantallaChat);
-ruta('/recibo/:id', pantallaRecibo);
-ruta('/pedidos', pantallaPedidos);
-ruta('/programar', pantallaProgramar);
-ruta('/lugares', pantallaLugares);
-ruta('/lugares/:tipo', pantallaEditarLugar);
-ruta('/billetera', pantallaBilletera);
-ruta('/billetera/agregar', pantallaAgregarMetodo);
-ruta('/cuenta', pantallaCuenta);
+ruta('/recibo/:id', pantallaRecibo, C);
+ruta('/pedidos', pantallaPedidos, C);
+ruta('/programar', pantallaProgramar, C);
+ruta('/lugares', pantallaLugares, C);
+ruta('/lugares/:tipo', pantallaEditarLugar, C);
+ruta('/billetera', pantallaBilletera, C);
+ruta('/billetera/agregar', pantallaAgregarMetodo, C);
+ruta('/cuenta', pantallaCuenta, { ...C, otroRol: '/maestro/cuenta' });
 ruta('/perfil', pantallaPerfil);
 ruta('/seguridad', pantallaSeguridad);
-ruta('/cupones', pantallaCupones);
-ruta('/invitar', pantallaInvitar);
+ruta('/cupones', pantallaCupones, C);
+ruta('/invitar', pantallaInvitar, C);
 ruta('/ayuda', pantallaAyuda);
 ruta('/configuracion', pantallaConfiguracion);
-ruta('/trabaja', pantallaTrabaja);
+ruta('/trabaja', pantallaTrabaja, C);
+
+// App del maestro (mismo programa, misma base de datos)
+const M = { rol: 'trabajador' };
+ruta('/maestro', pantallaMaestro, M);
+ruta('/maestro/pedido/:id', pantallaTrabajoMaestro, M);
+ruta('/maestro/trabajos', pantallaTrabajosMaestro, M);
+ruta('/maestro/cuenta', pantallaCuentaMaestro, M);
 
 // Protección contra clickjacking: Camello no se deja mostrar dentro de otra página
 if (window.top !== window.self) {
@@ -73,14 +83,21 @@ document.getElementById('arranque')?.remove();
 iniciarRouter({
   raiz,
   haySesion: () => !!sesion.usuario,
+  rolActual: () => sesion.usuario?.rol || 'cliente',
   appInstalada: instalacion.instalada,
   inicioPublico: '/bienvenida',
-  inicioPrivado: '/inicio',
+  inicioPrivado: () => inicioDe(sesion.usuario),
 });
 
 // Si se cierra la sesión en otra pestaña (o vence), esta también se cierra
 window.addEventListener('storage', (e) => {
-  if (e.key === 'camello:sesion' && !e.newValue && sesion.usuario) {
+  let deEste = false;
+  try {
+    deEste = JSON.parse(e.oldValue || 'null')?.usuarioId === sesion.usuario?.id;
+  } catch {
+    /* valor dañado: se ignora */
+  }
+  if (e.key === 'camello:sesion' && !e.newValue && sesion.usuario && deEste) {
     sesion.salir();
     location.hash = '#/bienvenida';
   }

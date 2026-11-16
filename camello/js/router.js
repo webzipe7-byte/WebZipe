@@ -12,6 +12,7 @@ let limpiarActual = null;
  * pantalla: async (raiz, params) => (opcional) función de limpieza
  * opciones.publica: true si no requiere sesión
  * opciones.soloApp: true si solo se puede usar con la app instalada
+ * opciones.rol: 'cliente' o 'trabajador' si la pantalla es solo de ese tipo de cuenta
  */
 export function ruta(patron, pantalla, opciones = {}) {
   const claves = [];
@@ -40,8 +41,10 @@ export const atras = (respaldo = '/inicio') => {
   else ir(respaldo, { reemplazar: true });
 };
 
-export function iniciarRouter({ raiz, haySesion, appInstalada = () => true, inicioPublico, inicioPrivado }) {
+export function iniciarRouter({ raiz, haySesion, rolActual = () => 'cliente', appInstalada = () => true, inicioPublico, inicioPrivado }) {
+  const privado = () => (typeof inicioPrivado === 'function' ? inicioPrivado() : inicioPrivado);
   async function resolver() {
+    const inicioPrivado = privado();
     const camino = location.hash.slice(1) || (haySesion() ? inicioPrivado : inicioPublico);
 
     let encontrada = null;
@@ -59,6 +62,7 @@ export function iniciarRouter({ raiz, haySesion, appInstalada = () => true, inic
     if (!encontrada.publica && !haySesion()) return ir(inicioPublico, { reemplazar: true });
     if (encontrada.soloSinSesion && haySesion()) return ir(inicioPrivado, { reemplazar: true });
     if (encontrada.soloApp && !appInstalada()) return ir(inicioPublico, { reemplazar: true });
+    if (encontrada.rol && haySesion() && encontrada.rol !== rolActual()) return ir(encontrada.otroRol || inicioPrivado, { reemplazar: true });
 
     vistas++;
     if (typeof limpiarActual === 'function') limpiarActual();

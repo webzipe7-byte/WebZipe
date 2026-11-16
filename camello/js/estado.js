@@ -3,7 +3,7 @@
  * - el usuario con sesión iniciada
  * - el borrador de la solicitud que se está armando (sobrevive a recargar la página)
  */
-import { auth } from './services/auth.js';
+import { auth, usuarioPublico } from './services/auth.js';
 import { almacen } from './services/almacen.js';
 
 let usuario = auth.usuarioActual();
@@ -14,6 +14,14 @@ export const sesion = {
   },
   set(u) {
     usuario = u;
+  },
+  /**
+   * Vuelve a leer los datos de ESTE usuario. Cada pestaña recuerda con quién
+   * entró, así se puede tener al cliente y al maestro abiertos a la vez.
+   */
+  refrescar() {
+    if (usuario) usuario = usuarioPublico(usuario.id) || usuario;
+    return usuario;
   },
   salir() {
     auth.cerrarSesion();

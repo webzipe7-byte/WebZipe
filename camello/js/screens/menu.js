@@ -352,14 +352,12 @@ export function pantallaTrabaja(raiz) {
         <li>${icono('billetera', { tamano: 22 })}<span><b>Pagos seguros</b><small>Recibes lo de cada servicio y el 100% de las propinas.</small></span></li>
         <li>${icono('estrella', { tamano: 22 })}<span><b>Crece con tus calificaciones</b><small>Los mejor calificados aparecen primero.</small></span></li>
       </ul>
-      <p class="nota-demo">La app para maestros está en desarrollo.</p>
+      <p class="nota-demo">Para trabajar, cierra sesión y crea una cuenta nueva eligiendo <b>Soy maestro</b>. Usa otro correo: tu cuenta de cliente sigue igual.</p>
     </main>
-    <div class="pie-fijo"><button class="btn btn-primario btn-bloque" data-accion="avisar">Avísame cuando abra</button></div>`;
+    <div class="pie-fijo"><button class="btn btn-primario btn-bloque" data-accion="avisar">Crear mi cuenta de maestro</button></div>`;
   raiz.querySelector('[data-accion="atras"]').addEventListener('click', () => atras('/cuenta'));
-  raiz.querySelector('[data-accion="avisar"]').addEventListener('click', (e) => {
-    sesion.set(auth.modificar(sesion.usuario.id, (u) => (u.interesTrabajar = Date.now())));
-    e.currentTarget.textContent = '¡Listo! Te avisaremos';
-    e.currentTarget.disabled = true;
-    aviso('Te avisaremos cuando abramos inscripciones.', 'exito');
+  raiz.querySelector('[data-accion="avisar"]').addEventListener('click', () => {
+    sesion.salir();
+    ir('/registro', { reemplazar: true });
   });
 }

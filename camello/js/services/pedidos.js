@@ -10,6 +10,7 @@
  */
 import { almacen, esperar, generarId, MAX_PEDIDOS } from './almacen.js';
 import { SIMULACION } from '../config.js';
+import { intentos, minutosRestantes } from './seguridad.js';
 
 const CLAVE = 'pedidos';
 
@@ -35,6 +36,17 @@ const DURACION = {
  */
 export function estadoDe(pedido, ahora = Date.now()) {
   if (pedido.cancelado) return { id: 'cancelado', indice: -1, avance: 0 };
+  // Pedido con un maestro registrado: el estado lo cambia el maestro desde su app
+  if (pedido.real) {
+    const indice = Math.max(0, ESTADOS.findIndex((s) => s.id === pedido.estado));
+    const id = ESTADOS[indice].id;
+    let avance = id === 'finalizado' ? 1 : 0;
+    if (id === 'en_camino') {
+      const viaje = Math.max(1, pedido.minutosLlegada || 15) * 60000;
+      avance = Math.min(0.95, (ahora - (pedido.tiempos?.en_camino || ahora)) / viaje);
+    }
+    return { id, indice, avance };
+  }
   if (!pedido.inicio) return { id: 'agendado', indice: 1, avance: 0 };
 
   let transcurrido = ahora - pedido.inicio;
@@ -102,6 +114,13 @@ export const pedidos = {
       calificacion: null,
       ...datos,
     };
+    // Los maestros registrados tienen id de usuario: ellos manejan el pedido
+    if (String(datos.trabajadorId).startsWith('u_')) {
+      pedido.real = true;
+      pedido.inicio = Date.now();
+      pedido.estado = 'buscando';
+      pedido.tiempos = { buscando: Date.now() };
+    }
     guardarTodos([pedido, ...todos()]);
     return pedido;
   },
@@ -144,5 +163,52 @@ export const pedidos = {
   async calificar(id, calificacion) {
     await esperar(700);
     return actualizar(id, { calificacion: { ...calificacion, fecha: Date.now() } });
+  },
+
+  /** Avisa cada vez que cambia algún pedido (en esta pestaña o en otra). */
+  escuchar: (fn) => almacen.escuchar('pedidos', fn),
+
+  /* ---------- Lado del maestro ---------- */
+
+  /** Pedidos asignados a un maestro, del más nuevo al más viejo. */
+  delMaestro: (maestroId) =>
+    todos()
+      .filter((p) => p.trabajadorId === maestroId)
+      .sort((a, b) => b.creado - a.creado),
+
+  /**
+   * El maestro cambia el estado de su pedido.
+   * accion: aceptar | rechazar | salir | llegar (pide el código del cliente) | terminar
+   */
+  async avanzar(id, maestroId, accion, { pin = '' } = {}) {
+    await esperar(400);
+    const p = pedidos.obtener(id);
+    if (!p || !p.real || p.trabajadorId !== maestroId) throw new Error('Este pedido no es tuyo.');
+    if (p.cancelado) throw new Error('El cliente canceló este pedido.');
+    const pasos = {
+      aceptar: ['buscando', 'aceptado'],
+      rechazar: ['buscando', null],
+      salir: ['aceptado', 'en_camino'],
+      llegar: ['en_camino', 'en_proceso'],
+      terminar: ['en_proceso', 'finalizado'],
+    };
+    const paso = pasos[accion];
+    if (!paso) throw new Error('Acción no válida.');
+    if (p.estado !== paso[0]) throw new Error('El pedido ya cambió. Revisa su estado.');
+
+    if (accion === 'rechazar') {
+      return actualizar(id, { cancelado: { fecha: Date.now(), motivo: 'El maestro no pudo tomar el servicio. Elige otro maestro.', por: 'maestro' } });
+    }
+    if (accion === 'llegar') {
+      const llave = `pin:${id}`;
+      const espera = intentos.bloqueado(llave);
+      if (espera) throw new Error(`Demasiados intentos. Espera ${minutosRestantes(espera)} min.`);
+      if (String(pin).trim() !== p.pin) {
+        const quedan = intentos.fallo(llave);
+        throw new Error(quedan > 0 ? `Ese no es el código del cliente. Te quedan ${quedan} intentos.` : 'Demasiados intentos. Espera 5 min.');
+      }
+      intentos.limpiar(llave);
+    }
+    return actualizar(id, { estado: paso[1], tiempos: { ...(p.tiempos || {}), [paso[1]]: Date.now() } });
   },
 };

@@ -133,7 +133,7 @@ export function marcarError(raiz, id, mensaje) {
   if (!c) return;
   c.classList.toggle('con-error', !!mensaje);
   c.querySelector('.campo-error').textContent = mensaje || '';
-  c.querySelector('input,textarea')?.setAttribute('aria-invalid', mensaje ? 'true' : 'false');
+  c.querySelector('input,textarea,select')?.setAttribute('aria-invalid', mensaje ? 'true' : 'false');
 }
 
 /** Activa los botones de "ver contraseña" dentro de un contenedor. */

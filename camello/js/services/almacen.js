@@ -1,6 +1,16 @@
 /**
- * Almacenamiento local (localStorage) con prefijo propio.
- * En el demo hace las veces de "base de datos".
+ * Base de datos de Camello: una sola, compartida por clientes y maestros.
+ *
+ * Tablas (claves con prefijo "camello:"):
+ *   usuarios        clientes y maestros (campo `rol`)
+ *   pedidos         solicitudes de servicio de todos
+ *   chat:<pedido>   mensajes entre el cliente y el maestro de ese pedido
+ *   ubicacion:<id>  última posición GPS de cada maestro conectado
+ *
+ * Hoy vive en el dispositivo (localStorage). Para que clientes y maestros
+ * se vean desde teléfonos distintos, este archivo se cambia por uno que hable
+ * con una base en la nube (Firebase, Supabase…) con las mismas funciones:
+ * leer, guardar, borrar y escuchar.
  */
 
 const PREFIJO = 'camello:';
@@ -29,12 +39,14 @@ export const almacen = {
     const texto = JSON.stringify(valor);
     try {
       localStorage.setItem(PREFIJO + clave, texto);
+      avisarCambio(clave);
       return true;
     } catch {
       // Espacio lleno: se libera lo más viejo (chats y pedidos cerrados) y se intenta otra vez
       liberarEspacio();
       try {
         localStorage.setItem(PREFIJO + clave, texto);
+        avisarCambio(clave);
         return true;
       } catch {
         return false;
@@ -45,11 +57,40 @@ export const almacen = {
   borrar(clave) {
     try {
       localStorage.removeItem(PREFIJO + clave);
+      avisarCambio(clave);
     } catch {
       /* sin acceso al almacenamiento: no hay nada que borrar */
     }
   },
+
+  /**
+   * Avisa cuando cambia una clave, en esta pestaña o en otra
+   * (por ejemplo, el cliente y el maestro abiertos a la vez).
+   * `claves` puede ser un texto o una lista; una clave que termina en ':'
+   * escucha todas las que empiezan así ('chat:').
+   * Devuelve la función para dejar de escuchar.
+   */
+  escuchar(claves, fn) {
+    const lista = [].concat(claves);
+    const coincide = (k) => lista.some((c) => (c.endsWith(':') ? k.startsWith(c) : k === c));
+    const local = (e) => coincide(e.detail) && fn(e.detail);
+    const otra = (e) => e.key?.startsWith(PREFIJO) && coincide(e.key.slice(PREFIJO.length)) && fn(e.key.slice(PREFIJO.length));
+    window.addEventListener('camello:cambio', local);
+    window.addEventListener('storage', otra);
+    return () => {
+      window.removeEventListener('camello:cambio', local);
+      window.removeEventListener('storage', otra);
+    };
+  },
 };
+
+function avisarCambio(clave) {
+  try {
+    window.dispatchEvent(new CustomEvent('camello:cambio', { detail: clave }));
+  } catch {
+    /* fuera del navegador no hay a quién avisar */
+  }
+}
 
 /** Máximo de pedidos guardados por dispositivo (los cerrados más viejos se descartan). */
 export const MAX_PEDIDOS = 200;
