@@ -5,10 +5,10 @@
    ========================================================== */
 
 :root {
-  --marca: #0e8a5f;
-  --marca-osc: #0a6b49;
-  --marca-suave: #e8f6ef;
-  --acento: #f5b83d;
+  --marca: #7a3519;
+  --marca-osc: #55250f;
+  --marca-suave: #f6ede6;
+  --acento: #e0a24a;
   --tinta: #0f172a;
   --tinta-2: #334155;
   --tenue: #64748b;
@@ -26,7 +26,7 @@
   --mapa-fondo: #eef2f7;
   --mapa-manzana: #dfe5ee;
   --mapa-parque: #d6eedd;
-  --mapa-ruta-fondo: #bfe5d3;
+  --mapa-ruta-fondo: #ead3c4;
 
   --radio: 16px;
   --radio-sm: 12px;
@@ -135,7 +135,7 @@ h1:focus {
 }
 @media (min-width: 560px) {
   body {
-    background: radial-gradient(circle at 20% 0%, #e3f4ec 0, transparent 40%), var(--fondo);
+    background: radial-gradient(circle at 20% 0%, #f4e9e1 0, transparent 40%), var(--fondo);
   }
   .app {
     box-shadow: 0 0 0 1px var(--linea), 0 30px 80px -40px rgba(15, 23, 42, 0.35);
@@ -271,13 +271,13 @@ button.barra-btn:active {
 .btn-primario {
   background: var(--marca);
   color: #fff;
-  box-shadow: 0 8px 20px -10px rgba(14, 138, 95, 0.7);
+  box-shadow: 0 8px 20px -10px rgba(122, 53, 25, 0.7);
 }
 .btn-primario:hover:not(:disabled) {
   background: var(--marca-osc);
 }
 .btn-primario:disabled {
-  background: #c3d3cc;
+  background: #d6c8c0;
   box-shadow: none;
   cursor: not-allowed;
 }
@@ -291,7 +291,7 @@ button.barra-btn:active {
   color: var(--marca-osc);
 }
 .btn-secundario:hover:not(:disabled) {
-  background: #d5efe2;
+  background: #efe0d6;
 }
 .btn-texto {
   color: var(--marca-osc);
@@ -393,7 +393,7 @@ button.barra-btn:active {
 .campo textarea:focus {
   outline: none;
   border-color: var(--marca);
-  box-shadow: 0 0 0 4px rgba(14, 138, 95, 0.12);
+  box-shadow: 0 0 0 4px rgba(122, 53, 25, 0.12);
 }
 .campo input[type='password'],
 .campo-caja:has(.campo-ojo) input {
@@ -451,7 +451,7 @@ button.barra-btn:active {
   content: '';
   position: absolute;
   inset: 10%;
-  border: 1.5px dashed #bfe3d2;
+  border: 1.5px dashed #e3c9b8;
   border-radius: 50%;
 }
 .orbita-item {
@@ -465,10 +465,11 @@ button.barra-btn:active {
 }
 .orbita-centro {
   position: absolute;
+  line-height: 0;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 12px 22px rgba(14, 138, 95, 0.35));
+  filter: drop-shadow(0 12px 22px rgba(85, 37, 15, 0.3));
 }
 @keyframes aparecer {
   from {
@@ -599,7 +600,7 @@ button.barra-btn:active {
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.12s;
 }
 .categoria:hover {
-  border-color: #bfe3d2;
+  border-color: #e3c9b8;
   box-shadow: var(--sombra);
 }
 .categoria:active {
@@ -828,7 +829,7 @@ button.barra-btn:active {
   color: var(--marca);
 }
 .opcion input:focus-visible + .opcion-caja {
-  outline: 3px solid rgba(14, 138, 95, 0.35);
+  outline: 3px solid rgba(122, 53, 25, 0.35);
   outline-offset: 2px;
 }
 .opcion-caja::after {
@@ -891,7 +892,7 @@ button.barra-btn:active {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .trabajador:hover {
-  border-color: #bfe3d2;
+  border-color: #e3c9b8;
   box-shadow: var(--sombra);
 }
 .trabajador-info {
@@ -1361,7 +1362,7 @@ button.barra-btn:active {
 }
 .linea-estados .actual .punto {
   border-color: var(--marca);
-  box-shadow: 0 0 0 5px rgba(14, 138, 95, 0.15);
+  box-shadow: 0 0 0 5px rgba(122, 53, 25, 0.15);
 }
 .linea-estados .actual .punto::after {
   content: '';
@@ -1404,7 +1405,7 @@ button.barra-btn:active {
   color: var(--tinta);
 }
 .btn-descargar:hover {
-  border-color: #bfe3d2;
+  border-color: #e3c9b8;
 }
 .pasos-instalar {
   counter-reset: paso;
@@ -1935,7 +1936,7 @@ button.barra-btn:active {
   margin-top: 22px;
   padding: 16px;
   border-radius: var(--radio);
-  background: linear-gradient(120deg, var(--marca) 0%, #13a571 100%);
+  background: linear-gradient(120deg, var(--marca-osc) 0%, #8f4a24 100%);
   color: #fff;
 }
 .promo > span:nth-child(2) {
@@ -2120,7 +2121,7 @@ button.barra-btn:active {
   transform: translateX(20px);
 }
 .interruptor input:focus-visible + i {
-  outline: 3px solid rgba(14, 138, 95, 0.35);
+  outline: 3px solid rgba(122, 53, 25, 0.35);
   outline-offset: 2px;
 }
 .grupo .interruptor + .interruptor {
@@ -2233,7 +2234,7 @@ button.barra-btn:active {
   gap: 14px;
   padding: 14px;
   border-radius: var(--radio);
-  border: 1.5px dashed #b5dcc9;
+  border: 1.5px dashed #dcbfac;
   background: var(--marca-suave);
 }
 .cupon.usado {
