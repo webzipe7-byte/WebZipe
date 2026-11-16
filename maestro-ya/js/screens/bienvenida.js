@@ -1,6 +1,9 @@
 import { CATEGORIAS } from '../data/categorias.js';
 import { iconoCategoria } from '../ui/componentes.js';
 import { logo } from '../ui/logo.js';
+import { icono } from '../ui/iconos.js';
+import { abrirInstalar } from '../ui/hoja-instalar.js';
+import { instalacion } from '../instalar.js';
 
 export function pantallaBienvenida(raiz) {
   // Los íconos de las categorías giran alrededor del logo como "órbita"
@@ -24,6 +27,9 @@ export function pantallaBienvenida(raiz) {
       <div class="pie-acciones">
         <a class="btn btn-primario btn-bloque" href="#/registro">Crear cuenta</a>
         <a class="btn btn-texto btn-bloque" href="#/entrar">Ya tengo cuenta</a>
+        ${instalacion.instalada() ? '' : `<button class="btn btn-descargar btn-bloque" data-accion="instalar">${icono('descargar', { tamano: 20 })} Descargar la app</button>`}
       </div>
     </section>`;
+
+  raiz.querySelector('[data-accion="instalar"]')?.addEventListener('click', abrirInstalar);
 }

@@ -9,6 +9,7 @@ import { montarPedidoActivo } from '../ui/pedido-activo.js';
 import { icono } from '../ui/iconos.js';
 import { esc, iniciales } from '../ui/formato.js';
 import { instalacion } from '../instalar.js';
+import { abrirInstalar } from '../ui/hoja-instalar.js';
 import { validarNombre, validarCorreo, validarTelefono, validarContrasena, validarIgual } from '../services/validar.js';
 import { APP } from '../config.js';
 
@@ -139,11 +140,11 @@ export function pantallaPerfil(raiz) {
     cajaInstalar.innerHTML = `
       <div class="panel instalar">
         <span class="cat-ico" style="--cat:var(--marca)">${icono('descargar', { tamano: 22 })}</span>
-        <span><b>Instala ${esc(APP.nombre)}</b><small class="tenue">${esc(instalacion.instruccion())}</small></span>
-        ${instalacion.disponible() ? '<button class="btn btn-secundario" data-accion="instalar">Instalar</button>' : ''}
+        <span><b>Descarga ${esc(APP.nombre)}</b><small class="tenue">Tenla con su propio ícono, como cualquier app.</small></span>
+        <button class="btn btn-secundario" data-accion="instalar">Instalar</button>
       </div>`;
-    cajaInstalar.querySelector('[data-accion="instalar"]')?.addEventListener('click', async () => {
-      await instalacion.pedir();
+    cajaInstalar.querySelector('[data-accion="instalar"]').addEventListener('click', async () => {
+      await abrirInstalar();
       pintarInstalar();
     });
   };

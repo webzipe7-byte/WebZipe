@@ -1393,6 +1393,44 @@ button.barra-btn:active {
   margin-top: 14px;
 }
 
+/* ---------- Descargar / instalar ---------- */
+.btn-descargar {
+  margin-top: 6px;
+  border: 1.5px solid var(--linea);
+  background: #fff;
+  color: var(--tinta);
+}
+.btn-descargar:hover {
+  border-color: #cfd7f7;
+}
+.pasos-instalar {
+  counter-reset: paso;
+  display: grid;
+  gap: 12px;
+  margin: 6px 0 4px;
+}
+.pasos-instalar li {
+  counter-increment: paso;
+  position: relative;
+  padding-left: 38px;
+  color: var(--tinta-2);
+}
+.pasos-instalar li::before {
+  content: counter(paso);
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--marca-suave);
+  color: var(--marca-osc);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
 /* ---------- Diálogo ---------- */
 .dialogo {
   position: fixed;

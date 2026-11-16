@@ -3,7 +3,7 @@
  * Guarda la app en caché para que abra rápido y funcione sin conexión.
  * Al publicar cambios, sube el número de VERSION para que todos reciban la nueva.
  */
-const VERSION = 'maestroya-v1';
+const VERSION = 'maestroya-v2';
 
 const ARCHIVOS = [
   './',
@@ -28,6 +28,7 @@ const ARCHIVOS = [
   './js/services/validar.js',
   './js/ui/componentes.js',
   './js/ui/formato.js',
+  './js/ui/hoja-instalar.js',
   './js/ui/iconos.js',
   './js/ui/logo.js',
   './js/ui/mapa.js',
