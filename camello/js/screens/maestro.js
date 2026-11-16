@@ -93,7 +93,7 @@ export function pantallaMaestro(raiz) {
       <ul class="resumen-dia">
         <li><b>${dinero(deHoy.reduce((s, p) => s + ganancia(p), 0))}</b><span>Ganado hoy</span></li>
         <li><b>${deHoy.length}</b><span>Servicios hoy</span></li>
-        <li><b>${icono('estrella', { tamano: 14, relleno: true })} ${ficha.calificacion.toFixed(1)}</b><span>Calificación</span></li>
+        <li><b>${icono('estrella', { tamano: 14, relleno: true })} ${ficha.calificacion == null ? 'Nuevo' : ficha.calificacion.toFixed(1)}</b><span>Calificación</span></li>
       </ul>
 
       ${
@@ -389,7 +389,7 @@ export function pantallaCuentaMaestro(raiz) {
       <section class="perfil-cabeza">
         ${avatar(ficha, 80)}
         <h1 tabindex="-1">${esc(u.nombre)}</h1>
-        <p class="tenue">${esc(cat?.nombre || '')} · ${u.maestro.anios} años · ${icono('estrella', { tamano: 14, relleno: true })} ${ficha.calificacion.toFixed(1)}</p>
+        <p class="tenue">${esc(cat?.nombre || '')} · ${u.maestro.anios} años · ${icono('estrella', { tamano: 14, relleno: true })} ${ficha.calificacion == null ? 'Nuevo' : ficha.calificacion.toFixed(1)}</p>
       </section>
       <a class="fila-accion tarjeta" href="#/perfil">${icono('editar', { tamano: 20 })}<span><b>Mis datos</b><small>Nombre, correo y celular</small></span>${icono('derecha', { tamano: 18 })}</a>
       <a class="fila-accion tarjeta" href="#/seguridad">${icono('candado', { tamano: 20 })}<span><b>Seguridad</b><small>Contraseña y cuenta</small></span>${icono('derecha', { tamano: 18 })}</a>

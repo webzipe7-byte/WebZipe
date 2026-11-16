@@ -24,7 +24,7 @@ function puntosSeguimiento(pedido, e) {
 }
 
 function mapaSeguimiento(pedido, e, t) {
-  const vivo = pedido.real && posicionEnVivo(pedido.trabajadorId);
+  const vivo = posicionEnVivo(pedido.trabajadorId);
   const nota =
     e.id === 'buscando' ? 'Tu dirección' : e.id === 'en_proceso' ? `${t.nombre} está en tu dirección` : vivo ? `${t.nombre} en vivo` : `Ubicación aproximada de ${t.nombre}`;
   return mapaReal(puntosSeguimiento(pedido, e), { nota });
@@ -80,7 +80,7 @@ export function pantallaSeguimiento(raiz, { id }) {
       return { titulo: `Llega en ${min} min`, detalle: `${t.nombre} va en camino. Ten lista la entrada.`, clase: '' };
     }
     if (e.id === 'finalizado') return { titulo: est.titulo, detalle: 'Revisa el trabajo y paga para cerrar el servicio.', clase: 'listo' };
-    if (e.id === 'buscando' && pedido.real) return { titulo: `Esperando que ${t.nombre} acepte`, detalle: 'Ya le llegó tu solicitud a su app.', clase: '' };
+    if (e.id === 'buscando') return { titulo: `Esperando que ${t.nombre} acepte`, detalle: 'Ya le llegó tu solicitud a su app.', clase: '' };
     return { titulo: est.titulo.replace('el maestro', t.nombre), detalle: est.detalle, clase: '' };
   }
 
@@ -174,7 +174,7 @@ export function pantallaSeguimiento(raiz, { id }) {
       }
 
       ${sePuedeCancelar(pedido) ? '<button class="btn btn-texto peligro btn-bloque" data-accion="cancelar">Cancelar pedido</button>' : ''}
-      ${e.id === 'agendado' ? '<p class="nota-demo">Demo: <button class="enlace" data-accion="iniciar">simular que ya es la hora</button></p>' : ''}`;
+`;
 
     // Acción principal según el momento del pedido
     if (etapa === 'por_pagar') pie.innerHTML = `<a class="btn btn-primario btn-bloque" href="#/pagar/${pedido.id}">Pagar ${dinero(pedido.precio.total)}</a>`;
@@ -192,10 +192,6 @@ export function pantallaSeguimiento(raiz, { id }) {
     );
     cuerpo.querySelector('[data-accion="chat"]')?.addEventListener('click', () => ir(`/chat/${pedido.id}`));
     cuerpo.querySelector('[data-accion="compartir"]')?.addEventListener('click', () => compartirSeguimiento(pedido, t));
-    cuerpo.querySelector('[data-accion="iniciar"]')?.addEventListener('click', () => {
-      pedidos.iniciarAhora(pedido.id);
-      pintar();
-    });
     cuerpo.querySelector('[data-accion="cancelar"]')?.addEventListener('click', preguntarCancelar);
     pie.querySelector('[data-accion="repetir"]')?.addEventListener('click', () => ir(`/solicitud/${pedido.categoria}`));
   }

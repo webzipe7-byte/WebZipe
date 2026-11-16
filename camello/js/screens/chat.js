@@ -85,7 +85,7 @@ export function pantallaChat(raiz, { id }) {
 
   function enviar(texto) {
     if (!texto.trim() || !abierto()) return;
-    chat.enviar(id, texto, { rol: miRol, respuestaAutomatica: !pedido.real && !soyMaestro });
+    chat.enviar(id, texto, { rol: miRol });
   }
 
   pintar();

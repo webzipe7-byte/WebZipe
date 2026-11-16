@@ -30,6 +30,7 @@ import {
 import { pantallaPerfil } from './screens/perfil.js';
 import { pantallaMaestro, pantallaTrabajoMaestro, pantallaTrabajosMaestro, pantallaCuentaMaestro } from './screens/maestro.js';
 import { inicioDe } from './services/auth.js';
+import { pedidos } from './services/pedidos.js';
 
 // Pantallas públicas (sin sesión)
 ruta('/bienvenida', pantallaBienvenida, { publica: true, soloSinSesion: true });
@@ -76,6 +77,9 @@ if (window.top !== window.self) {
   document.body.innerHTML = '<p class="sin-js">Por seguridad, abre Camello directamente.</p>';
   throw new Error('Camello no se puede abrir dentro de un marco.');
 }
+
+// Quita los pedidos de prueba con maestros de ejemplo que hayan quedado de versiones anteriores
+pedidos.limpiarEjemplos();
 
 const raiz = document.getElementById('app');
 document.getElementById('arranque')?.remove();

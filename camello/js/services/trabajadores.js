@@ -1,9 +1,7 @@
 /**
- * Búsqueda de trabajadores disponibles y cálculo de precios.
- * En producción: el servidor devuelve los trabajadores cercanos con su ubicación real
- * y el precio lo define la plataforma o el propio trabajador.
+ * Maestros: solo personas reales que crearon su cuenta de maestro.
+ * No hay maestros de ejemplo.
  */
-import { TRABAJADORES } from '../data/trabajadores.js';
 import { categoriaPorId } from '../data/categorias.js';
 import { RECARGO_URGENCIA } from '../config.js';
 import { almacen, esperar } from './almacen.js';
@@ -20,7 +18,8 @@ export function fichaMaestro(u, desde = null) {
   if (!u?.maestro) return null;
   const suyos = almacen.leer('pedidos', []).filter((p) => p.trabajadorId === u.id);
   const calificados = suyos.filter((p) => p.calificacion?.estrellas);
-  const promedio = calificados.length ? calificados.reduce((s, p) => s + p.calificacion.estrellas, 0) / calificados.length : 5;
+  // Sin calificaciones todavía: se muestra como "Nuevo", no se inventa un puntaje
+  const promedio = calificados.length ? calificados.reduce((s, p) => s + p.calificacion.estrellas, 0) / calificados.length : null;
   const [nombre, ...resto] = u.nombre.split(' ');
   const cat = categoriaPorId(u.maestro.categoria);
   const aqui = posicionEnVivo(u.id);
@@ -32,7 +31,7 @@ export function fichaMaestro(u, desde = null) {
     nombre,
     apellido: resto.join(' '),
     anios: u.maestro.anios,
-    calificacion: Math.round(promedio * 10) / 10,
+    calificacion: promedio === null ? null : Math.round(promedio * 10) / 10,
     trabajos: suyos.filter((p) => p.pago).length,
     distanciaKm: Math.round(Math.max(0.2, km) * 10) / 10,
     factorPrecio: 1,
@@ -76,7 +75,7 @@ export const trabajadores = {
     const enLinea = maestrosRegistrados()
       .filter((u) => u.maestro.conectado && u.maestro.categoria === categoriaId)
       .map((u) => fichaMaestro(u, desde));
-    return [...enLinea, ...TRABAJADORES.filter((t) => t.categoria === categoriaId)].map((t) => ({
+    return enLinea.map((t) => ({
       ...t,
       minutos: minutosLlegada(t.distanciaKm),
       precio: cotizar(t, { urgente }),
@@ -85,19 +84,19 @@ export const trabajadores = {
 
   async porId(id) {
     await esperar(300);
-    const t = TRABAJADORES.find((x) => x.id === id) || maestroPorId(id);
+    const t = maestroPorId(id);
     if (!t) throw new Error('No encontramos a este trabajador.');
     return { ...t, minutos: minutosLlegada(t.distanciaKm) };
   },
 
   /** Versión sin espera, para pantallas que ya tienen el pedido cargado. */
+  /** Si el maestro borró su cuenta, se muestra solo como "Maestro". */
   buscarLocal: (id) =>
-    TRABAJADORES.find((x) => x.id === id) ||
-    maestroPorId(id) || { id, nombre: 'Maestro', apellido: '', categoria: 'cerrajero', calificacion: 5, trabajos: 0, anios: 0, especialidades: [], resenas: [], color: '#7a3519' },
+    maestroPorId(id) || { id, nombre: 'Maestro', apellido: '', categoria: 'cerrajero', calificacion: null, trabajos: 0, anios: 0, especialidades: [], resenas: [], color: '#7a3519' },
 };
 
 export const ORDENES = {
   cercano: { nombre: 'Más cerca', fn: (a, b) => a.distanciaKm - b.distanciaKm },
-  calificacion: { nombre: 'Mejor calificado', fn: (a, b) => b.calificacion - a.calificacion || b.trabajos - a.trabajos },
+  calificacion: { nombre: 'Mejor calificado', fn: (a, b) => (b.calificacion ?? 0) - (a.calificacion ?? 0) || b.trabajos - a.trabajos },
   precio: { nombre: 'Menor precio', fn: (a, b) => a.precio.total - b.precio.total },
 };

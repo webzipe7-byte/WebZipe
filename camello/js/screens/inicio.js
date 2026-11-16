@@ -14,7 +14,6 @@ import { mapaFondo } from '../ui/mapa.js';
 import { icono } from '../ui/iconos.js';
 import { almacen } from '../services/almacen.js';
 import { esc, primerNombre, saludo, dinero, iniciales } from '../ui/formato.js';
-import { APP } from '../config.js';
 
 const LUGAR = 'lugarInicio';
 
@@ -108,11 +107,10 @@ export async function pantallaInicio(raiz) {
       <section id="recientes"></section>
 
       <ul class="confianza">
-        <li>${icono('escudo', { tamano: 20 })}<span>Maestros con identidad verificada</span></li>
+        <li>${icono('escudo', { tamano: 20 })}<span>Código de seguridad para saber que es tu maestro</span></li>
         <li>${icono('billete', { tamano: 20 })}<span>Ves el precio antes de pedir</span></li>
         <li>${icono('check', { tamano: 20 })}<span>Pagas cuando el trabajo termina</span></li>
       </ul>
-      <p class="nota-demo">Demo · maestros, precios y reseñas de ejemplo en ${APP.ciudad}.</p>
     </main>
     ${navInferior('inicio')}`;
 

@@ -184,6 +184,11 @@ Camello es una sola app con dos tipos de cuenta. Al crear la cuenta se elige
 **Necesito un maestro** o **Soy maestro** (con oficio y años de experiencia).
 La página de descarga es la misma para los dos.
 
+**Solo personas reales**
+- No hay maestros, reseñas ni calificaciones de ejemplo. La lista del cliente muestra únicamente
+  maestros registrados y conectados. Un maestro sin calificaciones aparece como "Nuevo".
+- El chat no tiene respuestas automáticas: responde la persona.
+
 **Maestro**
 - Botón para conectarse o desconectarse. Si está conectado, aparece de primero en la
   lista del cliente con la marca "En línea ahora".

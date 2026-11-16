@@ -1,15 +1,9 @@
 /**
  * Pedidos de servicio y su ciclo de vida.
- *
- * El estado del pedido NO se guarda paso a paso: se calcula a partir de la hora
- * en que empezó (`inicio`) y de los tiempos de SIMULACION. Así el seguimiento
- * sigue funcionando aunque la persona cierre y vuelva a abrir la app.
- *
- * Para la versión real, `estadoDe()` se reemplaza por el estado que envía
- * el servidor (o el trabajador desde su app) y lo demás sigue igual.
+ * El estado lo cambia el maestro desde su app (aceptar, salir, llegar, terminar)
+ * y el cliente lo ve al instante.
  */
 import { almacen, esperar, generarId, MAX_PEDIDOS } from './almacen.js';
-import { SIMULACION } from '../config.js';
 import { intentos, minutosRestantes } from './seguridad.js';
 
 const CLAVE = 'pedidos';
@@ -23,41 +17,20 @@ export const ESTADOS = [
   { id: 'finalizado', nombre: 'Finalizado', titulo: 'Servicio terminado', detalle: 'Revisa el trabajo y paga.' },
 ];
 
-const DURACION = {
-  buscando: SIMULACION.buscando,
-  aceptado: SIMULACION.aceptado,
-  en_camino: SIMULACION.enCamino,
-  en_proceso: SIMULACION.enProceso,
-};
-
 /**
  * Estado actual del pedido.
  * Devuelve { id, indice, avance (0..1 dentro del estado), terminado }.
  */
 export function estadoDe(pedido, ahora = Date.now()) {
   if (pedido.cancelado) return { id: 'cancelado', indice: -1, avance: 0 };
-  // Pedido con un maestro registrado: el estado lo cambia el maestro desde su app
-  if (pedido.real) {
-    const indice = Math.max(0, ESTADOS.findIndex((s) => s.id === pedido.estado));
-    const id = ESTADOS[indice].id;
-    let avance = id === 'finalizado' ? 1 : 0;
-    if (id === 'en_camino') {
-      const viaje = Math.max(1, pedido.minutosLlegada || 15) * 60000;
-      avance = Math.min(0.95, (ahora - (pedido.tiempos?.en_camino || ahora)) / viaje);
-    }
-    return { id, indice, avance };
+  const indice = Math.max(0, ESTADOS.findIndex((s) => s.id === pedido.estado));
+  const id = ESTADOS[indice].id;
+  let avance = id === 'finalizado' ? 1 : 0;
+  if (id === 'en_camino') {
+    const viaje = Math.max(1, pedido.minutosLlegada || 15) * 60000;
+    avance = Math.min(0.95, (ahora - (pedido.tiempos?.en_camino || ahora)) / viaje);
   }
-  if (!pedido.inicio) return { id: 'agendado', indice: 1, avance: 0 };
-
-  let transcurrido = ahora - pedido.inicio;
-  for (let i = 0; i < ESTADOS.length - 1; i++) {
-    const id = ESTADOS[i].id;
-    if (transcurrido < DURACION[id]) {
-      return { id, indice: i, avance: transcurrido / DURACION[id], restanteMs: DURACION[id] - transcurrido };
-    }
-    transcurrido -= DURACION[id];
-  }
-  return { id: 'finalizado', indice: ESTADOS.length - 1, avance: 1 };
+  return { id, indice, avance };
 }
 
 /** Etapa del pedido desde el punto de vista del usuario (para el historial y avisos). */
@@ -70,7 +43,7 @@ export function etapaDe(pedido, ahora = Date.now()) {
   return 'completado';
 }
 
-export const sePuedeCancelar = (pedido) => ['buscando', 'aceptado', 'agendado'].includes(estadoDe(pedido).id);
+export const sePuedeCancelar = (pedido) => ['buscando', 'aceptado'].includes(estadoDe(pedido).id);
 
 const todos = () => almacen.leer(CLAVE, []);
 /**
@@ -101,26 +74,22 @@ function actualizar(id, cambios) {
 export const pedidos = {
   async crear(datos) {
     await esperar(900);
-    const programado = datos.cuando.tipo === 'programado';
     const pedido = {
       id: generarId('p_'),
       numero: String(Math.floor(100000 + Math.random() * 900000)),
       // Código que la persona le pide al maestro al llegar, para confirmar que es él
       pin: String(Math.floor(1000 + Math.random() * 9000)),
       creado: Date.now(),
-      inicio: programado ? null : Date.now(),
+      inicio: Date.now(),
       cancelado: null,
       pago: null,
       calificacion: null,
       ...datos,
     };
-    // Los maestros registrados tienen id de usuario: ellos manejan el pedido
-    if (String(datos.trabajadorId).startsWith('u_')) {
-      pedido.real = true;
-      pedido.inicio = Date.now();
-      pedido.estado = 'buscando';
-      pedido.tiempos = { buscando: Date.now() };
-    }
+    if (!String(datos.trabajadorId).startsWith('u_')) throw new Error('Elige un maestro de la lista.');
+    pedido.real = true;
+    pedido.estado = 'buscando';
+    pedido.tiempos = { buscando: Date.now() };
     guardarTodos([pedido, ...todos()]);
     return pedido;
   },
@@ -151,11 +120,6 @@ export const pedidos = {
     return actualizar(id, { cancelado: { fecha: Date.now(), motivo } });
   },
 
-  /** Solo para el demo: arranca ya un servicio programado. */
-  iniciarAhora(id) {
-    return actualizar(id, { inicio: Date.now() });
-  },
-
   registrarPago(id, pago) {
     return actualizar(id, { pago });
   },
@@ -163,6 +127,15 @@ export const pedidos = {
   async calificar(id, calificacion) {
     await esperar(700);
     return actualizar(id, { calificacion: { ...calificacion, fecha: Date.now() } });
+  },
+
+  /** Borra los pedidos de prueba que se hicieron con maestros de ejemplo (versiones anteriores). */
+  limpiarEjemplos() {
+    const lista = todos();
+    const reales = lista.filter((p) => p.real);
+    if (reales.length === lista.length) return;
+    lista.filter((p) => !p.real).forEach((p) => almacen.borrar(`chat:${p.id}`));
+    almacen.guardar(CLAVE, reales);
   },
 
   /** Avisa cada vez que cambia algún pedido (en esta pestaña o en otra). */
@@ -183,7 +156,7 @@ export const pedidos = {
   async avanzar(id, maestroId, accion, { pin = '' } = {}) {
     await esperar(400);
     const p = pedidos.obtener(id);
-    if (!p || !p.real || p.trabajadorId !== maestroId) throw new Error('Este pedido no es tuyo.');
+    if (!p || p.trabajadorId !== maestroId) throw new Error('Este pedido no es tuyo.');
     if (p.cancelado) throw new Error('El cliente canceló este pedido.');
     const pasos = {
       aceptar: ['buscando', 'aceptado'],

@@ -61,6 +61,7 @@ export function iconoCategoria(cat, tamano = 48) {
 }
 
 export function calificacion(valor, trabajos) {
+  if (valor == null) return '<span class="califica"><b>Nuevo</b></span>';
   return `<span class="califica">${icono('estrella', { tamano: 15, relleno: true })}<b>${valor.toFixed(1)}</b>${
     trabajos != null ? `<span class="tenue">(${trabajos})</span>` : ''
   }</span>`;

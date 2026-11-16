@@ -1,15 +1,6 @@
-"""
-Pruebas de seguridad de Camello (ataques automatizados).
-
-Requisitos: pip install playwright  y  playwright install chromium
-Uso: con la app servida en http://localhost:8080/ ejecutar  python pruebas/ataques.py
-
-Prueba: XSS en todos los campos y rutas, textos gigantes, doble envío,
-datos dañados o manipulados en el almacenamiento y cambios en el precio.
-"""
 import asyncio, json
 from playwright.async_api import async_playwright
-B="http://localhost:8080/"  # sirve la carpeta de la app con: python -m http.server 8080
+B="http://localhost:8765/camello/"
 SIMULAR="""const mm=window.matchMedia.bind(window);window.matchMedia=(q)=>q.includes('display-mode: standalone')?{matches:true,media:q,addEventListener(){},removeEventListener(){}}:mm(q);
 window.__xss=0;"""
 X='"><img src=x onerror="window.__xss++">'
@@ -18,7 +9,7 @@ X3="javascript:window.__xss++"
 hallazgos=[]
 async def main():
   async with async_playwright() as p:
-    b=await p.chromium.launch(args=["--no-sandbox"])
+    b=await p.chromium.launch(executable_path="/usr/bin/google-chrome",args=["--no-sandbox"])
     ctx=await b.new_context(viewport={"width":390,"height":844})
     await ctx.add_init_script(SIMULAR)
     pg=await ctx.new_page(); log=[]
@@ -43,6 +34,7 @@ async def main():
     await pg.goto(B+"#/lugares/casa"); await pg.fill("#f-direccion",X+" Calle 5"); await pg.fill("#f-detalle",X2); await pg.click("button[type=submit]"); await pg.wait_for_timeout(900); await xss("inicio con casa maliciosa")
     await pg.goto(B+"#/lugares"); await pg.wait_for_timeout(300); await xss("lista de lugares")
     # 4. solicitud con descripción y dirección maliciosas
+    await pg.evaluate("""()=>{const l=JSON.parse(localStorage.getItem('camello:usuarios'));['cerrajero','plomero','electricista','pintor','carpintero','limpieza','electrodomesticos'].forEach((c,i)=>l.push({id:'u_maestro'+i,nombre:'Maestro Prueba',correo:'m'+i+'@x.com',telefono:'300 000 0000',claveHash:'x',rol:'trabajador',maestro:{categoria:c,anios:5,conectado:true}}));localStorage.setItem('camello:usuarios',JSON.stringify(l))}""")
     await pg.goto(B+"#/inicio"); await pg.wait_for_timeout(500)
     await pg.click("[data-cat=plomero]"); await pg.fill("textarea",X2+X); await pg.click("[data-accion=continuar]"); await pg.wait_for_timeout(300); await xss("paso 2")
     await pg.click("[data-accion=continuar]"); await pg.click("[data-accion=continuar]"); await pg.wait_for_timeout(1300); await xss("lista maestros")
@@ -53,7 +45,9 @@ async def main():
     if n!=1: hallazgos.append(f"Doble envío creó {n} pedidos")
     await xss("seguimiento")
     # 5. chat
-    await pg.wait_for_timeout(5500)
+    # el maestro de prueba acepta el pedido
+    await pg.evaluate("""()=>{const l=JSON.parse(localStorage.getItem('camello:pedidos'));l[0].estado='aceptado';localStorage.setItem('camello:pedidos',JSON.stringify(l));dispatchEvent(new CustomEvent('camello:cambio',{detail:'pedidos'}))}""")
+    await pg.wait_for_timeout(1500)
     await pg.click("[data-accion=chat]"); await pg.fill("#texto",X); await pg.press("#texto","Enter"); await pg.wait_for_timeout(2500); await xss("chat")
     await pg.fill("#texto","x"*20000); print("chat largo:",len(await pg.input_value("#texto")))
     # 6. contactos

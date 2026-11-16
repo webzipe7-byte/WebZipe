@@ -36,7 +36,7 @@ export async function pantallaCuenta(raiz) {
         <span class="avatar grande" style="--av:var(--marca)">${esc(iniciales(u.nombre))}</span>
         <div>
           <h1 tabindex="-1">${esc(u.nombre)}</h1>
-          <p class="tenue">${icono('estrella', { tamano: 14, relleno: true, clase: 'estrella-ico' })} 5,0 · ${hechos} servicio${hechos === 1 ? '' : 's'} · Ver perfil</p>
+          <p class="tenue">${hechos} servicio${hechos === 1 ? '' : 's'} · Ver perfil</p>
         </div>
         ${icono('derecha', { tamano: 18 })}
       </a>

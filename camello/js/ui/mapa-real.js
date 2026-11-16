@@ -52,7 +52,7 @@ export const puntoCliente = (pedido) => pedido.direccion?.coords || puntoAproxim
 export function puntoMaestro(pedido, estado) {
   const casa = puntoCliente(pedido);
   const vivo = posicionEnVivo(pedido.trabajadorId);
-  if (vivo && pedido.real) return { ...vivo, enVivo: true };
+  if (vivo) return { ...vivo, enVivo: true };
   if (['en_proceso', 'finalizado'].includes(estado.id)) return casa;
   const salida = puntoDeSalida(casa, Math.min(4, Math.max(0.8, (pedido.minutosLlegada || 15) / 8)), pedido.id);
   return estado.id === 'en_camino' ? interpolar(salida, casa, estado.avance) : salida;
