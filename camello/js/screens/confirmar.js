@@ -38,6 +38,10 @@ export async function pantallaConfirmar(raiz) {
   }
 
   function calcular() {
+    // El borrador vive en el navegador: se revalida todo antes de usarlo
+    const ofertaValida = Number.isInteger(b.oferta) && b.oferta >= minimo && b.oferta < cotizacion.total;
+    if (!ofertaValida) b.oferta = null;
+    if (b.cupon && !misCupones.some((c) => c.codigo === b.cupon)) b.cupon = null;
     const subtotal = b.oferta || cotizacion.total;
     const descuento = b.cupon ? descuentoDe(b.cupon, subtotal) : 0;
     return { ...cotizacion, sugerido: cotizacion.total, oferta: b.oferta || null, cupon: descuento ? b.cupon : null, descuento, total: subtotal - descuento };

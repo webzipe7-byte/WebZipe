@@ -6,10 +6,20 @@
 const PREFIJO = 'camello:';
 
 export const almacen = {
+  /**
+   * Lee un valor. Si lo guardado está dañado o no es del mismo tipo que el
+   * valor por defecto (lista, objeto…), devuelve el valor por defecto.
+   */
   leer(clave, porDefecto = null) {
     try {
       const valor = localStorage.getItem(PREFIJO + clave);
-      return valor === null ? porDefecto : JSON.parse(valor);
+      if (valor === null) return porDefecto;
+      const dato = JSON.parse(valor);
+      if (Array.isArray(porDefecto) && !Array.isArray(dato)) return porDefecto;
+      if (porDefecto && typeof porDefecto === 'object' && !Array.isArray(porDefecto) && (typeof dato !== 'object' || dato === null || Array.isArray(dato))) {
+        return porDefecto;
+      }
+      return dato;
     } catch {
       return porDefecto;
     }

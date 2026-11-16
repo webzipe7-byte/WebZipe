@@ -107,8 +107,12 @@ export function errorVista(mensaje = 'Algo salió mal.') {
 }
 
 /** Campo de formulario con etiqueta y espacio para el error. */
+/** Largo máximo por defecto según el tipo de campo, para que nadie pegue textos gigantes. */
+const MAXIMOS = { text: 120, email: 100, tel: 20, password: 64 };
+
 export function campo({ id, etiqueta, tipo = 'text', valor = '', ayuda = '', auto = '', modo = '', max = '' }) {
   const esClave = tipo === 'password';
+  max = max || MAXIMOS[tipo] || 120;
   return `
     <div class="campo" data-campo="${id}">
       <label for="f-${id}">${esc(etiqueta)}</label>

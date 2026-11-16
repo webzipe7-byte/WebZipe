@@ -236,7 +236,7 @@ export function pantallaSolicitud(raiz, { categoria }) {
         return irPaso(3);
       }
       const texto = raiz.querySelector('#f-direccion').value.trim();
-      if (texto.length < 6) {
+      if (texto.length < 6 || texto.length > 120) {
         marcarError(raiz, 'direccion', 'Escribe la dirección completa, con número.');
         raiz.querySelector('#f-direccion').focus();
         return;

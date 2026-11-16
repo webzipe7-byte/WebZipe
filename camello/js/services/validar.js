@@ -7,6 +7,7 @@ export function validarNombre(valor) {
   const v = valor.trim();
   if (!v) return 'Escribe tu nombre.';
   if (v.length < 3) return 'El nombre es muy corto.';
+  if (v.length > 60) return 'El nombre es muy largo (máximo 60 caracteres).';
   if (!/^[\p{L} .'-]+$/u.test(v)) return 'Usa solo letras y espacios.';
   return '';
 }
@@ -14,6 +15,7 @@ export function validarNombre(valor) {
 export function validarCorreo(valor) {
   const v = valor.trim();
   if (!v) return 'Escribe tu correo.';
+  if (v.length > 100) return 'El correo es muy largo.';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return 'El correo no es válido. Ejemplo: nombre@correo.com';
   return '';
 }
@@ -28,6 +30,7 @@ export function validarTelefono(valor) {
 export function validarContrasena(valor) {
   if (!valor) return 'Crea una contraseña.';
   if (valor.length < 8) return 'Debe tener al menos 8 caracteres.';
+  if (valor.length > 64) return 'Máximo 64 caracteres.';
   if (!/[A-Za-z]/.test(valor) || !/\d/.test(valor)) return 'Combina letras y números.';
   return '';
 }

@@ -83,7 +83,7 @@ export function pantallaEditarLugar(raiz, { tipo }) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const texto = form.direccion.value.trim();
-    if (texto.length < 6) {
+    if (texto.length < 6 || texto.length > 120) {
       marcarError(form, 'direccion', 'Escribe la dirección completa, con número.');
       return form.direccion.focus();
     }
