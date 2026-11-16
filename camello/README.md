@@ -160,3 +160,20 @@ quien tenga acceso al teléfono desbloqueado podría verlos. En la versión real
 
 Sube el número de `VERSION` en `sw.js` (por ejemplo `camello-v2`) para que quienes
 ya la instalaron reciban la versión nueva.
+
+## Prueba de carga (40 millones de personas)
+
+Camello no tiene servidor propio: cada teléfono ejecuta la app y guarda sus datos.
+Por eso lo único que recibe a todos a la vez es el hosting de los archivos.
+
+- Primera visita: 46 archivos, ~97 KB comprimidos por persona.
+- 40 millones de primeras visitas: ~3,6 TB y ~2.000 millones de solicitudes.
+- Visitas siguientes: 0 solicitudes, la app abre desde la copia guardada en el teléfono
+  (antes volvía a pedir los 46 archivos cada vez).
+- 20 navegadores entrando a la vez en local: 20/20 sin errores.
+- Teléfono con el almacenamiento lleno (6.500 pedidos): la app libera lo viejo,
+  guarda máximo 200 pedidos y el historial carga de a 20 (0,8 s).
+
+GitHub Pages tiene un límite suave de 100 GB al mes, así que a esta escala hay que
+pasar el hosting a Cloudflare Pages (ancho de banda y solicitudes estáticas sin límite
+en el plan gratis). Los archivos se suben tal cual, no hay que cambiar código.

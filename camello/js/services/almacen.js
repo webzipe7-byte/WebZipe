@@ -26,11 +26,19 @@ export const almacen = {
   },
 
   guardar(clave, valor) {
+    const texto = JSON.stringify(valor);
     try {
-      localStorage.setItem(PREFIJO + clave, JSON.stringify(valor));
+      localStorage.setItem(PREFIJO + clave, texto);
       return true;
     } catch {
-      return false;
+      // Espacio lleno: se libera lo más viejo (chats y pedidos cerrados) y se intenta otra vez
+      liberarEspacio();
+      try {
+        localStorage.setItem(PREFIJO + clave, texto);
+        return true;
+      } catch {
+        return false;
+      }
     }
   },
 
@@ -42,6 +50,25 @@ export const almacen = {
     }
   },
 };
+
+/** Máximo de pedidos guardados por dispositivo (los cerrados más viejos se descartan). */
+export const MAX_PEDIDOS = 200;
+
+/** Borra chats de pedidos viejos y recorta el historial. */
+export function liberarEspacio() {
+  try {
+    const pedidos = JSON.parse(localStorage.getItem(PREFIJO + 'pedidos') || '[]');
+    if (!Array.isArray(pedidos)) return;
+    const recientes = pedidos.sort((a, b) => b.creado - a.creado).slice(0, Math.floor(MAX_PEDIDOS / 2));
+    const vivos = new Set(recientes.map((p) => p.id));
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith(PREFIJO + 'chat:') && !vivos.has(k.slice((PREFIJO + 'chat:').length)))
+      .forEach((k) => localStorage.removeItem(k));
+    localStorage.setItem(PREFIJO + 'pedidos', JSON.stringify(recientes));
+  } catch {
+    /* no hay nada más que liberar */
+  }
+}
 
 /** Simula la demora de un servidor para que se vean los estados de carga. */
 export const esperar = (ms = 600) => new Promise((resolver) => setTimeout(resolver, ms));

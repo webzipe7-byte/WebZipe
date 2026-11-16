@@ -8,7 +8,7 @@
  * Para la versión real, `estadoDe()` se reemplaza por el estado que envía
  * el servidor (o el trabajador desde su app) y lo demás sigue igual.
  */
-import { almacen, esperar, generarId } from './almacen.js';
+import { almacen, esperar, generarId, MAX_PEDIDOS } from './almacen.js';
 import { SIMULACION } from '../config.js';
 
 const CLAVE = 'pedidos';
@@ -61,7 +61,21 @@ export function etapaDe(pedido, ahora = Date.now()) {
 export const sePuedeCancelar = (pedido) => ['buscando', 'aceptado', 'agendado'].includes(estadoDe(pedido).id);
 
 const todos = () => almacen.leer(CLAVE, []);
-const guardarTodos = (lista) => almacen.guardar(CLAVE, lista);
+/**
+ * Guarda la lista sin pasar de MAX_PEDIDOS: se conservan los activos
+ * y los más recientes. Lanza un error si el teléfono no tiene espacio.
+ */
+function guardarTodos(lista) {
+  let final = lista;
+  if (lista.length > MAX_PEDIDOS) {
+    const activos = lista.filter((p) => etapaDe(p) !== 'completado' && etapaDe(p) !== 'cancelado');
+    const cerrados = lista.filter((p) => !activos.includes(p)).sort((a, b) => b.creado - a.creado);
+    final = [...activos, ...cerrados.slice(0, Math.max(0, MAX_PEDIDOS - activos.length))];
+  }
+  if (!almacen.guardar(CLAVE, final)) {
+    throw new Error('Tu teléfono no tiene espacio para guardar el pedido. Libera espacio e intenta de nuevo.');
+  }
+}
 
 function actualizar(id, cambios) {
   const lista = todos();

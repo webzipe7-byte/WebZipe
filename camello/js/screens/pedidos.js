@@ -43,25 +43,37 @@ export function pantallaPedidos(raiz) {
         ul.innerHTML = `<li>${vacio({ icono: 'pedidos', titulo: 'Aún no tienes pedidos', texto: 'Cuando pidas tu primer servicio, lo verás aquí con todo su detalle.', accion: 'Pedir un servicio', ruta: '#/inicio' })}</li>`;
         return;
       }
-      ul.innerHTML = lista
-        .map((p) => {
-          const cat = categoriaPorId(p.categoria);
-          const t = trabajadores.buscarLocal(p.trabajadorId);
-          const [estado, color] = etiquetaEstado(p);
-          return `
+      // Se muestran de a 20 para que el historial abra rápido aunque haya muchos pedidos
+      let mostrados = 0;
+      const tarjeta = (p) => {
+        const cat = categoriaPorId(p.categoria);
+        const t = trabajadores.buscarLocal(p.trabajadorId);
+        if (!cat || !t || !p.precio) return '';
+        const [estado, color] = etiquetaEstado(p);
+        return `
           <li>
-            <a class="tarjeta pedido-item" href="#/pedido/${p.id}">
+            <a class="tarjeta pedido-item" href="#/pedido/${encodeURIComponent(p.id)}">
               ${iconoCategoria(cat, 44)}
               <span class="pedido-info">
                 <b>${esc(cat.nombreCorto || cat.nombre)}</b>
-                <small class="tenue">${esc(t ? `${t.nombre} ${t.apellido}` : '')} · ${esc(fechaHora(p.creado))}</small>
+                <small class="tenue">${esc(`${t.nombre} ${t.apellido}`)} · ${esc(fechaHora(p.creado))}</small>
                 <span class="etiqueta etiqueta-${color}">${esc(estado)}</span>
               </span>
               <span class="pedido-valor">${dinero(p.precio.total)}${icono('derecha', { tamano: 18 })}</span>
             </a>
           </li>`;
-        })
-        .join('');
+      };
+      const mas = () => {
+        ul.querySelector('.ver-mas')?.remove();
+        ul.insertAdjacentHTML('beforeend', lista.slice(mostrados, mostrados + 20).map(tarjeta).join(''));
+        mostrados += 20;
+        if (mostrados < lista.length) {
+          ul.insertAdjacentHTML('beforeend', `<li class="ver-mas"><button class="btn btn-secundario btn-bloque">Ver más pedidos (${lista.length - mostrados})</button></li>`);
+          ul.querySelector('.ver-mas button').addEventListener('click', mas);
+        }
+      };
+      ul.innerHTML = '';
+      mas();
     } catch (err) {
       ul.innerHTML = `<li>${errorVista(err.message)}</li>`;
       ul.querySelector('[data-accion="reintentar"]').addEventListener('click', cargar);

@@ -3,7 +3,7 @@
  * Guarda la app en caché para que abra rápido y funcione sin conexión.
  * Al publicar cambios, sube el número de VERSION para que todos reciban la nueva.
  */
-const VERSION = 'camello-v7';
+const VERSION = 'camello-v8';
 
 const ARCHIVOS = [
   './',
@@ -59,7 +59,7 @@ const ARCHIVOS = [
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(ARCHIVOS.map((u) => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
@@ -72,21 +72,26 @@ self.addEventListener('activate', (e) => {
 });
 
 /**
- * Primero la red y, si no hay conexión, la copia guardada.
- * Así siempre se ve la última versión cuando hay internet.
+ * Primero la copia guardada: así la app abre al instante y, aunque millones de
+ * personas la abran a la vez, cada teléfono solo descarga la app una vez.
+ * Las actualizaciones llegan cuando cambia VERSION (el navegador revisa sw.js
+ * cada vez que se abre la app; main.js recarga la página al activarse la nueva).
  */
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(
-    // cache: 'no-cache' pide al servidor la versión más reciente (sin usar la copia vieja del navegador)
-    fetch(e.request, { cache: 'no-cache' })
-      .then((resp) => {
-        if (resp.ok && resp.type === 'basic') {
-          const copia = resp.clone();
-          caches.open(VERSION).then((c) => c.put(e.request, copia));
-        }
-        return resp;
-      })
-      .catch(() => caches.match(e.request, { ignoreSearch: true }).then((r) => r || caches.match('./index.html')))
+    caches.match(e.request, { ignoreSearch: true }).then(
+      (guardada) =>
+        guardada ||
+        fetch(e.request)
+          .then((resp) => {
+            if (resp.ok && resp.type === 'basic') {
+              const copia = resp.clone();
+              caches.open(VERSION).then((c) => c.put(e.request, copia));
+            }
+            return resp;
+          })
+          .catch(() => caches.match('./index.html'))
+    )
   );
 });
