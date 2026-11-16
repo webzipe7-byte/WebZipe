@@ -130,11 +130,31 @@ Para la versión real se cambian esos archivos y las pantallas siguen iguales.
 | **Chat y llamadas** | `services/chat.js` (hoy responde con mensajes automáticos) y el botón de llamar en `screens/seguimiento.js`. |
 | **Fotos de maestros** | `ui/componentes.js → avatar()`: hoy usa iniciales; agregar `foto` al trabajador y pintarla ahí. |
 
-## Notas de seguridad del demo
+## Seguridad
 
-- Las contraseñas se guardan como hash SHA-256 en el navegador, nunca en texto plano.
-  En producción la autenticación debe hacerse en el servidor (hash con sal, tokens, etc.).
-- Todo texto que escribe el usuario se escapa antes de mostrarse.
+| Protección | Cómo funciona |
+|---|---|
+| **Contraseñas** | Nunca se guardan. Se guarda una clave derivada con PBKDF2-SHA256 (210.000 iteraciones) y una sal única por usuario. Las cuentas con el formato viejo se actualizan solas al entrar. |
+| **Contraseñas débiles** | Mínimo 8 caracteres con letras y números; se rechazan las más comunes, las secuencias (1234, abcd) y las que contienen el nombre o el correo. |
+| **Intentos fallidos** | Tras 5 intentos de inicio de sesión o de cupón incorrectos, se bloquea 5 minutos. El mensaje es el mismo exista o no la cuenta, para no revelar qué correos están registrados. |
+| **Sesión** | Vence a los 30 días sin uso. Si se cierra en una pestaña, se cierra en todas. |
+| **Acciones delicadas** | Eliminar la cuenta pide la contraseña. |
+| **XSS** | Todo texto escrito por el usuario se escapa antes de mostrarse; los avisos usan `textContent`. |
+| **Política de contenido (CSP)** | Solo se ejecuta código del propio sitio: sin scripts externos ni en línea, sin `object`, sin cambiar `base` ni enviar formularios a otros sitios. |
+| **Clickjacking** | La app se niega a abrirse dentro de un marco de otra página. |
+| **Pagos** | De una tarjeta solo se guardan la franquicia y los últimos 4 números; el CVV nunca se guarda. |
+| **Chat y llamadas** | Pensados para que el maestro no vea el número del cliente. |
+| **Service worker** | Solo guarda en caché respuestas correctas del propio sitio. |
+| **Seguridad física** | Código de 4 números por servicio, contactos de confianza, botón de emergencia (123) y reporte de problemas. |
+
+**Límites de un demo sin servidor:** los datos viven en el navegador del usuario, así que
+quien tenga acceso al teléfono desbloqueado podría verlos. En la versión real:
+
+- Autenticación en el servidor (hash con Argon2 o bcrypt, tokens de corta duración, verificación del correo y del celular).
+- Encabezados HTTP de seguridad desde el servidor (`Strict-Transport-Security`, `X-Frame-Options`/`frame-ancestors`, `X-Content-Type-Options`), que GitHub Pages no permite configurar.
+- Pagos solo a través de la pasarela (tokenización, sin datos de tarjeta en nuestros servidores).
+- Límite de intentos y registro de actividad sospechosa en el servidor.
+- Verificación de identidad y antecedentes de los maestros.
 
 ## Al publicar cambios
 

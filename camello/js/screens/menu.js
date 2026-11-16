@@ -314,12 +314,21 @@ export function pantallaConfiguracion(raiz) {
       <div class="dialogo"><div class="dialogo-caja" role="dialog" aria-modal="true" aria-labelledby="del-t">
         <h2 id="del-t">¿Eliminar tu cuenta?</h2>
         <p>Se borran tus datos, lugares, métodos de pago y cupones. Esta acción no se puede deshacer.</p>
+        ${campo({ id: 'clave', etiqueta: 'Escribe tu contraseña para confirmar', tipo: 'password', auto: 'current-password' })}
         <button class="btn btn-peligro btn-bloque" data-si>Sí, eliminar mi cuenta</button>
         <button class="btn btn-texto btn-bloque" data-no>Cancelar</button>
       </div></div>`;
     caja.querySelector('[data-no]').addEventListener('click', () => (caja.innerHTML = ''));
     caja.querySelector('[data-si]').addEventListener('click', async (e) => {
-      cargando(e.currentTarget, true, 'Eliminando…');
+      const boton = e.currentTarget;
+      cargando(boton, true, 'Eliminando…');
+      try {
+        await auth.confirmarClave(sesion.usuario.id, caja.querySelector('#f-clave').value);
+      } catch (err) {
+        cargando(boton, false);
+        marcarError(caja, 'clave', err.message);
+        return;
+      }
       await auth.eliminarCuenta(sesion.usuario.id);
       sesion.salir();
       ir('/bienvenida', { reemplazar: true });

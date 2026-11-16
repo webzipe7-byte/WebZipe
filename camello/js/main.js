@@ -61,6 +61,12 @@ ruta('/ayuda', pantallaAyuda);
 ruta('/configuracion', pantallaConfiguracion);
 ruta('/trabaja', pantallaTrabaja);
 
+// Protección contra clickjacking: Camello no se deja mostrar dentro de otra página
+if (window.top !== window.self) {
+  document.body.innerHTML = '<p class="sin-js">Por seguridad, abre Camello directamente.</p>';
+  throw new Error('Camello no se puede abrir dentro de un marco.');
+}
+
 const raiz = document.getElementById('app');
 document.getElementById('arranque')?.remove();
 
@@ -70,6 +76,14 @@ iniciarRouter({
   appInstalada: instalacion.instalada,
   inicioPublico: '/bienvenida',
   inicioPrivado: '/inicio',
+});
+
+// Si se cierra la sesión en otra pestaña (o vence), esta también se cierra
+window.addEventListener('storage', (e) => {
+  if (e.key === 'camello:sesion' && !e.newValue && sesion.usuario) {
+    sesion.salir();
+    location.hash = '#/bienvenida';
+  }
 });
 
 // Service worker: permite instalar la app y abrirla sin conexión

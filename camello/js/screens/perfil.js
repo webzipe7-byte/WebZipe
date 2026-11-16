@@ -8,6 +8,7 @@ import { atras } from '../router.js';
 import { icono } from '../ui/iconos.js';
 import { esc, iniciales } from '../ui/formato.js';
 import { validarNombre, validarCorreo, validarTelefono, validarContrasena, validarIgual } from '../services/validar.js';
+import { claveDebil } from '../services/seguridad.js';
 
 export function pantallaPerfil(raiz) {
   const u = sesion.usuario;
@@ -103,7 +104,7 @@ export function pantallaPerfil(raiz) {
     e.preventDefault();
     const errores = {
       actual: fClave.actual.value ? '' : 'Escribe tu contraseña actual.',
-      nueva: validarContrasena(fClave.nueva.value),
+      nueva: validarContrasena(fClave.nueva.value) || claveDebil(fClave.nueva.value, sesion.usuario),
       nueva2: validarIgual(fClave.nueva2.value, fClave.nueva.value),
     };
     Object.entries(errores).forEach(([k, v]) => marcarError(fClave, k, v));

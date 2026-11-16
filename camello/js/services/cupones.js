@@ -4,6 +4,7 @@
  */
 import { auth } from './auth.js';
 import { esperar } from './almacen.js';
+import { intentos, minutosRestantes } from './seguridad.js';
 
 export const CATALOGO = {
   BIENVENIDO: { titulo: '20% en tu primer camello', porcentaje: 0.2, tope: 20000, soloPrimero: true },
@@ -35,7 +36,14 @@ export const cupones = {
     await esperar(600);
     const codigo = texto.trim().toUpperCase().replace(/\s+/g, '');
     if (!codigo) throw new Error('Escribe el código del cupón.');
-    if (!CATALOGO[codigo]) throw new Error('Ese código no existe o ya venció.');
+    const llave = `cupon:${usuarioId}`;
+    const espera = intentos.bloqueado(llave);
+    if (espera) throw new Error(`Demasiados códigos incorrectos. Intenta en ${minutosRestantes(espera)} min.`);
+    if (!/^[A-Z0-9]{4,20}$/.test(codigo) || !CATALOGO[codigo]) {
+      intentos.fallo(llave);
+      throw new Error('Ese código no existe o ya venció.');
+    }
+    intentos.limpiar(llave);
     let repetido = false;
     const usuario = auth.modificar(usuarioId, (u) => {
       if (u.cupones.some((c) => c.codigo === codigo)) repetido = true;

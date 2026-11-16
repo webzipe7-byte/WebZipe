@@ -6,6 +6,7 @@ import { sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
 import { barra, campo, marcarError, activarOjos, cargando } from '../ui/componentes.js';
 import { validarNombre, validarCorreo, validarTelefono, validarContrasena, validarIgual } from '../services/validar.js';
+import { claveDebil } from '../services/seguridad.js';
 
 /** Valida al salir de cada campo y limpia el error mientras se corrige. */
 function validarEnVivo(form, reglas) {
@@ -56,7 +57,7 @@ export function pantallaRegistro(raiz) {
     nombre: validarNombre,
     correo: validarCorreo,
     telefono: validarTelefono,
-    clave: validarContrasena,
+    clave: (v, f) => validarContrasena(v) || claveDebil(v, { nombre: f.nombre.value, correo: f.correo.value }),
     clave2: (v, f) => validarIgual(v, f.clave.value),
   };
   validarEnVivo(form, reglas);
@@ -83,7 +84,7 @@ export function pantallaRegistro(raiz) {
         marcarError(form, err.campo, err.message);
         form[err.campo]?.focus();
       } else {
-        marcarError(form, 'clave2', 'No pudimos crear la cuenta. Intenta de nuevo.');
+        marcarError(form, 'clave2', err.message || 'No pudimos crear la cuenta. Intenta de nuevo.');
       }
     }
   });

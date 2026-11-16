@@ -1,28 +1,24 @@
 /**
  * Cuentas de consumidor.
  *
- * Demo: los usuarios se guardan en el dispositivo y la contraseña se guarda
- * como hash SHA-256, nunca en texto plano. En producción este archivo se
+ * Demo: los usuarios se guardan en el dispositivo. La contraseña nunca se guarda:
+ * se guarda una clave derivada con PBKDF2 y sal (ver seguridad.js).
+ * Hay bloqueo tras 5 intentos fallidos y la sesión vence a los 30 días. En producción este archivo se
  * reemplaza por llamadas al servidor (registro, login con token, etc.)
  * manteniendo las mismas funciones públicas.
  */
 import { almacen, esperar, generarId } from './almacen.js';
 import { formatearTelefono } from './validar.js';
+import { derivar, verificar, intentos, minutosRestantes } from './seguridad.js';
 
 const USUARIOS = 'usuarios';
 const SESION = 'sesion';
 
-async function hash(texto) {
-  if (window.crypto?.subtle) {
-    const datos = new TextEncoder().encode(texto);
-    const resumen = await crypto.subtle.digest('SHA-256', datos);
-    return [...new Uint8Array(resumen)].map((b) => b.toString(16).padStart(2, '0')).join('');
-  }
-  // Respaldo para cuando la página no corre en https ni localhost
-  let h = 0;
-  for (const c of texto) h = (Math.imul(31, h) + c.charCodeAt(0)) | 0;
-  return 'x' + (h >>> 0).toString(16);
-}
+/** La sesión dura 30 días desde el último uso. */
+const DURACION_SESION = 30 * 24 * 60 * 60 * 1000;
+
+const abrirSesion = (usuarioId) =>
+  almacen.guardar(SESION, { usuarioId, desde: Date.now(), vence: Date.now() + DURACION_SESION });
 
 const usuarios = () => almacen.leer(USUARIOS, []);
 
@@ -66,6 +62,12 @@ export const auth = {
   usuarioActual() {
     const sesion = almacen.leer(SESION);
     if (!sesion) return null;
+    if (!sesion.vence || sesion.vence < Date.now()) {
+      almacen.borrar(SESION);
+      return null;
+    }
+    // Cada uso renueva el plazo
+    if (sesion.vence - Date.now() < DURACION_SESION - 60 * 60 * 1000) abrirSesion(sesion.usuarioId);
     const usuario = usuarios().find((u) => u.id === sesion.usuarioId);
     return usuario ? publico(usuario) : null;
   },
@@ -82,7 +84,7 @@ export const auth = {
       nombre: nombre.trim().replace(/\s+/g, ' '),
       correo: correoNorm,
       telefono: formatearTelefono(telefono),
-      claveHash: await hash(clave),
+      claveHash: await derivar(clave),
       direcciones: [],
       lugares: { casa: null, trabajo: null },
       contactos: [],
@@ -95,17 +97,39 @@ export const auth = {
       creado: Date.now(),
     };
     guardarUsuarios([...lista, usuario]);
-    almacen.guardar(SESION, { usuarioId: usuario.id, desde: Date.now() });
+    abrirSesion(usuario.id);
     return publico(usuario);
   },
 
   async iniciarSesion({ correo, clave }) {
     await esperar(600);
-    const usuario = usuarios().find((u) => u.correo === correo.trim().toLowerCase());
-    if (!usuario || usuario.claveHash !== (await hash(clave))) {
-      throw new ErrorCampo('clave', 'El correo o la contraseña no coinciden.');
+    const correoNorm = correo.trim().toLowerCase();
+    const llave = `login:${correoNorm}`;
+    const espera = intentos.bloqueado(llave);
+    if (espera) {
+      throw new ErrorCampo('clave', `Demasiados intentos. Por seguridad, espera ${minutosRestantes(espera)} min e intenta de nuevo.`);
     }
-    almacen.guardar(SESION, { usuarioId: usuario.id, desde: Date.now() });
+    const lista = usuarios();
+    const usuario = lista.find((u) => u.correo === correoNorm);
+    const resultado = await verificar(clave, usuario?.claveHash);
+    if (!usuario || !resultado.ok) {
+      const quedan = intentos.fallo(llave);
+      // El mismo mensaje exista o no la cuenta, para no revelar qué correos están registrados
+      throw new ErrorCampo(
+        'clave',
+        quedan > 0 && quedan <= 2
+          ? `El correo o la contraseña no coinciden. ${quedan > 1 ? `Te quedan ${quedan} intentos` : 'Te queda 1 intento'}.`
+          : quedan <= 0
+            ? 'Demasiados intentos. Por seguridad, espera 5 min e intenta de nuevo.'
+            : 'El correo o la contraseña no coinciden.'
+      );
+    }
+    intentos.limpiar(llave);
+    if (resultado.actualizar) {
+      usuario.claveHash = await derivar(clave);
+      guardarUsuarios(lista);
+    }
+    abrirSesion(usuario.id);
     return publico(usuario);
   },
 
@@ -136,10 +160,10 @@ export const auth = {
     await esperar(500);
     const lista = usuarios();
     const i = lista.findIndex((u) => u.id === id);
-    if (i < 0 || lista[i].claveHash !== (await hash(actual))) {
+    if (i < 0 || !(await verificar(actual, lista[i].claveHash)).ok) {
       throw new ErrorCampo('actual', 'La contraseña actual no es correcta.');
     }
-    lista[i].claveHash = await hash(nueva);
+    lista[i].claveHash = await derivar(nueva);
     guardarUsuarios(lista);
   },
 
@@ -156,6 +180,13 @@ export const auth = {
     lista[i] = copia;
     guardarUsuarios(lista);
     return publico(copia);
+  },
+
+  /** Confirma la contraseña antes de una acción delicada (eliminar la cuenta). */
+  async confirmarClave(id, clave) {
+    await esperar(300);
+    const u = usuarios().find((x) => x.id === id);
+    if (!u || !(await verificar(clave, u.claveHash)).ok) throw new ErrorCampo('clave', 'La contraseña no es correcta.');
   },
 
   async eliminarCuenta(id) {
