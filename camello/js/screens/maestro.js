@@ -120,9 +120,17 @@ export function pantallaMaestro(raiz) {
         }
       </section>`;
 
-    cuerpo.querySelector('#conectado').addEventListener('change', (e) => {
-      sesion.set(auth.modificar(u.id, (x) => (x.maestro.conectado = e.target.checked)));
-      aviso(e.target.checked ? 'Listo, ya puedes recibir trabajos.' : 'Te desconectaste. No te llegarán solicitudes.');
+    cuerpo.querySelector('#conectado').addEventListener('change', async (e) => {
+      const activo = e.target.checked;
+      e.target.disabled = true;
+      const nuevo = auth.modificar(u.id, (x) => (x.maestro.conectado = activo));
+      sesion.set(nuevo);
+      try {
+        await nuevo.guardado;
+        aviso(activo ? 'Listo, ya puedes recibir trabajos.' : 'Te desconectaste. No te llegarán solicitudes.');
+      } catch {
+        sesion.set(auth.modificar(u.id, (x) => (x.maestro.conectado = !activo)));
+      }
       gps();
       pintar();
     });
@@ -397,9 +405,10 @@ export function pantallaCuentaMaestro(raiz) {
       <button class="btn btn-texto peligro btn-bloque" data-accion="salir">${icono('salir', { tamano: 18 })} Cerrar sesión</button>
     </main>
     ${navMaestro('cuenta')}`;
-  raiz.querySelector('[data-accion="salir"]').addEventListener('click', () => {
-    auth.modificar(u.id, (x) => (x.maestro.conectado = false));
-    sesion.salir();
+  raiz.querySelector('[data-accion="salir"]').addEventListener('click', async (e) => {
+    cargando(e.currentTarget, true, 'Cerrando sesión…');
+    // Al salir queda desconectado: los clientes dejan de verlo
+    await sesion.salir();
     ir('/bienvenida', { reemplazar: true });
   });
 }

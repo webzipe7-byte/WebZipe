@@ -29,8 +29,10 @@ import {
 } from './screens/menu.js';
 import { pantallaPerfil } from './screens/perfil.js';
 import { pantallaMaestro, pantallaTrabajoMaestro, pantallaTrabajosMaestro, pantallaCuentaMaestro } from './screens/maestro.js';
-import { inicioDe } from './services/auth.js';
-import { pedidos } from './services/pedidos.js';
+import { auth, inicioDe, alFallarGuardado } from './services/auth.js';
+import { sincronizar } from './services/sincronizar.js';
+import { usuarioNube, alCambiarSesion } from './services/nube.js';
+import { aviso } from './ui/componentes.js';
 
 // Pantallas públicas (sin sesión)
 ruta('/bienvenida', pantallaBienvenida, { publica: true, soloSinSesion: true });
@@ -78,8 +80,34 @@ if (window.top !== window.self) {
   throw new Error('Camello no se puede abrir dentro de un marco.');
 }
 
-// Quita los pedidos de prueba con maestros de ejemplo que hayan quedado de versiones anteriores
-pedidos.limpiarEjemplos();
+// Datos de versiones anteriores (cuando todo vivía solo en el teléfono): ya no se usan
+try {
+  Object.keys(localStorage)
+    .filter((k) => /^camello:(usuarios|pedidos|sesion|borrador|chat:|ubicacion:|visto:)/.test(k))
+    .forEach((k) => localStorage.removeItem(k));
+} catch {
+  /* sin almacenamiento */
+}
+
+alFallarGuardado((mensaje) => aviso(mensaje, 'error'));
+
+// Con sesión: se traen los datos de la nube antes de mostrar la app (máximo 8 s; si no hay señal, se usa la copia)
+if (usuarioNube()) {
+  try {
+    await Promise.race([sincronizar.cargar(), new Promise((_, no) => setTimeout(() => no(new Error('lento')), 8000))]);
+  } catch {
+    /* sin conexión: se sigue con lo que hay guardado */
+  }
+  sesion.set(auth.usuarioActual());
+}
+
+// Si la sesión se cierra o vence (en esta pestaña o en el servidor), se vuelve a la bienvenida
+alCambiarSesion((s) => {
+  if (!s && sesion.usuario) {
+    sesion.set(null);
+    location.hash = '#/bienvenida';
+  }
+});
 
 const raiz = document.getElementById('app');
 document.getElementById('arranque')?.remove();
@@ -93,16 +121,17 @@ iniciarRouter({
   inicioPrivado: () => inicioDe(sesion.usuario),
 });
 
-// Si se cierra la sesión en otra pestaña (o vence), esta también se cierra
+// Si se cierra la sesión de esta misma cuenta en otra pestaña, esta también se cierra
 window.addEventListener('storage', (e) => {
+  if (e.key !== 'camello:nube' || e.newValue || !sesion.usuario) return;
   let deEste = false;
   try {
-    deEste = JSON.parse(e.oldValue || 'null')?.usuarioId === sesion.usuario?.id;
+    deEste = JSON.parse(e.oldValue || 'null')?.user?.id === sesion.usuario.id;
   } catch {
     /* valor dañado: se ignora */
   }
-  if (e.key === 'camello:sesion' && !e.newValue && sesion.usuario && deEste) {
-    sesion.salir();
+  if (deEste) {
+    sesion.set(null);
     location.hash = '#/bienvenida';
   }
 });

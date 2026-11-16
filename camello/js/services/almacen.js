@@ -1,19 +1,20 @@
 /**
- * Base de datos de Camello: una sola, compartida por clientes y maestros.
+ * Copia local de los datos (localStorage).
  *
- * Tablas (claves con prefijo "camello:"):
- *   usuarios        clientes y maestros (campo `rol`)
- *   pedidos         solicitudes de servicio de todos
- *   chat:<pedido>   mensajes entre el cliente y el maestro de ese pedido
- *   ubicacion:<id>  última posición GPS de cada maestro conectado
+ * La base de datos real está en la nube (ver nube.js y sincronizar.js).
+ * Aquí se guarda una copia de lo que le toca a cada persona para que la app
+ * abra rápido y funcione aunque se vaya la señal un momento:
+ *   usuarios        mi cuenta y los perfiles públicos que necesito ver
+ *   pedidos         mis pedidos (como cliente o como maestro)
+ *   chat:<pedido>   mensajes de cada pedido
+ *   ubicacion:<id>  última posición de los maestros
  *
- * Hoy vive en el dispositivo (localStorage). Para que clientes y maestros
- * se vean desde teléfonos distintos, este archivo se cambia por uno que hable
- * con una base en la nube (Firebase, Supabase…) con las mismas funciones:
- * leer, guardar, borrar y escuchar.
+ * Cada cuenta tiene su propio espacio (camello:u:<id>:), así dos personas
+ * pueden usar el mismo navegador sin mezclar sus datos.
  */
 
-const PREFIJO = 'camello:';
+const BASE = 'camello:';
+let PREFIJO = BASE;
 
 export const almacen = {
   /**
@@ -70,6 +71,23 @@ export const almacen = {
    * escucha todas las que empiezan así ('chat:').
    * Devuelve la función para dejar de escuchar.
    */
+  /** Cambia al espacio de una cuenta (o al general si no hay sesión). */
+  usar(usuarioId) {
+    PREFIJO = usuarioId ? `${BASE}u:${usuarioId}:` : BASE;
+  },
+
+  /** Borra la copia local de la cuenta actual (al cerrar sesión). */
+  vaciar() {
+    if (PREFIJO === BASE) return;
+    try {
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith(PREFIJO))
+        .forEach((k) => localStorage.removeItem(k));
+    } catch {
+      /* nada que borrar */
+    }
+  },
+
   escuchar(claves, fn) {
     const lista = [].concat(claves);
     const coincide = (k) => lista.some((c) => (c.endsWith(':') ? k.startsWith(c) : k === c));

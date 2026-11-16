@@ -8,7 +8,7 @@ import { pedidos } from './pedidos.js';
 
 export const pagos = {
   async pagar(pedido, { metodo, propina = 0 }) {
-    await esperar(1600);
+    await esperar(900);
     const pago = {
       id: generarId('pay_'),
       metodoId: metodo.id,
@@ -20,7 +20,7 @@ export const pagos = {
       estado: metodo.tipo === 'efectivo' ? 'efectivo' : 'aprobado',
       fecha: Date.now(),
     };
-    pedidos.registrarPago(pedido.id, pago);
+    await pedidos.registrarPago(pedido.id, pago);
     return pago;
   },
 };

@@ -4,13 +4,14 @@
  * Los mensajes se guardan en la misma base de datos (tabla chat:<pedido>) y
  * las dos pantallas se actualizan solas cuando llega uno nuevo.
  */
-import { almacen, generarId } from './almacen.js';
+import { almacen } from './almacen.js';
+import { db, usuarioNube } from './nube.js';
+import { sincronizar } from './sincronizar.js';
 
 export const RESPUESTAS_RAPIDAS = ['¿Ya vienes?', 'Estoy en la puerta', 'Toca el timbre, por favor', 'Gracias'];
 export const RESPUESTAS_MAESTRO = ['Voy en camino', 'Ya llegué', 'Estoy buscando la dirección', '¿Me confirma el apto?'];
 
 export const MAX_MENSAJE = 300;
-const MAX_MENSAJES = 300;
 
 const clave = (pedidoId) => `chat:${pedidoId}`;
 
@@ -20,14 +21,12 @@ const rolDe = (m) => m.rol || (m.de === 'yo' ? 'cliente' : 'trabajador');
 export const chat = {
   mensajes: (pedidoId) => almacen.leer(clave(pedidoId), []).map((m) => ({ ...m, rol: rolDe(m) })),
 
-  /** rol: quién escribe ('cliente' o 'trabajador'). */
-  enviar(pedidoId, texto, { rol = 'cliente' } = {}) {
+  /** rol: quién escribe ('cliente' o 'trabajador'). Llega al otro teléfono al instante. */
+  async enviar(pedidoId, texto, { rol = 'cliente' } = {}) {
     const limpio = String(texto).trim().slice(0, MAX_MENSAJE);
     if (!limpio) return;
-    const lista = chat.mensajes(pedidoId);
-    lista.push({ id: generarId('m_'), rol, texto: limpio, fecha: Date.now() });
-    almacen.guardar(clave(pedidoId), lista.slice(-MAX_MENSAJES));
-
+    const [fila] = await db.crear('mensajes', { pedido_id: pedidoId, autor: usuarioNube().id, rol, texto: limpio });
+    if (fila) sincronizar.ponerMensaje(fila);
   },
 
   /** Cuántos mensajes de la otra persona no se han visto. */

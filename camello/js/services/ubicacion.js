@@ -2,6 +2,7 @@
  * Ubicación: GPS del teléfono, distancias y posición de los maestros.
  */
 import { almacen } from './almacen.js';
+import { subirPosicion } from './sincronizar.js';
 
 /** Centro de Cali, por si el teléfono no da la ubicación. */
 export const CENTRO = { lat: 3.4516, lng: -76.532 };
@@ -65,7 +66,9 @@ export function seguirMaestro(maestroId) {
 
 export function guardarPosicion(maestroId, punto) {
   if (!valido(punto)) return;
-  almacen.guardar(`ubicacion:${maestroId}`, { lat: +punto.lat.toFixed(6), lng: +punto.lng.toFixed(6), fecha: Date.now() });
+  const p = { lat: +punto.lat.toFixed(6), lng: +punto.lng.toFixed(6) };
+  almacen.guardar(`ubicacion:${maestroId}`, { ...p, fecha: Date.now() });
+  subirPosicion(p);
 }
 
 /** Posición en vivo del maestro, o null si no la ha compartido hace poco. */

@@ -23,10 +23,11 @@ export const sesion = {
     if (usuario) usuario = usuarioPublico(usuario.id) || usuario;
     return usuario;
   },
+  /** Cierra la sesión: borra la copia local de la cuenta y avisa a la nube. */
   salir() {
-    auth.cerrarSesion();
-    usuario = null;
     borrador.limpiar();
+    usuario = null;
+    return auth.cerrarSesion();
   },
 };
 

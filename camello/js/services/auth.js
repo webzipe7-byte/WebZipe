@@ -1,27 +1,19 @@
 /**
- * Cuentas de consumidor.
+ * Cuentas de clientes y maestros, guardadas en la nube (Supabase Auth).
  *
- * Demo: los usuarios se guardan en el dispositivo. La contraseña nunca se guarda:
- * se guarda una clave derivada con PBKDF2 y sal (ver seguridad.js).
- * Hay bloqueo tras 5 intentos fallidos y la sesión vence a los 30 días. En producción este archivo se
- * reemplaza por llamadas al servidor (registro, login con token, etc.)
- * manteniendo las mismas funciones públicas.
+ * La contraseña nunca pasa por nuestras tablas: la maneja Supabase Auth.
+ * Los perfiles y datos privados están en las tablas `perfiles` y `privado`,
+ * protegidas para que cada quien solo lea y cambie lo suyo.
+ *
+ * Las pantallas usan estas mismas funciones de siempre; por dentro leen de la
+ * copia local (rápido) y envían los cambios a la nube.
  */
-import { almacen, esperar, generarId } from './almacen.js';
+import { almacen, esperar } from './almacen.js';
 import { formatearTelefono } from './validar.js';
-import { derivar, verificar, intentos, minutosRestantes } from './seguridad.js';
+import { intentos, minutosRestantes } from './seguridad.js';
 import { categoriaPorId } from '../data/categorias.js';
-
-const USUARIOS = 'usuarios';
-const SESION = 'sesion';
-
-/** La sesión dura 30 días desde el último uso. */
-const DURACION_SESION = 30 * 24 * 60 * 60 * 1000;
-
-const abrirSesion = (usuarioId) =>
-  almacen.guardar(SESION, { usuarioId, desde: Date.now(), vence: Date.now() + DURACION_SESION });
-
-const usuarios = () => almacen.leer(USUARIOS, []);
+import { cuentas, db, usuarioNube, ErrorNube } from './nube.js';
+import { sincronizar, datosPrivados } from './sincronizar.js';
 
 /** Código para invitar amigos: nombre + 4 números. Ej: ANA4821 */
 function codigoReferido(nombre) {
@@ -34,9 +26,8 @@ function codigoReferido(nombre) {
     .slice(0, 6);
   return (base || 'CAMELLO') + Math.floor(1000 + Math.random() * 9000);
 }
-const guardarUsuarios = (lista) => almacen.guardar(USUARIOS, lista);
 
-/** Valores por defecto para cuentas creadas antes de agregar estas funciones. */
+/** Valores por defecto para los datos privados de una cuenta. */
 const PREDETERMINADOS = () => ({
   direcciones: [],
   lugares: { casa: null, trabajo: null },
@@ -49,20 +40,9 @@ const PREDETERMINADOS = () => ({
   preferencias: { avisos: true, promociones: true, sonido: true },
 });
 
-/** Quita la contraseña antes de entregar el usuario a las pantallas. */
-const publico = ({ claveHash, ...resto }) => ({ ...PREDETERMINADOS(), rol: 'cliente', ...resto });
+const usuarios = () => almacen.leer('usuarios', []);
 
-/** Pantalla de inicio según el tipo de cuenta. */
-export const inicioDe = (usuario) => (usuario?.rol === 'trabajador' ? '/maestro' : '/inicio');
-
-/** Lectura de un usuario por id, sin la contraseña (para mostrar el nombre del cliente al maestro y viceversa). */
-export function usuarioPublico(id) {
-  const u = usuarios().find((x) => x.id === id);
-  return u ? publico(u) : null;
-}
-
-/** Todos los maestros registrados (sin contraseñas). */
-export const maestrosRegistrados = () => usuarios().filter((u) => u.rol === 'trabajador' && u.maestro).map(publico);
+const publico = (u) => ({ ...PREDETERMINADOS(), rol: 'cliente', ...u });
 
 export class ErrorCampo extends Error {
   constructor(campo, mensaje) {
@@ -71,164 +51,193 @@ export class ErrorCampo extends Error {
   }
 }
 
+/** Pantalla de inicio según el tipo de cuenta. */
+export const inicioDe = (usuario) => (usuario?.rol === 'trabajador' ? '/maestro' : '/inicio');
+
+/** Un usuario por id, desde la copia local. */
+export function usuarioPublico(id) {
+  const u = usuarios().find((x) => x.id === id);
+  return u ? publico(u) : null;
+}
+
+/** Maestros que conozco (conectados o de mis pedidos). */
+export const maestrosRegistrados = () => usuarios().filter((u) => u.rol === 'trabajador' && u.maestro).map(publico);
+
+/** Envía a la nube los cambios de mi cuenta (perfil público y datos privados). */
+async function subir(u) {
+  await Promise.all([
+    db.cambiar('perfiles', { id: `eq.${u.id}` }, {
+      nombre: u.nombre,
+      ...(u.maestro ? { categoria: u.maestro.categoria, anios: u.maestro.anios, conectado: !!u.maestro.conectado } : {}),
+      actualizado: new Date().toISOString(),
+    }),
+    db.guardar('privado', { id: u.id, telefono: u.telefono || null, datos: datosPrivados(u), actualizado: new Date().toISOString() }),
+  ]);
+}
+
+let avisoError = null;
+/** La app registra aquí cómo mostrar un error de guardado (un aviso en pantalla). */
+export const alFallarGuardado = (fn) => (avisoError = fn);
+
 export const auth = {
+  /** Mi cuenta, si hay sesión. Lectura inmediata desde la copia local. */
   usuarioActual() {
-    const sesion = almacen.leer(SESION);
-    if (!sesion) return null;
-    if (!sesion.vence || sesion.vence < Date.now()) {
-      almacen.borrar(SESION);
-      return null;
-    }
-    // Cada uso renueva el plazo
-    if (sesion.vence - Date.now() < DURACION_SESION - 60 * 60 * 1000) abrirSesion(sesion.usuarioId);
-    const usuario = usuarios().find((u) => u.id === sesion.usuarioId);
-    return usuario ? publico(usuario) : null;
+    const yo = usuarioNube();
+    if (!yo) return null;
+    almacen.usar(yo.id);
+    const u = usuarios().find((x) => x.id === yo.id);
+    return u ? publico(u) : null;
   },
 
   /**
    * rol: 'cliente' (pide servicios) o 'trabajador' (los presta).
-   * Los dos viven en la misma tabla de usuarios.
+   * Los dos viven en la misma base de datos.
    */
   async registrar({ nombre, correo, telefono, clave, rol = 'cliente', oficio = '', anios = 0 }) {
-    await esperar(700);
     if (rol !== 'cliente' && rol !== 'trabajador') throw new Error('Tipo de cuenta no válido.');
     if (rol === 'trabajador' && !categoriaPorId(oficio)) throw new ErrorCampo('oficio', 'Elige tu oficio.');
     const aniosNum = Math.round(Number(anios));
     if (rol === 'trabajador' && (!Number.isFinite(aniosNum) || aniosNum < 0 || aniosNum > 60)) {
       throw new ErrorCampo('anios', 'Escribe tus años de experiencia (de 0 a 60).');
     }
-    const lista = usuarios();
+    const limpio = nombre.trim().replace(/\s+/g, ' ');
     const correoNorm = correo.trim().toLowerCase();
-    if (lista.some((u) => u.correo === correoNorm)) {
-      throw new ErrorCampo('correo', 'Ya existe una cuenta con este correo. Inicia sesión.');
-    }
-    const usuario = {
-      id: generarId('u_'),
-      nombre: nombre.trim().replace(/\s+/g, ' '),
-      correo: correoNorm,
+    const meta = {
+      nombre: limpio,
       telefono: formatearTelefono(telefono),
-      claveHash: await derivar(clave),
-      direcciones: [],
-      lugares: { casa: null, trabajo: null },
-      contactos: [],
-      bloqueados: [],
-      metodos: [{ id: 'efectivo', tipo: 'efectivo', nombre: 'Efectivo' }],
-      metodoPreferido: 'efectivo',
-      cupones: [{ codigo: 'BIENVENIDO', agregado: Date.now(), usado: null }],
-      codigoReferido: codigoReferido(nombre),
-      preferencias: { avisos: true, promociones: true, sonido: true },
-      creado: Date.now(),
       rol,
-      ...(rol === 'trabajador'
-        ? { maestro: { categoria: oficio, anios: aniosNum, conectado: false, desde: Date.now() } }
-        : {}),
+      ...(rol === 'trabajador' ? { categoria: oficio, anios: aniosNum } : {}),
     };
-    guardarUsuarios([...lista, usuario]);
-    abrirSesion(usuario.id);
-    return publico(usuario);
+    let s;
+    try {
+      s = await cuentas.crear(correoNorm, clave, meta);
+    } catch (e) {
+      if (/correo/.test(e.message)) throw new ErrorCampo('correo', e.message);
+      if (/contraseña/.test(e.message)) throw new ErrorCampo('clave', e.message);
+      throw e;
+    }
+    if (!s) {
+      throw new ErrorCampo('correo', `Te enviamos un correo a ${correoNorm}. Ábrelo para confirmar tu cuenta y luego inicia sesión.`);
+    }
+    const datos = { ...PREDETERMINADOS(), cupones: [{ codigo: 'BIENVENIDO', agregado: Date.now(), usado: null }], codigoReferido: codigoReferido(limpio), creado: Date.now() };
+    const u = await sincronizar.cargar(datos);
+    return publico(u);
   },
 
   async iniciarSesion({ correo, clave }) {
-    await esperar(600);
     const correoNorm = correo.trim().toLowerCase();
     const llave = `login:${correoNorm}`;
     const espera = intentos.bloqueado(llave);
     if (espera) {
       throw new ErrorCampo('clave', `Demasiados intentos. Por seguridad, espera ${minutosRestantes(espera)} min e intenta de nuevo.`);
     }
-    const lista = usuarios();
-    const usuario = lista.find((u) => u.correo === correoNorm);
-    const resultado = await verificar(clave, usuario?.claveHash);
-    if (!usuario || !resultado.ok) {
-      const quedan = intentos.fallo(llave);
-      // El mismo mensaje exista o no la cuenta, para no revelar qué correos están registrados
-      throw new ErrorCampo(
-        'clave',
-        quedan > 0 && quedan <= 2
-          ? `El correo o la contraseña no coinciden. ${quedan > 1 ? `Te quedan ${quedan} intentos` : 'Te queda 1 intento'}.`
-          : quedan <= 0
-            ? 'Demasiados intentos. Por seguridad, espera 5 min e intenta de nuevo.'
-            : 'El correo o la contraseña no coinciden.'
-      );
+    try {
+      await cuentas.entrar(correoNorm, clave);
+    } catch (e) {
+      if (e instanceof ErrorNube && e.codigo !== 'red' && e.estado < 500) {
+        const quedan = intentos.fallo(llave);
+        // El mismo mensaje exista o no la cuenta, para no revelar qué correos están registrados
+        throw new ErrorCampo(
+          'clave',
+          /confirmado/.test(e.message)
+            ? e.message
+            : quedan <= 0
+              ? 'Demasiados intentos. Por seguridad, espera 5 min e intenta de nuevo.'
+              : quedan <= 2
+                ? `El correo o la contraseña no coinciden. ${quedan > 1 ? `Te quedan ${quedan} intentos` : 'Te queda 1 intento'}.`
+                : 'El correo o la contraseña no coinciden.'
+        );
+      }
+      throw new ErrorCampo('clave', e.message);
     }
     intentos.limpiar(llave);
-    if (resultado.actualizar) {
-      usuario.claveHash = await derivar(clave);
-      guardarUsuarios(lista);
-    }
-    abrirSesion(usuario.id);
-    return publico(usuario);
+    const u = await sincronizar.cargar({ ...PREDETERMINADOS(), codigoReferido: codigoReferido(correoNorm) });
+    return publico(u);
   },
 
-  cerrarSesion() {
-    almacen.borrar(SESION);
+  /** Cierra la sesión y borra la copia local de esta cuenta del teléfono. */
+  async cerrarSesion() {
+    const yo = auth.usuarioActual();
+    if (yo?.maestro?.conectado) {
+      await db.cambiar('perfiles', { id: `eq.${yo.id}` }, { conectado: false }).catch(() => {});
+    }
+    almacen.vaciar();
+    almacen.usar(null);
+    await cuentas.salir();
   },
 
   async actualizarPerfil(id, cambios) {
-    await esperar(500);
-    const lista = usuarios();
-    const i = lista.findIndex((u) => u.id === id);
-    if (i < 0) throw new Error('Tu sesión expiró. Vuelve a iniciar sesión.');
+    await esperar(200);
+    const yo = usuarioNube();
     if (cambios.correo) {
       const correoNorm = cambios.correo.trim().toLowerCase();
-      if (lista.some((u) => u.correo === correoNorm && u.id !== id)) {
-        throw new ErrorCampo('correo', 'Ese correo ya lo usa otra cuenta.');
+      if (correoNorm !== yo.email) {
+        try {
+          await cuentas.cambiarCorreo(correoNorm);
+        } catch (e) {
+          throw new ErrorCampo('correo', e.message);
+        }
       }
-      cambios.correo = correoNorm;
+      delete cambios.correo;
     }
     if (cambios.telefono) cambios.telefono = formatearTelefono(cambios.telefono);
     if (cambios.nombre) cambios.nombre = cambios.nombre.trim().replace(/\s+/g, ' ');
-    lista[i] = { ...lista[i], ...cambios };
-    guardarUsuarios(lista);
-    return publico(lista[i]);
+    const u = auth.modificar(id, (x) => Object.assign(x, cambios), { esperar: true });
+    await u.guardado;
+    return u;
   },
 
   async cambiarClave(id, actual, nueva) {
-    await esperar(500);
-    const lista = usuarios();
-    const i = lista.findIndex((u) => u.id === id);
-    if (i < 0 || !(await verificar(actual, lista[i].claveHash)).ok) {
+    const yo = usuarioNube();
+    if (!(await cuentas.verificarClave(yo.email, actual))) {
       throw new ErrorCampo('actual', 'La contraseña actual no es correcta.');
     }
-    lista[i].claveHash = await derivar(nueva);
-    guardarUsuarios(lista);
+    try {
+      await cuentas.cambiarClave(nueva);
+    } catch (e) {
+      throw new ErrorCampo('nueva', e.message);
+    }
   },
 
   /**
-   * Cambios internos al usuario (lugares, contactos, billetera, cupones…).
-   * Recibe una función que modifica una copia del usuario y la guarda.
+   * Cambios a mi cuenta (lugares, contactos, billetera, cupones, conectarse…).
+   * Se ven al instante en el teléfono y se envían a la nube por detrás.
    */
   modificar(id, cambio) {
     const lista = usuarios();
     const i = lista.findIndex((u) => u.id === id);
-    if (i < 0) throw new Error('Tu sesión expiró. Vuelve a iniciar sesión.');
-    const copia = structuredClone(lista[i]);
+    if (i < 0 || id !== usuarioNube()?.id) throw new Error('Tu sesión expiró. Vuelve a iniciar sesión.');
+    const copia = structuredClone(publico(lista[i]));
     cambio(copia);
     lista[i] = copia;
-    guardarUsuarios(lista);
-    return publico(copia);
+    almacen.guardar('usuarios', lista);
+    const guardado = subir(copia).catch((e) => {
+      avisoError?.(e.message || 'No pudimos guardar el cambio. Revisa tu conexión.');
+      throw e;
+    });
+    guardado.catch(() => {});
+    const resultado = publico(copia);
+    Object.defineProperty(resultado, 'guardado', { value: guardado, enumerable: false });
+    return resultado;
   },
 
   /** Confirma la contraseña antes de una acción delicada (eliminar la cuenta). */
   async confirmarClave(id, clave) {
-    await esperar(300);
-    const u = usuarios().find((x) => x.id === id);
-    if (!u || !(await verificar(clave, u.claveHash)).ok) throw new ErrorCampo('clave', 'La contraseña no es correcta.');
+    if (!(await cuentas.verificarClave(usuarioNube().email, clave))) throw new ErrorCampo('clave', 'La contraseña no es correcta.');
   },
 
-  async eliminarCuenta(id) {
-    await esperar(600);
-    guardarUsuarios(usuarios().filter((u) => u.id !== id));
-    almacen.borrar(SESION);
+  async eliminarCuenta() {
+    await db.funcion('eliminar_mi_cuenta', {});
+    almacen.vaciar();
+    almacen.usar(null);
+    await cuentas.salir();
   },
 
   /** Recuerda la dirección para no escribirla de nuevo. Guarda las 3 más recientes. */
   recordarDireccion(id, direccion) {
-    const lista = usuarios();
-    const u = lista.find((x) => x.id === id);
-    if (!u) return;
     const clave = direccion.texto.toLowerCase();
-    u.direcciones = [direccion, ...(u.direcciones || []).filter((d) => d.texto.toLowerCase() !== clave)].slice(0, 3);
-    guardarUsuarios(lista);
+    auth.modificar(id, (u) => {
+      u.direcciones = [direccion, ...(u.direcciones || []).filter((d) => d.texto.toLowerCase() !== clave)].slice(0, 3);
+    });
   },
 };

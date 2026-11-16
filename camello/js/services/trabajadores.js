@@ -16,10 +16,10 @@ const COLORES = ['#7a3519', '#0F766E', '#B45309', '#7C3AED', '#0369A1', '#4D7C0F
  */
 export function fichaMaestro(u, desde = null) {
   if (!u?.maestro) return null;
-  const suyos = almacen.leer('pedidos', []).filter((p) => p.trabajadorId === u.id);
-  const calificados = suyos.filter((p) => p.calificacion?.estrellas);
+  // Reseñas que yo le dejé (las demás son privadas de cada cliente)
+  const calificados = almacen.leer('pedidos', []).filter((p) => p.trabajadorId === u.id && p.calificacion?.estrellas);
   // Sin calificaciones todavía: se muestra como "Nuevo", no se inventa un puntaje
-  const promedio = calificados.length ? calificados.reduce((s, p) => s + p.calificacion.estrellas, 0) / calificados.length : null;
+  const promedio = u.calificaciones ? u.calificacionSuma / u.calificaciones : null;
   const [nombre, ...resto] = u.nombre.split(' ');
   const cat = categoriaPorId(u.maestro.categoria);
   const aqui = posicionEnVivo(u.id);
@@ -32,7 +32,7 @@ export function fichaMaestro(u, desde = null) {
     apellido: resto.join(' '),
     anios: u.maestro.anios,
     calificacion: promedio === null ? null : Math.round(promedio * 10) / 10,
-    trabajos: suyos.filter((p) => p.pago).length,
+    trabajos: u.trabajosHechos || 0,
     distanciaKm: Math.round(Math.max(0.2, km) * 10) / 10,
     factorPrecio: 1,
     especialidades: cat ? [cat.nombre] : [],

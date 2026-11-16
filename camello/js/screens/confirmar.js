@@ -253,9 +253,9 @@ export async function pantallaConfirmar(raiz) {
       sesion.refrescar();
       borrador.limpiar();
       ir(`/pedido/${pedido.id}`, { reemplazar: true });
-    } catch {
+    } catch (err) {
       cargando(boton, false);
-      aviso('No pudimos enviar tu solicitud. Revisa tu conexión e intenta de nuevo.', 'error');
+      aviso(err.message || 'No pudimos enviar tu solicitud. Revisa tu conexión e intenta de nuevo.', 'error');
     }
   }
 

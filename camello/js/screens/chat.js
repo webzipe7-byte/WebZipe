@@ -8,7 +8,7 @@ import { usuarioPublico } from '../services/auth.js';
 import { chat, RESPUESTAS_RAPIDAS, RESPUESTAS_MAESTRO, MAX_MENSAJE } from '../services/chat.js';
 import { sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
-import { barra, avatar } from '../ui/componentes.js';
+import { barra, avatar, aviso } from '../ui/componentes.js';
 import { icono } from '../ui/iconos.js';
 import { esc, hora } from '../ui/formato.js';
 
@@ -83,9 +83,13 @@ export function pantallaChat(raiz, { id }) {
     pintarPie();
   }
 
-  function enviar(texto) {
+  async function enviar(texto) {
     if (!texto.trim() || !abierto()) return;
-    chat.enviar(id, texto, { rol: miRol });
+    try {
+      await chat.enviar(id, texto, { rol: miRol });
+    } catch (err) {
+      aviso(err.message || 'No se pudo enviar el mensaje.', 'error');
+    }
   }
 
   pintar();

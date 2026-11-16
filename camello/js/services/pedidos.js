@@ -3,8 +3,9 @@
  * El estado lo cambia el maestro desde su app (aceptar, salir, llegar, terminar)
  * y el cliente lo ve al instante.
  */
-import { almacen, esperar, generarId, MAX_PEDIDOS } from './almacen.js';
-import { intentos, minutosRestantes } from './seguridad.js';
+import { almacen, generarId } from './almacen.js';
+import { db } from './nube.js';
+import { sincronizar } from './sincronizar.js';
 
 const CLAVE = 'pedidos';
 
@@ -46,62 +47,28 @@ export function etapaDe(pedido, ahora = Date.now()) {
 export const sePuedeCancelar = (pedido) => ['buscando', 'aceptado'].includes(estadoDe(pedido).id);
 
 const todos = () => almacen.leer(CLAVE, []);
-/**
- * Guarda la lista sin pasar de MAX_PEDIDOS: se conservan los activos
- * y los más recientes. Lanza un error si el teléfono no tiene espacio.
- */
-function guardarTodos(lista) {
-  let final = lista;
-  if (lista.length > MAX_PEDIDOS) {
-    const activos = lista.filter((p) => etapaDe(p) !== 'completado' && etapaDe(p) !== 'cancelado');
-    const cerrados = lista.filter((p) => !activos.includes(p)).sort((a, b) => b.creado - a.creado);
-    final = [...activos, ...cerrados.slice(0, Math.max(0, MAX_PEDIDOS - activos.length))];
-  }
-  if (!almacen.guardar(CLAVE, final)) {
-    throw new Error('Tu teléfono no tiene espacio para guardar el pedido. Libera espacio e intenta de nuevo.');
-  }
-}
 
-function actualizar(id, cambios) {
-  const lista = todos();
-  const i = lista.findIndex((p) => p.id === id);
-  if (i < 0) throw new Error('No encontramos este pedido.');
-  lista[i] = { ...lista[i], ...cambios };
-  guardarTodos(lista);
-  return lista[i];
-}
+const ponerEnCopia = (datos) => sincronizar.ponerPedido(datos);
 
 export const pedidos = {
+  /** El cliente envía la solicitud. La crea el servidor (estado, fechas y código). */
   async crear(datos) {
-    await esperar(900);
-    const pedido = {
-      id: generarId('p_'),
-      numero: String(Math.floor(100000 + Math.random() * 900000)),
-      // Código que la persona le pide al maestro al llegar, para confirmar que es él
-      pin: String(Math.floor(1000 + Math.random() * 9000)),
-      creado: Date.now(),
-      inicio: Date.now(),
-      cancelado: null,
-      pago: null,
-      calificacion: null,
-      ...datos,
-    };
-    if (!String(datos.trabajadorId).startsWith('u_')) throw new Error('Elige un maestro de la lista.');
-    pedido.real = true;
-    pedido.estado = 'buscando';
-    pedido.tiempos = { buscando: Date.now() };
-    guardarTodos([pedido, ...todos()]);
-    return pedido;
+    if (!/^[0-9a-f-]{36}$/.test(String(datos.trabajadorId))) throw new Error('Elige un maestro de la lista.');
+    const id = generarId('p_');
+    // Código que la persona le pide al maestro al llegar, para confirmar que es él
+    const pin = String(Math.floor(1000 + Math.random() * 9000));
+    const numero = String(Math.floor(100000 + Math.random() * 900000));
+    const creado = await db.funcion('crear_pedido', { p_id: id, p_trabajador: datos.trabajadorId, p_datos: { ...datos, numero }, p_pin: pin });
+    return sincronizar.ponerPedido(creado, pin);
   },
 
   async delUsuario(usuarioId) {
-    await esperar(500);
     return todos()
       .filter((p) => p.usuarioId === usuarioId)
       .sort((a, b) => b.creado - a.creado);
   },
 
-  /** Lectura inmediata (sin espera) para el aviso de pedido activo y el seguimiento. */
+  /** Lectura inmediata para el aviso de pedido activo y el seguimiento. */
   obtener: (id) => todos().find((p) => p.id === id) || null,
 
   activoDe(usuarioId) {
@@ -114,31 +81,18 @@ export const pedidos = {
   },
 
   async cancelar(id, motivo) {
-    await esperar(600);
-    const p = pedidos.obtener(id);
-    if (!p || !sePuedeCancelar(p)) throw new Error('El maestro ya va en camino. Ya no se puede cancelar.');
-    return actualizar(id, { cancelado: { fecha: Date.now(), motivo } });
+    return ponerEnCopia(await db.funcion('actualizar_pedido', { p_id: id, p_accion: 'cancelar', p_valor: { motivo } }));
   },
 
-  registrarPago(id, pago) {
-    return actualizar(id, { pago });
+  async registrarPago(id, pago) {
+    return ponerEnCopia(await db.funcion('actualizar_pedido', { p_id: id, p_accion: 'pagar', p_valor: pago }));
   },
 
   async calificar(id, calificacion) {
-    await esperar(700);
-    return actualizar(id, { calificacion: { ...calificacion, fecha: Date.now() } });
+    return ponerEnCopia(await db.funcion('actualizar_pedido', { p_id: id, p_accion: 'calificar', p_valor: calificacion }));
   },
 
-  /** Borra los pedidos de prueba que se hicieron con maestros de ejemplo (versiones anteriores). */
-  limpiarEjemplos() {
-    const lista = todos();
-    const reales = lista.filter((p) => p.real);
-    if (reales.length === lista.length) return;
-    lista.filter((p) => !p.real).forEach((p) => almacen.borrar(`chat:${p.id}`));
-    almacen.guardar(CLAVE, reales);
-  },
-
-  /** Avisa cada vez que cambia algún pedido (en esta pestaña o en otra). */
+  /** Avisa cada vez que cambia algún pedido (en este teléfono o desde el otro). */
   escuchar: (fn) => almacen.escuchar('pedidos', fn),
 
   /* ---------- Lado del maestro ---------- */
@@ -150,38 +104,14 @@ export const pedidos = {
       .sort((a, b) => b.creado - a.creado),
 
   /**
-   * El maestro cambia el estado de su pedido.
-   * accion: aceptar | rechazar | salir | llegar (pide el código del cliente) | terminar
+   * El maestro cambia el estado de su pedido. Las reglas las revisa el servidor.
+   * accion: aceptar | rechazar | salir | llegar (con el código del cliente) | terminar
    */
   async avanzar(id, maestroId, accion, { pin = '' } = {}) {
-    await esperar(400);
     const p = pedidos.obtener(id);
     if (!p || p.trabajadorId !== maestroId) throw new Error('Este pedido no es tuyo.');
-    if (p.cancelado) throw new Error('El cliente canceló este pedido.');
-    const pasos = {
-      aceptar: ['buscando', 'aceptado'],
-      rechazar: ['buscando', null],
-      salir: ['aceptado', 'en_camino'],
-      llegar: ['en_camino', 'en_proceso'],
-      terminar: ['en_proceso', 'finalizado'],
-    };
-    const paso = pasos[accion];
-    if (!paso) throw new Error('Acción no válida.');
-    if (p.estado !== paso[0]) throw new Error('El pedido ya cambió. Revisa su estado.');
-
-    if (accion === 'rechazar') {
-      return actualizar(id, { cancelado: { fecha: Date.now(), motivo: 'El maestro no pudo tomar el servicio. Elige otro maestro.', por: 'maestro' } });
-    }
-    if (accion === 'llegar') {
-      const llave = `pin:${id}`;
-      const espera = intentos.bloqueado(llave);
-      if (espera) throw new Error(`Demasiados intentos. Espera ${minutosRestantes(espera)} min.`);
-      if (String(pin).trim() !== p.pin) {
-        const quedan = intentos.fallo(llave);
-        throw new Error(quedan > 0 ? `Ese no es el código del cliente. Te quedan ${quedan} intentos.` : 'Demasiados intentos. Espera 5 min.');
-      }
-      intentos.limpiar(llave);
-    }
-    return actualizar(id, { estado: paso[1], tiempos: { ...(p.tiempos || {}), [paso[1]]: Date.now() } });
+    const r = await db.funcion('avanzar_pedido', { p_id: id, p_accion: accion, p_pin: String(pin).trim() });
+    if (r?.error) throw new Error(r.error);
+    return ponerEnCopia(r);
   },
 };
