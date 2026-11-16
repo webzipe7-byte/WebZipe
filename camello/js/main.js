@@ -75,8 +75,20 @@ iniciarRouter({
 // Service worker: permite instalar la app y abrirla sin conexión
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {
-      /* sin service worker la app sigue funcionando, solo que no offline */
+    navigator.serviceWorker
+      .register('./sw.js', { updateViaCache: 'none' })
+      .then((reg) => reg.update())
+      .catch(() => {
+        /* sin service worker la app sigue funcionando, solo que no offline */
+      });
+
+    // Cuando se publica una versión nueva, la app se recarga sola una vez para mostrarla
+    let recargada = false;
+    const habiaControlador = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!habiaControlador || recargada) return;
+      recargada = true;
+      location.reload();
     });
   });
 }

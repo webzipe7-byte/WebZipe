@@ -3,7 +3,7 @@
  * Guarda la app en caché para que abra rápido y funcione sin conexión.
  * Al publicar cambios, sube el número de VERSION para que todos reciban la nueva.
  */
-const VERSION = 'camello-v3';
+const VERSION = 'camello-v4';
 
 const ARCHIVOS = [
   './',
@@ -77,7 +77,8 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(
-    fetch(e.request)
+    // cache: 'no-cache' pide al servidor la versión más reciente (sin usar la copia vieja del navegador)
+    fetch(e.request, { cache: 'no-cache' })
       .then((resp) => {
         const copia = resp.clone();
         caches.open(VERSION).then((c) => c.put(e.request, copia));
