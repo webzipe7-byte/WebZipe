@@ -1,0 +1,42 @@
+/**
+ * Estado compartido entre pantallas:
+ * - el usuario con sesión iniciada
+ * - el borrador de la solicitud que se está armando (sobrevive a recargar la página)
+ */
+import { auth } from './services/auth.js';
+import { almacen } from './services/almacen.js';
+
+let usuario = auth.usuarioActual();
+
+export const sesion = {
+  get usuario() {
+    return usuario;
+  },
+  set(u) {
+    usuario = u;
+  },
+  salir() {
+    auth.cerrarSesion();
+    usuario = null;
+    borrador.limpiar();
+  },
+};
+
+const CLAVE_BORRADOR = 'borrador';
+
+export const borrador = {
+  leer: () => almacen.leer(CLAVE_BORRADOR, null),
+  /** Mezcla los cambios con lo que ya había. */
+  guardar: (cambios) => {
+    const actual = almacen.leer(CLAVE_BORRADOR, {}) || {};
+    const nuevo = { ...actual, ...cambios };
+    almacen.guardar(CLAVE_BORRADOR, nuevo);
+    return nuevo;
+  },
+  nuevo: (categoria) => {
+    const b = { categoria, descripcion: '', direccion: null, cuando: null, trabajadorId: null };
+    almacen.guardar(CLAVE_BORRADOR, b);
+    return b;
+  },
+  limpiar: () => almacen.borrar(CLAVE_BORRADOR),
+};
