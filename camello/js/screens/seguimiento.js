@@ -173,13 +173,14 @@ export function pantallaSeguimiento(raiz, { id }) {
           : ''
       }
 
-      ${sePuedeCancelar(pedido) ? '<button class="btn btn-texto peligro btn-bloque" data-accion="cancelar">Cancelar pedido</button>' : ''}
 `;
 
     // Acción principal según el momento del pedido
     if (etapa === 'por_pagar') pie.innerHTML = `<a class="btn btn-primario btn-bloque" href="#/pagar/${pedido.id}">Pagar ${dinero(pedido.precio.total)}</a>`;
     else if (etapa === 'por_calificar') pie.innerHTML = `<a class="btn btn-primario btn-bloque" href="#/calificar/${pedido.id}">Calificar a ${esc(t.nombre)}</a>`;
     else if (etapa === 'completado' || etapa === 'cancelado') pie.innerHTML = `<button class="btn btn-secundario btn-bloque" data-accion="repetir">Pedir de nuevo</button>`;
+    // Mientras el maestro no haya salido, cancelar siempre está a la vista en la barra de abajo
+    else if (sePuedeCancelar(pedido)) pie.innerHTML = `<button class="btn btn-peligro-borde btn-bloque" data-accion="cancelar">${icono('cerrar', { tamano: 18 })} Cancelar pedido</button>`;
     else pie.innerHTML = '';
     raiz.classList.toggle('sin-pie', !pie.innerHTML);
 
@@ -192,7 +193,7 @@ export function pantallaSeguimiento(raiz, { id }) {
     );
     cuerpo.querySelector('[data-accion="chat"]')?.addEventListener('click', () => ir(`/chat/${pedido.id}`));
     cuerpo.querySelector('[data-accion="compartir"]')?.addEventListener('click', () => compartirSeguimiento(pedido, t));
-    cuerpo.querySelector('[data-accion="cancelar"]')?.addEventListener('click', preguntarCancelar);
+    pie.querySelector('[data-accion="cancelar"]')?.addEventListener('click', preguntarCancelar);
     pie.querySelector('[data-accion="repetir"]')?.addEventListener('click', () => ir(`/solicitud/${pedido.categoria}`));
   }
 

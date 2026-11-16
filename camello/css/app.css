@@ -2930,3 +2930,17 @@ a.perfil-usuario {
 .revisa-correo .pie-acciones {
   margin-top: 28px;
 }
+
+/* Cancelar: visible pero sin competir con la acción principal */
+.btn-peligro-borde {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #fff;
+  color: #b91c1c;
+  border: 1.5px solid #fca5a5;
+}
+.btn-peligro-borde:active {
+  background: #fef2f2;
+}
