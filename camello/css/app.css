@@ -2914,3 +2914,19 @@ a.perfil-usuario {
 .conexion .interruptor input:checked + i {
   background: #22c55e;
 }
+
+/* Revisa tu correo */
+.revisa-correo {
+  text-align: center;
+  padding-top: 32px;
+}
+.revisa-correo > svg {
+  color: var(--marca);
+  margin: 0 auto 8px;
+}
+.revisa-correo h1 {
+  margin: 8px 0;
+}
+.revisa-correo .pie-acciones {
+  margin-top: 28px;
+}

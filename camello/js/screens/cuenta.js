@@ -1,12 +1,13 @@
 /**
  * Crear cuenta e iniciar sesión.
  */
-import { auth, ErrorCampo, inicioDe } from '../services/auth.js';
+import { auth, ErrorCampo, FaltaConfirmar, inicioDe } from '../services/auth.js';
 import { CATEGORIAS } from '../data/categorias.js';
 import { esc } from '../ui/formato.js';
 import { sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
-import { barra, campo, marcarError, activarOjos, cargando } from '../ui/componentes.js';
+import { barra, campo, marcarError, activarOjos, cargando, aviso } from '../ui/componentes.js';
+import { icono } from '../ui/iconos.js';
 import { validarNombre, validarCorreo, validarTelefono, validarContrasena, validarIgual } from '../services/validar.js';
 import { claveDebil } from '../services/seguridad.js';
 
@@ -117,6 +118,7 @@ export function pantallaRegistro(raiz) {
       ir(inicioDe(usuario), { reemplazar: true });
     } catch (err) {
       cargando(boton, false);
+      if (err instanceof FaltaConfirmar) return pantallaRevisaCorreo(raiz, err.correo);
       if (err instanceof ErrorCampo) {
         marcarError(form, err.campo, err.message);
         form[err.campo]?.focus();
@@ -162,7 +164,48 @@ export function pantallaEntrar(raiz) {
       ir(inicioDe(usuario), { reemplazar: true });
     } catch (err) {
       cargando(boton, false);
+      if (err instanceof FaltaConfirmar) return pantallaRevisaCorreo(raiz, err.correo);
       marcarError(form, err.campo || 'clave', err.message);
     }
+  });
+
+  // Si viene de "Ya confirmé", el correo ya está escrito
+  const recordado = sessionStorage.getItem('camello:correo-pendiente');
+  if (recordado) {
+    form.correo.value = recordado;
+    sessionStorage.removeItem('camello:correo-pendiente');
+    form.clave.focus();
+  }
+}
+
+/** Cuenta creada: falta abrir el enlace que llegó al correo. */
+function pantallaRevisaCorreo(raiz, correo) {
+  raiz.innerHTML = `
+    ${barra('Confirma tu correo')}
+    <main class="contenido revisa-correo">
+      ${icono('correo', { tamano: 48 })}
+      <h1 tabindex="-1">Revisa tu correo</h1>
+      <p>Te enviamos un enlace a <b>${esc(correo)}</b>. Ábrelo desde este celular para activar tu cuenta.</p>
+      <p class="tenue pequeno">Si no lo ves, busca en Spam o Promociones. Puede tardar un par de minutos.</p>
+      <div class="pie-acciones">
+        <button class="btn btn-primario btn-bloque" data-accion="ya">Ya lo confirmé, entrar</button>
+        <button class="btn btn-texto btn-bloque" data-accion="reenviar">Enviar el correo otra vez</button>
+      </div>
+    </main>`;
+  raiz.querySelector('[data-accion="atras"]').addEventListener('click', () => atras('/bienvenida'));
+  raiz.querySelector('[data-accion="ya"]').addEventListener('click', () => {
+    sessionStorage.setItem('camello:correo-pendiente', correo);
+    ir('/entrar', { reemplazar: true });
+  });
+  const reenviar = raiz.querySelector('[data-accion="reenviar"]');
+  reenviar.addEventListener('click', async () => {
+    cargando(reenviar, true, 'Enviando…');
+    try {
+      await auth.reenviarConfirmacion(correo);
+      aviso('Listo, te enviamos el correo otra vez.', 'exito');
+    } catch (e) {
+      aviso(e.message, 'error');
+    }
+    cargando(reenviar, false);
   });
 }

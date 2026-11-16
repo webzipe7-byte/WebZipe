@@ -44,6 +44,14 @@ const usuarios = () => almacen.leer('usuarios', []);
 
 const publico = (u) => ({ ...PREDETERMINADOS(), rol: 'cliente', ...u });
 
+/** La cuenta se creó pero falta abrir el enlace del correo. */
+export class FaltaConfirmar extends Error {
+  constructor(correo) {
+    super(`Te enviamos un correo a ${correo} para confirmar tu cuenta.`);
+    this.correo = correo;
+  }
+}
+
 export class ErrorCampo extends Error {
   constructor(campo, mensaje) {
     super(mensaje);
@@ -116,9 +124,7 @@ export const auth = {
       if (/contraseña/.test(e.message)) throw new ErrorCampo('clave', e.message);
       throw e;
     }
-    if (!s) {
-      throw new ErrorCampo('correo', `Te enviamos un correo a ${correoNorm}. Ábrelo para confirmar tu cuenta y luego inicia sesión.`);
-    }
+    if (!s) throw new FaltaConfirmar(correoNorm);
     const datos = { ...PREDETERMINADOS(), cupones: [{ codigo: 'BIENVENIDO', agregado: Date.now(), usado: null }], codigoReferido: codigoReferido(limpio), creado: Date.now() };
     const u = await sincronizar.cargar(datos);
     return publico(u);
@@ -135,17 +141,17 @@ export const auth = {
       await cuentas.entrar(correoNorm, clave);
     } catch (e) {
       if (e instanceof ErrorNube && e.codigo !== 'red' && e.estado < 500) {
+        // Contraseña correcta pero el correo aún no se confirmó
+        if (/confirmado/.test(e.message)) throw new FaltaConfirmar(correoNorm);
         const quedan = intentos.fallo(llave);
         // El mismo mensaje exista o no la cuenta, para no revelar qué correos están registrados
         throw new ErrorCampo(
           'clave',
-          /confirmado/.test(e.message)
-            ? e.message
-            : quedan <= 0
-              ? 'Demasiados intentos. Por seguridad, espera 5 min e intenta de nuevo.'
-              : quedan <= 2
-                ? `El correo o la contraseña no coinciden. ${quedan > 1 ? `Te quedan ${quedan} intentos` : 'Te queda 1 intento'}.`
-                : 'El correo o la contraseña no coinciden.'
+          quedan <= 0
+            ? 'Demasiados intentos. Por seguridad, espera 5 min e intenta de nuevo.'
+            : quedan <= 2
+              ? `El correo o la contraseña no coinciden. ${quedan > 1 ? `Te quedan ${quedan} intentos` : 'Te queda 1 intento'}.`
+              : 'El correo o la contraseña no coinciden.'
         );
       }
       throw new ErrorCampo('clave', e.message);
@@ -220,6 +226,8 @@ export const auth = {
     Object.defineProperty(resultado, 'guardado', { value: guardado, enumerable: false });
     return resultado;
   },
+
+  reenviarConfirmacion: (correo) => cuentas.reenviarConfirmacion(correo),
 
   /** Confirma la contraseña antes de una acción delicada (eliminar la cuenta). */
   async confirmarClave(id, clave) {

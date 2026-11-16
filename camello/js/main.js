@@ -31,7 +31,7 @@ import { pantallaPerfil } from './screens/perfil.js';
 import { pantallaMaestro, pantallaTrabajoMaestro, pantallaTrabajosMaestro, pantallaCuentaMaestro } from './screens/maestro.js';
 import { auth, inicioDe, alFallarGuardado } from './services/auth.js';
 import { sincronizar } from './services/sincronizar.js';
-import { usuarioNube, alCambiarSesion } from './services/nube.js';
+import { usuarioNube, alCambiarSesion, cuentas } from './services/nube.js';
 import { aviso } from './ui/componentes.js';
 
 // Pantallas públicas (sin sesión)
@@ -92,11 +92,15 @@ try {
 alFallarGuardado((mensaje) => aviso(mensaje, 'error'));
 
 // Con sesión: se traen los datos de la nube antes de mostrar la app (máximo 8 s; si no hay señal, se usa la copia)
+// Si la app se abrió desde el enlace del correo de confirmación, se entra directo
+const enlace = await cuentas.recibirEnlace();
+let errorCarga = '';
 if (usuarioNube()) {
   try {
     await Promise.race([sincronizar.cargar(), new Promise((_, no) => setTimeout(() => no(new Error('lento')), 8000))]);
-  } catch {
-    /* sin conexión: se sigue con lo que hay guardado */
+  } catch (e) {
+    // Sin conexión se sigue con lo que hay guardado; otro error se le muestra a la persona
+    if (e.message !== 'lento' && e.codigo !== 'red') errorCarga = e.message;
   }
   sesion.set(auth.usuarioActual());
 }
@@ -120,6 +124,10 @@ iniciarRouter({
   inicioPublico: '/bienvenida',
   inicioPrivado: () => inicioDe(sesion.usuario),
 });
+
+if (enlace === 'confirmado' && sesion.usuario) aviso('¡Correo confirmado! Ya puedes usar Camello.', 'exito');
+else if (enlace === 'vencido') aviso('Ese enlace ya se usó o venció. Si ya confirmaste, inicia sesión con tu correo y contraseña.', 'error');
+else if (errorCarga) aviso(errorCarga, 'error');
 
 // Si se cierra la sesión de esta misma cuenta en otra pestaña, esta también se cierra
 window.addEventListener('storage', (e) => {

@@ -59,7 +59,7 @@ export const usuarioNube = () => sesion?.user || null;
 const conVencimiento = (datos) => ({
   access_token: datos.access_token,
   refresh_token: datos.refresh_token,
-  expires_at: datos.expires_at || Math.floor(Date.now() / 1000) + (datos.expires_in || 3600),
+  expires_at: Number(datos.expires_at) || Math.floor(Date.now() / 1000) + (Number(datos.expires_in) || 3600),
   user: { id: datos.user.id, email: datos.user.email, meta: datos.user.user_metadata || {} },
 });
 
@@ -114,6 +114,8 @@ function mensajeDe(cuerpo, estado) {
   if (/already registered|already exists/i.test(texto)) return 'Ya existe una cuenta con este correo. Inicia sesión.';
   if (/invalid login credentials/i.test(texto)) return 'El correo o la contraseña no coinciden.';
   if (/email not confirmed/i.test(texto)) return 'Todavía no has confirmado tu correo. Abre el enlace que te enviamos.';
+  if (/email.*invalid|invalid.*email|valid email/i.test(texto)) return 'Ese correo no es válido. Revísalo.';
+  if (/sending.*email|email.*rate/i.test(texto)) return 'No pudimos enviar el correo ahora. Intenta en unos minutos.';
   if (/rate limit|too many/i.test(texto) || estado === 429) return 'Demasiados intentos. Espera un momento e intenta de nuevo.';
   if (/password/i.test(texto) && /weak|short|least/i.test(texto)) return 'La contraseña es muy débil. Usa al menos 8 caracteres con letras y números.';
   if (/jwt|token/i.test(texto) && estado === 401) return 'Tu sesión venció. Vuelve a iniciar sesión.';
@@ -162,12 +164,57 @@ async function pedir(ruta, { metodo = 'GET', cuerpo, cabeceras = {}, conSesion =
 export const cuentas = {
   /** Crea la cuenta. Devuelve la sesión, o null si Supabase pide confirmar el correo. */
   async crear(correo, clave, meta) {
-    const datos = await pedir('/auth/v1/signup', { metodo: 'POST', cuerpo: { email: correo, password: clave, data: meta }, conSesion: false });
+    const destino = location.origin + location.pathname;
+    const datos = await pedir(`/auth/v1/signup?redirect_to=${encodeURIComponent(destino)}`, {
+      metodo: 'POST',
+      cuerpo: { email: correo, password: clave, data: meta },
+      conSesion: false,
+    });
     if (datos?.access_token) {
       guardarSesion(conVencimiento(datos));
       return sesion;
     }
+    // Supabase no dice que el correo ya existe (por privacidad): lo sabemos porque no crea identidad nueva
+    const identidades = datos?.identities ?? datos?.user?.identities;
+    if (Array.isArray(identidades) && identidades.length === 0) {
+      throw new ErrorNube('Ya existe una cuenta con este correo. Inicia sesión.', { estado: 422 });
+    }
     return null;
+  },
+
+  /** Vuelve a enviar el correo de confirmación. */
+  reenviarConfirmacion: (correo) =>
+    pedir(`/auth/v1/resend?redirect_to=${encodeURIComponent(location.origin + location.pathname)}`, {
+      metodo: 'POST',
+      cuerpo: { type: 'signup', email: correo },
+      conSesion: false,
+    }),
+
+  /**
+   * Al tocar el enlace del correo, Supabase abre la app con la sesión en la dirección
+   * (#access_token=…). Aquí se toma, se guarda y se limpia la dirección.
+   * Devuelve 'confirmado', 'vencido' o null si no venía de un enlace.
+   */
+  async recibirEnlace() {
+    const h = new URLSearchParams(location.hash.slice(1));
+    const limpiar = () => history.replaceState(null, '', location.pathname + location.search);
+    if (h.get('error_code') || (h.get('error') && !h.get('access_token'))) {
+      limpiar();
+      return 'vencido';
+    }
+    const access = h.get('access_token');
+    const refresh = h.get('refresh_token');
+    if (!access || !refresh) return null;
+    limpiar();
+    try {
+      const r = await fetch(`${NUBE.url}/auth/v1/user`, { headers: { apikey: NUBE.clave, Authorization: `Bearer ${access}` } });
+      if (!r.ok) return 'vencido';
+      const user = await r.json();
+      guardarSesion(conVencimiento({ access_token: access, refresh_token: refresh, expires_at: Number(h.get('expires_at')) || 0, expires_in: Number(h.get('expires_in')) || 3600, user }));
+      return 'confirmado';
+    } catch {
+      return 'vencido';
+    }
   },
 
   async entrar(correo, clave) {
