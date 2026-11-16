@@ -433,65 +433,54 @@ button.barra-btn:active {
   display: none;
 }
 
-/* ---------- Bienvenida ---------- */
+/* ---------- Bienvenida: el desierto ---------- */
 .bienvenida {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  padding: calc(28px + env(safe-area-inset-top, 0px)) 24px calc(24px + var(--abajo));
-  background: radial-gradient(120% 60% at 50% 0%, var(--marca-suave) 0, #fff 70%);
+  background: #f6e3c8;
 }
-.orbita {
-  position: relative;
-  width: min(300px, 78vw);
-  aspect-ratio: 1;
-  margin: 18px auto 10px;
-}
-.orbita::before {
-  content: '';
-  position: absolute;
-  inset: 10%;
-  border: 1.5px dashed #e3c9b8;
-  border-radius: 50%;
-}
-.orbita-item {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  animation: aparecer 0.5s var(--suave) both;
-}
-.orbita-item .cat-ico {
-  box-shadow: var(--sombra);
-  background: #fff;
-}
-.orbita-centro {
-  position: absolute;
-  line-height: 0;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 12px 22px rgba(85, 37, 15, 0.3));
-}
-@keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.6);
-  }
+.desierto {
+  display: block;
+  width: 100%;
+  height: 54dvh;
+  min-height: 300px;
+  max-height: 460px;
 }
 .bienvenida-texto {
   text-align: center;
-  margin: auto 0 28px;
+  padding: 10px 26px 0;
+  margin-top: -6px;
 }
 .bienvenida h1 {
-  font-size: clamp(1.75rem, 1.3rem + 2vw, 2.1rem);
+  font-size: clamp(1.8rem, 1.3rem + 2vw, 2.15rem);
   line-height: 1.15;
   letter-spacing: -0.02em;
   font-weight: 750;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  color: #3b1a0a;
 }
-.bienvenida p {
-  color: var(--tinta-2);
+.bienvenida-texto > p:not(.marca-nombre) {
+  color: #6b4a33;
   max-width: 340px;
   margin: 0 auto;
+}
+.bienvenida .pie-acciones {
+  margin-top: auto;
+  padding: 22px 24px calc(22px + var(--abajo));
+}
+.btn-bloqueado {
+  background: rgba(255, 255, 255, 0.55);
+  color: #a07c63;
+  border: 1.5px dashed #d9b99b;
+  cursor: not-allowed;
+  min-height: 50px;
+}
+.nota-instalar {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 0.84rem;
+  color: #7a573f;
 }
 
 /* ---------- Inicio ---------- */
@@ -1398,15 +1387,6 @@ button.barra-btn:active {
 }
 
 /* ---------- Descargar / instalar ---------- */
-.btn-descargar {
-  margin-top: 6px;
-  border: 1.5px solid var(--linea);
-  background: #fff;
-  color: var(--tinta);
-}
-.btn-descargar:hover {
-  border-color: #e3c9b8;
-}
 .pasos-instalar {
   counter-reset: paso;
   display: grid;

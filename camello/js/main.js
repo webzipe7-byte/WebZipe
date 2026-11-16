@@ -3,7 +3,7 @@
  */
 import { ruta, iniciarRouter } from './router.js';
 import { sesion } from './estado.js';
-import './instalar.js';
+import { instalacion } from './instalar.js';
 
 import { pantallaBienvenida } from './screens/bienvenida.js';
 import { pantallaRegistro, pantallaEntrar } from './screens/cuenta.js';
@@ -31,8 +31,9 @@ import { pantallaPerfil } from './screens/perfil.js';
 
 // Pantallas públicas (sin sesión)
 ruta('/bienvenida', pantallaBienvenida, { publica: true, soloSinSesion: true });
-ruta('/registro', pantallaRegistro, { publica: true, soloSinSesion: true });
-ruta('/entrar', pantallaEntrar, { publica: true, soloSinSesion: true });
+// Crear cuenta y entrar solo dentro de la app instalada
+ruta('/registro', pantallaRegistro, { publica: true, soloSinSesion: true, soloApp: true });
+ruta('/entrar', pantallaEntrar, { publica: true, soloSinSesion: true, soloApp: true });
 
 // Pantallas con sesión
 ruta('/inicio', pantallaInicio);
@@ -66,6 +67,7 @@ document.getElementById('arranque')?.remove();
 iniciarRouter({
   raiz,
   haySesion: () => !!sesion.usuario,
+  appInstalada: instalacion.instalada,
   inicioPublico: '/bienvenida',
   inicioPrivado: '/inicio',
 });

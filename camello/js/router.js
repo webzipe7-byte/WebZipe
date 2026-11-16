@@ -11,6 +11,7 @@ let limpiarActual = null;
  * patron: '/pedido/:id'
  * pantalla: async (raiz, params) => (opcional) función de limpieza
  * opciones.publica: true si no requiere sesión
+ * opciones.soloApp: true si solo se puede usar con la app instalada
  */
 export function ruta(patron, pantalla, opciones = {}) {
   const claves = [];
@@ -39,7 +40,7 @@ export const atras = (respaldo = '/inicio') => {
   else ir(respaldo, { reemplazar: true });
 };
 
-export function iniciarRouter({ raiz, haySesion, inicioPublico, inicioPrivado }) {
+export function iniciarRouter({ raiz, haySesion, appInstalada = () => true, inicioPublico, inicioPrivado }) {
   async function resolver() {
     const camino = location.hash.slice(1) || (haySesion() ? inicioPrivado : inicioPublico);
 
@@ -57,6 +58,7 @@ export function iniciarRouter({ raiz, haySesion, inicioPublico, inicioPrivado })
     if (!encontrada) return ir(haySesion() ? inicioPrivado : inicioPublico, { reemplazar: true });
     if (!encontrada.publica && !haySesion()) return ir(inicioPublico, { reemplazar: true });
     if (encontrada.soloSinSesion && haySesion()) return ir(inicioPrivado, { reemplazar: true });
+    if (encontrada.soloApp && !appInstalada()) return ir(inicioPublico, { reemplazar: true });
 
     vistas++;
     if (typeof limpiarActual === 'function') limpiarActual();
