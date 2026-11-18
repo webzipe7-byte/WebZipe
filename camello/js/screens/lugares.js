@@ -70,7 +70,7 @@ export function pantallaEditarLugar(raiz, { tipo }) {
       <h1 tabindex="-1">${actual ? 'Editar' : 'Agregar'} ${NOMBRES[tipo].toLowerCase()}</h1>
       <p class="intro">La usaremos cuando pidas un servicio en ${tipo === 'casa' ? 'tu casa' : 'tu trabajo'}.</p>
       <form class="formulario" novalidate>
-        ${campo({ id: 'direccion', etiqueta: 'Dirección', valor: actual?.texto || '', auto: 'street-address', ayuda: 'Ej: Calle 5 # 38-20, San Fernando' })}
+        ${campo({ id: 'direccion', etiqueta: 'Dirección', valor: actual?.texto || '', auto: 'street-address', ayuda: 'Ej: Calle 10 # 5-20, barrio Centro' })}
         ${campo({ id: 'detalle', etiqueta: 'Apto, casa o referencia (opcional)', valor: actual?.detalle || '' })}
         <button class="btn btn-primario btn-bloque" type="submit">Guardar</button>
         ${actual ? '<button class="btn btn-texto peligro btn-bloque" type="button" data-accion="borrar">Quitar esta dirección</button>' : ''}

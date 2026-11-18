@@ -3,6 +3,7 @@
  */
 import { auth, ErrorCampo, FaltaConfirmar, inicioDe } from '../services/auth.js';
 import { CATEGORIAS } from '../data/categorias.js';
+import { opcionesCiudad } from '../data/ciudades.js';
 import { esc } from '../ui/formato.js';
 import { sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
@@ -59,6 +60,11 @@ export function pantallaRegistro(raiz) {
           ${campo({ id: 'anios', etiqueta: 'Años de experiencia', tipo: 'number', modo: 'numeric', max: 2 })}
         </div>
         ${campo({ id: 'nombre', etiqueta: 'Nombre completo', auto: 'name' })}
+        <div class="campo" data-campo="ciudad">
+          <label for="f-ciudad">Ciudad</label>
+          <select id="f-ciudad" name="ciudad" aria-describedby="e-ciudad" autocomplete="address-level2">${opcionesCiudad()}</select>
+          <p class="campo-error" id="e-ciudad" role="alert"></p>
+        </div>
         ${campo({ id: 'correo', etiqueta: 'Correo', tipo: 'email', auto: 'email', modo: 'email' })}
         ${campo({ id: 'telefono', etiqueta: 'Celular', tipo: 'tel', auto: 'tel', modo: 'tel', ayuda: 'El maestro te llamará a este número.' })}
         ${campo({ id: 'clave', etiqueta: 'Contraseña', tipo: 'password', auto: 'new-password', ayuda: 'Mínimo 8 caracteres, con letras y números.' })}
@@ -78,6 +84,7 @@ export function pantallaRegistro(raiz) {
     clave: (v, f) => validarContrasena(v) || claveDebil(v, { nombre: f.nombre.value, correo: f.correo.value }),
     clave2: (v, f) => validarIgual(v, f.clave.value),
     oficio: (v, f) => (f.rol.value === 'trabajador' && !v ? 'Elige tu oficio.' : ''),
+    ciudad: (v) => (v ? '' : 'Elige tu ciudad.'),
     anios: (v, f) => {
       if (f.rol.value !== 'trabajador') return '';
       const n = Number(v);
@@ -113,6 +120,7 @@ export function pantallaRegistro(raiz) {
         rol: form.rol.value,
         oficio: form.oficio.value,
         anios: form.anios.value,
+        ciudad: form.ciudad.value,
       });
       sesion.set(usuario);
       ir(inicioDe(usuario), { reemplazar: true });

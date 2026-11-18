@@ -219,3 +219,19 @@ La página de descarga es la misma para los dos.
 
 Pruebas: `pruebas/flujo_maestro.py` (pedido completo cliente ↔ maestro) y
 `pruebas/ataques_maestro.py` (permisos, chat, código de llegada).
+
+## Toda Colombia (versión 0.3.0)
+
+Camello funciona en 62 ciudades: todas las capitales de departamento y las ciudades
+grandes de cada área metropolitana (`js/data/ciudades.js`).
+
+- Al crear la cuenta, clientes y maestros eligen su ciudad.
+- Al pedir un servicio se elige la ciudad. Con "Usar mi ubicación actual" se pone sola.
+- El cliente solo ve a los maestros conectados de esa ciudad. La búsqueda se hace en el
+  servidor, filtrada por oficio y ciudad (con índice), y se refresca cada 15 s.
+- Para que funcione con miles de maestros en el país, cada teléfono recibe en vivo solo
+  los cambios de su ciudad. La ubicación del maestro se consulta solo del que viene en camino.
+- Las cuentas creadas antes sin ciudad: al maestro se le pide en su panel antes de
+  conectarse; al cliente, en el primer pedido.
+
+Cambio en la base de datos: `supabase/02_ciudades.sql` (ya aplicado).

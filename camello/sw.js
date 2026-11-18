@@ -3,7 +3,7 @@
  * Guarda la app en caché para que abra rápido y funcione sin conexión.
  * Al publicar cambios, sube el número de VERSION para que todos reciban la nueva.
  */
-const VERSION = 'camello-v13';
+const VERSION = 'camello-v14';
 
 const ARCHIVOS = [
   './',
@@ -15,6 +15,7 @@ const ARCHIVOS = [
   './icons/icono-512.png',
   './js/config.js',
   './js/data/categorias.js',
+  './js/data/ciudades.js',
   './js/estado.js',
   './js/instalar.js',
   './js/main.js',

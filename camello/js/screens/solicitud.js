@@ -10,6 +10,9 @@ import { icono } from '../ui/iconos.js';
 import { esc, fecha } from '../ui/formato.js';
 import { RECARGO_URGENCIA } from '../config.js';
 import { miUbicacion, puntoAproximado } from '../services/ubicacion.js';
+import { opcionesCiudad, ciudadMasCercana, ciudadPorId } from '../data/ciudades.js';
+import { auth } from '../services/auth.js';
+import { realtime } from '../services/nube.js';
 
 /** Casa, Trabajo y direcciones recientes, sin repetir. */
 function direccionesGuardadas(u) {
@@ -96,8 +99,14 @@ export function pantallaSolicitud(raiz, { categoria }) {
       return pasoDonde();
     }
     const usarNueva = !elegida || !guardadas.some(esGuardada);
+    const ciudad = b.ciudad || elegida?.ciudad || sesion.usuario?.ciudad || '';
     return `
       <h1 tabindex="-1">¿A dónde debe llegar el maestro?</h1>
+      <div class="campo" data-campo="ciudad">
+        <label for="f-ciudad">Ciudad</label>
+        <select id="f-ciudad" name="ciudad" aria-describedby="e-ciudad">${opcionesCiudad(ciudad)}</select>
+        <p class="campo-error" id="e-ciudad" role="alert"></p>
+      </div>
       ${
         guardadas.length
           ? `<div class="opciones" role="radiogroup" aria-label="Direcciones guardadas">
@@ -122,7 +131,7 @@ export function pantallaSolicitud(raiz, { categoria }) {
           ${icono('ubicacion', { tamano: 22 })}
           <span>${b.gps ? 'Ubicación lista' : 'Usar mi ubicación actual'}<small>${b.gps ? 'El maestro verá tu punto exacto en el mapa' : 'Para que el maestro llegue sin perderse'}</small></span>
         </button>
-        ${campo({ id: 'direccion', etiqueta: 'Dirección', valor: usarNueva ? elegida?.texto || '' : '', auto: 'street-address', ayuda: 'Ej: Calle 5 # 38-20, San Fernando' })}
+        ${campo({ id: 'direccion', etiqueta: 'Dirección', valor: usarNueva ? elegida?.texto || '' : '', auto: 'street-address', ayuda: 'Ej: Calle 10 # 5-20, barrio Centro' })}
         ${campo({ id: 'detalle', etiqueta: 'Apto, casa o referencia (opcional)', valor: usarNueva ? elegida?.detalle || '' : '' })}
       </div>`;
   }
@@ -186,10 +195,18 @@ export function pantallaSolicitud(raiz, { categoria }) {
 
     if (paso === 2) {
       const nueva = raiz.querySelector('.nueva-dir');
+      const selCiudad = raiz.querySelector('#f-ciudad');
+      selCiudad.addEventListener('change', () => {
+        b = borrador.guardar({ ciudad: selCiudad.value });
+        marcarError(raiz, 'ciudad', '');
+      });
       raiz.querySelectorAll('[name="dir"]').forEach((r) =>
         r.addEventListener('change', () => {
           nueva.hidden = r.value !== 'nueva';
           if (r.value === 'nueva') raiz.querySelector('#f-direccion').focus();
+          // Una dirección guardada ya sabe su ciudad
+          const d = r.value !== 'nueva' && direccionesGuardadas(sesion.usuario)[Number(r.value)];
+          if (d?.ciudad) selCiudad.value = d.ciudad;
         })
       );
       const gps = raiz.querySelector('[data-accion="gps"]');
@@ -198,7 +215,10 @@ export function pantallaSolicitud(raiz, { categoria }) {
         gps.querySelector('span').firstChild.textContent = 'Buscando tu ubicación…';
         try {
           const punto = await miUbicacion();
-          b = borrador.guardar({ gps: punto });
+          // Con el GPS también se sabe la ciudad
+          const cerca = ciudadMasCercana(punto);
+          b = borrador.guardar({ gps: punto, ...(cerca ? { ciudad: cerca.id } : {}) });
+          if (cerca) raiz.querySelector('#f-ciudad').value = cerca.id;
           const input = raiz.querySelector('#f-direccion');
           if (!input.value.trim()) input.value = 'Mi ubicación actual';
           gps.classList.add('listo');
@@ -251,10 +271,21 @@ export function pantallaSolicitud(raiz, { categoria }) {
     }
 
     if (paso === 2) {
+      const ciudad = raiz.querySelector('#f-ciudad').value;
+      if (!ciudadPorId(ciudad)) {
+        marcarError(raiz, 'ciudad', 'Elige la ciudad donde necesitas el servicio.');
+        raiz.querySelector('#f-ciudad').focus();
+        return;
+      }
+      // La última ciudad usada queda como la de la persona (así ve en vivo a los maestros de ahí)
+      if (sesion.usuario.ciudad !== ciudad) {
+        sesion.set(auth.modificar(sesion.usuario.id, (u) => (u.ciudad = ciudad)));
+        realtime.iniciar(ciudad);
+      }
       const sel = raiz.querySelector('[name="dir"]:checked');
       if (sel && sel.value !== 'nueva') {
         const d = direccionesGuardadas(sesion.usuario)[Number(sel.value)];
-        borrador.guardar({ direccion: { texto: d.texto, detalle: d.detalle || '', coords: d.coords || puntoAproximado(d.texto) } });
+        borrador.guardar({ direccion: { texto: d.texto, detalle: d.detalle || '', ciudad, coords: d.coords || puntoAproximado(d.texto, ciudad) } });
         return irPaso(3);
       }
       const texto = raiz.querySelector('#f-direccion').value.trim();
@@ -264,8 +295,8 @@ export function pantallaSolicitud(raiz, { categoria }) {
         return;
       }
       // Punto en el mapa: el GPS si lo compartió; si no, uno aproximado según la dirección
-      const coords = borrador.leer().gps || puntoAproximado(texto);
-      borrador.guardar({ direccion: { texto, detalle: raiz.querySelector('#f-detalle').value.trim(), coords } });
+      const coords = borrador.leer().gps || puntoAproximado(texto, ciudad);
+      borrador.guardar({ direccion: { texto, detalle: raiz.querySelector('#f-detalle').value.trim(), ciudad, coords } });
       return irPaso(3);
     }
 

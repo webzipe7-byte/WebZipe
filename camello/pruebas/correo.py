@@ -16,7 +16,7 @@ async def ruta(route):
 async def reg(pg,correo):
     await pg.goto(B+"#/registro"); await pg.wait_for_timeout(500)
     await pg.fill("#f-nombre","Ana Gómez"); await pg.fill("#f-correo",correo); await pg.fill("#f-telefono","3001234567")
-    await pg.fill("#f-clave","Sol-desierto7"); await pg.fill("#f-clave2","Sol-desierto7"); await pg.click("button[type=submit]"); await pg.wait_for_timeout(1200)
+    await pg.select_option("#f-ciudad","cali"); await pg.fill("#f-clave","Sol-desierto7"); await pg.fill("#f-clave2","Sol-desierto7"); await pg.click("button[type=submit]"); await pg.wait_for_timeout(1200)
 async def main():
   async with async_playwright() as p:
     b=await p.chromium.launch(executable_path="/usr/bin/google-chrome",args=["--no-sandbox"])

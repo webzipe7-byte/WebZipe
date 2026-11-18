@@ -9,6 +9,8 @@ import { fichaMaestro } from '../services/trabajadores.js';
 import { chat } from '../services/chat.js';
 import { seguirMaestro, posicionEnVivo, distanciaKm } from '../services/ubicacion.js';
 import { categoriaPorId } from '../data/categorias.js';
+import { ciudadPorId, opcionesCiudad } from '../data/ciudades.js';
+import { realtime } from '../services/nube.js';
 import { sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
 import { barra, avatar, vacio, aviso, cargando, iconoCategoria } from '../ui/componentes.js';
@@ -81,10 +83,19 @@ export function pantallaMaestro(raiz) {
     cuerpo.innerHTML = `
       <section class="maestro-cabeza">
         ${avatar(ficha, 52)}
-        <div><h1 tabindex="-1">${esc(saludo())}, ${esc(primerNombre(u.nombre))}</h1><p class="tenue">${esc(cat?.nombre || '')} · ${u.maestro.anios} años de experiencia</p></div>
+        <div><h1 tabindex="-1">${esc(saludo())}, ${esc(primerNombre(u.nombre))}</h1><p class="tenue">${esc(cat?.nombre || '')} · ${esc(ciudadPorId(u.ciudad)?.nombre || 'Sin ciudad')} · ${u.maestro.anios} años</p></div>
       </section>
 
-      <section class="conexion${conectado ? ' activa' : ''}">
+      ${
+        !ciudadPorId(u.ciudad)
+          ? `<section class="tarjeta pedir-ciudad">
+              <b>¿En qué ciudad trabajas?</b>
+              <small class="tenue">Te mostramos a los clientes de esa ciudad.</small>
+              <select id="f-ciudad-maestro" aria-label="Ciudad donde trabajas">${opcionesCiudad()}</select>
+            </section>`
+          : ''
+      }
+      <section class="conexion${conectado ? ' activa' : ''}"${ciudadPorId(u.ciudad) ? '' : ' hidden'}>
         <span><b>${conectado ? 'Estás conectado' : 'Estás desconectado'}</b><small>${conectado ? 'Los clientes te ven y te pueden pedir.' : 'Conéctate para recibir trabajos.'}</small></span>
         <label class="interruptor"><input type="checkbox" id="conectado" ${conectado ? 'checked' : ''} aria-label="Recibir trabajos"><i aria-hidden="true"></i></label>
       </section>
@@ -120,6 +131,13 @@ export function pantallaMaestro(raiz) {
         }
       </section>`;
 
+    cuerpo.querySelector('#f-ciudad-maestro')?.addEventListener('change', (e) => {
+      if (!e.target.value) return;
+      sesion.set(auth.modificar(u.id, (x) => (x.ciudad = e.target.value)));
+      realtime.iniciar(e.target.value);
+      aviso(`Listo: trabajas en ${ciudadPorId(e.target.value).nombre}.`, 'exito');
+      pintar();
+    });
     cuerpo.querySelector('#conectado').addEventListener('change', async (e) => {
       const activo = e.target.checked;
       e.target.disabled = true;
@@ -399,12 +417,22 @@ export function pantallaCuentaMaestro(raiz) {
         <h1 tabindex="-1">${esc(u.nombre)}</h1>
         <p class="tenue">${esc(cat?.nombre || '')} · ${u.maestro.anios} años · ${icono('estrella', { tamano: 14, relleno: true })} ${ficha.calificacion == null ? 'Nuevo' : ficha.calificacion.toFixed(1)}</p>
       </section>
+      <div class="campo">
+        <label for="f-ciudad-cuenta">Ciudad donde trabajo</label>
+        <select id="f-ciudad-cuenta">${opcionesCiudad(u.ciudad)}</select>
+      </div>
       <a class="fila-accion tarjeta" href="#/perfil">${icono('editar', { tamano: 20 })}<span><b>Mis datos</b><small>Nombre, correo y celular</small></span>${icono('derecha', { tamano: 18 })}</a>
       <a class="fila-accion tarjeta" href="#/seguridad">${icono('candado', { tamano: 20 })}<span><b>Seguridad</b><small>Contraseña y cuenta</small></span>${icono('derecha', { tamano: 18 })}</a>
       <a class="fila-accion tarjeta" href="#/ayuda">${icono('ayuda', { tamano: 20 })}<span><b>Ayuda</b><small>Preguntas frecuentes</small></span>${icono('derecha', { tamano: 18 })}</a>
       <button class="btn btn-texto peligro btn-bloque" data-accion="salir">${icono('salir', { tamano: 18 })} Cerrar sesión</button>
     </main>
     ${navMaestro('cuenta')}`;
+  raiz.querySelector('#f-ciudad-cuenta').addEventListener('change', (e) => {
+    if (!e.target.value) return;
+    sesion.set(auth.modificar(u.id, (x) => (x.ciudad = e.target.value)));
+    realtime.iniciar(e.target.value);
+    aviso(`Ahora trabajas en ${ciudadPorId(e.target.value).nombre}.`, 'exito');
+  });
   raiz.querySelector('[data-accion="salir"]').addEventListener('click', async (e) => {
     cargando(e.currentTarget, true, 'Cerrando sesión…');
     // Al salir queda desconectado: los clientes dejan de verlo

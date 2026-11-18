@@ -43,7 +43,7 @@ const MARCAS = {
 };
 
 /** Dónde está el cliente (el punto del servicio). */
-export const puntoCliente = (pedido) => pedido.direccion?.coords || puntoAproximado(pedido.direccion?.texto);
+export const puntoCliente = (pedido) => pedido.direccion?.coords || puntoAproximado(pedido.direccion?.texto, pedido.direccion?.ciudad);
 
 /**
  * Dónde está el maestro: su GPS en vivo si lo está compartiendo; si no,

@@ -12,6 +12,7 @@ import { almacen, esperar } from './almacen.js';
 import { formatearTelefono } from './validar.js';
 import { intentos, minutosRestantes } from './seguridad.js';
 import { categoriaPorId } from '../data/categorias.js';
+import { ciudadPorId } from '../data/ciudades.js';
 import { cuentas, db, usuarioNube, ErrorNube } from './nube.js';
 import { sincronizar, datosPrivados } from './sincronizar.js';
 
@@ -76,6 +77,7 @@ async function subir(u) {
   await Promise.all([
     db.cambiar('perfiles', { id: `eq.${u.id}` }, {
       nombre: u.nombre,
+      ciudad: ciudadPorId(u.ciudad) ? u.ciudad : null,
       ...(u.maestro ? { categoria: u.maestro.categoria, anios: u.maestro.anios, conectado: !!u.maestro.conectado } : {}),
       actualizado: new Date().toISOString(),
     }),
@@ -101,8 +103,9 @@ export const auth = {
    * rol: 'cliente' (pide servicios) o 'trabajador' (los presta).
    * Los dos viven en la misma base de datos.
    */
-  async registrar({ nombre, correo, telefono, clave, rol = 'cliente', oficio = '', anios = 0 }) {
+  async registrar({ nombre, correo, telefono, clave, rol = 'cliente', oficio = '', anios = 0, ciudad = '' }) {
     if (rol !== 'cliente' && rol !== 'trabajador') throw new Error('Tipo de cuenta no válido.');
+    if (!ciudadPorId(ciudad)) throw new ErrorCampo('ciudad', 'Elige tu ciudad.');
     if (rol === 'trabajador' && !categoriaPorId(oficio)) throw new ErrorCampo('oficio', 'Elige tu oficio.');
     const aniosNum = Math.round(Number(anios));
     if (rol === 'trabajador' && (!Number.isFinite(aniosNum) || aniosNum < 0 || aniosNum > 60)) {
@@ -114,6 +117,7 @@ export const auth = {
       nombre: limpio,
       telefono: formatearTelefono(telefono),
       rol,
+      ciudad,
       ...(rol === 'trabajador' ? { categoria: oficio, anios: aniosNum } : {}),
     };
     let s;

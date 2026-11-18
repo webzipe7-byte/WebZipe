@@ -6,8 +6,8 @@
 export const APP = {
   nombre: 'Camello',
   lema: 'Te hacemos el camello',
-  version: '0.2.0',
-  ciudad: 'Cali',
+  version: '0.3.0',
+  pais: 'Colombia',
   moneda: 'COP',
   locale: 'es-CO',
   lineaEmergencia: '123',

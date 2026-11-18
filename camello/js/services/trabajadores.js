@@ -5,6 +5,7 @@
 import { categoriaPorId } from '../data/categorias.js';
 import { RECARGO_URGENCIA } from '../config.js';
 import { almacen, esperar } from './almacen.js';
+import { sincronizar } from './sincronizar.js';
 import { maestrosRegistrados, usuarioPublico } from './auth.js';
 import { distanciaKm, posicionEnVivo } from './ubicacion.js';
 
@@ -70,16 +71,27 @@ export function cotizar(trabajador, { urgente }) {
 
 export const trabajadores = {
   /** desde: punto del cliente, para calcular la distancia a los maestros conectados. */
-  async disponibles(categoriaId, { urgente = true, desde = null } = {}) {
-    await esperar(900);
-    const enLinea = maestrosRegistrados()
-      .filter((u) => u.maestro.conectado && u.maestro.categoria === categoriaId)
-      .map((u) => fichaMaestro(u, desde));
-    return enLinea.map((t) => ({
-      ...t,
-      minutos: minutosLlegada(t.distanciaKm),
-      precio: cotizar(t, { urgente }),
-    }));
+  /**
+   * Maestros conectados de un oficio en la ciudad del servicio.
+   * Pregunta al servidor; si no hay señal, usa los que ya se conocen.
+   */
+  async disponibles(categoriaId, opciones = {}) {
+    if (opciones.ciudad) {
+      try {
+        await sincronizar.maestrosConectados(categoriaId, opciones.ciudad);
+      } catch (e) {
+        if (e.codigo !== 'red') throw e;
+      }
+    }
+    return trabajadores.disponiblesLocal(categoriaId, opciones);
+  },
+
+  /** Igual que disponibles, pero solo con lo que ya está en el teléfono (para refrescar la lista al instante). */
+  disponiblesLocal(categoriaId, { urgente = true, desde = null, ciudad = '' } = {}) {
+    return maestrosRegistrados()
+      .filter((u) => u.maestro.conectado && u.maestro.categoria === categoriaId && (!ciudad || u.ciudad === ciudad))
+      .map((u) => fichaMaestro(u, desde))
+      .map((t) => ({ ...t, minutos: minutosLlegada(t.distanciaKm), precio: cotizar(t, { urgente }) }));
   },
 
   async porId(id) {

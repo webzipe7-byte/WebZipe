@@ -4,6 +4,7 @@
 import { trabajadores, ORDENES, cotizar } from '../services/trabajadores.js';
 import { almacen } from '../services/almacen.js';
 import { categoriaPorId, oficioDe } from '../data/categorias.js';
+import { ciudadPorId } from '../data/ciudades.js';
 import { borrador, sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
 import { barra, avatar, calificacion, esqueletoTarjetas, errorVista, estrellasFijas, vacio } from '../ui/componentes.js';
@@ -25,6 +26,7 @@ export async function pantallaTrabajadores(raiz) {
   if (!b?.categoria || !b.direccion || !b.cuando) return ir('/inicio', { reemplazar: true });
   const cat = categoriaPorId(b.categoria);
   const urgente = b.cuando.tipo === 'urgente';
+  const opciones = () => ({ urgente, desde: b.direccion?.coords, ciudad: b.direccion?.ciudad || sesion.usuario?.ciudad || '' });
   let orden = 'cercano';
   let lista = [];
 
@@ -53,7 +55,7 @@ export async function pantallaTrabajadores(raiz) {
     if (!visibles.length) {
       ul.innerHTML = `<li>${vacio({
         icono: 'buscar',
-        titulo: `No hay ${cat.plural.toLowerCase()} conectados ahora`,
+        titulo: `No hay ${cat.plural.toLowerCase()} conectados ahora${ciudadPorId(opciones().ciudad) ? ` en ${ciudadPorId(opciones().ciudad).nombre}` : ''}`,
         texto: 'Esta lista se actualiza sola: apenas un maestro se conecte, aparece aquí.',
       })}</li>`;
       return;
@@ -94,7 +96,7 @@ export async function pantallaTrabajadores(raiz) {
   async function cargar() {
     ul.innerHTML = esqueletoTarjetas(4);
     try {
-      lista = await trabajadores.disponibles(b.categoria, { urgente, desde: b.direccion?.coords });
+      lista = await trabajadores.disponibles(b.categoria, opciones());
       if (ul.isConnected) pintar();
     } catch (err) {
       ul.innerHTML = `<li>${errorVista(err.message)}</li>`;
@@ -103,10 +105,16 @@ export async function pantallaTrabajadores(raiz) {
   }
   cargar();
   // Si un maestro se conecta o se desconecta mientras la persona mira la lista, se actualiza
-  return almacen.escuchar('usuarios', async () => {
-    lista = await trabajadores.disponibles(b.categoria, { urgente, desde: b.direccion?.coords });
+  const dejar = almacen.escuchar('usuarios', () => {
+    lista = trabajadores.disponiblesLocal(b.categoria, opciones());
     if (ul.isConnected) pintar();
   });
+  // Cada 15 s se pregunta otra vez al servidor por si alguien se conectó
+  const reloj = setInterval(() => trabajadores.disponibles(b.categoria, opciones()).catch(() => {}), 15000);
+  return () => {
+    dejar();
+    clearInterval(reloj);
+  };
 }
 
 export async function pantallaTrabajador(raiz, { id }) {

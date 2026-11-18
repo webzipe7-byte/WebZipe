@@ -3,9 +3,10 @@
  */
 import { almacen } from './almacen.js';
 import { subirPosicion } from './sincronizar.js';
+import { ciudadPorId } from '../data/ciudades.js';
 
-/** Centro de Cali, por si el teléfono no da la ubicación. */
-export const CENTRO = { lat: 3.4516, lng: -76.532 };
+/** Centro de Bogotá: solo se usa si no se sabe ni la ciudad ni el GPS. */
+export const CENTRO = { lat: 4.711, lng: -74.0721 };
 
 /** Una posición vieja (más de 2 minutos) ya no se toma como en vivo. */
 const VIGENCIA_MS = 2 * 60 * 1000;
@@ -22,15 +23,16 @@ export function distanciaKm(a, b) {
 }
 
 /**
- * Punto aproximado para una dirección escrita, dentro de Cali.
+ * Punto aproximado para una dirección escrita, dentro de su ciudad.
  * Siempre da el mismo punto para la misma dirección.
  */
-export function puntoAproximado(texto = '') {
+export function puntoAproximado(texto = '', ciudadId = '') {
+  const centro = ciudadPorId(ciudadId) || CENTRO;
   let h = 2166136261;
   for (const c of texto.toLowerCase()) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
-  const a = ((h & 0xffff) / 0xffff - 0.5) * 0.06;
-  const b = (((h >>> 16) & 0xffff) / 0xffff - 0.5) * 0.06;
-  return { lat: +(CENTRO.lat + a).toFixed(5), lng: +(CENTRO.lng + b).toFixed(5), aproximada: true };
+  const a = ((h & 0xffff) / 0xffff - 0.5) * 0.04;
+  const b = (((h >>> 16) & 0xffff) / 0xffff - 0.5) * 0.04;
+  return { lat: +(centro.lat + a).toFixed(5), lng: +(centro.lng + b).toFixed(5), aproximada: true };
 }
 
 const valido = (p) =>

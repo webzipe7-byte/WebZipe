@@ -277,7 +277,16 @@ export const db = {
 
 /* ---------------- Tiempo real (Phoenix / Supabase Realtime) ---------------- */
 
-const TABLAS_VIVO = ['perfiles', 'pedidos', 'mensajes', 'ubicaciones'];
+/**
+ * Tablas que llegan en vivo. Los perfiles solo de mi ciudad, para que con
+ * miles de maestros en el país cada teléfono reciba únicamente lo que le sirve.
+ * Las ubicaciones no van aquí: se consultan solo del maestro que viene en camino.
+ */
+const suscripciones = (ciudad) => [
+  { event: '*', schema: 'public', table: 'perfiles', ...(ciudad ? { filter: `ciudad=eq.${ciudad}` } : {}) },
+  { event: '*', schema: 'public', table: 'pedidos' },
+  { event: 'INSERT', schema: 'public', table: 'mensajes' },
+];
 
 export const realtime = (() => {
   let ws = null;
@@ -285,6 +294,7 @@ export const realtime = (() => {
   let reintento = 0;
   let ref = 0;
   let activo = false;
+  let ciudad = '';
   const topico = 'realtime:camello';
   const oyentes = new Set();
   const estadoOyentes = new Set();
@@ -312,7 +322,7 @@ export const realtime = (() => {
         config: {
           broadcast: { self: false },
           presence: { key: '' },
-          postgres_changes: TABLAS_VIVO.map((table) => ({ event: '*', schema: 'public', table })),
+          postgres_changes: suscripciones(ciudad),
         },
         access_token: t,
       });
@@ -348,8 +358,18 @@ export const realtime = (() => {
   }
 
   return {
-    iniciar() {
-      if (activo) return;
+    iniciar(nuevaCiudad = '') {
+      if (activo && nuevaCiudad === ciudad) return;
+      ciudad = /^[a-z-]{2,40}$/.test(nuevaCiudad || '') ? nuevaCiudad : '';
+      if (activo) {
+        // Cambió de ciudad: se vuelve a suscribir con el filtro nuevo
+        try {
+          ws?.close();
+        } catch {
+          /* ya cerrado */
+        }
+        return;
+      }
       activo = true;
       abrir();
     },

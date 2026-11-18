@@ -2944,3 +2944,17 @@ a.perfil-usuario {
 .btn-peligro-borde:active {
   background: #fef2f2;
 }
+.pedir-ciudad {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 2px solid var(--marca);
+}
+.pedir-ciudad select {
+  font: inherit;
+  padding: 12px 14px;
+  border: 1.5px solid var(--linea);
+  border-radius: var(--radio-sm);
+  background: #fff;
+}

@@ -10,7 +10,7 @@ import { almacen } from './almacen.js';
 import { db, realtime, usuarioNube } from './nube.js';
 
 /** Campos que van a la tabla `perfiles` (públicos) y no a `privado`. */
-const PUBLICOS = ['id', 'nombre', 'rol', 'maestro', 'correo', 'telefono', 'calificaciones', 'calificacionSuma', 'trabajosHechos'];
+const PUBLICOS = ['id', 'nombre', 'rol', 'ciudad', 'maestro', 'correo', 'telefono', 'calificaciones', 'calificacionSuma', 'trabajosHechos'];
 
 export const datosPrivados = (u) => Object.fromEntries(Object.entries(u).filter(([k]) => !PUBLICOS.includes(k)));
 
@@ -20,6 +20,7 @@ export function dePerfil(p) {
     id: p.id,
     nombre: p.nombre,
     rol: p.rol,
+    ciudad: p.ciudad || '',
     ...(p.rol === 'trabajador' ? { maestro: { categoria: p.categoria, anios: p.anios ?? 0, conectado: !!p.conectado } } : {}),
     calificaciones: p.calificaciones || 0,
     calificacionSuma: p.calificacion_suma || 0,
@@ -77,6 +78,7 @@ async function asegurarPerfil(yo) {
     id: yo.id,
     nombre: String(m.nombre || yo.email.split('@')[0]).slice(0, 80),
     rol: m.rol === 'trabajador' ? 'trabajador' : 'cliente',
+    ciudad: m.ciudad || null,
     categoria: m.rol === 'trabajador' ? m.categoria || null : null,
     anios: m.rol === 'trabajador' ? Number(m.anios) || 0 : null,
   };
@@ -106,9 +108,10 @@ export const sincronizar = {
     const pines = perfil.rol === 'cliente' && pedidos.length ? await db.ver('pines', { select: 'pedido_id,pin' }) : [];
     const pinDe = Object.fromEntries(pines.map((x) => [x.pedido_id, x.pin]));
 
-    // Perfiles que necesito: los maestros conectados y las personas de mis pedidos
+    // Perfiles que necesito: los maestros conectados en mi ciudad y las personas de mis pedidos
     const ids = pedidos.flatMap((p) => [p.usuarioId, p.trabajadorId]).filter((x) => x !== yo.id);
-    const filtro = ids.length ? `(and(rol.eq.trabajador,conectado.eq.true),id.in.${lista(ids)})` : '(and(rol.eq.trabajador,conectado.eq.true))';
+    const enMiCiudad = perfil.ciudad ? `and(rol.eq.trabajador,conectado.eq.true,ciudad.eq.${perfil.ciudad})` : 'id.eq.00000000-0000-0000-0000-000000000000';
+    const filtro = ids.length ? `(${enMiCiudad},id.in.${lista(ids)})` : `(${enMiCiudad})`;
     const perfiles = await db.ver('perfiles', { select: '*', or: filtro, limit: 500 });
 
     const maestros = perfiles.filter((p) => p.rol === 'trabajador').map((p) => p.id);
@@ -128,7 +131,7 @@ export const sincronizar = {
     Object.entries(porPedido).forEach(([id, l]) => almacen.guardar(`chat:${id}`, l));
     ubicaciones.forEach(ponerUbicacion);
 
-    realtime.iniciar();
+    realtime.iniciar(perfil.ciudad);
     return mio;
   },
 
@@ -137,6 +140,47 @@ export const sincronizar = {
     if (almacen.leer('usuarios', []).some((u) => u.id === id)) return;
     const [p] = await db.ver('perfiles', { id: `eq.${id}` });
     if (p) ponerUsuario(dePerfil(p));
+  },
+
+  /**
+   * Maestros conectados de un oficio en una ciudad, directo del servidor
+   * (así funciona aunque la persona pida en una ciudad distinta a la suya).
+   */
+  async maestrosConectados(categoria, ciudad) {
+    const filas = await db.ver('perfiles', {
+      select: '*',
+      rol: 'eq.trabajador',
+      conectado: 'eq.true',
+      categoria: `eq.${categoria}`,
+      ciudad: `eq.${ciudad}`,
+      limit: 60,
+    });
+    filas.forEach((p) => ponerUsuario(dePerfil(p)));
+    if (filas.length) {
+      const ubic = await db.ver('ubicaciones', { maestro_id: `in.${lista(filas.map((p) => p.id))}` });
+      ubic.forEach(ponerUbicacion);
+    }
+    return filas.map((p) => p.id);
+  },
+
+  /** Revisa cada pocos segundos dónde va un maestro (para el mapa del seguimiento). */
+  vigilarUbicacion(maestroId) {
+    let activo = true;
+    const traer = async () => {
+      if (!activo || document.hidden) return;
+      try {
+        const [u] = await db.ver('ubicaciones', { maestro_id: `eq.${maestroId}` });
+        if (u) ponerUbicacion(u);
+      } catch {
+        /* sin señal: se intenta en la próxima vuelta */
+      }
+    };
+    traer();
+    const reloj = setInterval(traer, 8000);
+    return () => {
+      activo = false;
+      clearInterval(reloj);
+    };
   },
 
   ponerPedido,

@@ -15,6 +15,7 @@ import { desglosePrecio } from '../ui/precio.js';
 import { mapaReal, moverMarcas, puntoCliente, puntoMaestro } from '../ui/mapa-real.js';
 import { posicionEnVivo } from '../services/ubicacion.js';
 import { chat } from '../services/chat.js';
+import { sincronizar } from '../services/sincronizar.js';
 
 /** Mapa del seguimiento: la casa del cliente y, si ya salió, el maestro. */
 function puntosSeguimiento(pedido, e) {
@@ -233,9 +234,12 @@ export function pantallaSeguimiento(raiz, { id }) {
   // Cambios que hace el maestro desde su app y mensajes nuevos se ven al instante
   const dejar = pedidos.escuchar(pintar);
   const dejarChat = chat.escuchar(id, pintar);
+  // Mientras el servicio está activo se consulta dónde va el maestro
+  const dejarUbicacion = etapaDe(pedidos.obtener(id) || {}) === 'activo' ? sincronizar.vigilarUbicacion(pedidos.obtener(id).trabajadorId) : () => {};
   return () => {
     clearInterval(reloj);
     dejar();
     dejarChat();
+    dejarUbicacion();
   };
 }
