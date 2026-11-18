@@ -274,3 +274,20 @@ de Camello: entra desde la izquierda, tiene buscador arriba, los departamentos e
 (cada uno abre sus ciudades numeradas, como el submenú "Servicios" de WebZipe), "Ciudades
 principales" de primero y el botón "Usar mi ubicación" abajo. Se cierra con la X, tocando
 afuera o con Escape. Es el mismo para clientes y maestros.
+
+## Direcciones reales (versión 0.3.4)
+
+Antes, la dirección escrita no se buscaba: se inventaba un punto dentro de la ciudad a partir
+del texto, y por eso "Jardín Plaza" quedaba en cualquier parte. Ahora:
+
+- **Sugerencias mientras escribe** (`js/services/geocodificar.js`, Photon de OpenStreetMap):
+  lugares, centros comerciales, barrios y calles reales de la ciudad elegida, en toda Colombia.
+  Elegir una sugerencia deja el punto exacto.
+- **Confirmar en el mapa** (`js/ui/mapa-elegir.js`): si la persona escribe la dirección sin elegir
+  sugerencia, se busca (Nominatim) y se abre un mapa con el pin fijo en el centro para moverlo
+  hasta la puerta. Si no se encuentra, empieza en el centro de la ciudad. Nunca se inventa un punto.
+- Las direcciones colombianas ("Calle 5 # 38-20", "Cra 43A No. 1 Sur") se limpian antes de buscar.
+- **GPS:** además del punto, escribe la dirección real ("Calle 16 100-20, Ciudad Jardín").
+- **Casa y Trabajo** se guardan con su punto. Las direcciones guardadas antes se confirman una
+  sola vez en el mapa.
+- Junto al campo aparece "Ubicada en el mapa · Ver o ajustar".

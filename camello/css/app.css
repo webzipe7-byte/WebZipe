@@ -3301,3 +3301,192 @@ body.sin-scroll {
 .selector-vacio b {
   color: var(--tinta);
 }
+
+/* ---------- Dirección con sugerencias ---------- */
+.campo-direccion {
+  position: relative;
+}
+.dir-caja {
+  position: relative;
+}
+.dir-sugerencias {
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 6px;
+  list-style: none;
+  background: #fffaf3;
+  border: 1px solid #eadfce;
+  border-radius: var(--radio-sm);
+  box-shadow: 0 14px 30px -12px rgba(40, 20, 5, 0.35);
+  max-height: 300px;
+  overflow-y: auto;
+}
+.dir-op {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.dir-op > svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--marca);
+}
+.dir-op span {
+  display: grid;
+}
+.dir-op small {
+  color: var(--tenue);
+  font-size: 0.8rem;
+}
+.dir-op.marcada,
+.dir-op:hover {
+  background: #f6ecdf;
+}
+.dir-punto {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: #166534;
+}
+.dir-punto .enlace {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+/* ---------- Mapa para marcar el punto ---------- */
+.elegir-pantalla {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  background: #fffaf3;
+}
+.elegir-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(env(safe-area-inset-top) + 8px) 18px 8px;
+  border-bottom: 1px solid #eadfce;
+}
+.elegir-mapa {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.6) 2px, transparent 2px) 0 0 / 40px 40px,
+    linear-gradient(rgba(255, 255, 255, 0.6) 2px, transparent 2px) 0 0 / 40px 40px,
+    var(--mapa-fondo);
+}
+.moviendo .elegir-mapa {
+  cursor: grabbing;
+}
+.elegir-teselas i {
+  position: absolute;
+  width: 256px;
+  height: 256px;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+.elegir-pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  color: var(--marca);
+  transform: translate(-50%, -100%);
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.15s ease;
+  pointer-events: none;
+}
+.elegir-pin svg {
+  fill: #fff;
+}
+.moviendo .elegir-pin {
+  transform: translate(-50%, -118%);
+}
+.elegir-sombra {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.elegir-zoom {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  display: grid;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+.elegir-zoom button,
+.elegir-yo {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: #fff;
+  color: var(--tinta);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+.elegir-zoom button + button {
+  border-top: 1px solid #eadfce;
+}
+.elegir-yo {
+  position: absolute;
+  right: 14px;
+  bottom: 34px;
+  border-radius: 50%;
+  color: var(--marca);
+  box-shadow: var(--sombra);
+}
+.elegir-creditos {
+  position: absolute;
+  left: 8px;
+  bottom: 24px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 0.7rem;
+}
+.elegir-hoja {
+  padding: 18px 18px calc(env(safe-area-inset-bottom) + 16px);
+  border-radius: 22px 22px 0 0;
+  margin-top: -18px;
+  position: relative;
+  background: #fffaf3;
+  box-shadow: 0 -10px 30px -18px rgba(40, 20, 5, 0.45);
+}
+.elegir-hoja h2 {
+  margin: 0 0 4px;
+}
+.elegir-hoja .tenue {
+  margin: 0;
+}
+.elegir-cerca {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 1.4em;
+  margin: 10px 0 14px;
+  font-size: 0.88rem;
+  color: var(--tinta-2);
+}

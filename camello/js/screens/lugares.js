@@ -7,6 +7,8 @@ import { sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
 import { barra, campo, marcarError, cargando, aviso } from '../ui/componentes.js';
 import { icono } from '../ui/iconos.js';
+import { campoCiudad, activarCiudades, ponerCiudad } from '../ui/selector-ciudad.js';
+import { campoDireccion, activarDireccion } from '../ui/campo-direccion.js';
 import { esc } from '../ui/formato.js';
 
 const NOMBRES = { casa: 'Casa', trabajo: 'Trabajo' };
@@ -70,7 +72,8 @@ export function pantallaEditarLugar(raiz, { tipo }) {
       <h1 tabindex="-1">${actual ? 'Editar' : 'Agregar'} ${NOMBRES[tipo].toLowerCase()}</h1>
       <p class="intro">La usaremos cuando pidas un servicio en ${tipo === 'casa' ? 'tu casa' : 'tu trabajo'}.</p>
       <form class="formulario" novalidate>
-        ${campo({ id: 'direccion', etiqueta: 'Dirección', valor: actual?.texto || '', auto: 'street-address', ayuda: 'Ej: Calle 10 # 5-20, barrio Centro' })}
+        ${campoCiudad({ valor: actual?.ciudad || sesion.usuario.ciudad || '', conGps: true })}
+        ${campoDireccion({ valor: actual?.texto || '' })}
         ${campo({ id: 'detalle', etiqueta: 'Apto, casa o referencia (opcional)', valor: actual?.detalle || '' })}
         <button class="btn btn-primario btn-bloque" type="submit">Guardar</button>
         ${actual ? '<button class="btn btn-texto peligro btn-bloque" type="button" data-accion="borrar">Quitar esta dirección</button>' : ''}
@@ -79,6 +82,12 @@ export function pantallaEditarLugar(raiz, { tipo }) {
 
   const form = raiz.querySelector('form');
   raiz.querySelector('[data-accion="atras"]').addEventListener('click', () => atras('/lugares'));
+  activarCiudades(form);
+  const dir = activarDireccion(form, {
+    ciudad: () => form.ciudad.value,
+    punto: actual?.coords,
+    alCambiarCiudad: (id) => ponerCiudad(form.ciudad, id),
+  });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -87,12 +96,18 @@ export function pantallaEditarLugar(raiz, { tipo }) {
       marcarError(form, 'direccion', 'Escribe la dirección completa, con número.');
       return form.direccion.focus();
     }
+    if (!form.ciudad.value) {
+      marcarError(form, 'ciudad', 'Elige la ciudad.');
+      return form.querySelector('[data-selector-ciudad]').focus();
+    }
     const boton = form.querySelector('[type="submit"]');
-    cargando(boton, true, 'Guardando…');
-    await new Promise((r) => setTimeout(r, 400));
+    cargando(boton, true, 'Buscando la dirección…');
+    // El punto real: de la sugerencia, del GPS o confirmado en el mapa
+    const coords = await dir.asegurar();
+    if (!coords) return cargando(boton, false);
     sesion.set(
       auth.modificar(sesion.usuario.id, (u) => {
-        u.lugares[tipo] = { texto, detalle: form.detalle.value.trim() };
+        u.lugares[tipo] = { texto, detalle: form.detalle.value.trim(), ciudad: form.ciudad.value, coords };
       })
     );
     almacen.guardar('lugarInicio', tipo);

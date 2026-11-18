@@ -60,6 +60,9 @@ async def pedir(c):
         await c.check("[name=dir][value=nueva]", force=True)
     await c.fill("#f-direccion", "Carrera 39 # 5-30, San Fernando")
     await c.click("[data-accion=continuar]")
+    # Sin sugerencia elegida se confirma el punto en el mapa
+    await c.wait_for_selector(".elegir-pantalla")
+    await c.click("[data-confirmar]")
     await c.wait_for_timeout(300)
     await c.click("[data-accion=continuar]")
     await c.wait_for_timeout(1500)

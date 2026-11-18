@@ -5,15 +5,28 @@
 import { categoriaPorId } from '../data/categorias.js';
 import { borrador, sesion } from '../estado.js';
 import { ir } from '../router.js';
-import { barra, pasos, iconoCategoria, campo, marcarError } from '../ui/componentes.js';
+import { barra, pasos, iconoCategoria, campo, marcarError, cargando } from '../ui/componentes.js';
 import { icono } from '../ui/iconos.js';
 import { esc, fecha } from '../ui/formato.js';
 import { RECARGO_URGENCIA } from '../config.js';
-import { miUbicacion, puntoAproximado } from '../services/ubicacion.js';
+import { miUbicacion } from '../services/ubicacion.js';
+import { direccionDe } from '../services/geocodificar.js';
+import { campoDireccion, activarDireccion, ubicarConMapa, puntoConfiable } from '../ui/campo-direccion.js';
 import { ciudadMasCercana, ciudadPorId } from '../data/ciudades.js';
 import { campoCiudad, activarCiudades, ponerCiudad } from '../ui/selector-ciudad.js';
 import { auth } from '../services/auth.js';
 import { realtime } from '../services/nube.js';
+
+/** Guarda el punto confirmado en la dirección guardada (Casa, Trabajo o reciente) para no volver a pedirlo. */
+function guardarPuntoDe(d, coords) {
+  const mismo = (x) => x && x.texto === d.texto && (x.detalle || '') === (d.detalle || '');
+  sesion.set(
+    auth.modificar(sesion.usuario.id, (u) => {
+      ['casa', 'trabajo'].forEach((k) => mismo(u.lugares?.[k]) && (u.lugares[k].coords = coords));
+      (u.direcciones || []).forEach((x) => mismo(x) && (x.coords = coords));
+    })
+  );
+}
 
 /** Casa, Trabajo y direcciones recientes, sin repetir. */
 function direccionesGuardadas(u) {
@@ -38,6 +51,7 @@ export function pantallaSolicitud(raiz, { categoria }) {
   if (!cat) return ir('/inicio', { reemplazar: true });
 
   let b = borrador.leer();
+  let dir = null; // campo de dirección del paso 2
   if (!b || b.categoria !== categoria) b = borrador.nuevo(categoria);
   let paso = b.paso || 1;
 
@@ -128,7 +142,7 @@ export function pantallaSolicitud(raiz, { categoria }) {
           ${icono('ubicacion', { tamano: 22 })}
           <span>${b.gps ? 'Ubicación lista' : 'Usar mi ubicación actual'}<small>${b.gps ? 'El maestro verá tu punto exacto en el mapa' : 'Para que el maestro llegue sin perderse'}</small></span>
         </button>
-        ${campo({ id: 'direccion', etiqueta: 'Dirección', valor: usarNueva ? elegida?.texto || '' : '', auto: 'street-address', ayuda: 'Ej: Calle 10 # 5-20, barrio Centro' })}
+        ${campoDireccion({ valor: usarNueva ? elegida?.texto || '' : '' })}
         ${campo({ id: 'detalle', etiqueta: 'Apto, casa o referencia (opcional)', valor: usarNueva ? elegida?.detalle || '' : '' })}
       </div>`;
   }
@@ -194,6 +208,12 @@ export function pantallaSolicitud(raiz, { categoria }) {
       const nueva = raiz.querySelector('.nueva-dir');
       const selCiudad = raiz.querySelector('#f-ciudad');
       activarCiudades(raiz);
+      const elegida = borrador.leer().direccion;
+      dir = activarDireccion(raiz, {
+        ciudad: () => selCiudad.value,
+        punto: b.gps || (elegida && !raiz.querySelector('[name="dir"]:checked:not([value="nueva"])') ? elegida.coords : null),
+        alCambiarCiudad: (id) => ponerCiudad(selCiudad, id),
+      });
       selCiudad.addEventListener('change', () => {
         b = borrador.guardar({ ciudad: selCiudad.value });
         marcarError(raiz, 'ciudad', '');
@@ -215,10 +235,12 @@ export function pantallaSolicitud(raiz, { categoria }) {
           const punto = await miUbicacion();
           // Con el GPS también se sabe la ciudad
           const cerca = ciudadMasCercana(punto);
-          b = borrador.guardar({ gps: punto, ...(cerca ? { ciudad: cerca.id } : {}) });
+          const gpsPunto = { lat: punto.lat, lng: punto.lng, fuente: 'gps' };
+          b = borrador.guardar({ gps: gpsPunto, ...(cerca ? { ciudad: cerca.id } : {}) });
           if (cerca) ponerCiudad(raiz.querySelector('#f-ciudad'), cerca.id);
-          const input = raiz.querySelector('#f-direccion');
-          if (!input.value.trim()) input.value = 'Mi ubicación actual';
+          // Se escribe la dirección real del punto (la persona puede corregirla)
+          const texto = (await direccionDe(punto)) || raiz.querySelector('#f-direccion').value.trim() || 'Mi ubicación actual';
+          dir.ponerPunto(gpsPunto, texto);
           gps.classList.add('listo');
           gps.querySelector('span').innerHTML = 'Ubicación lista<small>El maestro verá tu punto exacto en el mapa</small>';
           marcarError(raiz, 'direccion', '');
@@ -256,7 +278,7 @@ export function pantallaSolicitud(raiz, { categoria }) {
     }
   }
 
-  function continuar() {
+  async function continuar() {
     if (paso === 1) {
       const texto = raiz.querySelector('textarea').value.trim();
       if (texto.length < 5) {
@@ -280,10 +302,20 @@ export function pantallaSolicitud(raiz, { categoria }) {
         sesion.set(auth.modificar(sesion.usuario.id, (u) => (u.ciudad = ciudad)));
         realtime.iniciar(ciudad);
       }
+      const boton = raiz.querySelector('[data-accion="continuar"]');
       const sel = raiz.querySelector('[name="dir"]:checked');
       if (sel && sel.value !== 'nueva') {
         const d = direccionesGuardadas(sesion.usuario)[Number(sel.value)];
-        borrador.guardar({ direccion: { texto: d.texto, detalle: d.detalle || '', ciudad, coords: d.coords || puntoAproximado(d.texto, ciudad) } });
+        let coords = puntoConfiable(d.coords) ? d.coords : null;
+        if (!coords) {
+          // Direcciones guardadas antes de esta versión: se confirman una vez en el mapa
+          cargando(boton, true, 'Buscando la dirección…');
+          coords = await ubicarConMapa(d.texto, ciudad);
+          cargando(boton, false);
+          if (!coords) return;
+          guardarPuntoDe(d, coords);
+        }
+        borrador.guardar({ direccion: { texto: d.texto, detalle: d.detalle || '', ciudad, coords } });
         return irPaso(3);
       }
       const texto = raiz.querySelector('#f-direccion').value.trim();
@@ -292,8 +324,11 @@ export function pantallaSolicitud(raiz, { categoria }) {
         raiz.querySelector('#f-direccion').focus();
         return;
       }
-      // Punto en el mapa: el GPS si lo compartió; si no, uno aproximado según la dirección
-      const coords = borrador.leer().gps || puntoAproximado(texto, ciudad);
+      // Punto real: de la sugerencia elegida, del GPS o confirmado por la persona en el mapa
+      cargando(boton, true, 'Buscando la dirección…');
+      const coords = await dir.asegurar();
+      cargando(boton, false);
+      if (!coords) return;
       borrador.guardar({ direccion: { texto, detalle: raiz.querySelector('#f-detalle').value.trim(), ciudad, coords } });
       return irPaso(3);
     }

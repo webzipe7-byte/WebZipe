@@ -23,16 +23,12 @@ export function distanciaKm(a, b) {
 }
 
 /**
- * Punto aproximado para una dirección escrita, dentro de su ciudad.
- * Siempre da el mismo punto para la misma dirección.
+ * Cuando un pedido viejo no tiene punto real, se usa el centro de su ciudad
+ * (antes se inventaba un punto a partir del texto, y por eso caía en cualquier parte).
  */
 export function puntoAproximado(texto = '', ciudadId = '') {
   const centro = ciudadPorId(ciudadId) || CENTRO;
-  let h = 2166136261;
-  for (const c of texto.toLowerCase()) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
-  const a = ((h & 0xffff) / 0xffff - 0.5) * 0.04;
-  const b = (((h >>> 16) & 0xffff) / 0xffff - 0.5) * 0.04;
-  return { lat: +(centro.lat + a).toFixed(5), lng: +(centro.lng + b).toFixed(5), aproximada: true };
+  return { lat: centro.lat, lng: centro.lng, aproximada: true };
 }
 
 const valido = (p) =>
