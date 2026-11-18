@@ -95,77 +95,135 @@ export function activarCiudades(raiz) {
   });
 }
 
-/** Abre la pantalla de búsqueda. Devuelve la ciudad elegida, o null si se cierra sin elegir. */
+/** Departamentos con sus ciudades, en orden alfabético. */
+const DEPARTAMENTOS = [...new Set(CIUDADES.map((c) => c.departamento))]
+  .sort((a, b) => a.localeCompare(b, 'es'))
+  .map((d) => ({ nombre: d, ciudades: CIUDADES.filter((c) => c.departamento === d).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')) }));
+
+/**
+ * Abre el menú lateral de ciudades (entra desde la izquierda, como el menú de WebZipe):
+ * buscador arriba, departamentos en mayúsculas y cada uno abre sus ciudades.
+ * Devuelve la ciudad elegida, o null si se cierra sin elegir.
+ */
 export function abrirSelectorCiudad({ actual = '', conGps = false } = {}) {
   return new Promise((resolver) => {
-    const pantalla = document.createElement('div');
-    pantalla.className = 'selector-pantalla';
-    pantalla.setAttribute('role', 'dialog');
-    pantalla.setAttribute('aria-modal', 'true');
-    pantalla.setAttribute('aria-label', 'Elige tu ciudad');
-    pantalla.innerHTML = `
-      <header class="selector-cabeza">
-        <button type="button" class="barra-btn" data-cerrar aria-label="Cerrar">${icono('atras', { tamano: 22 })}</button>
-        <h2>Elige tu ciudad</h2>
-      </header>
-      <div class="selector-buscar">
-        ${icono('buscar', { tamano: 20 })}
-        <input type="search" placeholder="Escribe tu ciudad o departamento" autocomplete="off" autocapitalize="words"
-          enterkeyhint="search" aria-label="Buscar ciudad" aria-controls="lista-ciudades">
-        <button type="button" class="selector-limpiar" data-limpiar aria-label="Borrar búsqueda" hidden>${icono('cerrar', { tamano: 16 })}</button>
-      </div>
-      ${
-        conGps
-          ? `<button type="button" class="selector-gps" data-gps>${icono('ubicacion', { tamano: 20 })}<span><b>Usar mi ubicación</b><small>Elegimos la ciudad donde estás</small></span></button>`
-          : ''
-      }
-      <div class="selector-lista" id="lista-ciudades" role="listbox" aria-label="Ciudades"></div>`;
-    document.body.appendChild(pantalla);
+    const elegida = ciudadPorId(actual);
+    const fondo = document.createElement('div');
+    fondo.className = 'selector-pantalla cajon-fondo';
+    fondo.innerHTML = `
+      <aside class="cajon" role="dialog" aria-modal="true" aria-label="Elige tu ciudad">
+        <section class="cajon-panel" data-panel="principal">
+          <header class="cajon-cabeza">
+            <button type="button" class="cajon-x" data-cerrar aria-label="Cerrar">${icono('cerrar', { tamano: 22 })}</button>
+            <span class="cajon-titulo">Tu ciudad</span>
+          </header>
+          <div class="selector-buscar cajon-buscar">
+            ${icono('buscar', { tamano: 18 })}
+            <input type="search" placeholder="Buscar ciudad o departamento" autocomplete="off" autocapitalize="words"
+              enterkeyhint="search" aria-label="Buscar ciudad" aria-controls="cajon-lista">
+            <button type="button" class="selector-limpiar" data-limpiar aria-label="Borrar búsqueda" hidden>${icono('cerrar', { tamano: 14 })}</button>
+          </div>
+          <nav class="cajon-lista" id="cajon-lista" aria-label="Ciudades"></nav>
+          <footer class="cajon-pie">
+            ${conGps ? `<button type="button" class="selector-gps cajon-accion" data-gps>${icono('ubicacion', { tamano: 18 })}<span>Usar mi ubicación</span></button><small class="cajon-gps-nota" hidden></small>` : ''}
+            <p class="cajon-nota">${elegida ? `Ahora: <b>${esc(elegida.nombre)}</b>, ${esc(elegida.departamento)}` : `${CIUDADES.length} ciudades de Colombia`}</p>
+          </footer>
+        </section>
+        <section class="cajon-panel cajon-sub" data-panel="sub" hidden aria-live="polite"></section>
+      </aside>`;
+    document.body.appendChild(fondo);
     document.body.classList.add('sin-scroll');
+    requestAnimationFrame(() => fondo.classList.add('abierto'));
 
-    const input = pantalla.querySelector('input');
-    const lista = pantalla.querySelector('.selector-lista');
-    const limpiar = pantalla.querySelector('[data-limpiar]');
+    const principal = fondo.querySelector('[data-panel="principal"]');
+    const sub = fondo.querySelector('[data-panel="sub"]');
+    const input = fondo.querySelector('input');
+    const lista = fondo.querySelector('.cajon-lista');
+    const limpiar = fondo.querySelector('[data-limpiar]');
     let resultados = [];
 
-    const fila = (c, q = '') => `
+    const opcion = (c, n, q = '') => `
       <button type="button" role="option" class="selector-opcion${c.id === actual ? ' actual' : ''}" data-id="${c.id}" aria-selected="${c.id === actual}">
-        <span><b>${resaltar(c.nombre, q)}</b><small>${esc(c.departamento)}</small></span>
+        ${n ? `<span class="cajon-num">${String(n).padStart(2, '0')}</span>` : ''}
+        <span class="cajon-ciudad"><b>${resaltar(c.nombre, q)}</b><small>${esc(c.departamento)}</small></span>
         ${c.id === actual ? icono('check', { tamano: 18 }) : ''}
       </button>`;
+
+    // Lista principal: ciudades principales y departamentos (cada uno abre sus ciudades)
+    function pintarMenu() {
+      const marca = (d) => (elegida && elegida.departamento === d ? ' tiene-actual' : '');
+      lista.innerHTML = `
+        <button type="button" class="cajon-item destacado" data-depto="__principales">
+          <span>Ciudades principales</span><small>${PRINCIPALES}</small>${icono('derecha', { tamano: 16 })}
+        </button>
+        <p class="cajon-grupo">Por departamento</p>
+        ${DEPARTAMENTOS.map(
+          (d) => `<button type="button" class="cajon-item${marca(d.nombre)}" data-depto="${esc(d.nombre)}">
+            <span>${esc(d.nombre)}</span><small>${d.ciudades.length}</small>${icono('derecha', { tamano: 16 })}
+          </button>`
+        ).join('')}`;
+    }
 
     function pintar() {
       const q = input.value;
       limpiar.hidden = !q;
       const encontradas = buscarCiudades(q);
       if (encontradas === null) {
-        resultados = CIUDADES_SELECTOR;
-        lista.innerHTML = `
-          <p class="selector-grupo">Ciudades principales</p>
-          ${CIUDADES_SELECTOR.slice(0, PRINCIPALES).map((c) => fila(c)).join('')}
-          <p class="selector-grupo">Todas las ciudades (A–Z)</p>
-          ${CIUDADES_SELECTOR.slice(PRINCIPALES).map((c) => fila(c)).join('')}`;
-        return;
+        resultados = [];
+        return pintarMenu();
       }
       resultados = encontradas;
       lista.innerHTML = encontradas.length
-        ? `<p class="selector-grupo">${encontradas.length} resultado${encontradas.length > 1 ? 's' : ''}</p>${encontradas.map((c) => fila(c, q)).join('')}`
+        ? `<p class="cajon-grupo">${encontradas.length} resultado${encontradas.length > 1 ? 's' : ''}</p>
+           <div role="listbox" aria-label="Resultados">${encontradas.map((c) => opcion(c, 0, q)).join('')}</div>`
         : `<div class="selector-vacio">
-            ${icono('buscar', { tamano: 32 })}
+            ${icono('buscar', { tamano: 30 })}
             <b>No encontramos "${esc(q.trim())}"</b>
-            <small>Revisa cómo está escrito. Si tu municipio no aparece, todavía no estamos ahí.</small>
+            <small>Revisa cómo está escrito o entra por el departamento. Si tu municipio no aparece, todavía no estamos ahí.</small>
           </div>`;
+    }
+
+    // Submenú de un departamento (entra desde la derecha, como "Servicios" en WebZipe)
+    function abrirDepto(nombre) {
+      const principales = nombre === '__principales';
+      const ciudades = principales ? CIUDADES_SELECTOR.slice(0, PRINCIPALES) : DEPARTAMENTOS.find((d) => d.nombre === nombre).ciudades;
+      sub.innerHTML = `
+        <header class="cajon-cabeza sub">
+          <button type="button" class="cajon-volver" data-volver aria-label="Volver">${icono('atras', { tamano: 20 })}</button>
+          <span class="cajon-titulo">${esc(principales ? 'Principales' : nombre)}</span>
+          <button type="button" class="cajon-x" data-cerrar aria-label="Cerrar">${icono('cerrar', { tamano: 22 })}</button>
+        </header>
+        <p class="cajon-intro">${
+          principales
+            ? 'Las ciudades con más maestros. Toca la tuya.'
+            : `${ciudades.length === 1 ? 'La ciudad' : `Las ${ciudades.length} ciudades`} de ${esc(nombre)} donde está Camello.`
+        }</p>
+        <div class="cajon-lista" role="listbox" aria-label="Ciudades de ${esc(nombre)}">${ciudades.map((c, i) => opcion(c, i + 1)).join('')}</div>`;
+      sub.hidden = false;
+      requestAnimationFrame(() => sub.classList.add('abierto'));
+      principal.setAttribute('aria-hidden', 'true');
+      sub.querySelector('.selector-opcion')?.focus();
+    }
+
+    function cerrarDepto() {
+      sub.classList.remove('abierto');
+      principal.removeAttribute('aria-hidden');
+      setTimeout(() => (sub.hidden = true), 250);
+      input.focus();
     }
 
     function cerrar(ciudad = null) {
       document.removeEventListener('keydown', teclas);
-      pantalla.remove();
       document.body.classList.remove('sin-scroll');
+      fondo.classList.remove('abierto');
+      setTimeout(() => fondo.remove(), 250);
       resolver(ciudad);
     }
 
     function teclas(e) {
-      if (e.key === 'Escape') cerrar();
+      if (e.key !== 'Escape') return;
+      if (!sub.hidden) cerrarDepto();
+      else cerrar();
     }
 
     input.addEventListener('input', pintar);
@@ -181,30 +239,35 @@ export function abrirSelectorCiudad({ actual = '', conGps = false } = {}) {
       pintar();
       input.focus();
     });
-    lista.addEventListener('click', (e) => {
-      const b = e.target.closest('[data-id]');
-      if (b) cerrar(ciudadPorId(b.dataset.id));
+    fondo.addEventListener('click', (e) => {
+      if (e.target === fondo) return cerrar();
+      const ciudad = e.target.closest('[data-id]');
+      if (ciudad) return cerrar(ciudadPorId(ciudad.dataset.id));
+      const depto = e.target.closest('[data-depto]');
+      if (depto) return abrirDepto(depto.dataset.depto);
+      if (e.target.closest('[data-volver]')) return cerrarDepto();
+      if (e.target.closest('[data-cerrar]')) return cerrar();
     });
-    pantalla.querySelector('[data-cerrar]').addEventListener('click', () => cerrar());
     document.addEventListener('keydown', teclas);
 
-    const gps = pantalla.querySelector('[data-gps]');
+    const gps = fondo.querySelector('[data-gps]');
+    const nota = fondo.querySelector('.cajon-gps-nota');
     gps?.addEventListener('click', async () => {
       gps.disabled = true;
-      gps.querySelector('small').textContent = 'Buscando dónde estás…';
+      gps.querySelector('span').textContent = 'Buscando dónde estás…';
       try {
         const c = ciudadMasCercana(await miUbicacion());
         if (c) return cerrar(c);
-        gps.querySelector('small').textContent = 'Estás lejos de las ciudades donde funcionamos. Búscala en la lista.';
+        nota.textContent = 'Estás lejos de las ciudades donde funcionamos. Búscala en la lista.';
       } catch (err) {
-        gps.querySelector('small').textContent = err.message;
+        nota.textContent = err.message;
       }
+      nota.hidden = false;
+      gps.querySelector('span').textContent = 'Usar mi ubicación';
       gps.disabled = false;
     });
 
     pintar();
-    // Si ya había una elegida, se muestra en la lista
-    lista.querySelector('.actual')?.scrollIntoView({ block: 'center' });
     input.focus();
   });
 }

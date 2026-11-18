@@ -266,3 +266,11 @@ pantalla de la app (`js/ui/selector-ciudad.js`) con un buscador.
 - "Usar mi ubicación" elige la ciudad con el GPS.
 - Enter elige el primer resultado; Escape o la flecha cierran sin cambiar.
 - Se usa al crear la cuenta, al pedir un servicio y en el panel y la cuenta del maestro.
+
+## Menú de ciudades (versión 0.3.3)
+
+El selector de ciudad ahora es un menú lateral con el estilo del menú de WebZipe y los colores
+de Camello: entra desde la izquierda, tiene buscador arriba, los departamentos en mayúsculas
+(cada uno abre sus ciudades numeradas, como el submenú "Servicios" de WebZipe), "Ciudades
+principales" de primero y el botón "Usar mi ubicación" abajo. Se cierra con la X, tocando
+afuera o con Escape. Es el mismo para clientes y maestros.
