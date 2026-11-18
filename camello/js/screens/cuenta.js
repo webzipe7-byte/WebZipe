@@ -3,7 +3,7 @@
  */
 import { auth, ErrorCampo, FaltaConfirmar, inicioDe } from '../services/auth.js';
 import { CATEGORIAS } from '../data/categorias.js';
-import { opcionesCiudad } from '../data/ciudades.js';
+import { campoCiudad, activarCiudades } from '../ui/selector-ciudad.js';
 import { esc } from '../ui/formato.js';
 import { sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
@@ -34,7 +34,8 @@ function validarTodo(form, reglas) {
     marcarError(form, id, error);
     if (error && !primero) primero = input;
   });
-  primero?.focus();
+  // Un campo oculto (como la ciudad) se enfoca por su botón
+  (primero?.type === 'hidden' ? primero.parentElement.querySelector('button') : primero)?.focus();
   return !primero;
 }
 
@@ -60,11 +61,7 @@ export function pantallaRegistro(raiz) {
           ${campo({ id: 'anios', etiqueta: 'Años de experiencia', tipo: 'number', modo: 'numeric', max: 2 })}
         </div>
         ${campo({ id: 'nombre', etiqueta: 'Nombre completo', auto: 'name' })}
-        <div class="campo" data-campo="ciudad">
-          <label for="f-ciudad">Ciudad</label>
-          <select id="f-ciudad" name="ciudad" aria-describedby="e-ciudad" autocomplete="address-level2">${opcionesCiudad()}</select>
-          <p class="campo-error" id="e-ciudad" role="alert"></p>
-        </div>
+        ${campoCiudad({ conGps: true })}
         ${campo({ id: 'correo', etiqueta: 'Correo', tipo: 'email', auto: 'email', modo: 'email' })}
         ${campo({ id: 'telefono', etiqueta: 'Celular', tipo: 'tel', auto: 'tel', modo: 'tel', ayuda: 'El maestro te llamará a este número.' })}
         ${campo({ id: 'clave', etiqueta: 'Contraseña', tipo: 'password', auto: 'new-password', ayuda: 'Mínimo 8 caracteres, con letras y números.' })}
@@ -93,6 +90,7 @@ export function pantallaRegistro(raiz) {
   };
   validarEnVivo(form, reglas);
   activarOjos(form);
+  activarCiudades(form);
   raiz.querySelector('[data-accion="atras"]').addEventListener('click', () => atras('/bienvenida'));
 
   const extra = form.querySelector('.solo-maestro');
@@ -159,6 +157,7 @@ export function pantallaEntrar(raiz) {
   };
   validarEnVivo(form, reglas);
   activarOjos(form);
+  activarCiudades(form);
   raiz.querySelector('[data-accion="atras"]').addEventListener('click', () => atras('/bienvenida'));
 
   form.addEventListener('submit', async (e) => {

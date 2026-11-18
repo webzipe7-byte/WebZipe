@@ -51,7 +51,7 @@ async def main():
     await pg.fill("#f-clave","Sol-desierto7"); await pg.fill("#f-clave2","Sol-desierto7"); await pg.click("button[type=submit]"); await pg.wait_for_timeout(600)
     print("sin ciudad ->", await pg.inner_text("#e-ciudad"))
     print("opciones de ciudad:", await pg.locator("#f-ciudad option").count())
-    await pg.select_option("#f-ciudad","bogota"); await pg.click("button[type=submit]"); await pg.wait_for_timeout(1500)
+    await pg.click("[data-selector-ciudad=f-ciudad]"); await pg.fill(".selector-buscar input","Bogotá"); await pg.press(".selector-buscar input","Enter"); await pg.wait_for_timeout(200); await pg.click("button[type=submit]"); await pg.wait_for_timeout(1500)
     print("registro meta:",creados[-1].get("ciudad"),"| perfil:",[x.get("ciudad") for x in db["perfiles"] if x["id"]==U], "| pantalla:", pg.url.split('#')[1])
     await pg.click("[data-cat=cerrajero]"); await pg.fill("textarea","Se dañó la chapa"); await pg.click("[data-accion=continuar]"); await pg.wait_for_timeout(500)
     print("ciudad propuesta:", await pg.input_value("#f-ciudad"))

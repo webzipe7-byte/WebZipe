@@ -9,7 +9,8 @@ import { fichaMaestro } from '../services/trabajadores.js';
 import { chat } from '../services/chat.js';
 import { seguirMaestro, posicionEnVivo, distanciaKm } from '../services/ubicacion.js';
 import { categoriaPorId } from '../data/categorias.js';
-import { ciudadPorId, opcionesCiudad } from '../data/ciudades.js';
+import { ciudadPorId } from '../data/ciudades.js';
+import { campoCiudad, activarCiudades } from '../ui/selector-ciudad.js';
 import { realtime } from '../services/nube.js';
 import { almacen } from '../services/almacen.js';
 import { sesion } from '../estado.js';
@@ -92,7 +93,7 @@ export function pantallaMaestro(raiz) {
           ? `<section class="tarjeta pedir-ciudad">
               <b>¿En qué ciudad trabajas?</b>
               <small class="tenue">Te mostramos a los clientes de esa ciudad.</small>
-              <select id="f-ciudad-maestro" aria-label="Ciudad donde trabajas">${opcionesCiudad()}</select>
+              ${campoCiudad({ id: 'f-ciudad-maestro', nombre: 'ciudad-maestro', etiqueta: 'Ciudad', conGps: true })}
             </section>`
           : ''
       }
@@ -132,6 +133,7 @@ export function pantallaMaestro(raiz) {
         }
       </section>`;
 
+    activarCiudades(cuerpo);
     cuerpo.querySelector('#f-ciudad-maestro')?.addEventListener('change', (e) => {
       if (!e.target.value) return;
       sesion.set(auth.modificar(u.id, (x) => (x.ciudad = e.target.value)));
@@ -421,16 +423,14 @@ export function pantallaCuentaMaestro(raiz) {
         <h1 tabindex="-1">${esc(u.nombre)}</h1>
         <p class="tenue">${esc(cat?.nombre || '')} · ${u.maestro.anios} años · ${icono('estrella', { tamano: 14, relleno: true })} ${ficha.calificacion == null ? 'Nuevo' : ficha.calificacion.toFixed(1)}</p>
       </section>
-      <div class="campo">
-        <label for="f-ciudad-cuenta">Ciudad donde trabajo</label>
-        <select id="f-ciudad-cuenta">${opcionesCiudad(u.ciudad)}</select>
-      </div>
+      ${campoCiudad({ id: 'f-ciudad-cuenta', nombre: 'ciudad-cuenta', valor: u.ciudad, etiqueta: 'Ciudad donde trabajo', conGps: true })}
       <a class="fila-accion tarjeta" href="#/perfil">${icono('editar', { tamano: 20 })}<span><b>Mis datos</b><small>Nombre, correo y celular</small></span>${icono('derecha', { tamano: 18 })}</a>
       <a class="fila-accion tarjeta" href="#/seguridad">${icono('candado', { tamano: 20 })}<span><b>Seguridad</b><small>Contraseña y cuenta</small></span>${icono('derecha', { tamano: 18 })}</a>
       <a class="fila-accion tarjeta" href="#/ayuda">${icono('ayuda', { tamano: 20 })}<span><b>Ayuda</b><small>Preguntas frecuentes</small></span>${icono('derecha', { tamano: 18 })}</a>
       <button class="btn btn-texto peligro btn-bloque" data-accion="salir">${icono('salir', { tamano: 18 })} Cerrar sesión</button>
     </main>
     ${navMaestro('cuenta')}`;
+  activarCiudades(raiz);
   raiz.querySelector('#f-ciudad-cuenta').addEventListener('change', (e) => {
     if (!e.target.value) return;
     sesion.set(auth.modificar(u.id, (x) => (x.ciudad = e.target.value)));

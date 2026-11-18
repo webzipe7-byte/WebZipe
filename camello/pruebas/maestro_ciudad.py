@@ -52,7 +52,7 @@ async def main():
     await pg.evaluate("s=>localStorage.setItem('camello:nube',s)", json.dumps({"access_token":"a","refresh_token":"r","expires_at":9999999999,"user":{"id":U,"email":"p@x.com","meta":{}}}))
     await pg.goto(B+"#/maestro"); await pg.wait_for_timeout(2000)
     print("pide ciudad:", await pg.locator(".pedir-ciudad").count(), "| botón conectar oculto:", await pg.locator(".conexion").is_hidden())
-    await pg.select_option("#f-ciudad-maestro","barranquilla"); await pg.wait_for_timeout(800)
+    await pg.click("[data-selector-ciudad=f-ciudad-maestro]"); await pg.fill(".selector-buscar input","Barranquilla"); await pg.press(".selector-buscar input","Enter"); await pg.wait_for_timeout(200); await pg.wait_for_timeout(800)
     print("después:", await pg.inner_text(".maestro-cabeza p"), "| conectar visible:", await pg.locator(".conexion").is_visible(), "| en servidor:", [x.get("ciudad") for x in db["perfiles"] if x["id"]==U])
     await pg.screenshot(path="/home/claude/maestro_ciudad.png")
     print("ERRORES:",errs)

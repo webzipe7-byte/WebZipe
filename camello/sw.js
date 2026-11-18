@@ -3,7 +3,7 @@
  * Guarda la app en caché para que abra rápido y funcione sin conexión.
  * Al publicar cambios, sube el número de VERSION para que todos reciban la nueva.
  */
-const VERSION = 'camello-v16';
+const VERSION = 'camello-v17';
 
 const ARCHIVOS = [
   './',
@@ -61,6 +61,7 @@ const ARCHIVOS = [
   './js/ui/precio.js',
   './js/ui/reportar.js',
   './js/ui/seguridad.js',
+  './js/ui/selector-ciudad.js',
   './js/ui/silueta.js',
 ];
 

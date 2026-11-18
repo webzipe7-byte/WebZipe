@@ -254,3 +254,15 @@ Cambio en la base de datos: `supabase/02_ciudades.sql` (ya aplicado).
 Pruebas: `pruebas/flujo_completo.py` recorre todo entre un cliente y un maestro en dos
 "celulares" distintos con `pruebas/servidor_simulado.py` (cuentas, tablas, funciones y tiempo real).
 Base de datos: `supabase/03_reportes_y_conexion.sql` (ya aplicado).
+
+## Buscador de ciudades (versión 0.3.2)
+
+La ciudad ya no se elige en una lista desplegable: al tocar el campo "Ciudad" se abre una
+pantalla de la app (`js/ui/selector-ciudad.js`) con un buscador.
+
+- Busca por nombre o por departamento, con o sin tildes y en mayúsculas o minúsculas
+  ("medellin", "MEDELLÍN", "valle", "candela").
+- Sin escribir nada muestra las 12 principales y luego todas de la A a la Z.
+- "Usar mi ubicación" elige la ciudad con el GPS.
+- Enter elige el primer resultado; Escape o la flecha cierran sin cambiar.
+- Se usa al crear la cuenta, al pedir un servicio y en el panel y la cuenta del maestro.

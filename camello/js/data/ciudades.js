@@ -82,14 +82,6 @@ export const CIUDADES_SELECTOR = [
   ...CIUDADES.slice(PRINCIPALES).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')),
 ];
 
-/** Opciones <option> para un <select> de ciudad. */
-export function opcionesCiudad(seleccionada = '') {
-  const op = (c) => `<option value="${c.id}" ${c.id === seleccionada ? 'selected' : ''}>${c.nombre} · ${c.departamento}</option>`;
-  return `<option value="">Elige tu ciudad</option>
-    <optgroup label="Ciudades principales">${CIUDADES_SELECTOR.slice(0, PRINCIPALES).map(op).join('')}</optgroup>
-    <optgroup label="Más ciudades">${CIUDADES_SELECTOR.slice(PRINCIPALES).map(op).join('')}</optgroup>`;
-}
-
 /** La ciudad de la lista más cercana a un punto GPS (máximo 60 km; si no, null). */
 export function ciudadMasCercana(p) {
   if (!p) return null;
