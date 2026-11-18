@@ -41,6 +41,58 @@ export function limpiarDireccion(texto) {
     .trim();
 }
 
+const compacto = (t) => normal(t).replace(/\s+/g, '');
+
+/**
+ * Lee una dirección con nomenclatura colombiana: "Calle 5 38-20", "Carrera 43A 1 Sur-150".
+ * Devuelve { via: 'calle 5', cruce: '38', placa: 20 } o null si no tiene esa forma.
+ */
+export function leerNomenclatura(texto) {
+  const t = normal(limpiarDireccion(texto)).replace(/,.*$/, '');
+  // Número con letra opcional (43A, 5 bis, 68B): la letra no puede ser el inicio de una palabra ("Sur")
+  const num = '(\\d{1,3}(?:\\s?[a-z](?![a-z]))?(?:\\s?bis)?(?:\\s?[a-z](?![a-z]))?)';
+  const m = t.match(new RegExp(`^(?:avenida\\s+)?(calle|carrera|transversal|diagonal|avenida)\\s+${num}(\\s+(?:sur|este|norte|oeste))?\\s+${num}(\\s+(?:sur|este))?(?:\\s*-\\s*(\\d{1,3}))?`));
+  if (!m) return null;
+  return {
+    via: `${m[1]} ${m[2].replace(/\s+/g, '')}${m[3] || ''}`.trim(),
+    cruce: `${m[4].replace(/\s+/g, '')}${m[5] || ''}`.trim(),
+    placa: m[6] ? Number(m[6]) : null,
+  };
+}
+
+/**
+ * Ubica la cuadra de una dirección con nomenclatura buscando lugares registrados
+ * en esa misma cuadra (por ejemplo, "Calle 5 # 38-48" para "Calle 5 # 38-20").
+ * Devuelve { lat, lng, barrio } o null.
+ */
+async function buscarCuadra(n, ciudad, signal) {
+  const parametros = new URLSearchParams({ q: `${n.via} ${n.cruce}`, limit: '50', bbox: COLOMBIA });
+  if (ciudad) {
+    parametros.set('lat', ciudad.lat);
+    parametros.set('lon', ciudad.lng);
+  }
+  const r = await fetch(`${PHOTON}/api/?${parametros}`, { signal });
+  if (!r.ok) return null;
+  const via = compacto(n.via);
+  const cruce = compacto(n.cruce);
+  let mejor = null;
+  for (const f of (await r.json()).features || []) {
+    const p = f.properties;
+    const calle = compacto(p.street).replace(/^avenida/, '');
+    const placa = compacto(p.housenumber);
+    if (calle !== via || !placa.startsWith(cruce)) continue;
+    const [lng, lat] = f.geometry.coordinates;
+    if (ciudad && distanciaKm(ciudad, { lat, lng }) > RADIO_CIUDAD_KM) continue;
+    // Mejor si el cruce es exacto (38-… y no 38D-…) y la placa está cerca de la buscada
+    const siguiente = placa.charAt(cruce.length);
+    const exacto = !siguiente || !/[a-z]/.test(siguiente);
+    const numPlaca = Number((placa.slice(cruce.length).match(/\d+/) || [])[0]);
+    const puntaje = (exacto ? 0 : 1000) + (n.placa != null && Number.isFinite(numPlaca) ? Math.abs(numPlaca - n.placa) : 500);
+    if (!mejor || puntaje < mejor.puntaje) mejor = { lat, lng, barrio: p.district || p.locality || '', puntaje };
+  }
+  return mejor;
+}
+
 /** Agrega la ciudad a la búsqueda si la persona no la escribió. */
 function conCiudad(texto, ciudad) {
   if (!ciudad || normal(texto).includes(normal(ciudad.nombre))) return texto;
@@ -65,6 +117,21 @@ export async function sugerir(texto, ciudadId, { signal } = {}) {
   const q = limpiarDireccion(texto);
   if (q.length < 3) return [];
   const ciudad = ciudadPorId(ciudadId);
+
+  // "Calle 5 # 38-20": se ubica la cuadra y se sugiere la misma dirección que escribió
+  const n = leerNomenclatura(texto);
+  if (n) {
+    const cuadra = await buscarCuadra(n, ciudad, signal);
+    if (!cuadra) return [];
+    return [{
+      titulo: texto.trim().replace(/\s+/g, ' '),
+      detalle: [cuadra.barrio, ciudad?.nombre].filter(Boolean).join(', '),
+      lat: cuadra.lat,
+      lng: cuadra.lng,
+      km: 0,
+      ciudad: ciudadMasCercana(cuadra)?.id || ciudadId,
+    }];
+  }
   const parametros = new URLSearchParams({ q: conCiudad(q, ciudad), limit: '10', bbox: COLOMBIA });
   if (ciudad) {
     parametros.set('lat', ciudad.lat);
@@ -80,7 +147,8 @@ export async function sugerir(texto, ciudadId, { signal } = {}) {
       const [lng, lat] = f.geometry.coordinates;
       const { titulo, detalle } = describir(f.properties);
       const km = ciudad ? distanciaKm(ciudad, { lat, lng }) : 0;
-      return { titulo, detalle, lat, lng, km, ciudad: ciudadMasCercana({ lat, lng })?.id || '' };
+      const enLaCiudad = !!ciudad && normal(f.properties.city || f.properties.county || '') === normal(ciudad.nombre);
+      return { titulo, detalle, lat, lng, km, enLaCiudad, ciudad: ciudadMasCercana({ lat, lng })?.id || '' };
     })
     .filter((s) => {
       const clave = `${s.titulo}|${s.detalle}`;
@@ -88,8 +156,8 @@ export async function sugerir(texto, ciudadId, { signal } = {}) {
       vistos.add(clave);
       return true;
     });
-  // Las de la ciudad elegida van primero; las lejanas solo si no hay de la ciudad
-  const cerca = lista.filter((s) => s.km <= RADIO_CIUDAD_KM);
+  // Primero las del mismo municipio, luego las cercanas; las lejanas solo si no hay nada cerca
+  const cerca = lista.filter((s) => s.km <= RADIO_CIUDAD_KM).sort((a, b) => b.enLaCiudad - a.enLaCiudad || a.km - b.km);
   return (cerca.length ? cerca : lista).slice(0, 6);
 }
 
@@ -99,6 +167,15 @@ export async function sugerir(texto, ciudadId, { signal } = {}) {
  */
 export async function ubicarDireccion(texto, ciudadId) {
   const ciudad = ciudadPorId(ciudadId);
+  const n = leerNomenclatura(texto);
+  if (n) {
+    try {
+      const cuadra = await buscarCuadra(n, ciudad);
+      if (cuadra) return { lat: cuadra.lat, lng: cuadra.lng, exacta: true, cuadra: true };
+    } catch {
+      /* se intenta con el otro buscador */
+    }
+  }
   const q = conCiudad(limpiarDireccion(texto), ciudad);
   const parametros = new URLSearchParams({ format: 'jsonv2', countrycodes: 'co', limit: '3', addressdetails: '0', q });
   if (ciudad) {

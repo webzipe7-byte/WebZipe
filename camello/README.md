@@ -286,7 +286,10 @@ del texto, y por eso "Jardín Plaza" quedaba en cualquier parte. Ahora:
 - **Confirmar en el mapa** (`js/ui/mapa-elegir.js`): si la persona escribe la dirección sin elegir
   sugerencia, se busca (Nominatim) y se abre un mapa con el pin fijo en el centro para moverlo
   hasta la puerta. Si no se encuentra, empieza en el centro de la ciudad. Nunca se inventa un punto.
-- Las direcciones colombianas ("Calle 5 # 38-20", "Cra 43A No. 1 Sur") se limpian antes de buscar.
+- **Nomenclatura colombiana:** "Calle 5 # 38-20" se lee como Calle 5 con Carrera 38 y se ubica la
+  cuadra buscando lugares registrados en esa misma cuadra (probado en Bogotá, Cali, Medellín,
+  Barranquilla y Bucaramanga). Entiende Cra, Cl, Av, Dg, Tv, letras (43A, 68B), bis y Sur.
+- Las sugerencias del mismo municipio van primero.
 - **GPS:** además del punto, escribe la dirección real ("Calle 16 100-20, Ciudad Jardín").
 - **Casa y Trabajo** se guardan con su punto. Las direcciones guardadas antes se confirman una
   sola vez en el mapa.
