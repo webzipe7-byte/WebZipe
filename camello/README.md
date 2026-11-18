@@ -294,3 +294,11 @@ del texto, y por eso "Jardín Plaza" quedaba en cualquier parte. Ahora:
 - **Casa y Trabajo** se guardan con su punto. Las direcciones guardadas antes se confirman una
   sola vez en el mapa.
 - Junto al campo aparece "Ubicada en el mapa · Ver o ajustar".
+
+## Respaldo de los buscadores (versión 0.3.6)
+
+Durante las pruebas, Photon (sugerencias) dejó de responder. Ahora:
+- Cada consulta tiene tiempo límite (Photon 4,5 s, Nominatim 7 s): la app nunca se queda "Buscando…".
+- Si Photon falla, se deja de usar 3 minutos y se sigue con Nominatim y el mapa.
+- La dirección del GPS usa Nominatim si Photon no responde.
+- Si no hay sugerencias, el campo explica que la dirección se confirmará en el mapa.

@@ -18,6 +18,39 @@ const COLOMBIA = '-81.8,-4.3,-66.8,13.6';
 /** Más lejos que esto del centro de la ciudad elegida ya no se considera de esa ciudad. */
 const RADIO_CIUDAD_KM = 30;
 
+/**
+ * Consulta con tiempo límite: si el servicio no responde, se sigue sin él
+ * (la persona marca el punto en el mapa) en vez de quedarse "Buscando…".
+ */
+async function pedirConTiempo(url, { signal, ms = 5000, headers } = {}) {
+  const ctl = new AbortController();
+  const reloj = setTimeout(() => ctl.abort(), ms);
+  const cancelar = () => ctl.abort();
+  signal?.addEventListener('abort', cancelar);
+  try {
+    const r = await fetch(url, { signal: ctl.signal, headers });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return await r.json();
+  } finally {
+    clearTimeout(reloj);
+    signal?.removeEventListener('abort', cancelar);
+  }
+}
+
+/** Si Photon falla, se deja de usar 3 minutos para no hacer esperar a la persona en cada letra. */
+let photonCaidoHasta = 0;
+const photonDisponible = () => Date.now() > photonCaidoHasta;
+async function photon(ruta, parametros, signal) {
+  if (!photonDisponible()) throw new Error('Photon no disponible');
+  try {
+    return await pedirConTiempo(`${PHOTON}${ruta}?${parametros}`, { signal, ms: 4500 });
+  } catch (e) {
+    // Si la canceló la persona (siguió escribiendo) no es una caída
+    if (!signal?.aborted) photonCaidoHasta = Date.now() + 3 * 60 * 1000;
+    throw e;
+  }
+}
+
 const normal = (t) =>
   String(t || '')
     .toLowerCase()
@@ -71,12 +104,11 @@ async function buscarCuadra(n, ciudad, signal) {
     parametros.set('lat', ciudad.lat);
     parametros.set('lon', ciudad.lng);
   }
-  const r = await fetch(`${PHOTON}/api/?${parametros}`, { signal });
-  if (!r.ok) return null;
+  const datos = await photon('/api/', parametros, signal);
   const via = compacto(n.via);
   const cruce = compacto(n.cruce);
   let mejor = null;
-  for (const f of (await r.json()).features || []) {
+  for (const f of datos.features || []) {
     const p = f.properties;
     const calle = compacto(p.street).replace(/^avenida/, '');
     const placa = compacto(p.housenumber);
@@ -137,9 +169,7 @@ export async function sugerir(texto, ciudadId, { signal } = {}) {
     parametros.set('lat', ciudad.lat);
     parametros.set('lon', ciudad.lng);
   }
-  const r = await fetch(`${PHOTON}/api/?${parametros}`, { signal });
-  if (!r.ok) throw new Error('No pudimos buscar la dirección ahora.');
-  const datos = await r.json();
+  const datos = await photon('/api/', parametros, signal);
   const vistos = new Set();
   const lista = (datos.features || [])
     .filter((f) => f.properties?.countrycode === 'CO')
@@ -185,9 +215,7 @@ export async function ubicarDireccion(texto, ciudadId) {
     parametros.set('bounded', '1');
   }
   try {
-    const r = await fetch(`${NOMINATIM}/search?${parametros}`, { headers: { 'Accept-Language': 'es' } });
-    if (!r.ok) return null;
-    const [mejor] = await r.json();
+    const [mejor] = await pedirConTiempo(`${NOMINATIM}/search?${parametros}`, { ms: 7000, headers: { 'Accept-Language': 'es' } });
     if (!mejor) return null;
     const punto = { lat: Number(mejor.lat), lng: Number(mejor.lon) };
     if (ciudad && distanciaKm(ciudad, punto) > RADIO_CIUDAD_KM) return null;
@@ -198,16 +226,25 @@ export async function ubicarDireccion(texto, ciudadId) {
   }
 }
 
-/** De un punto a una dirección legible ("Calle 16 # 100-20, Ciudad Jardín"). */
+/** De un punto a una dirección legible ("Calle 16 # 100-20, Ciudad Jardín"). Si Photon falla, usa Nominatim. */
 export async function direccionDe(punto) {
   try {
-    const r = await fetch(`${PHOTON}/reverse?lat=${punto.lat}&lon=${punto.lng}&limit=1`);
-    if (!r.ok) return '';
-    const [f] = (await r.json()).features || [];
-    if (!f) return '';
-    const p = f.properties;
-    const calle = [p.street, p.housenumber].filter(Boolean).join(' ');
-    return [calle || p.name, p.district || p.locality].filter(Boolean).join(', ');
+    const datos = await photon('/reverse', new URLSearchParams({ lat: punto.lat, lon: punto.lng, limit: '1' }));
+    const p = datos.features?.[0]?.properties;
+    if (p) {
+      const calle = [p.street, p.housenumber].filter(Boolean).join(' ');
+      const texto = [calle || p.name, p.district || p.locality].filter(Boolean).join(', ');
+      if (texto) return texto;
+    }
+  } catch {
+    /* se intenta con Nominatim */
+  }
+  try {
+    const parametros = new URLSearchParams({ format: 'jsonv2', lat: punto.lat, lon: punto.lng, zoom: '18', addressdetails: '1' });
+    const j = await pedirConTiempo(`${NOMINATIM}/reverse?${parametros}`, { ms: 6000, headers: { 'Accept-Language': 'es' } });
+    const a = j.address || {};
+    const calle = [a.road, a.house_number].filter(Boolean).join(' ');
+    return [calle || j.name, a.neighbourhood || a.suburb || a.quarter].filter(Boolean).join(', ');
   } catch {
     return '';
   }

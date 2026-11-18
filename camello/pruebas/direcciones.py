@@ -42,8 +42,11 @@ modo_nominatim = {"r": "calle"}
 
 
 async def nominatim(route):
-    q = parse_qs(urlparse(route.request.url).query)
+    u = urlparse(route.request.url)
+    q = parse_qs(u.query)
     CONSULTAS.append(("nominatim", q.get("q", [""])[0]))
+    if u.path == "/reverse":
+        return await route.fulfill(headers=CORS, body=json.dumps({"address": {"road": "Calle 16", "house_number": "100-20", "suburb": "Ciudad Jardín"}}))
     if modo_nominatim["r"] == "calle":
         body = [{"lat": "3.4408", "lon": "-76.5363", "category": "highway", "type": "residential"}]
     else:
@@ -156,6 +159,42 @@ async def main():
         await pg.wait_for_timeout(1200)
         casa = next((x["datos"].get("lugares", {}).get("casa") for x in srv.t["privado"]), None)
         revisar(bool(casa and casa.get("coords", {}).get("fuente") == "busqueda"), f"Casa se guarda con el punto real ({casa})")
+
+        print("6. Photon caído: la app sigue funcionando con el respaldo")
+        await ctx.unroute("https://photon.komoot.io/**")
+        await ctx.route("https://photon.komoot.io/**", lambda r: r.abort())
+        modo_nominatim["r"] = "calle"
+        await ir_a_direccion()
+        await pg.fill("#f-direccion", "")
+        await pg.type("#f-direccion", "unicentro", delay=30)
+        await pg.wait_for_timeout(1200)
+        revisar(await pg.locator(".dir-sin-sugerencias").count() == 1, "avisa que confirme en el mapa")
+        t0 = asyncio.get_event_loop().time()
+        await pg.click("[data-accion=continuar]")
+        await pg.wait_for_selector(".elegir-pantalla", timeout=10000)
+        revisar(asyncio.get_event_loop().time() - t0 < 4, "abre el mapa rápido con el otro buscador")
+        await pg.click("[data-confirmar]")
+        await pg.wait_for_timeout(400)
+
+        print("7. Photon colgado (no responde): no se queda buscando para siempre")
+        await ctx.unroute("https://photon.komoot.io/**")
+        async def colgado(route):
+            await asyncio.sleep(20)
+        await ctx.route("https://photon.komoot.io/**", colgado)
+        await pg.evaluate("location.reload()")
+        await pg.wait_for_timeout(1500)
+        await ir_a_direccion()
+        await pg.fill("#f-direccion", "Calle 5 # 38-20")
+        t0 = asyncio.get_event_loop().time()
+        await pg.click("[data-accion=continuar]")
+        await pg.wait_for_selector(".elegir-pantalla", timeout=15000)
+        espera = asyncio.get_event_loop().time() - t0
+        revisar(espera < 8, f"abre el mapa en {espera:.1f} s aunque el buscador no responda")
+        await pg.click("[data-cancelar]")
+        await pg.wait_for_timeout(300)
+        await pg.click("[data-accion=gps]")
+        await pg.wait_for_timeout(500)
+        revisar(await pg.locator(".dir-punto").is_visible(), "el GPS funciona igual")
 
         print("Errores:", errores, srv.errores)
         await b.close()

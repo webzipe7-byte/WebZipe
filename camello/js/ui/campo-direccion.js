@@ -88,6 +88,15 @@ export function activarDireccion(raiz, { ciudad = () => '', punto = null, alCamb
     limpiarError();
   }
 
+  function avisoSinSugerencias() {
+    cerrarLista();
+    if (raiz.querySelector('.dir-sin-sugerencias')) return;
+    raiz.querySelector('.dir-caja').insertAdjacentHTML(
+      'afterend',
+      '<p class="campo-ayuda dir-sin-sugerencias">Escribe la dirección completa. Al continuar la confirmas en el mapa.</p>'
+    );
+  }
+
   function limpiarError() {
     raiz.querySelector('[data-campo="direccion"]')?.classList.remove('con-error');
     raiz.querySelector('#e-direccion').textContent = '';
@@ -107,8 +116,9 @@ export function activarDireccion(raiz, { ciudad = () => '', punto = null, alCamb
         sugerencias = await sugerir(texto, ciudad(), { signal: consulta.signal });
         marcada = -1;
         if (document.activeElement === input) pintarLista();
-      } catch {
-        /* sin señal o búsqueda cancelada: se puede seguir escribiendo */
+      } catch (e) {
+        // Si el buscador no responde se sigue igual: al continuar se confirma en el mapa
+        if (e.name !== 'AbortError' || !consulta.signal.aborted) avisoSinSugerencias();
       }
     }, 300);
   });

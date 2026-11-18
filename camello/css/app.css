@@ -3490,3 +3490,6 @@ body.sin-scroll {
   font-size: 0.88rem;
   color: var(--tinta-2);
 }
+.dir-sin-sugerencias {
+  margin: 6px 0 0;
+}
