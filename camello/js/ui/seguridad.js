@@ -4,10 +4,10 @@
  */
 import { icono } from './iconos.js';
 import { esc } from './formato.js';
-import { aviso } from './componentes.js';
 import { sesion } from '../estado.js';
 import { APP } from '../config.js';
 import { compartirSeguimiento } from '../screens/seguimiento.js';
+import { abrirReporte } from './reportar.js';
 
 export function abrirSeguridad(pedido, t) {
   const contactos = sesion.usuario.contactos || [];
@@ -34,7 +34,7 @@ export function abrirSeguridad(pedido, t) {
           <div class="seg-pin">${icono('candado', { tamano: 20 })}<span><b>Código de seguridad: ${esc(pedido.pin)}</b><small>Pídeselo a ${esc(t.nombre)} antes de abrir la puerta.</small></span></div>
         </li>
         <li>
-          <button data-accion="reportar">${icono('alerta', { tamano: 20 })}<span><b>Reportar un problema</b><small>El equipo de Camello revisa cada reporte</small></span></button>
+          <button data-accion="reportar">${icono('alerta', { tamano: 20 })}<span><b>Reportar un problema</b><small>Cuéntanos qué pasó con este servicio</small></span></button>
         </li>
       </ul>
       <button class="btn btn-texto btn-bloque" data-cerrar>Cerrar</button>
@@ -51,7 +51,7 @@ export function abrirSeguridad(pedido, t) {
   });
   fondo.querySelector('[data-accion="reportar"]').addEventListener('click', () => {
     cerrar();
-    aviso('Recibimos tu reporte. Te contactaremos en minutos. (Demo)', 'exito');
+    abrirReporte({ tipo: 'problema', pedidoId: pedido.id });
   });
   fondo.querySelector('[data-cerrar]').focus();
 }

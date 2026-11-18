@@ -1,5 +1,5 @@
 /**
- * Cierre del servicio: pago simulado y calificación.
+ * Cierre del servicio: registro del pago al maestro y calificación.
  */
 import { pedidos, etapaDe } from '../services/pedidos.js';
 import { pagos } from '../services/pagos.js';
@@ -51,7 +51,7 @@ export function pantallaPagar(raiz, { id }) {
       </section>
 
       <section class="bloque">
-        <h2>Método de pago</h2>
+        <h2>¿Cómo le pagaste a ${esc(t.nombre)}?</h2>
         <div class="opciones" role="radiogroup" aria-label="Método de pago">
           ${metodos
             .map(
@@ -63,7 +63,7 @@ export function pantallaPagar(raiz, { id }) {
             )
             .join('')}
         </div>
-        <p class="tenue pequeno">${icono('candado', { tamano: 14 })} Pago simulado: en este demo no se cobra nada.</p>
+        <p class="tenue pequeno">${icono('candado', { tamano: 14 })} Le pagas directamente al maestro. Camello no cobra dentro de la app: aquí solo dejas registrado el pago.</p>
       </section>
     </main>
     <div class="pie-fijo"><button class="btn btn-primario btn-bloque" data-accion="pagar"></button></div>`;
@@ -72,7 +72,7 @@ export function pantallaPagar(raiz, { id }) {
   const actualizar = () => {
     const total = pedido.precio.total + propina;
     raiz.querySelector('#monto').textContent = dinero(total);
-    boton.textContent = metodo.tipo === 'efectivo' ? `Ya pagué en efectivo · ${dinero(total)}` : `Pagar ${dinero(total)}`;
+    boton.textContent = `Ya le pagué ${dinero(total)}`;
   };
   actualizar();
 
@@ -95,13 +95,13 @@ export function pantallaPagar(raiz, { id }) {
   );
 
   boton.addEventListener('click', async () => {
-    cargando(boton, true, metodo.tipo === 'efectivo' ? 'Registrando…' : 'Procesando pago…');
+    cargando(boton, true, 'Registrando…');
     try {
       const pago = await pagos.pagar(pedido, { metodo, propina });
       raiz.innerHTML = `
         <main class="contenido centro-total">
           <span class="exito-ico">${icono('check', { tamano: 44 })}</span>
-          <h1 tabindex="-1">${metodo.tipo === 'efectivo' ? 'Pago registrado' : 'Pago aprobado'}</h1>
+          <h1 tabindex="-1">Pago registrado</h1>
           <p class="tenue">${dinero(pago.total)} · ${esc(metodo.nombre)}</p>
           <p>Último paso: cuéntanos cómo te fue con ${esc(t.nombre)}.</p>
           <a class="btn btn-texto" href="#/recibo/${id}">${icono('recibo', { tamano: 18 })} Ver recibo</a>

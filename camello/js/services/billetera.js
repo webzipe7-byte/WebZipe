@@ -44,12 +44,13 @@ export function vencimientoValido(texto) {
   return fin >= new Date();
 }
 
-export const ICONO_METODO = { tarjeta: 'tarjeta', nequi: 'celular', efectivo: 'billete' };
+export const ICONO_METODO = { tarjeta: 'tarjeta', nequi: 'celular', efectivo: 'billete', transferencia: 'celular' };
 
 export const billetera = {
   metodos: (usuario) => usuario.metodos,
 
   metodo: (usuario, id) => usuario.metodos.find((m) => m.id === id) || usuario.metodos[0],
+
 
   async agregarTarjeta(usuarioId, { numero, nombre }) {
     await esperar(900);

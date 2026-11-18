@@ -30,7 +30,7 @@ import {
 import { pantallaPerfil } from './screens/perfil.js';
 import { pantallaMaestro, pantallaTrabajoMaestro, pantallaTrabajosMaestro, pantallaCuentaMaestro } from './screens/maestro.js';
 import { auth, inicioDe, alFallarGuardado } from './services/auth.js';
-import { sincronizar } from './services/sincronizar.js';
+import { sincronizar, senalDeVida } from './services/sincronizar.js';
 import { usuarioNube, alCambiarSesion, cuentas } from './services/nube.js';
 import { aviso } from './ui/componentes.js';
 
@@ -128,6 +128,15 @@ iniciarRouter({
 if (enlace === 'confirmado' && sesion.usuario) aviso('¡Correo confirmado! Ya puedes usar Camello.', 'exito');
 else if (enlace === 'vencido') aviso('Ese enlace ya se usó o venció. Si ya confirmaste, inicia sesión con tu correo y contraseña.', 'error');
 else if (errorCarga) aviso(errorCarga, 'error');
+
+// Maestro conectado: cada minuto avisa que sigue con la app abierta.
+// Si cierra la app, a los 3 minutos deja de aparecer para los clientes.
+const latido = () => {
+  if (sesion.usuario?.maestro?.conectado && !document.hidden) senalDeVida();
+};
+setInterval(latido, 60000);
+document.addEventListener('visibilitychange', latido);
+latido();
 
 // Si se cierra la sesión de esta misma cuenta en otra pestaña, esta también se cierra
 window.addEventListener('storage', (e) => {

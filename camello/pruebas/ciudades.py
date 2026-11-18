@@ -5,7 +5,7 @@ B="http://localhost:8765/camello/"
 SIM="""const mm=window.matchMedia.bind(window);window.matchMedia=(q)=>q.includes('display-mode: standalone')?{matches:true,media:q,addEventListener(){},removeEventListener(){}}:mm(q);"""
 U="11111111-2222-3333-4444-555555555555"
 MB="99999999-2222-3333-4444-00000000000b"; MM="99999999-2222-3333-4444-00000000000d"
-base={"conectado":True,"calificaciones":0,"calificacion_suma":0,"trabajos":0,"rol":"trabajador","categoria":"cerrajero","anios":5}
+base={"actualizado":time.strftime("%Y-%m-%dT%H:%M:%S.000Z",time.gmtime()),"conectado":True,"calificaciones":0,"calificacion_suma":0,"trabajos":0,"rol":"trabajador","categoria":"cerrajero","anios":5}
 db={"perfiles":[{**base,"id":MB,"nombre":"Luis Bogotano","ciudad":"bogota"},{**base,"id":MM,"nombre":"Juan Paisa","ciudad":"medellin"}],"privado":[]}
 consultas=[]; creados=[]
 def filtra(rows,q):

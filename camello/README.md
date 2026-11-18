@@ -235,3 +235,22 @@ grandes de cada área metropolitana (`js/data/ciudades.js`).
   conectarse; al cliente, en el primer pedido.
 
 Cambio en la base de datos: `supabase/02_ciudades.sql` (ya aplicado).
+
+## Correcciones (versión 0.3.1)
+
+- **Maestros "fantasma":** un maestro conectado manda señal cada minuto mientras tiene la app
+  abierta. Si la cierra, a los 3 minutos deja de aparecer y el servidor no deja pedirle
+  (antes seguía "En línea" para siempre). La lista sigue lo que dice el servidor.
+- **Pagos:** se quitaron los cobros con tarjeta simulados (decía "Pago aprobado" sin cobrar nada
+  y pedía datos de la tarjeta). Ahora el cliente le paga directo al maestro, en efectivo o por
+  transferencia, y en la app queda registrado.
+- **Reportar un problema y soporte:** antes mostraban "te contactaremos" sin enviar nada. Ahora el
+  mensaje se guarda en la tabla `reportes` (Supabase → Table editor → reportes).
+- Se quitó el botón de llamar, que no hacía nada.
+- La política de privacidad decía que todo se guardaba solo en el teléfono: se corrigió.
+- El panel del maestro muestra el nombre del cliente apenas llega la solicitud.
+- Si el maestro tarda más de 3 minutos en responder, se le sugiere al cliente elegir otro.
+
+Pruebas: `pruebas/flujo_completo.py` recorre todo entre un cliente y un maestro en dos
+"celulares" distintos con `pruebas/servidor_simulado.py` (cuentas, tablas, funciones y tiempo real).
+Base de datos: `supabase/03_reportes_y_conexion.sql` (ya aplicado).

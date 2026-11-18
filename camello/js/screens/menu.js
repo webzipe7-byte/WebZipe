@@ -15,6 +15,7 @@ import { icono } from '../ui/iconos.js';
 import { esc, iniciales, dinero, fecha } from '../ui/formato.js';
 import { validarNombre, validarTelefono } from '../services/validar.js';
 import { APP, MAX_CONTACTOS } from '../config.js';
+import { abrirReporte } from '../ui/reportar.js';
 
 const fila = (ruta, ic, titulo, sub = '', extra = '') => `
   <li><a class="menu-fila" href="${ruta}">
@@ -57,7 +58,7 @@ export async function pantallaCuenta(raiz) {
       ${instalacion.instalada() ? '' : `<button class="menu-fila menu-suelto" data-accion="instalar"><span class="menu-ico">${icono('descargar', { tamano: 20 })}</span><span class="fila-texto"><b>Descargar la app</b><small>Tenla con su propio ícono</small></span></button>`}
 
       <button class="btn btn-texto peligro btn-bloque" data-accion="salir">${icono('salir', { tamano: 20 })} Cerrar sesión</button>
-      <p class="nota-demo">${esc(APP.nombre)} · versión ${esc(APP.version)} (demo)</p>
+      <p class="nota-demo">${esc(APP.nombre)} · versión ${esc(APP.version)}</p>
     </main>
     ${navInferior('cuenta')}`;
 
@@ -260,12 +261,12 @@ export function pantallaAyuda(raiz) {
       </div>
       <section class="bloque">
         <h2>¿No encontraste tu respuesta?</h2>
-        <button class="btn btn-secundario btn-bloque" data-accion="soporte">${icono('chat', { tamano: 20 })} Hablar con soporte</button>
+        <button class="btn btn-secundario btn-bloque" data-accion="soporte">${icono('chat', { tamano: 20 })} Escribir a soporte</button>
         <p class="tenue pequeno centro">Soporte todos los días de 6:00 a. m. a 10:00 p. m.</p>
       </section>
     </main>`;
   raiz.querySelector('[data-accion="atras"]').addEventListener('click', () => atras('/cuenta'));
-  raiz.querySelector('[data-accion="soporte"]').addEventListener('click', () => aviso('El chat con soporte estará disponible en la versión completa.'));
+  raiz.querySelector('[data-accion="soporte"]').addEventListener('click', () => abrirReporte({ tipo: 'soporte' }));
 }
 
 /* ================= Configuración ================= */
@@ -295,7 +296,7 @@ export function pantallaConfiguracion(raiz) {
       </ul>
       <section class="bloque">
         <h2>Privacidad</h2>
-        <p class="tenue pequeno">Tus datos se usan solo para prestarte el servicio. En este demo todo se guarda únicamente en este dispositivo.</p>
+        <p class="tenue pequeno">Tus datos se usan solo para prestarte el servicio. Se guardan en un servidor seguro y cada persona solo puede ver lo suyo: el maestro ve tu nombre y la dirección del servicio, nunca tu celular ni tu correo.</p>
         <button class="btn btn-texto peligro btn-bloque" data-accion="eliminar">${icono('papelera', { tamano: 18 })} Eliminar mi cuenta</button>
       </section>
       <div id="dialogo"></div>

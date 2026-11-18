@@ -219,7 +219,7 @@ export async function pantallaConfirmar(raiz) {
            .map((m) => `<label class="opcion"><input type="radio" name="metodo" value="${m.id}" ${m.id === actual ? 'checked' : ''}><span class="opcion-caja">${icono(ICONO_METODO[m.tipo])}<span><b>${esc(m.nombre)}</b></span></span></label>`)
            .join('')}
        </div>
-       <a class="btn btn-texto btn-bloque" href="#/billetera/agregar">${icono('mas', { tamano: 18 })} Agregar tarjeta o Nequi</a>
+       <p class="tenue pequeno">Le pagas directamente al maestro cuando termine el trabajo.</p>
        <button class="btn btn-primario btn-bloque" data-ok>Listo</button>`,
       (fondo, cerrar) => {
         fondo.querySelector('[data-ok]').addEventListener('click', () => {

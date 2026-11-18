@@ -11,6 +11,7 @@ import { seguirMaestro, posicionEnVivo, distanciaKm } from '../services/ubicacio
 import { categoriaPorId } from '../data/categorias.js';
 import { ciudadPorId, opcionesCiudad } from '../data/ciudades.js';
 import { realtime } from '../services/nube.js';
+import { almacen } from '../services/almacen.js';
 import { sesion } from '../estado.js';
 import { ir, atras } from '../router.js';
 import { barra, avatar, vacio, aviso, cargando, iconoCategoria } from '../ui/componentes.js';
@@ -96,7 +97,7 @@ export function pantallaMaestro(raiz) {
           : ''
       }
       <section class="conexion${conectado ? ' activa' : ''}"${ciudadPorId(u.ciudad) ? '' : ' hidden'}>
-        <span><b>${conectado ? 'Estás conectado' : 'Estás desconectado'}</b><small>${conectado ? 'Los clientes te ven y te pueden pedir.' : 'Conéctate para recibir trabajos.'}</small></span>
+        <span><b>${conectado ? 'Estás conectado' : 'Estás desconectado'}</b><small>${conectado ? 'Mantén Camello abierto para recibir solicitudes.' : 'Conéctate para recibir trabajos.'}</small></span>
         <label class="interruptor"><input type="checkbox" id="conectado" ${conectado ? 'checked' : ''} aria-label="Recibir trabajos"><i aria-hidden="true"></i></label>
       </section>
       ${mensajeUbicacion(conectado, !!aqui)}
@@ -177,9 +178,12 @@ export function pantallaMaestro(raiz) {
   pintar();
   gps();
   const dejar = pedidos.escuchar(pintar);
+  // Cuando llega el nombre de un cliente nuevo se vuelve a pintar
+  const dejarUsuarios = almacen.escuchar('usuarios', pintar);
   const reloj = setInterval(pintar, 15000);
   return () => {
     dejar();
+    dejarUsuarios();
     dejarGps();
     clearInterval(reloj);
   };

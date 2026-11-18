@@ -28,13 +28,22 @@ function codigoReferido(nombre) {
   return (base || 'CAMELLO') + Math.floor(1000 + Math.random() * 9000);
 }
 
+/**
+ * Por ahora el cliente le paga directo al maestro (efectivo o transferencia).
+ * Cuando se conecte una pasarela de pagos (Wompi, Mercado Pago…) se agregan aquí las tarjetas.
+ */
+export const METODOS_PAGO = [
+  { id: 'efectivo', tipo: 'efectivo', nombre: 'Efectivo' },
+  { id: 'transferencia', tipo: 'transferencia', nombre: 'Transferencia (Nequi, Daviplata o banco)' },
+];
+
 /** Valores por defecto para los datos privados de una cuenta. */
 const PREDETERMINADOS = () => ({
   direcciones: [],
   lugares: { casa: null, trabajo: null },
   contactos: [],
   bloqueados: [],
-  metodos: [{ id: 'efectivo', tipo: 'efectivo', nombre: 'Efectivo' }],
+  metodos: METODOS_PAGO,
   metodoPreferido: 'efectivo',
   cupones: [],
   codigoReferido: 'CAMELLO' + Math.floor(1000 + Math.random() * 9000),
@@ -43,7 +52,11 @@ const PREDETERMINADOS = () => ({
 
 const usuarios = () => almacen.leer('usuarios', []);
 
-const publico = (u) => ({ ...PREDETERMINADOS(), rol: 'cliente', ...u });
+const publico = (u) => {
+  const x = { ...PREDETERMINADOS(), rol: 'cliente', ...u, metodos: METODOS_PAGO };
+  if (!METODOS_PAGO.some((m) => m.id === x.metodoPreferido)) x.metodoPreferido = 'efectivo';
+  return x;
+};
 
 /** La cuenta se creó pero falta abrir el enlace del correo. */
 export class FaltaConfirmar extends Error {

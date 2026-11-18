@@ -23,7 +23,7 @@ export async function pantallaBilletera(raiz) {
       <section class="bloque primero">
         <h2>Métodos de pago</h2>
         <ul class="lista" id="metodos"></ul>
-        <a class="btn btn-secundario btn-bloque" href="#/billetera/agregar">${icono('mas', { tamano: 18 })} Agregar tarjeta o Nequi</a>
+        <p class="tenue pequeno">${icono('candado', { tamano: 14 })} Le pagas directamente al maestro cuando termina. Por ahora Camello no cobra dentro de la app, así que nunca te pediremos datos de tu tarjeta.</p>
       </section>
 
       <a class="promo" href="#/cupones">
@@ -47,7 +47,7 @@ export async function pantallaBilletera(raiz) {
       <li class="tarjeta metodo">
         <span class="metodo-ico">${icono(ICONO_METODO[m.tipo], { tamano: 22 })}</span>
         <span class="fila-texto"><b>${esc(m.nombre)}</b>${m.id === sesion.usuario.metodoPreferido ? '<small class="ok">Predeterminado</small>' : `<button class="enlace pequeno" data-preferir="${m.id}">Usar por defecto</button>`}</span>
-        ${m.tipo !== 'efectivo' ? `<button class="barra-btn" data-quitar="${m.id}" aria-label="Quitar ${esc(m.nombre)}">${icono('papelera', { tamano: 18 })}</button>` : ''}
+
       </li>`
       )
       .join('');
@@ -84,6 +84,9 @@ export async function pantallaBilletera(raiz) {
 }
 
 export function pantallaAgregarMetodo(raiz) {
+  // Sin pasarela de pagos no se guardan tarjetas: se vuelve a la billetera
+  return ir('/billetera', { reemplazar: true });
+
   let tipo = 'tarjeta';
 
   const pintar = () => {

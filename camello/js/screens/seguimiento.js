@@ -81,7 +81,14 @@ export function pantallaSeguimiento(raiz, { id }) {
       return { titulo: `Llega en ${min} min`, detalle: `${t.nombre} va en camino. Ten lista la entrada.`, clase: '' };
     }
     if (e.id === 'finalizado') return { titulo: est.titulo, detalle: 'Revisa el trabajo y paga para cerrar el servicio.', clase: 'listo' };
-    if (e.id === 'buscando') return { titulo: `Esperando que ${t.nombre} acepte`, detalle: 'Ya le llegó tu solicitud a su app.', clase: '' };
+    if (e.id === 'buscando') {
+      const minutos = (Date.now() - pedido.creado) / 60000;
+      return {
+        titulo: `Esperando que ${t.nombre} acepte`,
+        detalle: minutos > 3 ? 'Está tardando en responder. Si quieres, cancela y elige otro maestro.' : 'Ya le llegó tu solicitud a su app.',
+        clase: '',
+      };
+    }
     return { titulo: est.titulo.replace('el maestro', t.nombre), detalle: est.detalle, clase: '' };
   }
 
@@ -93,7 +100,7 @@ export function pantallaSeguimiento(raiz, { id }) {
 
     // Solo se repinta todo cuando cambia algo visible; el mapa y el tiempo se actualizan aparte
     const sinLeer = chat.sinLeer(id, 'cliente');
-    const clave = `${e.id}|${etapa}|${c.titulo}|${sinLeer}`;
+    const clave = `${e.id}|${etapa}|${c.titulo}|${c.detalle}|${sinLeer}`;
     if (clave === ultimaClave) {
       const fig = cuerpo.querySelector('.mapa-real');
       if (fig && !moverMarcas(fig, puntosSeguimiento(pedido, e))) fig.outerHTML = mapaSeguimiento(pedido, e, t);
@@ -132,7 +139,6 @@ export function pantallaSeguimiento(raiz, { id }) {
         ${
           enCurso && e.id !== 'buscando'
             ? `<span class="acciones-circulo">
-                <button class="circulo" data-accion="llamar" aria-label="Llamar a ${esc(t.nombre)}">${icono('telefono', { tamano: 20 })}</button>
                 <button class="circulo" data-accion="chat" aria-label="Escribir a ${esc(t.nombre)}">${icono('chat', { tamano: 20 })}${sinLeer ? `<span class="burbuja-num">${sinLeer}</span>` : ''}</button>
               </span>`
             : ''
@@ -189,9 +195,6 @@ export function pantallaSeguimiento(raiz, { id }) {
   }
 
   function conectar() {
-    cuerpo.querySelector('[data-accion="llamar"]')?.addEventListener('click', () =>
-      aviso('Llamada protegida: tu número no se le muestra al maestro. (Disponible en la versión completa)')
-    );
     cuerpo.querySelector('[data-accion="chat"]')?.addEventListener('click', () => ir(`/chat/${pedido.id}`));
     cuerpo.querySelector('[data-accion="compartir"]')?.addEventListener('click', () => compartirSeguimiento(pedido, t));
     pie.querySelector('[data-accion="cancelar"]')?.addEventListener('click', preguntarCancelar);

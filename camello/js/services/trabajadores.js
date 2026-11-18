@@ -5,7 +5,7 @@
 import { categoriaPorId } from '../data/categorias.js';
 import { RECARGO_URGENCIA } from '../config.js';
 import { almacen, esperar } from './almacen.js';
-import { sincronizar } from './sincronizar.js';
+import { sincronizar, VIVO_MS } from './sincronizar.js';
 import { maestrosRegistrados, usuarioPublico } from './auth.js';
 import { distanciaKm, posicionEnVivo } from './ubicacion.js';
 
@@ -41,6 +41,7 @@ export function fichaMaestro(u, desde = null) {
     mujer: false,
     color: COLORES[u.id.length % COLORES.length],
     enLinea: !!u.maestro.conectado,
+    visto: u.visto || 0,
     resenas: calificados
       .slice(-3)
       .reverse()
@@ -76,20 +77,23 @@ export const trabajadores = {
    * Pregunta al servidor; si no hay señal, usa los que ya se conocen.
    */
   async disponibles(categoriaId, opciones = {}) {
+    let delServidor = null;
     if (opciones.ciudad) {
       try {
-        await sincronizar.maestrosConectados(categoriaId, opciones.ciudad);
+        delServidor = new Set(await sincronizar.maestrosConectados(categoriaId, opciones.ciudad));
       } catch (e) {
         if (e.codigo !== 'red') throw e;
       }
     }
-    return trabajadores.disponiblesLocal(categoriaId, opciones);
+    const lista = trabajadores.disponiblesLocal(categoriaId, opciones);
+    // Si el servidor respondió, manda él: quien no vino ya no está disponible
+    return delServidor ? lista.filter((t) => delServidor.has(t.id)) : lista;
   },
 
   /** Igual que disponibles, pero solo con lo que ya está en el teléfono (para refrescar la lista al instante). */
   disponiblesLocal(categoriaId, { urgente = true, desde = null, ciudad = '' } = {}) {
     return maestrosRegistrados()
-      .filter((u) => u.maestro.conectado && u.maestro.categoria === categoriaId && (!ciudad || u.ciudad === ciudad))
+      .filter((u) => u.maestro.conectado && u.maestro.categoria === categoriaId && (!ciudad || u.ciudad === ciudad) && Date.now() - (u.visto || 0) < VIVO_MS)
       .map((u) => fichaMaestro(u, desde))
       .map((t) => ({ ...t, minutos: minutosLlegada(t.distanciaKm), precio: cotizar(t, { urgente }) }));
   },

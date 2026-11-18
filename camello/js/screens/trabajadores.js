@@ -106,11 +106,20 @@ export async function pantallaTrabajadores(raiz) {
   cargar();
   // Si un maestro se conecta o se desconecta mientras la persona mira la lista, se actualiza
   const dejar = almacen.escuchar('usuarios', () => {
-    lista = trabajadores.disponiblesLocal(b.categoria, opciones());
+    const ids = new Set(lista.map((t) => t.id));
+    // Cambios en vivo: se actualizan los que ya están y se agregan los que se conectan en esta ciudad
+    lista = trabajadores.disponiblesLocal(b.categoria, opciones()).filter((t) => ids.has(t.id) || Date.now() - (t.visto || 0) < 60000);
     if (ul.isConnected) pintar();
   });
   // Cada 15 s se pregunta otra vez al servidor por si alguien se conectó
-  const reloj = setInterval(() => trabajadores.disponibles(b.categoria, opciones()).catch(() => {}), 15000);
+  const reloj = setInterval(async () => {
+    try {
+      lista = await trabajadores.disponibles(b.categoria, opciones());
+      if (ul.isConnected) pintar();
+    } catch {
+      /* sin señal: se deja la lista como está */
+    }
+  }, 15000);
   return () => {
     dejar();
     clearInterval(reloj);

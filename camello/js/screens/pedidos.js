@@ -107,7 +107,7 @@ export function pantallaRecibo(raiz, { id }) {
           <li>${icono('ubicacion', { tamano: 20 })}<span><small>Dirección</small>${esc(p.direccion.texto)}${p.direccion.detalle ? ` · ${esc(p.direccion.detalle)}` : ''}</span></li>
         </ul>
         ${desglosePrecio(p)}
-        <p class="nota-demo">Comprobante de demostración, sin validez tributaria.</p>
+        <p class="nota-demo">Comprobante del servicio. No es una factura electrónica.</p>
       </section>
       <button class="btn btn-secundario btn-bloque" data-accion="imprimir">${icono('descargar', { tamano: 18 })} Guardar o imprimir</button>
     </main>`;

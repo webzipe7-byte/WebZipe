@@ -25,7 +25,18 @@ export function dePerfil(p) {
     calificaciones: p.calificaciones || 0,
     calificacionSuma: p.calificacion_suma || 0,
     trabajosHechos: p.trabajos || 0,
+    visto: Date.parse(p.actualizado) || 0,
   };
+}
+
+/** Un maestro conectado manda señal cada minuto; si pasan 3 sin señal, ya no se muestra. */
+export const VIVO_MS = 3 * 60 * 1000;
+
+/** Avisa al servidor que el maestro sigue con la app abierta. */
+export function senalDeVida() {
+  const yo = usuarioNube();
+  if (!yo) return Promise.resolve();
+  return db.cambiar('perfiles', { id: `eq.${yo.id}` }, { actualizado: new Date().toISOString() }).catch(() => {});
 }
 
 const lista = (ids) => `(${[...new Set(ids)].filter(Boolean).map((x) => `"${x}"`).join(',')})`;
@@ -153,6 +164,8 @@ export const sincronizar = {
       conectado: 'eq.true',
       categoria: `eq.${categoria}`,
       ciudad: `eq.${ciudad}`,
+      // Solo los que dieron señal de vida hace poco (con la app abierta)
+      actualizado: `gte.${new Date(Date.now() - VIVO_MS).toISOString()}`,
       limit: 60,
     });
     filas.forEach((p) => ponerUsuario(dePerfil(p)));
