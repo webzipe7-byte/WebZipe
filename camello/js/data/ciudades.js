@@ -83,6 +83,7 @@ const sinTildes = (t) =>
     .replace(/,.*$/, '')
     .replace(/(^|\s)(d\.?\s?c\.?|distrito capital)(?=\s|$)/g, ' ')
     .replace(/^distrito\s.*?\bde\s/, '')
+    .replace(/\s(ciudad|urbano|municipio)$/, '')
     .replace(/\s+/g, ' ')
     .trim();
 const PORNOMBRE = new Map(CIUDADES.map((c) => [sinTildes(c.nombre), c]));

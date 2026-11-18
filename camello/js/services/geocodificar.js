@@ -262,7 +262,8 @@ export async function ciudadDePunto(punto) {
     const parametros = new URLSearchParams({ format: 'jsonv2', lat: punto.lat, lon: punto.lng, zoom: '10', addressdetails: '1' });
     const j = await pedirConTiempo(`${NOMINATIM}/reverse?${parametros}`, { ms: 6000, headers: { 'Accept-Language': 'es' } });
     const a = j.address || {};
-    for (const nombre of [a.city, a.town, a.municipality, a.village, a.county, a.state_district, j.name]) {
+    // Bogotá aparece como state "Bogotá, Distrito Capital"; los demás departamentos no coinciden con ninguna ciudad
+    for (const nombre of [a.city, a.town, a.municipality, a.village, a.county, a.state_district, j.name, a.state]) {
       const c = ciudadPorNombre(nombre);
       if (c) return c;
     }
