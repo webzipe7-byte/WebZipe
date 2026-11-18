@@ -318,3 +318,7 @@ dice el mapa.
   Torre del Reloj de Cartagena no están con ese nombre en el mapa: se marcan en el mapa.
 - 6 de 6 direcciones con nomenclatura quedan sobre la calle correcta.
 - 19 de 19 puntos GPS de prueba dan la ciudad correcta, y los de fuera de Colombia, ninguna.
+
+## Lugares con otro nombre en el mapa (versión 0.3.8)
+
+Si un lugar no aparece con el nombre completo (por ejemplo "Torre del Reloj", que en el mapa está como "Puerta del Reloj"), se busca otra vez solo con las palabras que lo identifican, sin "torre", "parque", "plaza" y similares, siempre dentro de la ciudad elegida. Ese resultado se toma como zona aproximada y el cliente lo confirma en el mapa antes de pedir. Las consultas a Nominatim van espaciadas un segundo, como pide su política de uso.

@@ -208,7 +208,41 @@ export async function ubicarDireccion(texto, ciudadId) {
       /* se intenta con el otro buscador */
     }
   }
-  const q = conCiudad(limpiarDireccion(texto), ciudad);
+  const completo = await buscarNominatim(conCiudad(limpiarDireccion(texto), ciudad), ciudad);
+  if (completo) return completo;
+  // El mapa a veces tiene otro nombre ("Puerta del Reloj" y no "Torre del Reloj"):
+  // se busca otra vez solo con las palabras importantes y se toma como zona aproximada
+  const clave = palabrasClave(texto);
+  if (clave && clave !== normal(limpiarDireccion(texto))) {
+    await pausaNominatim();
+    const aproximado = await buscarNominatim(conCiudad(clave, ciudad), ciudad);
+    if (aproximado) return { ...aproximado, exacta: false };
+  }
+  return null;
+}
+
+/** Palabras que no ayudan a encontrar un lugar si el mapa lo tiene con otro nombre. */
+const GENERICAS = new Set(
+  'parque plaza plazoleta torre centro comercial cc c.c. estadio iglesia catedral basilica hospital clinica colegio universidad edificio conjunto residencial barrio sector la el los las de del y en frente al a'.split(' ')
+);
+
+function palabrasClave(texto) {
+  const p = normal(limpiarDireccion(texto))
+    .replace(/[^a-z0-9ñ\s]/g, ' ')
+    .split(/\s+/)
+    .filter((x) => x.length > 2 && !GENERICAS.has(x));
+  const clave = p.join(' ');
+  return clave.length >= 4 ? clave : '';
+}
+
+/** Nominatim pide máximo una consulta por segundo. */
+let ultimaNominatim = 0;
+async function pausaNominatim() {
+  const falta = 1100 - (Date.now() - ultimaNominatim);
+  if (falta > 0) await new Promise((r) => setTimeout(r, falta));
+}
+
+async function buscarNominatim(q, ciudad) {
   const parametros = new URLSearchParams({ format: 'jsonv2', countrycodes: 'co', limit: '3', addressdetails: '0', q });
   if (ciudad) {
     // Se busca solo dentro de la zona de la ciudad
@@ -217,11 +251,13 @@ export async function ubicarDireccion(texto, ciudadId) {
     parametros.set('bounded', '1');
   }
   try {
+    await pausaNominatim();
+    ultimaNominatim = Date.now();
     const [mejor] = await pedirConTiempo(`${NOMINATIM}/search?${parametros}`, { ms: 7000, headers: { 'Accept-Language': 'es' } });
     if (!mejor) return null;
     const punto = { lat: Number(mejor.lat), lng: Number(mejor.lon) };
     if (ciudad && distanciaKm(ciudad, punto) > RADIO_CIUDAD_KM) return null;
-    const exacta = ['house', 'building', 'amenity', 'shop', 'office', 'tourism', 'leisure'].includes(mejor.category) || mejor.type === 'house';
+    const exacta = ['building', 'amenity', 'shop', 'office', 'tourism', 'leisure', 'historic'].includes(mejor.category) || mejor.type === 'house';
     return { ...punto, exacta };
   } catch {
     return null;
