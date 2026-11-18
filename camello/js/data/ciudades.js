@@ -1,5 +1,5 @@
 /**
- * Ciudades de Colombia donde funciona Camello.
+ * Ciudades y municipios de Colombia donde funciona Camello.
  * Todas las capitales de departamento y las ciudades grandes de cada área
  * metropolitana. El punto es el centro de la ciudad (para el mapa cuando
  * la persona no comparte su ubicación).
@@ -52,6 +52,7 @@ export const CIUDADES = [
   ['soledad', 'Soledad', 'Atlántico', 10.9184, -74.7646],
   ['palmira', 'Palmira', 'Valle del Cauca', 3.5394, -76.3036],
   ['jamundi', 'Jamundí', 'Valle del Cauca', 3.261, -76.5394],
+  ['candelaria', 'Candelaria', 'Valle del Cauca', 3.4069, -76.3487],
   ['buenaventura', 'Buenaventura', 'Valle del Cauca', 3.8801, -77.0312],
   ['tulua', 'Tuluá', 'Valle del Cauca', 4.0847, -76.1954],
   ['buga', 'Buga', 'Valle del Cauca', 3.9009, -76.2978],
