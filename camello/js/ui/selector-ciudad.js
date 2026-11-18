@@ -8,8 +8,9 @@
  * El valor queda en un <input type="hidden"> con el id indicado, y al cambiar
  * dispara el evento 'change' en ese input, como lo haría un <select>.
  */
-import { CIUDADES, CIUDADES_SELECTOR, ciudadPorId, ciudadMasCercana } from '../data/ciudades.js';
+import { CIUDADES, CIUDADES_SELECTOR, ciudadPorId } from '../data/ciudades.js';
 import { miUbicacion } from '../services/ubicacion.js';
+import { ciudadDePunto } from '../services/geocodificar.js';
 import { icono } from './iconos.js';
 import { esc } from './formato.js';
 
@@ -256,7 +257,7 @@ export function abrirSelectorCiudad({ actual = '', conGps = false } = {}) {
       gps.disabled = true;
       gps.querySelector('span').textContent = 'Buscando dónde estás…';
       try {
-        const c = ciudadMasCercana(await miUbicacion());
+        const c = await ciudadDePunto(await miUbicacion());
         if (c) return cerrar(c);
         nota.textContent = 'Estás lejos de las ciudades donde funcionamos. Búscala en la lista.';
       } catch (err) {

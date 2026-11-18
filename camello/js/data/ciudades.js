@@ -75,6 +75,26 @@ const PORID = new Map(CIUDADES.map((c) => [c.id, c]));
 
 export const ciudadPorId = (id) => PORID.get(id) || null;
 
+const sinTildes = (t) =>
+  String(t || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/,.*$/, '')
+    .replace(/(^|\s)(d\.?\s?c\.?|distrito capital)(?=\s|$)/g, ' ')
+    .replace(/^distrito\s.*?\bde\s/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+const PORNOMBRE = new Map(CIUDADES.map((c) => [sinTildes(c.nombre), c]));
+
+/** Ciudad de la lista por su nombre como lo escribe el mapa ("Bogotá D.C.", "Medellin", "Santiago de Cali"). */
+export function ciudadPorNombre(nombre) {
+  const n = sinTildes(nombre);
+  if (!n) return null;
+  const sinPrefijo = n.replace(/^santiago de /, '').replace(/^san jose de /, '');
+  return PORNOMBRE.get(n) || PORNOMBRE.get(sinPrefijo) || PORNOMBRE.get(sinPrefijo.replace(/ de indias$/, '')) || null;
+}
+
 /** Lista ordenada para los selectores: primero las más grandes, luego el resto por nombre. */
 const PRINCIPALES = 12;
 export const CIUDADES_SELECTOR = [

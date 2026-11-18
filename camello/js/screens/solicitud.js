@@ -10,9 +10,9 @@ import { icono } from '../ui/iconos.js';
 import { esc, fecha } from '../ui/formato.js';
 import { RECARGO_URGENCIA } from '../config.js';
 import { miUbicacion } from '../services/ubicacion.js';
-import { direccionDe } from '../services/geocodificar.js';
+import { direccionDe, ciudadDePunto } from '../services/geocodificar.js';
 import { campoDireccion, activarDireccion, ubicarConMapa, puntoConfiable } from '../ui/campo-direccion.js';
-import { ciudadMasCercana, ciudadPorId } from '../data/ciudades.js';
+import { ciudadPorId } from '../data/ciudades.js';
 import { campoCiudad, activarCiudades, ponerCiudad } from '../ui/selector-ciudad.js';
 import { auth } from '../services/auth.js';
 import { realtime } from '../services/nube.js';
@@ -234,7 +234,7 @@ export function pantallaSolicitud(raiz, { categoria }) {
         try {
           const punto = await miUbicacion();
           // Con el GPS también se sabe la ciudad
-          const cerca = ciudadMasCercana(punto);
+          const cerca = await ciudadDePunto(punto);
           const gpsPunto = { lat: punto.lat, lng: punto.lng, fuente: 'gps' };
           b = borrador.guardar({ gps: gpsPunto, ...(cerca ? { ciudad: cerca.id } : {}) });
           if (cerca) ponerCiudad(raiz.querySelector('#f-ciudad'), cerca.id);

@@ -8,7 +8,7 @@
  *
  * Nunca se inventa un punto: si no se encuentra, la persona lo marca en el mapa.
  */
-import { ciudadPorId, ciudadMasCercana } from '../data/ciudades.js';
+import { ciudadPorId, ciudadMasCercana, ciudadPorNombre } from '../data/ciudades.js';
 import { distanciaKm } from './ubicacion.js';
 
 const PHOTON = 'https://photon.komoot.io';
@@ -177,8 +177,10 @@ export async function sugerir(texto, ciudadId, { signal } = {}) {
       const [lng, lat] = f.geometry.coordinates;
       const { titulo, detalle } = describir(f.properties);
       const km = ciudad ? distanciaKm(ciudad, { lat, lng }) : 0;
-      const enLaCiudad = !!ciudad && normal(f.properties.city || f.properties.county || '') === normal(ciudad.nombre);
-      return { titulo, detalle, lat, lng, km, enLaCiudad, ciudad: ciudadMasCercana({ lat, lng })?.id || '' };
+      // El municipio lo dice el mapa; solo si no lo dice se usa el más cercano
+      const municipio = ciudadPorNombre(f.properties.city) || ciudadPorNombre(f.properties.county);
+      const enLaCiudad = !!ciudad && municipio?.id === ciudad.id;
+      return { titulo, detalle, lat, lng, km, enLaCiudad, ciudad: (municipio || ciudadMasCercana({ lat, lng }))?.id || '' };
     })
     .filter((s) => {
       const clave = `${s.titulo}|${s.detalle}`;
@@ -248,4 +250,24 @@ export async function direccionDe(punto) {
   } catch {
     return '';
   }
+}
+
+/**
+ * Municipio de un punto GPS. Le pregunta al mapa en qué municipio está
+ * (así Bosa queda en Bogotá y no en Soacha, aunque esté más cerca del centro de Soacha).
+ * Si el mapa no responde, usa la ciudad de la lista más cercana.
+ */
+export async function ciudadDePunto(punto) {
+  try {
+    const parametros = new URLSearchParams({ format: 'jsonv2', lat: punto.lat, lon: punto.lng, zoom: '10', addressdetails: '1' });
+    const j = await pedirConTiempo(`${NOMINATIM}/reverse?${parametros}`, { ms: 6000, headers: { 'Accept-Language': 'es' } });
+    const a = j.address || {};
+    for (const nombre of [a.city, a.town, a.municipality, a.village, a.county, a.state_district, j.name]) {
+      const c = ciudadPorNombre(nombre);
+      if (c) return c;
+    }
+  } catch {
+    /* sin respuesta: se usa la más cercana */
+  }
+  return ciudadMasCercana(punto);
 }

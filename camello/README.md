@@ -302,3 +302,19 @@ Durante las pruebas, Photon (sugerencias) dejó de responder. Ahora:
 - Si Photon falla, se deja de usar 3 minutos y se sigue con Nominatim y el mapa.
 - La dirección del GPS usa Nominatim si Photon no responde.
 - Si no hay sugerencias, el campo explica que la dirección se confirmará en el mapa.
+
+## Municipio correcto con el GPS (versión 0.3.7)
+
+Antes, con el GPS se elegía la ciudad cuyo centro estuviera más cerca, y eso fallaba en las
+orillas: Bosa y Usme (Bogotá) quedaban en Soacha y Pance (Cali) en Jamundí. Ahora se le pregunta
+al mapa en qué municipio está el punto (`ciudadDePunto`) y se reconoce cómo lo escribe el mapa
+("Bogotá D.C.", "Santiago de Cali", "Cartagena de Indias", "San José de Cúcuta"…). Si el mapa
+no responde, se usa la más cercana. Las sugerencias de dirección también usan el municipio que
+dice el mapa.
+
+### Verificación de ubicaciones (servicio real, 17 de noviembre)
+- 63 de 63 centros de ciudad caen en su municipio.
+- 17 de 19 lugares conocidos a menos de 320 m (la mayoría a menos de 100 m). Parque Lleras y
+  Torre del Reloj de Cartagena no están con ese nombre en el mapa: se marcan en el mapa.
+- 6 de 6 direcciones con nomenclatura quedan sobre la calle correcta.
+- 19 de 19 puntos GPS de prueba dan la ciudad correcta, y los de fuera de Colombia, ninguna.
