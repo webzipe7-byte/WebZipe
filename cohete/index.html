@@ -139,8 +139,31 @@
   .explica { margin-top: 16px; min-height: 52px; font-size: 15.5px; }
   .pie-quiz { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; color: var(--suave); font-size: 14px; }
 
+
+  /* Sopa de letras */
+  .sopa-zona { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 4vw, 48px); align-items: start; margin-top: 10px; }
+  .sopa { --n: 15; display: grid; grid-template-columns: repeat(var(--n), 1fr); width: min(540px, 88vw, 54vh); aspect-ratio: 1; background: var(--panel); border: 1px solid var(--linea); border-radius: 16px; padding: 8px; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .letra { display: grid; place-items: center; font: 600 clamp(12px, 1.9vw, 19px)/1 var(--titulo); color: #dfe3ff; border-radius: 7px; cursor: pointer; transition: background .15s, color .15s; }
+  .letra.marcando { background: rgba(111,211,255,.35); color: #fff; }
+  .letra.hallada { color: #1b0d00; }
+  .lista-palabras { columns: 2; column-gap: 18px; list-style: none; }
+  .lista-palabras li { break-inside: avoid; padding: 6px 0; font: 600 15.5px/1.2 var(--titulo); letter-spacing: .04em; color: var(--tinta); transition: color .3s, opacity .3s; position: relative; width: fit-content; }
+  .lista-palabras li::after { content: ''; position: absolute; left: -3px; right: -3px; top: 50%; height: 2px; background: var(--fuego); transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
+  .lista-palabras li.tachada { color: var(--suave); opacity: .55; }
+  .lista-palabras li.tachada::after { transform: scaleX(1); }
+  .marcador { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .marcador b { font: 700 28px/1 var(--titulo); color: var(--fuego2); }
+  .felicidades { margin-top: 14px; font-weight: 600; color: #7dffb0; min-height: 22px; }
+  @media (max-width: 860px) {
+    .sopa-zona { grid-template-columns: 1fr; }
+    .sopa { width: min(100%, 92vw); padding: 5px; }
+    .lista-palabras { columns: 3; column-gap: 12px; }
+    .lista-palabras li { font-size: 13px; padding: 4px 0; }
+  }
+
   /* Navegación */
-  .nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex; align-items: center; gap: 14px; padding: 14px clamp(16px, 4vw, 40px) calc(14px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, rgba(5,6,15,.92) 45%); }
+  .nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex; align-items: center; gap: 14px; padding: 14px clamp(16px, 4vw, 40px) calc(14px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, rgba(5,6,15,.92) 45%); pointer-events: none; }
+  .nav button { pointer-events: auto; }
   .nav .flecha { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--linea); background: rgba(255,255,255,.05); display: grid; place-items: center; transition: background .2s; }
   .nav .flecha:hover { background: rgba(255,255,255,.12); }
   .nav .flecha:disabled { opacity: .3; cursor: default; }
@@ -403,7 +426,24 @@
     </div>
   </section>
 
-  <!-- 14. Cierre -->
+  <!-- 14. Sopa de letras -->
+  <section class="slide" data-titulo="Sopa de letras">
+    <div class="caja">
+      <div class="etiqueta entra">Reto final</div>
+      <h2 class="entra" style="margin-bottom:8px">Sopa de letras espacial</h2>
+      <p class="entra">Arrastra el dedo o el mouse desde la primera hasta la última letra de la palabra. También puedes tocar la primera letra y luego la última. Las palabras pueden estar al derecho, al revés, en vertical o en diagonal.</p>
+      <div class="sopa-zona entra">
+        <div class="sopa" id="sopa" aria-label="Sopa de letras"></div>
+        <div>
+          <div class="marcador"><span><b id="halladas">0</b> de <span id="totalPalabras">0</span> palabras</span><button class="boton claro" type="button" id="nuevaSopa">Nueva sopa</button></div>
+          <ul class="lista-palabras" id="listaPalabras"></ul>
+          <p class="felicidades" id="felicidades" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. Cierre -->
   <section class="slide portada" data-titulo="Gracias">
     <div class="caja">
       <div class="colegio entra">Colegio Carmelitano del Valle</div>
@@ -420,7 +460,7 @@
 <nav class="nav" aria-label="Navegación de diapositivas">
   <button class="flecha" id="anterior" type="button" aria-label="Diapositiva anterior"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
   <div class="puntos" id="puntos"></div>
-  <span class="contador" id="contador">1 / 14</span>
+  <span class="contador" id="contador">1 / 15</span>
   <button class="flecha" id="siguiente" type="button" aria-label="Diapositiva siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
 </nav>
 
@@ -508,7 +548,7 @@
     if (e.key === 'End') ir(slides.length - 1);
   });
   let toqueX = null, toqueY = null;
-  addEventListener('touchstart', e => { if (e.target.matches('input')) return; toqueX = e.touches[0].clientX; toqueY = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchstart', e => { if (e.target.matches('input') || e.target.closest('.sopa')) return; toqueX = e.touches[0].clientX; toqueY = e.touches[0].clientY; }, { passive: true });
   addEventListener('touchend', e => {
     if (toqueX === null) return;
     const dx = e.changedTouches[0].clientX - toqueX, dy = e.changedTouches[0].clientY - toqueY;
@@ -699,6 +739,127 @@
     });
   }
   mostrarPregunta();
+
+  /* ---------- Sopa de letras ---------- */
+  const PALABRAS = ['COHETE', 'POLVORA', 'CHINA', 'GODDARD', 'NEWTON', 'EMPUJE', 'ORBITA', 'LUNA', 'SATELITE', 'SPUTNIK',
+    'GAGARIN', 'APOLO', 'SATURNO', 'ESPACIO', 'ASTRONAUTA', 'COMBUSTIBLE', 'MOTOR', 'ETAPA', 'CONGREVE', 'FALCON',
+    'STARSHIP', 'GRAVEDAD', 'TIERRA', 'MYSORE'];
+  const N = 15;
+  const DIRS = [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]];
+  const COLORES = ['#ffc04a', '#ff7a2f', '#6fd3ff', '#7dffb0', '#ff8fb1', '#c4a7ff', '#ffe07a', '#7fe8e0'];
+  const sopa = $('#sopa'), lista = $('#listaPalabras');
+  let tablero = [], ubicadas = {}, encontradas = new Set(), inicio = null, marcadas = [];
+  sopa.style.setProperty('--n', N);
+
+  function armarSopa() {
+    for (let intento = 0; intento < 200; intento++) {
+      const t = Array.from({ length: N }, () => Array(N).fill(''));
+      const u = {};
+      const orden = [...PALABRAS].sort((a, b) => b.length - a.length);
+      let ok = true;
+      for (const w of orden) {
+        let puesta = false;
+        for (let k = 0; k < 300 && !puesta; k++) {
+          // Más palabras al derecho que al revés para que no sea tan difícil
+          const [dr, dc] = DIRS[Math.random() < .7 ? Math.floor(Math.random() * 4) : 4 + Math.floor(Math.random() * 4)];
+          const r0 = Math.floor(Math.random() * N), c0 = Math.floor(Math.random() * N);
+          const r1 = r0 + dr * (w.length - 1), c1 = c0 + dc * (w.length - 1);
+          if (r1 < 0 || r1 >= N || c1 < 0 || c1 >= N) continue;
+          let cabe = true;
+          for (let i = 0; i < w.length; i++) {
+            const x = t[r0 + dr * i][c0 + dc * i];
+            if (x && x !== w[i]) { cabe = false; break; }
+          }
+          if (!cabe) continue;
+          const celdas = [];
+          for (let i = 0; i < w.length; i++) { t[r0 + dr * i][c0 + dc * i] = w[i]; celdas.push((r0 + dr * i) * N + c0 + dc * i); }
+          u[w] = celdas; puesta = true;
+        }
+        if (!puesta) { ok = false; break; }
+      }
+      if (!ok) continue;
+      const abc = 'ABCDEFGHIJKLMNOPRSTUVYZ';
+      for (const fila of t) for (let c = 0; c < N; c++) if (!fila[c]) fila[c] = abc[Math.floor(Math.random() * abc.length)];
+      tablero = t; ubicadas = u; return;
+    }
+  }
+
+  function pintarSopa() {
+    armarSopa();
+    encontradas = new Set(); inicio = null; marcadas = [];
+    sopa.innerHTML = '';
+    tablero.flat().forEach((l, i) => {
+      const d = document.createElement('div');
+      d.className = 'letra'; d.textContent = l; d.dataset.i = i;
+      sopa.append(d);
+    });
+    lista.innerHTML = '';
+    [...PALABRAS].sort().forEach(w => {
+      const li = document.createElement('li');
+      li.textContent = w; li.dataset.palabra = w;
+      lista.append(li);
+    });
+    $('#halladas').textContent = 0;
+    $('#totalPalabras').textContent = PALABRAS.length;
+    $('#felicidades').textContent = '';
+  }
+
+  const celda = i => sopa.children[i];
+  function linea(a, b) {
+    const ra = Math.floor(a / N), ca = a % N, rb = Math.floor(b / N), cb = b % N;
+    const dr = Math.sign(rb - ra), dc = Math.sign(cb - ca);
+    const largo = Math.max(Math.abs(rb - ra), Math.abs(cb - ca));
+    if (!(ra === rb || ca === cb || Math.abs(rb - ra) === Math.abs(cb - ca))) return [a];
+    return Array.from({ length: largo + 1 }, (_, k) => (ra + dr * k) * N + ca + dc * k);
+  }
+  function marcar(celdas) {
+    marcadas.forEach(i => celda(i).classList.remove('marcando'));
+    marcadas = celdas;
+    marcadas.forEach(i => celda(i).classList.add('marcando'));
+  }
+  function revisar(celdas) {
+    const texto = celdas.map(i => tablero[Math.floor(i / N)][i % N]).join('');
+    const rev = [...texto].reverse().join('');
+    const w = PALABRAS.find(p => !encontradas.has(p) && (p === texto || p === rev) &&
+      ubicadas[p].length === celdas.length);
+    marcar([]);
+    if (!w) return false;
+    encontradas.add(w);
+    const color = COLORES[encontradas.size % COLORES.length];
+    celdas.forEach(i => { celda(i).classList.add('hallada'); celda(i).style.background = color; });
+    lista.querySelector(`[data-palabra="${w}"]`).classList.add('tachada');
+    $('#halladas').textContent = encontradas.size;
+    if (encontradas.size === PALABRAS.length) $('#felicidades').textContent = '¡Encontraron todas las palabras! Misión cumplida.';
+    return true;
+  }
+
+  const indiceEn = (x, y) => { const el = document.elementFromPoint(x, y); return el && el.classList.contains('letra') ? +el.dataset.i : null; };
+  let arrastrando = false, movio = false;
+  sopa.addEventListener('pointerdown', e => {
+    const i = indiceEn(e.clientX, e.clientY);
+    if (i === null) return;
+    e.preventDefault();
+    if (inicio !== null && inicio !== i) {
+      // Segundo toque: se marca de la primera letra a esta
+      const c = linea(inicio, i); inicio = null; revisar(c); return;
+    }
+    inicio = i; arrastrando = true; movio = false; marcar([i]);
+  });
+  addEventListener('pointermove', e => {
+    if (!arrastrando) return;
+    const i = indiceEn(e.clientX, e.clientY);
+    if (i === null) return;
+    if (i !== inicio) movio = true;
+    marcar(linea(inicio, i));
+  });
+  addEventListener('pointerup', () => {
+    if (!arrastrando) return;
+    arrastrando = false;
+    if (movio) { const c = marcadas.slice(); inicio = null; revisar(c); }
+    // Si no se movió, queda la primera letra marcada esperando el segundo toque
+  });
+  $('#nuevaSopa').addEventListener('click', pintarSopa);
+  pintarSopa();
 
   /* ---------- Inicio ---------- */
   const inicial = parseInt(location.hash.slice(1), 10);
