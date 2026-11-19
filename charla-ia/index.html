@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WebZipe · ¿La inteligencia artificial reemplazará al ser humano?</title>
+<meta name="description" content="Charla de WebZipe sobre la inteligencia artificial, las automatizaciones y el papel del desarrollador.">
+<meta name="theme-color" content="#152540">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-snap-type: y proximity; background: #0f1b31; }
+  body { color: #152540; font-family: 'Nunito Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .hoja { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; scroll-snap-align: center; padding: 2vh 0; }
+  .diapo {
+    position: relative; width: min(100vw, calc((100vh - 4vh) * 16 / 9)); aspect-ratio: 16 / 9;
+    overflow: hidden; container-type: inline-size; background: #fff;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,.6);
+  }
+  .lienzo { position: absolute; inset: 0; transform-origin: 50% 50%; }
+  .fondo { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-drag: none; }
+
+  /* Texto: cada línea en su sitio original, con tipografía nueva */
+  .texto { position: absolute; inset: 0; }
+  .ln { position: absolute; display: flex; align-items: center; white-space: nowrap; line-height: 1; }
+  .ln span { font-size: calc(var(--fs) * var(--k, 1) * 1cqw); letter-spacing: var(--ls, 0); display: inline-block; }
+  .a-l { justify-content: flex-start; }
+  .a-c { justify-content: center; }
+  .a-r { justify-content: flex-end; }
+  .f-b { font-family: 'Montserrat', sans-serif; font-weight: 800; }
+  .f-h { font-family: 'Montserrat', sans-serif; font-weight: 300; }
+  .f-r { font-family: 'Nunito Sans', sans-serif; font-weight: 400; }
+  .ln a { color: inherit; text-decoration: none; border-bottom: .08em solid rgba(237,232,228,.4); }
+  .ln a:hover { border-color: currentColor; }
+  .qr { position: absolute; border-radius: 4px; }
+  .qr:focus-visible, .ln a:focus-visible { outline: 3px solid #14abfe; outline-offset: 4px; }
+
+  /* Animaciones del fondo */
+  .ondas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .onda { fill: none; stroke: #36a9f2; stroke-width: 2.4; stroke-linecap: round; opacity: .55; stroke-dasharray: 1400; stroke-dashoffset: 1400; }
+  .burbujas circle { fill: #36a9f2; opacity: .6; }
+  .o2 .onda.o1 { transform: translate(0, 560px); }
+  .o3 .onda.o2 { transform: translate(-760px, -40px); }
+  .o0 .burbujas { transform: translate(560px, 0); }
+
+  .visible .lienzo { animation: respirar 16s ease-in-out infinite alternate; }
+  .visible .onda { animation: trazar 3.2s .4s cubic-bezier(.4,0,.2,1) forwards, mecer 9s 3.6s ease-in-out infinite alternate; }
+  .visible .onda.o2 { animation-delay: .9s, 4.1s; }
+  .visible .burbujas circle { animation: flotar 6s ease-in-out infinite alternate; }
+  .visible .burbujas circle:nth-child(2n) { animation-duration: 8s; animation-delay: -2s; }
+  .visible .burbujas circle:nth-child(3n) { animation-duration: 7s; animation-delay: -4s; }
+  .fondo { opacity: 0; transform: scale(1.035); transition: opacity 1s ease, transform 1.6s cubic-bezier(.2,.7,.2,1); }
+  .visible .fondo { opacity: 1; transform: none; }
+  .ln { opacity: 0; transform: translateY(14px); transition: opacity .7s ease var(--d), transform .8s cubic-bezier(.2,.7,.2,1) var(--d); }
+  .visible .ln { opacity: 1; transform: none; }
+  @keyframes respirar { from { transform: scale(1); } to { transform: scale(1.018) translateY(-.4%); } }
+  @keyframes trazar { to { stroke-dashoffset: 0; } }
+  @keyframes mecer { from { translate: 0 0; } to { translate: 14px -10px; } }
+  @keyframes flotar { from { translate: 0 0; } to { translate: 6px -16px; } }
+
+  /* Navegación */
+  .puntos { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); display: grid; gap: 9px; z-index: 5; }
+  .puntos a { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.3); transition: background .3s, transform .3s; }
+  .puntos a.sel { background: #36a9f2; transform: scale(1.35); }
+  .contador { position: fixed; left: 16px; bottom: 14px; z-index: 5; font: 600 13px/1 'Montserrat', sans-serif; letter-spacing: .08em; color: rgba(255,255,255,.65); }
+
+  @media (orientation: portrait) {
+    .hoja { min-height: 0; padding: 10px 0; scroll-snap-align: none; }
+    html { scroll-snap-type: none; }
+    .diapo { width: 100vw; }
+    .puntos { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .fondo, .ln { opacity: 1; transform: none; }
+    .onda { stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <section class="hoja" id="d1" aria-label="WebZipe">
+    <div class="diapo o1">
+      <div class="lienzo">
+        <img class="fondo" src="img/01.webp" alt="" fetchpriority="high" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-b a-c llenar" style="left:31.691%;top:44.610%;width:36.617%;height:14.689%;--fs:8.2625;color:#152540;--d:0ms"><span>WEBZIPE</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d2" aria-label="¿Qué es WebZipe?">
+    <div class="diapo o2">
+      <div class="lienzo">
+        <img class="fondo" src="img/02.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-h a-c llenar" style="left:10.412%;top:17.042%;width:17.220%;height:7.322%;--fs:3.9486;color:#152540;--d:0ms"><span>¿QUÉ ES</span></div>
+          <div class="ln f-b a-c llenar" style="left:10.412%;top:25.963%;width:25.502%;height:9.046%;--fs:5.0882;color:#152540;--d:45ms"><span>WEBZIPE?</span></div>
+          <div class="ln f-r a-l" style="left:10.412%;top:39.915%;width:38.071%;height:3.697%;--fs:2.0792;color:#152540;--d:90ms"><span>WebZipe se creó con el fin de demostrar</span></div>
+          <div class="ln f-r a-l" style="left:10.412%;top:45.081%;width:37.514%;height:3.697%;--fs:2.0792;color:#152540;--d:135ms"><span>que la IA es una herramienta que puede</span></div>
+          <div class="ln f-r a-l" style="left:10.412%;top:50.248%;width:37.824%;height:3.697%;--fs:2.0792;color:#152540;--d:180ms"><span>facilitar la vida de cada uno mientras se</span></div>
+          <div class="ln f-r a-l" style="left:10.412%;top:55.415%;width:39.788%;height:3.697%;--fs:2.0792;color:#152540;--d:225ms"><span>use correctamente. En WebZipe buscamos</span></div>
+          <div class="ln f-r a-l" style="left:10.412%;top:60.582%;width:23.815%;height:3.697%;--fs:2.0792;color:#152540;--d:270ms"><span>crear soluciones digitales</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d3" aria-label="¿La IA reemplazará al ser humano?">
+    <div class="diapo o3">
+      <div class="lienzo">
+        <img class="fondo" src="img/03.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-h a-l llenar" style="left:10.412%;top:11.585%;width:53.708%;height:6.678%;--fs:3.6014;color:#152540;--d:0ms"><span>¿LA INTELIGENCIA ARTIFICIAL</span></div>
+          <div class="ln f-h a-l llenar" style="left:10.412%;top:20.474%;width:31.921%;height:6.403%;--fs:3.6014;color:#152540;--d:45ms"><span>REEMPLAZARA AL</span></div>
+          <div class="ln f-b a-c llenar" style="left:10.412%;top:25.963%;width:39.194%;height:9.046%;--fs:5.0882;color:#152540;--d:90ms"><span>SER HUMANO?</span></div>
+          <div class="ln f-r a-l" style="left:5.625%;top:37.563%;width:58.623%;height:3.154%;--fs:1.7736;color:#152540;--d:135ms"><span>El debate sobre si la inteligencia artificial (IA) sustituirá a las personas se</span></div>
+          <div class="ln f-r a-l" style="left:5.625%;top:41.914%;width:46.562%;height:3.154%;--fs:1.7736;color:#152540;--d:180ms"><span>ha intensificado por cambios muy visibles en poco tiempo:</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:46.266%;width:54.906%;height:3.154%;--fs:1.7736;color:#152540;--d:225ms"><span>Avance acelerado de la automatización: Los modelos actuales ya no</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:50.618%;width:49.714%;height:3.154%;--fs:1.7736;color:#152540;--d:270ms"><span>solo realizan cálculos repetitivos o tareas mecánicas; también</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:54.970%;width:52.093%;height:3.154%;--fs:1.7736;color:#152540;--d:315ms"><span>redactan textos, analizan datos complejos, programan, diseñan y</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:59.322%;width:40.579%;height:3.154%;--fs:1.7736;color:#152540;--d:360ms"><span>asisten en atención al cliente o diagnóstico inicial.</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:63.674%;width:54.422%;height:3.154%;--fs:1.7736;color:#152540;--d:405ms"><span>Reducción de costos y mayor velocidad: Muchas empresas ven en la</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:68.025%;width:52.978%;height:3.154%;--fs:1.7736;color:#152540;--d:450ms"><span>IA una forma de operar las 24 horas, reducir tiempos de entrega y</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:72.377%;width:53.391%;height:3.154%;--fs:1.7736;color:#152540;--d:495ms"><span>disminuir gastos operativos, lo que genera temor sobre recortes de</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:76.729%;width:29.943%;height:3.154%;--fs:1.7736;color:#152540;--d:540ms"><span>personal o menor contratación junior.</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:81.081%;width:53.457%;height:3.154%;--fs:1.7736;color:#152540;--d:585ms"><span>Incertidumbre sobre el futuro del trabajo: Cuando una herramienta</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:85.433%;width:51.660%;height:3.154%;--fs:1.7736;color:#152540;--d:630ms"><span>iguala o supera la velocidad de ejecución de una tarea humana,</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:89.785%;width:46.270%;height:3.154%;--fs:1.7736;color:#152540;--d:675ms"><span>surge la duda lógica de qué pasará con miles de empleos</span></div>
+          <div class="ln f-r a-l" style="left:8.641%;top:94.137%;width:54.187%;height:3.154%;--fs:1.7736;color:#152540;--d:720ms"><span>tradicionales y qué nuevas profesiones nacerán para compensarlos.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d4" aria-label="Los límites de la IA">
+    <div class="diapo o0">
+      <div class="lienzo">
+        <img class="fondo" src="img/04.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-h a-r llenar" style="left:40.666%;top:1.905%;width:53.708%;height:6.678%;--fs:3.6014;color:#152540;--d:0ms"><span>¿LA INTELIGENCIA ARTIFICIAL</span></div>
+          <div class="ln f-h a-r llenar" style="left:62.453%;top:10.794%;width:31.921%;height:6.403%;--fs:3.6014;color:#152540;--d:45ms"><span>REEMPLAZARA AL</span></div>
+          <div class="ln f-b a-c llenar" style="left:55.388%;top:17.715%;width:39.194%;height:9.046%;--fs:5.0882;color:#152540;--d:90ms"><span>SER HUMANO?</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:27.262%;width:64.178%;height:3.031%;--fs:1.7049;color:#152540;--d:135ms"><span>A pesar de su potencia, la IA tiene límites fundamentales que impiden que sustituya</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:31.428%;width:32.232%;height:3.031%;--fs:1.7049;color:#152540;--d:180ms"><span>por completo lo que significa ser humano:</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:35.595%;width:57.423%;height:3.031%;--fs:1.7049;color:#152540;--d:225ms"><span>Falta de conciencia, empatía y juicio ético real: Una IA procesa patrones y</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:39.762%;width:55.814%;height:3.031%;--fs:1.7049;color:#152540;--d:270ms"><span>probabilidades, pero no siente emociones, no vive experiencias ni asume</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:43.928%;width:47.545%;height:3.031%;--fs:1.7049;color:#152540;--d:315ms"><span>responsabilidad moral por las consecuencias de una decisión.</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:48.095%;width:62.337%;height:3.031%;--fs:1.7049;color:#152540;--d:360ms"><span>Creatividad con propósito y contexto vital: Aunque puede generar ideas o estilos</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:52.262%;width:60.788%;height:3.031%;--fs:1.7049;color:#152540;--d:405ms"><span>a partir de datos existentes, el arte, el liderazgo y la innovación genuina nacen</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:56.428%;width:61.040%;height:3.031%;--fs:1.7049;color:#152540;--d:450ms"><span>de la intuición, la cultura, la empatía y la voluntad de transformar una realidad.</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:60.595%;width:59.735%;height:3.031%;--fs:1.7049;color:#152540;--d:495ms"><span>Relaciones humanas y confianza: En la educación, la salud, la negociación, el</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:64.762%;width:58.118%;height:3.031%;--fs:1.7049;color:#152540;--d:540ms"><span>liderazgo comunitario o el trabajo en equipo, las personas buscan conexión</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:68.928%;width:62.937%;height:3.031%;--fs:1.7049;color:#152540;--d:585ms"><span>auténtica, criterio humano y confianza mutua que un algoritmo no puede replicar.</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:73.095%;width:59.692%;height:3.031%;--fs:1.7049;color:#152540;--d:630ms"><span>Dependencia de la dirección humana: La IA necesita objetivos bien definidos,</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:77.262%;width:59.860%;height:3.031%;--fs:1.7049;color:#152540;--d:675ms"><span>preguntas inteligentes, verificación crítica y supervisión constante. Sin criterio</span></div>
+          <div class="ln f-r a-l" style="left:36.714%;top:81.428%;width:50.759%;height:3.031%;--fs:1.7049;color:#152540;--d:720ms"><span>humano, puede cometer errores convincentes o amplificar sesgos.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d5" aria-label="El riesgo">
+    <div class="diapo o1">
+      <div class="lienzo">
+        <img class="fondo" src="img/05.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-b a-c llenar" style="left:33.816%;top:4.039%;width:28.107%;height:9.046%;--fs:5.0882;color:#152540;--d:0ms"><span>EL RIESGO</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:17.216%;width:51.472%;height:3.771%;--fs:2.1215;color:#152540;--d:45ms"><span>El verdadero riesgo: ser desplazado por no adaptarse</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:22.494%;width:59.536%;height:3.771%;--fs:2.1215;color:#152540;--d:90ms"><span>La inteligencia artificial no suele desplazar de golpe a toda la</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:27.772%;width:55.510%;height:3.771%;--fs:2.1215;color:#152540;--d:135ms"><span>humanidad, sino a quienes deciden ignorarla o resistirse a</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:33.049%;width:25.068%;height:3.771%;--fs:2.1215;color:#152540;--d:180ms"><span>aprender cómo integrarla.</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:38.327%;width:56.568%;height:3.771%;--fs:2.1215;color:#152540;--d:225ms"><span>Quien se niega a entender qué hace bien la IA, cómo darle</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:43.605%;width:59.940%;height:3.771%;--fs:2.1215;color:#152540;--d:270ms"><span>instrucciones claras o cómo revisar críticamente sus resultados</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:48.883%;width:62.950%;height:3.771%;--fs:2.1215;color:#152540;--d:315ms"><span>pierde ventaja frente a alguien que sí combina su criterio humano</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:54.160%;width:61.826%;height:3.771%;--fs:2.1215;color:#152540;--d:360ms"><span>con estas herramientas. En la práctica, el cambio no es máquina</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:59.438%;width:56.823%;height:3.771%;--fs:2.1215;color:#152540;--d:405ms"><span>contra persona, sino personas que saben usar la IA frente a</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:64.716%;width:55.608%;height:3.771%;--fs:2.1215;color:#152540;--d:450ms"><span>personas que no se adaptan. Aprender a convivir con ella,</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:69.994%;width:56.314%;height:3.771%;--fs:2.1215;color:#152540;--d:495ms"><span>desarrollar pensamiento crítico y fortalecer las habilidades</span></div>
+          <div class="ln f-r a-l" style="left:33.816%;top:75.272%;width:50.462%;height:3.771%;--fs:2.1215;color:#152540;--d:540ms"><span>propiamente humanas es lo que marca la diferencia.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d6" aria-label="Entra a nuestro sitio web">
+    <div class="diapo o2">
+      <div class="lienzo">
+        <img class="fondo" src="img/06.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-h a-c llenar" style="left:39.730%;top:0.234%;width:20.540%;height:8.678%;--fs:4.8813;color:#ffffff;--d:0ms"><span>ENTRA A</span></div>
+          <div class="ln f-b a-c llenar" style="left:28.383%;top:8.045%;width:43.235%;height:7.125%;--fs:4.0076;color:#14abfe;--d:45ms"><span>NUESTRO SITIO WEB</span></div>
+          <div class="ln f-b a-c" style="left:39.777%;top:24.303%;width:20.444%;height:8.287%;--fs:4.6611;color:#253754;--d:90ms"><span>WebZipe</span></div>
+          <a class="qr" href="https://webzipe7-byte.github.io/WebZipe/" aria-label="Abrir el sitio web de WebZipe" style="left:27.468%;top:26.841%;width:46.250%;height:80.278%"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d7" aria-label="¿Por qué son importantes las automatizaciones?">
+    <div class="diapo o3">
+      <div class="lienzo">
+        <img class="fondo" src="img/07.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-b a-c llenar" style="left:32.412%;top:0.315%;width:30.436%;height:7.503%;--fs:4.0465;color:#152540;--d:0ms"><span>¿PORQUÉ SON</span></div>
+          <div class="ln f-b a-c llenar" style="left:27.401%;top:10.315%;width:40.459%;height:7.194%;--fs:4.0465;color:#152540;--d:45ms"><span>IMPORTANTES LAS</span></div>
+          <div class="ln f-b a-c llenar" style="left:23.541%;top:20.315%;width:48.179%;height:7.194%;--fs:4.0465;color:#152540;--d:90ms"><span>AUTOMATIZACIONES?</span></div>
+          <div class="ln f-r a-c" style="left:16.902%;top:30.614%;width:61.458%;height:5.039%;--fs:2.8340;color:#152540;--d:135ms"><span>Las automatizaciones son clave en una empresa</span></div>
+          <div class="ln f-r a-c" style="left:18.201%;top:37.651%;width:58.859%;height:5.039%;--fs:2.8340;color:#152540;--d:180ms"><span>porque transforman tareas repetitivas y lentas</span></div>
+          <div class="ln f-r a-c" style="left:18.692%;top:44.688%;width:57.879%;height:5.039%;--fs:2.8340;color:#152540;--d:225ms"><span>en procesos instantáneos, permitiendo que el</span></div>
+          <div class="ln f-r a-c" style="left:19.639%;top:51.725%;width:55.983%;height:5.039%;--fs:2.8340;color:#152540;--d:270ms"><span>negocio crezca sin tener que multiplicar sus</span></div>
+          <div class="ln f-r a-c" style="left:20.641%;top:58.762%;width:53.979%;height:5.039%;--fs:2.8340;color:#152540;--d:315ms"><span>gastos operativos en la misma proporción.</span></div>
+          <div class="ln f-r a-c" style="left:22.647%;top:65.799%;width:49.967%;height:5.039%;--fs:2.8340;color:#152540;--d:360ms"><span>En el caso concreto de automatizar las</span></div>
+          <div class="ln f-r a-c" style="left:23.442%;top:72.836%;width:48.377%;height:5.039%;--fs:2.8340;color:#152540;--d:405ms"><span>respuestas a clientes (por ejemplo, en</span></div>
+          <div class="ln f-r a-c" style="left:22.290%;top:79.873%;width:50.681%;height:5.039%;--fs:2.8340;color:#152540;--d:450ms"><span>WhatsApp, Instagram o un sitio web), su</span></div>
+          <div class="ln f-r a-c" style="left:21.663%;top:86.910%;width:51.936%;height:5.039%;--fs:2.8340;color:#152540;--d:495ms"><span>importancia se resume en cinco ventajas</span></div>
+          <div class="ln f-r a-c" style="left:42.076%;top:93.947%;width:11.108%;height:5.039%;--fs:2.8340;color:#152540;--d:540ms"><span>directas:</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d8" aria-label="Ventajas">
+    <div class="diapo o0">
+      <div class="lienzo">
+        <img class="fondo" src="img/08.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-b a-c llenar" style="left:30.478%;top:8.411%;width:39.043%;height:12.625%;--fs:7.1014;color:#152540;--d:0ms"><span>VENTAJAS</span></div>
+          <div class="ln f-r a-c" style="left:4.390%;top:37.114%;width:13.520%;height:2.634%;--fs:1.4819;color:#253754;--d:45ms"><span>Reducción de errores</span></div>
+          <div class="ln f-r a-c" style="left:22.891%;top:37.298%;width:12.677%;height:3.129%;--fs:1.7597;color:#253754;--d:90ms"><span>Escalabilidad sin</span></div>
+          <div class="ln f-r a-c" style="left:45.238%;top:37.298%;width:6.702%;height:3.129%;--fs:1.7597;color:#253754;--d:135ms"><span>Atencion</span></div>
+          <div class="ln f-r a-c" style="left:62.250%;top:37.298%;width:12.269%;height:3.129%;--fs:1.7597;color:#253754;--d:180ms"><span>Filtro inteligente</span></div>
+          <div class="ln f-r a-c" style="left:82.193%;top:37.484%;width:17.208%;height:3.129%;--fs:1.7597;color:#253754;--d:225ms"><span>Ahorro de tiempo para</span></div>
+          <div class="ln f-r a-c" style="left:6.501%;top:40.725%;width:9.299%;height:2.634%;--fs:1.4819;color:#253754;--d:270ms"><span>y consistencia:</span></div>
+          <div class="ln f-r a-c" style="left:22.804%;top:41.650%;width:12.853%;height:3.129%;--fs:1.7597;color:#253754;--d:315ms"><span>saturar al equipo</span></div>
+          <div class="ln f-r a-c" style="left:44.794%;top:41.650%;width:7.590%;height:3.129%;--fs:1.7597;color:#253754;--d:360ms"><span>inmediata</span></div>
+          <div class="ln f-r a-c" style="left:64.263%;top:41.650%;width:8.243%;height:3.129%;--fs:1.7597;color:#253754;--d:405ms"><span>de clientes</span></div>
+          <div class="ln f-r a-c" style="left:82.339%;top:41.836%;width:16.915%;height:3.129%;--fs:1.7597;color:#253754;--d:450ms"><span>tareas de mayor valor:</span></div>
+          <div class="ln f-r a-c" style="left:5.013%;top:45.276%;width:11.352%;height:3.209%;--fs:1.8049;color:#152540;--d:495ms"><span>Los mensajes</span></div>
+          <div class="ln f-r a-c" style="left:60.990%;top:46.260%;width:17.662%;height:3.025%;--fs:1.7014;color:#152540;--d:540ms"><span>Un flujo automatizado</span></div>
+          <div class="ln f-r a-c" style="left:42.173%;top:46.512%;width:12.833%;height:3.395%;--fs:1.9097;color:#152540;--d:585ms"><span>Un cliente que</span></div>
+          <div class="ln f-r a-c" style="left:22.100%;top:46.519%;width:13.846%;height:3.025%;--fs:1.7014;color:#152540;--d:630ms"><span>Una sola persona</span></div>
+          <div class="ln f-r a-c" style="left:81.268%;top:46.533%;width:18.054%;height:3.123%;--fs:1.7569;color:#152540;--d:675ms"><span>Al eliminar la carga de</span></div>
+          <div class="ln f-r a-c" style="left:4.428%;top:49.720%;width:12.521%;height:3.209%;--fs:1.8049;color:#152540;--d:720ms"><span>automatizados</span></div>
+          <div class="ln f-r a-c" style="left:64.637%;top:50.427%;width:9.927%;height:3.025%;--fs:1.7014;color:#152540;--d:765ms"><span>puede hacer</span></div>
+          <div class="ln f-r a-c" style="left:21.642%;top:50.686%;width:14.763%;height:3.025%;--fs:1.7014;color:#152540;--d:810ms"><span>difícilmente puede</span></div>
+          <div class="ln f-r a-c" style="left:81.154%;top:50.885%;width:18.282%;height:3.123%;--fs:1.7569;color:#152540;--d:855ms"><span>responder decenas de</span></div>
+          <div class="ln f-r a-c" style="left:41.295%;top:51.195%;width:14.587%;height:3.395%;--fs:1.9097;color:#152540;--d:900ms"><span>pregunta por un</span></div>
+          <div class="ln f-r a-c" style="left:2.254%;top:54.165%;width:16.871%;height:3.209%;--fs:1.8049;color:#152540;--d:945ms"><span>entregan siempre la</span></div>
+          <div class="ln f-r a-c" style="left:62.447%;top:54.593%;width:14.307%;height:3.025%;--fs:1.7014;color:#152540;--d:990ms"><span>preguntas básicas</span></div>
+          <div class="ln f-r a-c" style="left:23.698%;top:54.853%;width:10.651%;height:3.025%;--fs:1.7014;color:#152540;--d:1035ms"><span>responder 50</span></div>
+          <div class="ln f-r a-c" style="left:84.116%;top:55.236%;width:12.360%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>veces &quot;¿Cuánto</span></div>
+          <div class="ln f-r a-c" style="left:39.242%;top:55.877%;width:18.694%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>precio o un horario a</span></div>
+          <div class="ln f-r a-c" style="left:1.886%;top:58.609%;width:17.605%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>información correcta</span></div>
+          <div class="ln f-r a-c" style="left:60.600%;top:58.760%;width:18.001%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>iniciales (qué producto</span></div>
+          <div class="ln f-r a-c" style="left:21.410%;top:59.019%;width:15.227%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>mensajes al mismo</span></div>
+          <div class="ln f-r a-c" style="left:82.598%;top:59.588%;width:15.394%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>cuesta?&quot; o &quot;¿Hacen</span></div>
+          <div class="ln f-r a-c" style="left:42.197%;top:60.559%;width:12.783%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>las 11:00 p. m.</span></div>
+          <div class="ln f-r a-c" style="left:61.226%;top:62.927%;width:16.749%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>busca, en qué ciudad</span></div>
+          <div class="ln f-r a-c" style="left:7.361%;top:63.054%;width:6.657%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>(precios</span></div>
+          <div class="ln f-r a-c" style="left:21.309%;top:63.186%;width:15.428%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>tiempo sin cometer</span></div>
+          <div class="ln f-r a-c" style="left:82.677%;top:63.940%;width:15.237%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>envíos?&quot;, el equipo</span></div>
+          <div class="ln f-r a-c" style="left:39.511%;top:65.242%;width:18.156%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>obtiene respuesta al</span></div>
+          <div class="ln f-r a-c" style="left:63.648%;top:67.093%;width:11.906%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>está, cuál es su</span></div>
+          <div class="ln f-r a-c" style="left:22.691%;top:67.353%;width:12.664%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>errores o tardar</span></div>
+          <div class="ln f-r a-c" style="left:1.861%;top:67.498%;width:17.656%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>actualizados, enlaces</span></div>
+          <div class="ln f-r a-c" style="left:84.015%;top:68.292%;width:12.562%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>humano puede</span></div>
+          <div class="ln f-r a-c" style="left:40.188%;top:69.924%;width:16.802%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>instante. En ventas</span></div>
+          <div class="ln f-r a-c" style="left:63.686%;top:71.260%;width:11.828%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>presupuesto) y</span></div>
+          <div class="ln f-r a-c" style="left:24.701%;top:71.519%;width:8.646%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>horas. Una</span></div>
+          <div class="ln f-r a-c" style="left:2.087%;top:71.942%;width:17.203%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>de pago, políticas de</span></div>
+          <div class="ln f-r a-c" style="left:82.909%;top:72.644%;width:14.773%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>dedicarse a cerrar</span></div>
+          <div class="ln f-r a-c" style="left:39.776%;top:74.606%;width:17.627%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>digitales, responder</span></div>
+          <div class="ln f-r a-c" style="left:62.125%;top:75.427%;width:14.950%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>transferir al asesor</span></div>
+          <div class="ln f-r a-c" style="left:22.909%;top:75.686%;width:12.229%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>automatización</span></div>
+          <div class="ln f-r a-c" style="left:2.738%;top:76.387%;width:15.902%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>envío o requisitos),</span></div>
+          <div class="ln f-r a-c" style="left:80.629%;top:76.996%;width:19.332%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>ventas difíciles, fidelizar</span></div>
+          <div class="ln f-r a-c" style="left:40.544%;top:79.289%;width:16.091%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>en segundos evita</span></div>
+          <div class="ln f-r a-c" style="left:61.331%;top:79.593%;width:16.538%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>humano únicamente</span></div>
+          <div class="ln f-r a-c" style="left:21.065%;top:79.853%;width:15.917%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>atiende a cientos de</span></div>
+          <div class="ln f-r a-c" style="left:3.033%;top:80.831%;width:15.312%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>evitando olvidos o</span></div>
+          <div class="ln f-r a-c" style="left:82.526%;top:81.347%;width:15.537%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>clientes, mejorar el</span></div>
+          <div class="ln f-r a-c" style="left:61.021%;top:83.760%;width:17.158%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>cuando el cliente está</span></div>
+          <div class="ln f-r a-c" style="left:39.393%;top:83.971%;width:18.393%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>que el comprador se</span></div>
+          <div class="ln f-r a-c" style="left:25.619%;top:84.019%;width:6.809%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>usuarios</span></div>
+          <div class="ln f-r a-c" style="left:4.066%;top:85.276%;width:13.245%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>contradicciones</span></div>
+          <div class="ln f-r a-c" style="left:82.233%;top:85.699%;width:16.125%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>producto o resolver</span></div>
+          <div class="ln f-r a-c" style="left:61.562%;top:87.927%;width:16.077%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>listo para comprar o</span></div>
+          <div class="ln f-r a-c" style="left:20.400%;top:88.186%;width:17.246%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>simultáneamente con</span></div>
+          <div class="ln f-r a-c" style="left:38.853%;top:88.654%;width:19.473%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>enfríe y se vaya con la</span></div>
+          <div class="ln f-r a-c" style="left:2.286%;top:89.720%;width:16.805%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>comunes cuando se</span></div>
+          <div class="ln f-r a-c" style="left:80.737%;top:90.051%;width:19.116%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>reclamos delicados con</span></div>
+          <div class="ln f-r a-c" style="left:62.264%;top:92.093%;width:14.674%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>tiene un problema</span></div>
+          <div class="ln f-r a-c" style="left:21.135%;top:92.353%;width:15.776%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>el mismo tiempo de</span></div>
+          <div class="ln f-r a-c" style="left:42.609%;top:93.336%;width:11.961%;height:3.395%;--fs:1.9097;color:#152540;--d:1080ms"><span>competencia.</span></div>
+          <div class="ln f-r a-c" style="left:2.571%;top:94.165%;width:16.236%;height:3.209%;--fs:1.8049;color:#152540;--d:1080ms"><span>responde con afán.</span></div>
+          <div class="ln f-r a-c" style="left:82.282%;top:94.403%;width:16.026%;height:3.123%;--fs:1.7569;color:#152540;--d:1080ms"><span>verdadera empatía.</span></div>
+          <div class="ln f-r a-c" style="left:65.722%;top:96.260%;width:7.756%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>complejo.</span></div>
+          <div class="ln f-r a-c" style="left:24.868%;top:96.519%;width:8.311%;height:3.025%;--fs:1.7014;color:#152540;--d:1080ms"><span>respuesta.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d9" aria-label="La IA es un instrumento, no un desarrollador">
+    <div class="diapo o1">
+      <div class="lienzo">
+        <img class="fondo" src="img/09.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-h a-c llenar" style="left:19.398%;top:2.360%;width:63.478%;height:6.403%;--fs:3.6014;color:#152540;--d:0ms"><span>LA I.A ES UN INSTRUMENTO NO UN</span></div>
+          <div class="ln f-b a-c llenar" style="left:32.303%;top:10.315%;width:36.785%;height:7.194%;--fs:4.0465;color:#152540;--d:45ms"><span>DESARROLLADOR</span></div>
+          <div class="ln f-r a-c" style="left:10.269%;top:18.605%;width:80.072%;height:4.916%;--fs:2.7653;color:#152540;--d:90ms"><span>La IA no puede reemplazar a un desarrollador porque carece de</span></div>
+          <div class="ln f-r a-c" style="left:12.070%;top:25.457%;width:76.470%;height:4.916%;--fs:2.7653;color:#152540;--d:135ms"><span>intención propia, comprensión real del contexto de negocio y</span></div>
+          <div class="ln f-r a-c" style="left:4.342%;top:32.309%;width:91.926%;height:4.916%;--fs:2.7653;color:#152540;--d:180ms"><span>responsabilidad sobre el sistema que se construye. Puede acelerar mucho</span></div>
+          <div class="ln f-r a-c" style="left:9.871%;top:39.160%;width:80.868%;height:4.916%;--fs:2.7653;color:#152540;--d:225ms"><span>la escritura de código, pero el rol de desarrollador implica tomar</span></div>
+          <div class="ln f-r a-c" style="left:9.194%;top:46.012%;width:82.223%;height:4.916%;--fs:2.7653;color:#152540;--d:270ms"><span>decisiones que van mucho más allá de generar líneas funcionales.</span></div>
+          <div class="ln f-r a-c" style="left:7.198%;top:52.864%;width:86.215%;height:4.916%;--fs:2.7653;color:#152540;--d:315ms"><span>Pensar en la IA como un copiloto o taller bien equipado —similar a un</span></div>
+          <div class="ln f-r a-c" style="left:5.282%;top:59.716%;width:90.046%;height:4.916%;--fs:2.7653;color:#152540;--d:360ms"><span>compilador avanzado, un buscador o un generador de plantillas— ayuda</span></div>
+          <div class="ln f-r a-c" style="left:7.263%;top:66.568%;width:86.085%;height:4.916%;--fs:2.7653;color:#152540;--d:405ms"><span>a usarla mejor: delegas lo repetitivo y exploratorio, pero conservas el</span></div>
+          <div class="ln f-r a-c" style="left:15.887%;top:73.420%;width:68.837%;height:4.916%;--fs:2.7653;color:#152540;--d:450ms"><span>control del diseño, la calidad y el sentido del producto.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d10" aria-label="Diferencia en práctica">
+    <div class="diapo o2">
+      <div class="lienzo">
+        <img class="fondo" src="img/10.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-b a-c llenar" style="left:20.502%;top:2.345%;width:69.995%;height:9.045%;--fs:5.0882;color:#ede8e4;--d:0ms"><span>DIFERENCIA EN PRACTICA</span></div>
+          <div class="ln f-b a-c" style="left:62.392%;top:13.062%;width:12.552%;height:2.978%;--fs:1.6750;color:#ffffff;--d:45ms"><span>Desarrollador</span></div>
+          <div class="ln f-b a-c llenar" style="left:47.921%;top:14.210%;width:2.368%;height:3.709%;--fs:2.0868;color:#ffffff;--d:90ms"><span>IA</span></div>
+          <div class="ln f-b a-c" style="left:24.611%;top:16.223%;width:10.471%;height:4.442%;--fs:2.4986;color:#ffffff;--d:135ms"><span>Aspecto</span></div>
+          <div class="ln f-b a-c" style="left:64.037%;top:17.124%;width:9.264%;height:2.978%;--fs:1.6750;color:#ffffff;--d:180ms"><span>(Creador /</span></div>
+          <div class="ln f-b a-c" style="left:41.175%;top:19.371%;width:15.857%;height:3.709%;--fs:2.0868;color:#ffffff;--d:225ms"><span>(Instrumento)</span></div>
+          <div class="ln f-b a-c" style="left:63.977%;top:21.187%;width:9.382%;height:2.978%;--fs:1.6750;color:#ffffff;--d:270ms"><span>Ingeniero)</span></div>
+          <div class="ln f-r a-c" style="left:43.331%;top:31.848%;width:11.364%;height:2.982%;--fs:1.6778;color:#343434;--d:315ms"><span>Probabilidad y</span></div>
+          <div class="ln f-r a-c" style="left:61.040%;top:32.680%;width:15.257%;height:2.982%;--fs:1.6778;color:#343434;--d:360ms"><span>Criterio, contexto y</span></div>
+          <div class="ln f-b a-c" style="left:26.964%;top:34.567%;width:5.629%;height:3.417%;--fs:1.9222;color:#343434;--d:405ms"><span>Motor</span></div>
+          <div class="ln f-r a-c" style="left:40.786%;top:35.829%;width:16.456%;height:2.982%;--fs:1.6778;color:#343434;--d:450ms"><span>patrones aprendidos</span></div>
+          <div class="ln f-r a-c" style="left:62.406%;top:36.661%;width:12.525%;height:2.982%;--fs:1.6778;color:#343434;--d:495ms"><span>objetivos reales</span></div>
+          <div class="ln f-r a-c" style="left:64.015%;top:47.388%;width:9.306%;height:2.982%;--fs:1.6778;color:#343434;--d:540ms"><span>Resolver un</span></div>
+          <div class="ln f-r a-c" style="left:42.066%;top:47.857%;width:13.756%;height:2.982%;--fs:1.6778;color:#343434;--d:585ms"><span>Generar código o</span></div>
+          <div class="ln f-b a-c" style="left:27.641%;top:50.677%;width:4.275%;height:3.417%;--fs:1.9222;color:#343434;--d:630ms"><span>Foco</span></div>
+          <div class="ln f-r a-c" style="left:61.119%;top:51.369%;width:15.100%;height:2.982%;--fs:1.6778;color:#343434;--d:675ms"><span>problema de forma</span></div>
+          <div class="ln f-r a-c" style="left:44.555%;top:51.839%;width:8.780%;height:2.982%;--fs:1.6778;color:#343434;--d:720ms"><span>respuestas</span></div>
+          <div class="ln f-r a-c" style="left:64.600%;top:55.350%;width:8.136%;height:2.982%;--fs:1.6778;color:#343434;--d:765ms"><span>sostenible</span></div>
+          <div class="ln f-r a-c" style="left:44.991%;top:55.820%;width:7.908%;height:2.982%;--fs:1.6778;color:#343434;--d:810ms"><span>plausibles</span></div>
+          <div class="ln f-r a-c" style="left:42.310%;top:63.867%;width:13.132%;height:2.982%;--fs:1.6778;color:#343434;--d:855ms"><span>Puede introducir</span></div>
+          <div class="ln f-r a-c" style="left:62.143%;top:64.093%;width:13.051%;height:2.982%;--fs:1.6778;color:#343434;--d:900ms"><span>Verifica, prueba,</span></div>
+          <div class="ln f-r a-c" style="left:43.236%;top:67.849%;width:11.279%;height:2.982%;--fs:1.6778;color:#343434;--d:945ms"><span>fallos sutiles o</span></div>
+          <div class="ln f-b a-c" style="left:25.831%;top:67.868%;width:7.893%;height:3.417%;--fs:1.9222;color:#343434;--d:990ms"><span>Revisión</span></div>
+          <div class="ln f-r a-c" style="left:60.534%;top:68.074%;width:16.270%;height:2.982%;--fs:1.6778;color:#343434;--d:1035ms"><span>integra y decide qué</span></div>
+          <div class="ln f-r a-c" style="left:43.500%;top:71.830%;width:10.750%;height:2.982%;--fs:1.6778;color:#343434;--d:1080ms"><span>alucinaciones</span></div>
+          <div class="ln f-r a-c" style="left:64.787%;top:72.056%;width:7.762%;height:2.982%;--fs:1.6778;color:#343434;--d:1080ms"><span>se acepta</span></div>
+          <div class="ln f-r a-c" style="left:60.423%;top:82.897%;width:16.491%;height:3.353%;--fs:1.8861;color:#343434;--d:1080ms"><span>Técnica, operativa</span></div>
+          <div class="ln f-b a-c" style="left:22.446%;top:83.979%;width:14.664%;height:3.417%;--fs:1.9222;color:#343434;--d:1080ms"><span>Responsabilidad</span></div>
+          <div class="ln f-r a-c" style="left:44.053%;top:84.393%;width:10.102%;height:4.588%;--fs:2.5806;color:#343434;--d:1080ms"><span>Ninguna</span></div>
+          <div class="ln f-r a-c" style="left:63.271%;top:87.341%;width:10.794%;height:3.353%;--fs:1.8861;color:#343434;--d:1080ms"><span>y de calidad</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hoja" id="d11" aria-label="Muchas gracias por escuchar">
+    <div class="diapo o3">
+      <div class="lienzo">
+        <img class="fondo" src="img/11.webp" alt="" loading="lazy" decoding="async">
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="texto">
+          <div class="ln f-b a-l llenar" style="left:10.974%;top:17.072%;width:24.173%;height:9.045%;--fs:5.0882;color:#ede8e4;--d:0ms"><span>MUCHAS</span></div>
+          <div class="ln f-b a-l llenar" style="left:10.974%;top:29.665%;width:37.676%;height:9.045%;--fs:5.0882;color:#ede8e4;--d:45ms"><span>GRACIAS POR</span></div>
+          <div class="ln f-b a-l llenar" style="left:10.974%;top:42.258%;width:29.683%;height:9.045%;--fs:5.0882;color:#ede8e4;--d:90ms"><span>ESCUCHAR</span></div>
+          <div class="ln f-r a-l" style="left:10.412%;top:55.079%;width:38.910%;height:3.772%;--fs:2.1222;color:#ede8e4;--d:135ms"><span>Agradecemos por habernos escuchado y</span></div>
+          <div class="ln f-r a-l" style="left:10.412%;top:60.298%;width:43.660%;height:3.772%;--fs:2.1222;color:#ede8e4;--d:180ms"><span>esperamos que al menos, en este auditorio se</span></div>
+          <div class="ln f-r a-l" style="left:10.412%;top:65.518%;width:40.626%;height:3.772%;--fs:2.1222;color:#ede8e4;--d:225ms"><span>hayan llevado una cosa nueva que pensar.</span></div>
+          <div class="ln f-r a-l" style="left:15.846%;top:75.297%;width:17.769%;height:3.772%;--fs:2.1222;color:#ede8e4;--d:270ms"><span><a href="https://webzipe7-byte.github.io/WebZipe/">https://webzipe7-</a></span></div>
+          <div class="ln f-r a-c" style="left:45.230%;top:76.259%;width:27.607%;height:3.649%;--fs:2.0528;color:#ede8e4;--d:315ms"><span><a href="mailto:webzipemarketing@gmail.com">webzipemarketing@gmail.com</a></span></div>
+          <div class="ln f-r a-l" style="left:15.846%;top:80.575%;width:23.945%;height:3.772%;--fs:2.1222;color:#ede8e4;--d:360ms"><span><a href="https://webzipe7-byte.github.io/WebZipe/">byte.github.io/WebZipe/</a></span></div>
+          <a class="qr" href="https://webzipe7-byte.github.io/WebZipe/" aria-label="Abrir el sitio web de WebZipe" style="left:73.326%;top:69.269%;width:15.312%;height:26.574%"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<nav class="puntos" id="puntos" aria-label="Diapositivas"></nav>
+<div class="contador" id="contador" aria-hidden="true">01 / 11</div>
+<script>
+(() => {
+  const hojas = [...document.querySelectorAll('.hoja')];
+  const nav = document.getElementById('puntos');
+  const contador = document.getElementById('contador');
+  const dos = n => String(n).padStart(2, '0');
+
+  hojas.forEach((h, i) => {
+    const a = document.createElement('a');
+    a.href = '#' + h.id; a.setAttribute('aria-label', h.getAttribute('aria-label'));
+    nav.append(a);
+  });
+
+  // Ajuste de cada línea al ancho que tenía en el diseño original
+  function ajustar() {
+    document.querySelectorAll('.ln').forEach(ln => {
+      const s = ln.firstElementChild;
+      s.style.setProperty('--k', 1); s.style.setProperty('--ls', '0em');
+      const fs = parseFloat(getComputedStyle(s).fontSize);
+      const meta = ln.clientWidth, real = s.getBoundingClientRect().width;
+      if (!meta || !real) return;
+      if (ln.classList.contains('llenar')) {
+        const letras = Math.max(1, s.textContent.length - 1);
+        let ls = (meta - real) / letras / fs;
+        if (ls < -0.04) { s.style.setProperty('--k', meta / real); ls = 0; }
+        s.style.setProperty('--ls', ls.toFixed(4) + 'em');
+      } else if (real > meta) {
+        s.style.setProperty('--k', (meta / real).toFixed(4));
+      }
+    });
+  }
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(ajustar);
+
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (e.isIntersecting && e.intersectionRatio > .45) {
+        e.target.querySelector('.diapo').classList.add('visible');
+        const i = hojas.indexOf(e.target);
+        contador.textContent = dos(i + 1) + ' / ' + dos(hojas.length);
+        [...nav.children].forEach((a, j) => a.classList.toggle('sel', j === i));
+      }
+    });
+  }, { threshold: [0, .45, .8] });
+  hojas.forEach(h => io.observe(h));
+
+  addEventListener('keydown', e => {
+    const actual = [...nav.children].findIndex(a => a.classList.contains('sel'));
+    let n = null;
+    if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) n = actual + 1;
+    if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) n = actual - 1;
+    if (n === null) return;
+    e.preventDefault();
+    hojas[Math.max(0, Math.min(hojas.length - 1, n))].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+})();
+</script>
+</body>
+</html>
