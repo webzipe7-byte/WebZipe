@@ -12,11 +12,11 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; scroll-snap-type: y proximity; background: #0f1b31; }
-  body { color: #152540; font-family: 'Nunito Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: hidden; color: #152540; font-family: 'Nunito Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 
   .hoja { min-height: 100vh; min-height: 100svh; display: grid; place-items: center; scroll-snap-align: center; padding: 2vh 0; }
   .diapo {
-    position: relative; width: min(100vw, calc((100vh - 4vh) * 16 / 9)); aspect-ratio: 16 / 9;
+    position: relative; width: min(100%, calc((100vh - 4vh) * 16 / 9)); aspect-ratio: 16 / 9;
     overflow: hidden; container-type: inline-size; background: #fff;
     box-shadow: 0 30px 80px -30px rgba(0,0,0,.6);
   }
@@ -70,7 +70,7 @@
   @media (orientation: portrait) {
     .hoja { min-height: 0; padding: 10px 0; scroll-snap-align: none; }
     html { scroll-snap-type: none; }
-    .diapo { width: 100vw; }
+    .diapo { width: 100%; }
     .puntos { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
