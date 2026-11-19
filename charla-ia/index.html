@@ -61,6 +61,8 @@
   .visible .burbujas circle { animation: flotar 6s ease-in-out infinite alternate; }
   .visible .burbujas circle:nth-child(2n) { animation-duration: 8s; animation-delay: -2s; }
   .visible .burbujas circle:nth-child(3n) { animation-duration: 7s; animation-delay: -4s; }
+  .tapa, .tarjeta { opacity: 0; transition: opacity 1s ease .2s, transform .3s ease; }
+  .visible .tapa, .visible .tarjeta { opacity: 1; }
   .fondo { opacity: 0; transform: scale(1.035); transition: opacity 1s ease, transform 1.6s cubic-bezier(.2,.7,.2,1); }
   .visible .fondo { opacity: 1; transform: none; }
   .ln { opacity: 0; transform: translateY(14px); transition: opacity .7s ease var(--d), transform .8s cubic-bezier(.2,.7,.2,1) var(--d); }
@@ -452,6 +454,16 @@
     });
   }, { threshold: [0, .45, .8] });
   hojas.forEach(h => io.observe(h));
+  // Respaldo por si el navegador no avisa al observador (pestañas en segundo plano, saltos con enlaces)
+  function revisarVisibles() {
+    hojas.forEach(h => {
+      const r = h.getBoundingClientRect();
+      if (r.top < innerHeight * .75 && r.bottom > innerHeight * .25) h.querySelector('.diapo').classList.add('visible');
+    });
+  }
+  addEventListener('scroll', revisarVisibles, { passive: true });
+  addEventListener('load', revisarVisibles);
+  revisarVisibles();
 
   addEventListener('keydown', e => {
     const actual = [...nav.children].findIndex(a => a.classList.contains('sel'));
