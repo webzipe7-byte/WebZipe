@@ -42,9 +42,18 @@
   .ondas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
   .onda { fill: none; stroke: #36a9f2; stroke-width: 2.4; stroke-linecap: round; opacity: .55; stroke-dasharray: 1400; stroke-dashoffset: 1400; }
   .burbujas circle { fill: #36a9f2; opacity: .6; }
-  .o2 .onda.o1 { transform: translate(0, 560px); }
-  .o3 .onda.o2 { transform: translate(-760px, -40px); }
-  .o0 .burbujas { transform: translate(560px, 0); }
+  .sin-lineas .onda { display: none; }
+
+  /* Tarjeta del QR (diapositiva 6), con margen alrededor del código */
+  .tapa { position: absolute; left: 26.9%; top: 19.6%; width: 46.2%; bottom: 0; background: #254978; }
+  .tarjeta { position: absolute; left: calc(396 / 1440 * 100%); width: calc(646 / 1440 * 100%); top: calc(163 / 810 * 100%); height: calc(622 / 810 * 100%);
+    background: #d9d9d9; border-radius: 2.8cqw; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    padding: 2.2cqw 0 2.4cqw; text-decoration: none; box-shadow: 0 1.2cqw 3cqw -1.2cqw rgba(0,0,0,.35); transition: transform .3s ease; }
+  .tarjeta:hover { transform: translateY(-.3cqw); }
+  .tarjeta-titulo { font: 800 calc(52 / 1440 * 100cqw)/1 'Montserrat', sans-serif; color: #253754; letter-spacing: .01em; }
+  .tarjeta-qr { background: #fff; padding: 1.8cqw; border-radius: 1.1cqw; width: calc(470 / 1440 * 100cqw); aspect-ratio: 1; display: block; }
+  .tarjeta-qr img { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+  .tarjeta:focus-visible { outline: 3px solid #14abfe; outline-offset: 4px; }
 
   .visible .lienzo { animation: respirar 16s ease-in-out infinite alternate; }
   .visible .onda { animation: trazar 3.2s .4s cubic-bezier(.4,0,.2,1) forwards, mecer 9s 3.6s ease-in-out infinite alternate; }
@@ -86,7 +95,8 @@
     <div class="diapo o1">
       <div class="lienzo">
         <img class="fondo" src="img/01.webp" alt="" fetchpriority="high" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-b a-c llenar" style="left:31.691%;top:44.610%;width:36.617%;height:14.689%;--fs:8.2625;color:#152540;--d:0ms"><span>WEBZIPE</span></div>
         </div>
@@ -97,7 +107,8 @@
     <div class="diapo o2">
       <div class="lienzo">
         <img class="fondo" src="img/02.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-h a-c llenar" style="left:10.412%;top:17.042%;width:17.220%;height:7.322%;--fs:3.9486;color:#152540;--d:0ms"><span>¿QUÉ ES</span></div>
           <div class="ln f-b a-c llenar" style="left:10.412%;top:25.963%;width:25.502%;height:9.046%;--fs:5.0882;color:#152540;--d:45ms"><span>WEBZIPE?</span></div>
@@ -114,7 +125,8 @@
     <div class="diapo o3">
       <div class="lienzo">
         <img class="fondo" src="img/03.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-h a-l llenar" style="left:10.412%;top:11.585%;width:53.708%;height:6.678%;--fs:3.6014;color:#152540;--d:0ms"><span>¿LA INTELIGENCIA ARTIFICIAL</span></div>
           <div class="ln f-h a-l llenar" style="left:10.412%;top:20.474%;width:31.921%;height:6.403%;--fs:3.6014;color:#152540;--d:45ms"><span>REEMPLAZARA AL</span></div>
@@ -141,7 +153,8 @@
     <div class="diapo o0">
       <div class="lienzo">
         <img class="fondo" src="img/04.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-h a-r llenar" style="left:40.666%;top:1.905%;width:53.708%;height:6.678%;--fs:3.6014;color:#152540;--d:0ms"><span>¿LA INTELIGENCIA ARTIFICIAL</span></div>
           <div class="ln f-h a-r llenar" style="left:62.453%;top:10.794%;width:31.921%;height:6.403%;--fs:3.6014;color:#152540;--d:45ms"><span>REEMPLAZARA AL</span></div>
@@ -168,7 +181,8 @@
     <div class="diapo o1">
       <div class="lienzo">
         <img class="fondo" src="img/05.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-b a-c llenar" style="left:33.816%;top:4.039%;width:28.107%;height:9.046%;--fs:5.0882;color:#152540;--d:0ms"><span>EL RIESGO</span></div>
           <div class="ln f-r a-l" style="left:33.816%;top:17.216%;width:51.472%;height:3.771%;--fs:2.1215;color:#152540;--d:45ms"><span>El verdadero riesgo: ser desplazado por no adaptarse</span></div>
@@ -191,12 +205,11 @@
     <div class="diapo o2">
       <div class="lienzo">
         <img class="fondo" src="img/06.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        <div class="tapa" aria-hidden="true"></div><a class="tarjeta" href="https://webzipe7-byte.github.io/WebZipe/" aria-label="Abrir el sitio web de WebZipe"><span class="tarjeta-titulo">WebZipe</span><span class="tarjeta-qr"><img src="img/qr.png" alt="Código QR del sitio web de WebZipe"></span></a>
+        <svg class="ondas sin-lineas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-h a-c llenar" style="left:39.730%;top:0.234%;width:20.540%;height:8.678%;--fs:4.8813;color:#ffffff;--d:0ms"><span>ENTRA A</span></div>
           <div class="ln f-b a-c llenar" style="left:28.383%;top:8.045%;width:43.235%;height:7.125%;--fs:4.0076;color:#14abfe;--d:45ms"><span>NUESTRO SITIO WEB</span></div>
-          <div class="ln f-b a-c" style="left:39.777%;top:24.303%;width:20.444%;height:8.287%;--fs:4.6611;color:#253754;--d:90ms"><span>WebZipe</span></div>
-          <a class="qr" href="https://webzipe7-byte.github.io/WebZipe/" aria-label="Abrir el sitio web de WebZipe" style="left:27.468%;top:26.841%;width:46.250%;height:80.278%"></a>
         </div>
       </div>
     </div>
@@ -205,7 +218,8 @@
     <div class="diapo o3">
       <div class="lienzo">
         <img class="fondo" src="img/07.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-b a-c llenar" style="left:32.412%;top:0.315%;width:30.436%;height:7.503%;--fs:4.0465;color:#152540;--d:0ms"><span>¿PORQUÉ SON</span></div>
           <div class="ln f-b a-c llenar" style="left:27.401%;top:10.315%;width:40.459%;height:7.194%;--fs:4.0465;color:#152540;--d:45ms"><span>IMPORTANTES LAS</span></div>
@@ -228,7 +242,8 @@
     <div class="diapo o0">
       <div class="lienzo">
         <img class="fondo" src="img/08.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-b a-c llenar" style="left:30.478%;top:8.411%;width:39.043%;height:12.625%;--fs:7.1014;color:#152540;--d:0ms"><span>VENTAJAS</span></div>
           <div class="ln f-r a-c" style="left:4.390%;top:37.114%;width:13.520%;height:2.634%;--fs:1.4819;color:#253754;--d:45ms"><span>Reducción de errores</span></div>
@@ -310,7 +325,8 @@
     <div class="diapo o1">
       <div class="lienzo">
         <img class="fondo" src="img/09.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-h a-c llenar" style="left:19.398%;top:2.360%;width:63.478%;height:6.403%;--fs:3.6014;color:#152540;--d:0ms"><span>LA I.A ES UN INSTRUMENTO NO UN</span></div>
           <div class="ln f-b a-c llenar" style="left:32.303%;top:10.315%;width:36.785%;height:7.194%;--fs:4.0465;color:#152540;--d:45ms"><span>DESARROLLADOR</span></div>
@@ -331,7 +347,8 @@
     <div class="diapo o2">
       <div class="lienzo">
         <img class="fondo" src="img/10.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-b a-c llenar" style="left:20.502%;top:2.345%;width:69.995%;height:9.045%;--fs:5.0882;color:#ede8e4;--d:0ms"><span>DIFERENCIA EN PRACTICA</span></div>
           <div class="ln f-b a-c" style="left:62.392%;top:13.062%;width:12.552%;height:2.978%;--fs:1.6750;color:#ffffff;--d:45ms"><span>Desarrollador</span></div>
@@ -371,7 +388,8 @@
     <div class="diapo o3">
       <div class="lienzo">
         <img class="fondo" src="img/11.webp" alt="" loading="lazy" decoding="async">
-        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-40 120 C 180 40, 300 220, 520 140 S 820 40, 960 120"/><path class="onda o2" d="M900 760 C 1040 680, 1180 820, 1300 720 S 1460 640, 1500 700"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
+        
+        <svg class="ondas" viewBox="0 0 1440 810" preserveAspectRatio="none" aria-hidden="true"><path class="onda o1" d="M-30 70 C 40 20, 120 130, 230 60"/><path class="onda o2" d="M1230 790 C 1290 730, 1360 830, 1470 750"/><g class="burbujas"><circle cx="90" cy="700" r="5"/><circle cx="120" cy="676" r="3"/><circle cx="1330" cy="90" r="4"/><circle cx="1356" cy="118" r="6"/><circle cx="1300" cy="130" r="3"/></g></svg>
         <div class="texto">
           <div class="ln f-b a-l llenar" style="left:10.974%;top:17.072%;width:24.173%;height:9.045%;--fs:5.0882;color:#ede8e4;--d:0ms"><span>MUCHAS</span></div>
           <div class="ln f-b a-l llenar" style="left:10.974%;top:29.665%;width:37.676%;height:9.045%;--fs:5.0882;color:#ede8e4;--d:45ms"><span>GRACIAS POR</span></div>
