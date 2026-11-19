@@ -6,188 +6,192 @@
 <title>Del fuego al espacio · Historia del cohete · Colegio Carmelitano del Valle</title>
 <meta name="description" content="Presentación interactiva sobre los inicios y la evolución del cohete. Colegio Carmelitano del Valle.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#05060f">
+<meta name="theme-color" content="#0e0f12">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=EB+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
 <style>
+  /* Referencia de diseño: NASA Graphics Standards Manual (Danne & Blackburn, 1975).
+     Helvetica, retícula estricta, secciones numeradas, esquinas rectas y el rojo usado una sola vez.
+     Cada acento tiene un solo uso: ningún color se repite entre elementos. */
   :root {
-    --fondo: #05060f;
-    --tinta: #eef0ff;
-    --suave: #9aa1c4;
-    --linea: rgba(255,255,255,.1);
-    --fuego: #ff7a2f;
-    --fuego2: #ffc04a;
-    --hielo: #6fd3ff;
-    --panel: rgba(18,21,44,.72);
-    --titulo: 'Space Grotesk', system-ui, sans-serif;
-    --texto: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --fondo: #0e0f12;
+    --papel: #ece9e1;
+    --gris: #8c8a84;
+    --linea: rgba(236,233,225,.14);
+    --panel: rgba(22,23,28,.86);
+    --rojo-nasa: #fc3d21;      /* solo el título de la portada */
+    --azul-boton: #2a56d6;     /* solo el botón de cuenta regresiva */
+    --mostaza: #e3a72f;        /* solo los recuadros de dato */
+    --verde-agua: #1e9e8a;     /* solo los controles deslizantes */
+    --si: #6cc070;             /* despega / alcanza la órbita */
+    --no: #e8743b;             /* no alcanza */
+    --violeta: #9b7bff;        /* solo el resultado de la ecuación */
+    --cielo: #5ab4e5;          /* solo el cohete seleccionado en el comparador */
+    --bien: #3ddc97;           /* respuesta correcta del quiz */
+    --mal: #ff6b8b;            /* respuesta incorrecta del quiz */
+    --arena: #d9c7a3;          /* solo el botón final */
+    --helvetica: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    --serif: 'EB Garamond', Garamond, 'Times New Roman', serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; background: var(--fondo); color: var(--tinta); font-family: var(--texto); overflow: hidden; -webkit-tap-highlight-color: transparent; }
-  body { overscroll-behavior: none; }
   [hidden] { display: none !important; }
+  html, body { height: 100%; background: var(--fondo); color: var(--papel); font-family: var(--helvetica); overflow: hidden; -webkit-tap-highlight-color: transparent; }
+  body { overscroll-behavior: none; counter-reset: seccion; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-  #estrellas { position: fixed; inset: 0; z-index: 0; }
+  #estrellas { position: fixed; inset: 0; z-index: 0; opacity: .7; }
 
-  /* Diapositivas */
   .deck { position: fixed; inset: 0; z-index: 1; }
   .slide {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
     padding: clamp(20px, 5vw, 72px) clamp(20px, 7vw, 120px) 96px;
-    opacity: 0; visibility: hidden; transform: translateX(40px);
-    transition: opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1), visibility 0s .55s;
-    overflow-y: auto;
+    opacity: 0; visibility: hidden; transform: translateX(28px);
+    transition: opacity .45s ease, transform .45s ease, visibility 0s .45s;
+    overflow-y: auto; counter-increment: seccion;
   }
-  .slide.atras { transform: translateX(-40px); }
-  .slide.activa { opacity: 1; visibility: visible; transform: none; transition: opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1); }
+  .slide.atras { transform: translateX(-28px); }
+  .slide.activa { opacity: 1; visibility: visible; transform: none; transition: opacity .45s ease, transform .45s ease; }
   .slide > .caja { width: 100%; max-width: 1180px; margin: auto; }
-  .activa .entra { animation: subir .7s cubic-bezier(.2,.8,.2,1) both; }
-  .activa .entra:nth-child(2) { animation-delay: .08s; }
-  .activa .entra:nth-child(3) { animation-delay: .16s; }
-  .activa .entra:nth-child(4) { animation-delay: .24s; }
-  @keyframes subir { from { opacity: 0; transform: translateY(18px); } }
+  .activa .entra { animation: subir .5s ease both; }
+  .activa .entra:nth-child(2) { animation-delay: .06s; }
+  .activa .entra:nth-child(3) { animation-delay: .12s; }
+  .activa .entra:nth-child(4) { animation-delay: .18s; }
+  @keyframes subir { from { opacity: 0; transform: translateY(10px); } }
 
-  .etiqueta { display: inline-flex; align-items: center; gap: 8px; font: 500 13px/1 var(--texto); letter-spacing: .14em; text-transform: uppercase; color: var(--fuego2); margin-bottom: 18px; }
-  .etiqueta::before { content: ''; width: 22px; height: 2px; background: currentColor; }
-  h1, h2, h3 { font-family: var(--titulo); font-weight: 700; letter-spacing: -.02em; line-height: 1.05; }
-  h1 { font-size: clamp(42px, 8vw, 104px); }
-  h2 { font-size: clamp(32px, 5vw, 62px); margin-bottom: 20px; }
-  h3 { font-size: clamp(19px, 2vw, 24px); margin-bottom: 8px; }
-  p { font-size: clamp(16px, 1.45vw, 19px); line-height: 1.6; color: #cfd3ef; }
-  .grande { font-size: clamp(18px, 1.8vw, 23px); max-width: 62ch; }
-  em { font-style: normal; color: var(--fuego2); }
-  .degradado { background: linear-gradient(95deg, var(--fuego2), var(--fuego) 45%, #ff4d6d); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .etiqueta { display: flex; align-items: baseline; gap: 14px; font: 400 12.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--gris); margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid var(--linea); max-width: 520px; }
+  .etiqueta::before { content: counter(seccion, decimal-leading-zero) '.0'; color: var(--papel); }
+  h1, h2, h3 { font-family: var(--helvetica); font-weight: 700; letter-spacing: -.025em; line-height: 1.02; }
+  h1 { font-size: clamp(44px, 8.4vw, 112px); letter-spacing: -.04em; }
+  h2 { font-size: clamp(32px, 5vw, 62px); margin-bottom: 22px; }
+  h3 { font-size: clamp(18px, 1.8vw, 22px); margin-bottom: 8px; letter-spacing: -.01em; }
+  p { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.6; color: #cfccc4; }
+  .grande { font-size: clamp(18px, 1.75vw, 22px); max-width: 60ch; }
+  em { font-style: normal; color: var(--papel); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .rojo { color: var(--rojo-nasa); }
 
   .dos { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(24px, 5vw, 72px); align-items: center; }
-  .tarjetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 28px; }
-  .tarjeta { background: var(--panel); border: 1px solid var(--linea); border-radius: 18px; padding: 22px; backdrop-filter: blur(8px); transition: transform .25s, border-color .25s; }
-  .tarjeta:hover { transform: translateY(-4px); border-color: rgba(255,192,74,.4); }
-  .tarjeta .anio { font: 700 30px/1 var(--titulo); color: var(--fuego2); margin-bottom: 10px; display: block; }
+  .tarjetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0; margin-top: 28px; border-top: 1px solid var(--linea); }
+  .tarjeta { padding: 22px 22px 24px 0; border-bottom: 1px solid var(--linea); transition: background .2s; }
+  .tarjeta + .tarjeta { padding-left: 22px; border-left: 1px solid var(--linea); }
+  .tarjeta:hover { background: rgba(236,233,225,.03); }
+  .tarjeta .anio { font: 400 13px/1 var(--mono); color: var(--gris); margin-bottom: 14px; display: block; letter-spacing: .06em; }
   .tarjeta p { font-size: 15.5px; }
-  .dato { margin-top: 22px; padding: 16px 18px; border-left: 3px solid var(--hielo); background: rgba(111,211,255,.07); border-radius: 0 12px 12px 0; font-size: 15.5px; color: #d7f2ff; max-width: 64ch; }
-  .dato b { color: var(--hielo); }
+  .dato { margin-top: 24px; padding: 4px 0 4px 18px; border-left: 3px solid var(--mostaza); font-size: 15.5px; color: #dcd8cf; max-width: 64ch; line-height: 1.6; }
+  .dato b { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 18px; color: var(--papel); }
 
-  /* Portada */
-  .portada { text-align: center; }
-  .portada .colegio { font: 500 clamp(14px, 1.4vw, 17px)/1.4 var(--texto); letter-spacing: .22em; text-transform: uppercase; color: var(--suave); margin-bottom: 22px; }
-  .portada p { margin: 22px auto 34px; max-width: 54ch; }
-  .boton { display: inline-flex; align-items: center; gap: 10px; padding: 15px 28px; border-radius: 999px; font-weight: 600; font-size: 16px;
-    background: linear-gradient(95deg, var(--fuego2), var(--fuego)); color: #1b0d00; box-shadow: 0 10px 40px -10px rgba(255,122,47,.7); transition: transform .2s, box-shadow .2s; }
-  .boton:hover { transform: translateY(-2px); box-shadow: 0 16px 50px -12px rgba(255,122,47,.9); }
-  .boton.claro { background: rgba(255,255,255,.08); color: var(--tinta); box-shadow: none; border: 1px solid var(--linea); }
-  .cuenta { font: 700 clamp(90px, 18vw, 220px)/1 var(--titulo); position: fixed; inset: 0; display: grid; place-items: center; z-index: 20; pointer-events: none; color: var(--fuego2); text-shadow: 0 0 60px rgba(255,122,47,.6); }
+  .portada { text-align: left; }
+  .portada .colegio { font: 400 13px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--gris); margin-bottom: 26px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--linea); padding-bottom: 12px; }
+  .portada p { margin: 26px 0 34px; max-width: 54ch; }
+  .boton { display: inline-flex; align-items: center; gap: 12px; padding: 15px 24px; border-radius: 2px; font-weight: 700; font-size: 15px; letter-spacing: .01em; background: var(--azul-boton); color: #fff; transition: transform .15s, background .15s; }
+  .boton:hover { transform: translateY(-1px); background: #3563e8; }
+  .boton.arena { background: var(--arena); color: #1d1a14; }
+  .boton.arena:hover { background: #e4d4b2; }
+  .boton.claro { background: transparent; color: var(--papel); border: 1px solid rgba(236,233,225,.35); }
+  .boton.claro:hover { background: rgba(236,233,225,.06); }
+  .firma { margin-top: 46px; font: 400 12px/1.5 var(--mono); color: var(--gris); letter-spacing: .04em; }
+  .cuenta { font: 700 clamp(110px, 20vw, 240px)/1 var(--helvetica); letter-spacing: -.05em; position: fixed; inset: 0; display: grid; place-items: center; z-index: 20; pointer-events: none; color: var(--papel); }
   .cuenta span { animation: latido .9s ease both; }
-  @keyframes latido { from { transform: scale(1.6); opacity: 0; } 40% { opacity: 1; } to { transform: scale(.9); opacity: 0; } }
+  @keyframes latido { from { transform: scale(1.3); opacity: 0; } 35% { opacity: 1; } to { transform: scale(.95); opacity: 0; } }
 
-  /* Cohete que despega */
-  .despegue { position: fixed; left: 50%; bottom: -260px; width: 90px; z-index: 15; pointer-events: none; transform: translateX(-50%); }
+  .despegue { position: fixed; left: 50%; bottom: -260px; width: 84px; z-index: 15; pointer-events: none; transform: translateX(-50%); }
   .despegue.vuela { animation: volar 2.6s cubic-bezier(.55,0,.8,.4) forwards; }
-  @keyframes volar { 0% { bottom: -260px; } 15% { bottom: 40px; transform: translateX(-50%) rotate(0); } 100% { bottom: 130vh; transform: translateX(-50%) rotate(4deg); } }
+  @keyframes volar { 0% { bottom: -260px; } 15% { bottom: 40px; transform: translateX(-50%) rotate(0); } 100% { bottom: 130vh; transform: translateX(-50%) rotate(3deg); } }
   .llama { transform-origin: 50% 0; animation: titila .08s infinite alternate; }
-  @keyframes titila { to { transform: scaleY(1.25) scaleX(.9); opacity: .85; } }
+  @keyframes titila { to { transform: scaleY(1.22) scaleX(.9); opacity: .85; } }
 
-  /* Laboratorio de empuje */
-  .lab { background: var(--panel); border: 1px solid var(--linea); border-radius: 22px; padding: 26px; }
-  .lab label { display: flex; justify-content: space-between; font-size: 14px; color: var(--suave); margin: 16px 0 8px; }
-  .lab label b { color: var(--tinta); font-weight: 600; }
-  input[type=range] { width: 100%; accent-color: var(--fuego); height: 28px; }
-  .escena { position: relative; height: 230px; border-radius: 14px; background: linear-gradient(#0b0e22, #141a3b); overflow: hidden; margin-top: 18px; }
-  .escena .suelo { position: absolute; left: 0; right: 0; bottom: 0; height: 26px; background: #1d2240; border-top: 1px solid var(--linea); }
+  .lab { background: var(--panel); border: 1px solid var(--linea); border-radius: 3px; padding: 24px; }
+  .lab label { display: flex; justify-content: space-between; font: 400 12.5px/1.3 var(--mono); color: var(--gris); margin: 16px 0 8px; text-transform: uppercase; letter-spacing: .05em; }
+  .lab label b { color: var(--papel); font-weight: 500; text-transform: none; }
+  input[type=range] { width: 100%; accent-color: var(--verde-agua); height: 28px; }
+  .escena { position: relative; height: 230px; border: 1px solid var(--linea); background-image: linear-gradient(var(--linea) 1px, transparent 1px), linear-gradient(90deg, var(--linea) 1px, transparent 1px); background-size: 24px 24px; overflow: hidden; margin-top: 18px; }
+  .escena .suelo { position: absolute; left: 0; right: 0; bottom: 0; height: 26px; background: #1a1b20; border-top: 1px solid rgba(236,233,225,.3); }
   .mini { position: absolute; left: 50%; bottom: 26px; width: 44px; transform: translateX(-50%); transition: bottom .2s linear; }
   .mini .llama { opacity: 0; transition: opacity .2s; }
   .mini.prendido .llama { opacity: 1; }
-  .veredicto { margin-top: 14px; font-weight: 600; font-size: 15.5px; min-height: 24px; }
-  .veredicto.si { color: #7dffb0; } .veredicto.no { color: #ff9a8a; }
+  .veredicto { margin-top: 14px; font-weight: 700; font-size: 15px; min-height: 24px; }
+  .veredicto.si { color: var(--si); } .veredicto.no { color: var(--no); }
 
-  /* Línea de tiempo */
-  .linea-tiempo { position: relative; display: flex; gap: 6px; overflow-x: auto; padding: 18px 2px 10px; scrollbar-width: thin; }
-  .hito { flex: 0 0 auto; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--linea); background: rgba(255,255,255,.04); font: 600 15px/1 var(--titulo); color: var(--suave); transition: all .2s; }
-  .hito:hover { color: var(--tinta); }
-  .hito.sel { background: var(--fuego); color: #1b0d00; border-color: transparent; }
-  .detalle { margin-top: 18px; min-height: 190px; background: var(--panel); border: 1px solid var(--linea); border-radius: 20px; padding: 28px; display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: start; }
-  .detalle .grande-anio { font: 700 clamp(48px, 7vw, 86px)/1 var(--titulo); color: var(--fuego2); }
+  .linea-tiempo { position: relative; display: flex; gap: 0; overflow-x: auto; padding: 18px 0 0; scrollbar-width: thin; border-bottom: 1px solid var(--linea); }
+  .hito { flex: 0 0 auto; padding: 12px 14px; font: 500 14px/1 var(--mono); color: var(--gris); border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; }
+  .hito:hover { color: var(--papel); }
+  .hito.sel { color: var(--papel); border-color: var(--papel); }
+  .detalle { margin-top: 26px; min-height: 190px; display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: start; }
+  .detalle .grande-anio { font: 700 clamp(56px, 8vw, 104px)/.9 var(--helvetica); letter-spacing: -.05em; color: var(--papel); }
   .detalle h3 { font-size: clamp(22px, 2.4vw, 30px); }
-  .barra-tiempo { height: 4px; border-radius: 4px; background: var(--linea); margin-top: 18px; position: relative; }
-  .barra-tiempo i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: linear-gradient(90deg, var(--fuego2), var(--fuego)); transition: width .4s; }
+  .barra-tiempo { height: 1px; background: transparent; margin-top: -1px; position: relative; }
+  .barra-tiempo i { position: absolute; left: 0; top: -1px; height: 2px; background: rgba(236,233,225,.45); transition: width .4s; }
 
-  /* Comparador de alturas */
-  .alturas { display: flex; align-items: flex-end; gap: clamp(8px, 2vw, 26px); height: min(48vh, 420px); padding: 0 6px; border-bottom: 1px solid var(--linea); margin-top: 26px; position: relative; }
+  .alturas { display: flex; align-items: flex-end; gap: clamp(8px, 2vw, 26px); height: min(46vh, 400px); padding: 0 6px; border-bottom: 1px solid rgba(236,233,225,.4); margin-top: 26px; position: relative; background-image: linear-gradient(var(--linea) 1px, transparent 1px); background-size: 100% 25%; }
   .col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; cursor: pointer; }
-  .col .barra { width: min(56px, 70%); border-radius: 10px 10px 2px 2px; background: linear-gradient(180deg, #f2f4ff, #8f97c9); height: 0; transition: height 1s cubic-bezier(.2,.8,.2,1), filter .2s; position: relative; }
-  .col.sel .barra { background: linear-gradient(180deg, var(--fuego2), var(--fuego)); }
-  .col:hover .barra { filter: brightness(1.15); }
-  .col .metros { font: 700 14px/1 var(--titulo); margin-bottom: 8px; color: var(--tinta); }
+  .col .barra { width: min(52px, 70%); border-radius: 0; background: #57565a; height: 0; transition: height 1s cubic-bezier(.2,.8,.2,1), background .2s; }
+  .col.sel .barra { background: var(--cielo); }
+  .col:hover .barra { background: #75747a; }
+  .col.sel:hover .barra { background: var(--cielo); }
+  .col .metros { font: 500 13px/1 var(--mono); margin-bottom: 8px; color: var(--papel); }
   .nombres { display: flex; gap: clamp(8px, 2vw, 26px); padding: 10px 6px 0; }
-  .nombres span { flex: 1; text-align: center; font-size: 13px; color: var(--suave); line-height: 1.3; }
-  .persona { position: absolute; right: 0; bottom: 0; font-size: 12px; color: var(--suave); }
+  .nombres span { flex: 1; text-align: center; font: 400 12px/1.3 var(--mono); color: var(--gris); }
   .info-cohete { margin-top: 18px; min-height: 52px; }
 
-  /* Ecuación */
-  .ecuacion { font: 700 clamp(26px, 3.6vw, 44px)/1.2 var(--titulo); padding: 22px 26px; border-radius: 18px; background: var(--panel); border: 1px solid var(--linea); display: inline-block; margin: 14px 0; }
-  .resultado { font: 700 clamp(30px, 4vw, 48px)/1 var(--titulo); color: var(--fuego2); margin-top: 6px; }
+  .ecuacion { font: 400 clamp(26px, 3.4vw, 42px)/1.2 var(--serif); font-style: italic; padding: 18px 0; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); display: block; margin: 14px 0 18px; }
+  .resultado { font: 700 clamp(32px, 4vw, 50px)/1 var(--helvetica); letter-spacing: -.03em; color: var(--violeta); margin-top: 6px; }
 
-  /* Quiz */
   .quiz { max-width: 760px; }
-  .pregunta { font: 600 clamp(21px, 2.4vw, 28px)/1.3 var(--titulo); margin: 6px 0 20px; }
-  .opciones { display: grid; gap: 10px; }
-  .opcion { text-align: left; padding: 16px 18px; border-radius: 14px; border: 1px solid var(--linea); background: rgba(255,255,255,.04); font-size: 16px; transition: all .2s; }
-  .opcion:hover:not(:disabled) { border-color: rgba(255,192,74,.5); background: rgba(255,192,74,.06); }
-  .opcion.bien { border-color: #4ade80; background: rgba(74,222,128,.12); }
-  .opcion.mal { border-color: #f87171; background: rgba(248,113,113,.12); }
+  .pregunta { font: 700 clamp(22px, 2.4vw, 30px)/1.25 var(--helvetica); letter-spacing: -.015em; margin: 6px 0 22px; }
+  .opciones { display: grid; gap: 0; border-top: 1px solid var(--linea); }
+  .opcion { text-align: left; padding: 16px 4px; border-bottom: 1px solid var(--linea); font-size: 16.5px; display: flex; gap: 16px; transition: background .15s, color .15s; }
+  .opcion::before { content: attr(data-letra); font: 400 13px/1.6 var(--mono); color: var(--gris); }
+  .opcion:hover:not(:disabled) { background: rgba(236,233,225,.05); }
+  .opcion.bien { color: var(--bien); } .opcion.bien::before { color: var(--bien); }
+  .opcion.mal { color: var(--mal); text-decoration: line-through; } .opcion.mal::before { color: var(--mal); }
   .opcion:disabled { cursor: default; }
   .explica { margin-top: 16px; min-height: 52px; font-size: 15.5px; }
-  .pie-quiz { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; color: var(--suave); font-size: 14px; }
+  .pie-quiz { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; font: 400 13px/1 var(--mono); color: var(--gris); }
 
-
-  /* Sopa de letras */
   .sopa-zona { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 4vw, 48px); align-items: start; margin-top: 10px; }
-  .sopa { --n: 15; display: grid; grid-template-columns: repeat(var(--n), 1fr); width: min(540px, 88vw, 54vh); aspect-ratio: 1; background: var(--panel); border: 1px solid var(--linea); border-radius: 16px; padding: 8px; touch-action: none; user-select: none; -webkit-user-select: none; }
-  .letra { display: grid; place-items: center; font: 600 clamp(12px, 1.9vw, 19px)/1 var(--titulo); color: #dfe3ff; border-radius: 7px; cursor: pointer; transition: background .15s, color .15s; }
-  .letra.marcando { background: rgba(111,211,255,.35); color: #fff; }
-  .letra.hallada { color: #1b0d00; }
+  .sopa { --n: 15; display: grid; grid-template-columns: repeat(var(--n), 1fr); width: min(540px, 88vw, 54vh); aspect-ratio: 1; border: 1px solid rgba(236,233,225,.3); padding: 6px; touch-action: none; user-select: none; -webkit-user-select: none; background: #121317; }
+  .letra { display: grid; place-items: center; font: 700 clamp(12px, 1.8vw, 18px)/1 var(--helvetica); color: #d9d6ce; cursor: pointer; transition: background .15s, color .15s; }
+  .letra.marcando { background: rgba(236,233,225,.22); color: #fff; }
+  .letra.hallada { color: #141414; }
   .lista-palabras { columns: 2; column-gap: 18px; list-style: none; }
-  .lista-palabras li { break-inside: avoid; padding: 6px 0; font: 600 15.5px/1.2 var(--titulo); letter-spacing: .04em; color: var(--tinta); transition: color .3s, opacity .3s; position: relative; width: fit-content; }
-  .lista-palabras li::after { content: ''; position: absolute; left: -3px; right: -3px; top: 50%; height: 2px; background: var(--fuego); transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
-  .lista-palabras li.tachada { color: var(--suave); opacity: .55; }
+  .lista-palabras li { break-inside: avoid; padding: 6px 0; font: 500 14px/1.2 var(--mono); letter-spacing: .04em; color: var(--papel); transition: color .3s; position: relative; width: fit-content; }
+  .lista-palabras li::after { content: ''; position: absolute; left: -3px; right: -3px; top: 50%; height: 2px; background: var(--color, var(--papel)); transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
+  .lista-palabras li.tachada { color: var(--gris); }
   .lista-palabras li.tachada::after { transform: scaleX(1); }
-  .marcador { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
-  .marcador b { font: 700 28px/1 var(--titulo); color: var(--fuego2); }
-  .felicidades { margin-top: 14px; font-weight: 600; color: #7dffb0; min-height: 22px; }
-  @media (max-width: 860px) {
-    .sopa-zona { grid-template-columns: 1fr; }
-    .sopa { width: min(100%, 92vw); padding: 5px; }
-    .lista-palabras { columns: 3; column-gap: 12px; }
-    .lista-palabras li { font-size: 13px; padding: 4px 0; }
-  }
+  .marcador { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; font: 400 13px/1 var(--mono); color: var(--gris); }
+  .marcador b { font: 700 30px/1 var(--helvetica); color: var(--papel); }
+  .felicidades { margin-top: 14px; font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--papel); min-height: 22px; }
 
-  /* Navegación */
-  .nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex; align-items: center; gap: 14px; padding: 14px clamp(16px, 4vw, 40px) calc(14px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, rgba(5,6,15,.92) 45%); pointer-events: none; }
+  .nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex; align-items: center; gap: 14px; padding: 14px clamp(16px, 4vw, 40px) calc(14px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, rgba(14,15,18,.94) 45%); pointer-events: none; }
   .nav button { pointer-events: auto; }
-  .nav .flecha { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--linea); background: rgba(255,255,255,.05); display: grid; place-items: center; transition: background .2s; }
-  .nav .flecha:hover { background: rgba(255,255,255,.12); }
-  .nav .flecha:disabled { opacity: .3; cursor: default; }
-  .puntos { flex: 1; display: flex; justify-content: center; gap: 7px; flex-wrap: wrap; }
-  .puntos button { width: 8px; height: 8px; border-radius: 99px; background: rgba(255,255,255,.22); transition: all .3s; }
-  .puntos button.sel { width: 26px; background: var(--fuego); }
-  .contador { font: 500 14px/1 var(--titulo); color: var(--suave); min-width: 52px; text-align: right; }
-  .progreso { position: fixed; top: 0; left: 0; height: 3px; z-index: 11; background: linear-gradient(90deg, var(--fuego2), var(--fuego)); transition: width .5s; }
-  .ayuda { position: fixed; top: 14px; right: 18px; z-index: 11; font-size: 12.5px; color: var(--suave); display: flex; gap: 8px; align-items: center; }
-  .ayuda kbd { font: 500 11px/1 var(--texto); border: 1px solid var(--linea); border-radius: 5px; padding: 3px 6px; }
-  .ayuda button { border: 1px solid var(--linea); border-radius: 8px; padding: 6px 10px; font-size: 12.5px; color: var(--suave); }
+  .nav .flecha { width: 44px; height: 44px; border: 1px solid rgba(236,233,225,.3); display: grid; place-items: center; transition: background .2s; }
+  .nav .flecha:hover { background: rgba(236,233,225,.08); }
+  .nav .flecha:disabled { opacity: .25; cursor: default; }
+  .puntos { flex: 1; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .puntos button { width: 14px; height: 3px; background: rgba(236,233,225,.2); transition: background .3s, width .3s; }
+  .puntos button.sel { width: 30px; background: var(--papel); }
+  .contador { font: 400 13px/1 var(--mono); color: var(--gris); min-width: 52px; text-align: right; }
+  .progreso { position: fixed; top: 0; left: 0; height: 2px; z-index: 11; background: var(--papel); transition: width .5s; }
+  .ayuda { position: fixed; top: 14px; right: 18px; z-index: 11; font: 400 12px/1 var(--mono); color: var(--gris); display: flex; gap: 8px; align-items: center; }
+  .ayuda kbd { font: 400 11px/1 var(--mono); border: 1px solid var(--linea); padding: 3px 6px; }
+  .ayuda button { border: 1px solid var(--linea); padding: 7px 10px; font: 400 12px/1 var(--mono); color: var(--gris); }
 
   .figura { display: grid; place-items: center; }
-  .figura svg { width: 100%; max-width: 380px; height: auto; }
+  .figura svg { width: 100%; max-width: 360px; height: auto; }
 
   @media (max-width: 860px) {
     .dos { grid-template-columns: 1fr; }
     .figura svg { max-width: 220px; }
     .detalle { grid-template-columns: 1fr; gap: 8px; }
     .ayuda kbd, .ayuda .teclas { display: none; }
-    .slide { align-items: flex-start; }
-    .nombres span { font-size: 10.5px; }
+    .slide { align-items: flex-start; padding-top: 58px; padding-bottom: 110px; }
+    .nombres span { font-size: 10px; }
     .puntos { visibility: hidden; }
-    .slide { padding-bottom: 110px; }
+    .tarjeta + .tarjeta { padding-left: 0; border-left: 0; }
+    .sopa-zona { grid-template-columns: 1fr; }
+    .sopa { width: min(100%, 92vw); padding: 4px; }
+    .lista-palabras { columns: 3; column-gap: 12px; }
+    .lista-palabras li { font-size: 12px; padding: 4px 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -204,8 +208,8 @@
   <!-- 1. Portada -->
   <section class="slide portada" data-titulo="Portada">
     <div class="caja">
-      <div class="colegio entra">Colegio Carmelitano del Valle</div>
-      <h1 class="entra">Del fuego<br><span class="degradado">al espacio</span></h1>
+      <div class="colegio entra"><span>Colegio Carmelitano del Valle</span><span>Historia del cohete</span></div>
+      <h1 class="entra">Del fuego<br><span class="rojo">al espacio</span></h1>
       <p class="grande entra">Los inicios y la evolución del cohete: de una flecha con pólvora en la antigua China a las naves que hoy aterrizan solas.</p>
       <div class="entra"><button class="boton" id="btnDespegar" type="button">Iniciar cuenta regresiva
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
@@ -229,11 +233,11 @@
         <div class="escena" id="escena">
           <div class="suelo"></div>
           <svg class="mini" id="mini" viewBox="0 0 60 150" aria-hidden="true">
-            <g class="llama"><path d="M20 112 Q30 150 40 112 Z" fill="#ffc04a"/><path d="M24 112 Q30 136 36 112 Z" fill="#fff3c4"/></g>
-            <path d="M30 4 C44 20 46 44 46 70 L46 106 L14 106 L14 70 C14 44 16 20 30 4 Z" fill="#eef0ff"/>
-            <path d="M30 4 C38 13 42 24 44 34 L16 34 C18 24 22 13 30 4 Z" fill="#ff7a2f"/>
-            <circle cx="30" cy="56" r="7" fill="#6fd3ff" stroke="#141a3b" stroke-width="3"/>
-            <path d="M14 82 L2 106 L14 106 Z M46 82 L58 106 L46 106 Z" fill="#ff7a2f"/>
+            <g class="llama"><path d="M20 112 Q30 150 40 112 Z" fill="#f2c14e"/><path d="M24 112 Q30 136 36 112 Z" fill="#ffe9a8"/></g>
+            <path d="M30 4 C44 20 46 44 46 70 L46 106 L14 106 L14 70 C14 44 16 20 30 4 Z" fill="#ece9e1"/>
+            <path d="M30 4 C38 13 42 24 44 34 L16 34 C18 24 22 13 30 4 Z" fill="#c8553d"/>
+            <circle cx="30" cy="56" r="7" fill="#8fd3e8" stroke="#1a1b20" stroke-width="3"/>
+            <path d="M14 82 L2 106 L14 106 Z M46 82 L58 106 L46 106 Z" fill="#c8553d"/>
             <rect x="20" y="106" width="20" height="7" rx="2" fill="#8f97c9"/>
           </svg>
         </div>
@@ -254,15 +258,14 @@
       </div>
       <div class="figura entra">
         <svg viewBox="0 0 320 320" aria-hidden="true">
-          <defs><radialGradient id="g1"><stop offset="0" stop-color="#ffc04a" stop-opacity=".55"/><stop offset="1" stop-color="#ffc04a" stop-opacity="0"/></radialGradient></defs>
-          <circle cx="160" cy="160" r="150" fill="url(#g1)"/>
+          <circle cx="160" cy="160" r="148" fill="none" stroke="rgba(236,233,225,.18)"/><circle cx="160" cy="160" r="100" fill="none" stroke="rgba(236,233,225,.1)" stroke-dasharray="3 6"/>
           <g transform="rotate(-38 160 160)">
             <line x1="40" y1="160" x2="290" y2="160" stroke="#c7a07a" stroke-width="5" stroke-linecap="round"/>
             <path d="M290 160 l-22 -11 l0 22 z" fill="#d9dbe8"/>
-            <path d="M40 160 l-18 -12 l8 12 l-8 12 z M58 160 l-18 -12 l8 12 l-8 12 z" fill="#ff7a2f"/>
+            <path d="M40 160 l-18 -12 l8 12 l-8 12 z M58 160 l-18 -12 l8 12 l-8 12 z" fill="#c8553d"/>
             <rect x="170" y="146" width="70" height="28" rx="6" fill="#b84a2e"/>
             <rect x="178" y="146" width="6" height="28" fill="#7a2b1a"/><rect x="226" y="146" width="6" height="28" fill="#7a2b1a"/>
-            <g class="llama"><path d="M170 152 Q120 160 170 168 Z" fill="#ffc04a"/><path d="M170 155 Q140 160 170 165 Z" fill="#fff3c4"/></g>
+            <g class="llama"><path d="M170 152 Q120 160 170 168 Z" fill="#f2c14e"/><path d="M170 155 Q140 160 170 165 Z" fill="#ffe9a8"/></g>
           </g>
         </svg>
       </div>
@@ -311,7 +314,7 @@
         <input type="range" id="ve" min="15" max="45" value="30">
         <label>Cohete lleno <b><span id="vM0">10</span> veces más pesado que vacío</b></label>
         <input type="range" id="m0" min="2" max="25" value="10">
-        <p style="margin-top:20px;font-size:14px;color:var(--suave)">Velocidad final que alcanza:</p>
+        <p style="margin-top:20px;font-size:14px;color:var(--gris)">Velocidad final que alcanza:</p>
         <div class="resultado" id="dv">6,9 km/s</div>
         <div class="veredicto" id="orbita"></div>
       </div>
@@ -336,7 +339,7 @@
           <rect x="66" y="200" width="34" height="40" fill="#2b2b2b"/><rect x="100" y="240" width="34" height="50" fill="#2b2b2b"/>
           <path d="M66 240 L30 300 L30 320 L66 290 Z M134 240 L170 300 L170 320 L134 290 Z" fill="#5a5a52"/>
           <path d="M92 290 L108 290 L104 330 L96 330 Z" fill="#5a5a52"/>
-          <g class="llama"><path d="M86 330 Q100 400 114 330 Z" fill="#ffc04a"/></g>
+          <g class="llama"><path d="M86 330 Q100 400 114 330 Z" fill="#f2c14e"/></g>
         </svg>
       </div>
     </div>
@@ -388,7 +391,7 @@
           <circle cx="150" cy="150" r="96" fill="#14306b"/>
           <path d="M96 116 C120 96 150 104 160 128 C170 150 150 168 168 190 C150 214 112 204 104 176 C96 152 80 138 96 116 Z" fill="#2f8f5b"/>
           <ellipse cx="150" cy="150" rx="140" ry="48" fill="none" stroke="rgba(255,255,255,.25)" stroke-dasharray="4 6" transform="rotate(-20 150 150)"/>
-          <g id="satelite"><rect x="-9" y="-9" width="18" height="18" rx="2" fill="#ffc04a"/><rect x="-32" y="-5" width="20" height="10" fill="#6fd3ff"/><rect x="12" y="-5" width="20" height="10" fill="#6fd3ff"/></g>
+          <g id="satelite"><rect x="-9" y="-9" width="18" height="18" rx="2" fill="#b9b4a8"/><rect x="-32" y="-5" width="20" height="10" fill="#8fd3e8"/><rect x="12" y="-5" width="20" height="10" fill="#8fd3e8"/></g>
         </svg>
       </div>
     </div>
@@ -446,13 +449,14 @@
   <!-- 15. Cierre -->
   <section class="slide portada" data-titulo="Gracias">
     <div class="caja">
-      <div class="colegio entra">Colegio Carmelitano del Valle</div>
-      <h2 class="entra" style="font-size:clamp(40px,7vw,90px)">El próximo paso<br><span class="degradado">puede ser tuyo</span></h2>
+      <div class="colegio entra"><span>Colegio Carmelitano del Valle</span><span>Fin</span></div>
+      <h2 class="entra" style="font-size:clamp(40px,7vw,90px)">El próximo paso<br>puede ser tuyo.</h2>
       <p class="grande entra">De una flecha con pólvora a cohetes que aterrizan solos pasaron más de 800 años. Cada avance empezó con alguien curioso que se preguntó: <em>¿y si lo intentamos?</em></p>
-      <div class="entra" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        <button class="boton" id="btnOtraVez" type="button">Despegar otra vez</button>
+      <div class="entra" style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="boton arena" id="btnOtraVez" type="button">Despegar otra vez</button>
         <button class="boton claro" id="btnInicio" type="button">Volver al inicio</button>
       </div>
+      <p class="firma entra">Diseño inspirado en el NASA Graphics Standards Manual (Danne &amp; Blackburn, 1975).<br>Datos: NASA History Office, Smithsonian National Air and Space Museum.</p>
     </div>
   </section>
 </main>
@@ -466,11 +470,11 @@
 
 <div class="cuenta" id="cuenta" aria-live="polite"></div>
 <svg class="despegue" id="despegue" viewBox="0 0 60 150" aria-hidden="true">
-  <g class="llama"><path d="M18 112 Q30 175 42 112 Z" fill="#ff7a2f"/><path d="M22 112 Q30 150 38 112 Z" fill="#ffc04a"/><path d="M26 112 Q30 130 34 112 Z" fill="#fff3c4"/></g>
-  <path d="M30 4 C44 20 46 44 46 70 L46 106 L14 106 L14 70 C14 44 16 20 30 4 Z" fill="#eef0ff"/>
-  <path d="M30 4 C38 13 42 24 44 34 L16 34 C18 24 22 13 30 4 Z" fill="#ff7a2f"/>
-  <circle cx="30" cy="56" r="7" fill="#6fd3ff" stroke="#141a3b" stroke-width="3"/>
-  <path d="M14 82 L2 106 L14 106 Z M46 82 L58 106 L46 106 Z" fill="#ff7a2f"/>
+  <g class="llama"><path d="M18 112 Q30 175 42 112 Z" fill="#c8553d"/><path d="M22 112 Q30 150 38 112 Z" fill="#f2c14e"/><path d="M26 112 Q30 130 34 112 Z" fill="#ffe9a8"/></g>
+  <path d="M30 4 C44 20 46 44 46 70 L46 106 L14 106 L14 70 C14 44 16 20 30 4 Z" fill="#ece9e1"/>
+  <path d="M30 4 C38 13 42 24 44 34 L16 34 C18 24 22 13 30 4 Z" fill="#c8553d"/>
+  <circle cx="30" cy="56" r="7" fill="#8fd3e8" stroke="#1a1b20" stroke-width="3"/>
+  <path d="M14 82 L2 106 L14 106 Z M46 82 L58 106 L46 106 Z" fill="#c8553d"/>
   <rect x="20" y="106" width="20" height="7" rx="2" fill="#8f97c9"/>
 </svg>
 
@@ -725,7 +729,7 @@
     const caja = quiz.querySelector('.opciones');
     opciones.forEach((o, i) => {
       const b = document.createElement('button');
-      b.type = 'button'; b.className = 'opcion'; b.textContent = o;
+      b.type = 'button'; b.className = 'opcion'; b.textContent = o; b.dataset.letra = 'ABCD'[i];
       b.addEventListener('click', () => {
         caja.querySelectorAll('button').forEach((x, j) => { x.disabled = true; if (j === correcta) x.classList.add('bien'); });
         if (i === correcta) puntaje++; else b.classList.add('mal');
@@ -746,7 +750,8 @@
     'STARSHIP', 'GRAVEDAD', 'TIERRA', 'MYSORE'];
   const N = 15;
   const DIRS = [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]];
-  const COLORES = ['#ffc04a', '#ff7a2f', '#6fd3ff', '#7dffb0', '#ff8fb1', '#c4a7ff', '#ffe07a', '#7fe8e0'];
+  // Un color propio para cada palabra: 24 tonos separados 15° en el círculo cromático, ninguno se repite
+  const colorDe = w => `hsl(${[...PALABRAS].sort().indexOf(w) * 15} 68% 66%)`;
   const sopa = $('#sopa'), lista = $('#listaPalabras');
   let tablero = [], ubicadas = {}, encontradas = new Set(), inicio = null, marcadas = [];
   sopa.style.setProperty('--n', N);
@@ -825,9 +830,11 @@
     marcar([]);
     if (!w) return false;
     encontradas.add(w);
-    const color = COLORES[encontradas.size % COLORES.length];
+    const color = colorDe(w);
     celdas.forEach(i => { celda(i).classList.add('hallada'); celda(i).style.background = color; });
-    lista.querySelector(`[data-palabra="${w}"]`).classList.add('tachada');
+    const li = lista.querySelector(`[data-palabra="${w}"]`);
+    li.style.setProperty('--color', color);
+    li.classList.add('tachada');
     $('#halladas').textContent = encontradas.size;
     if (encontradas.size === PALABRAS.length) $('#felicidades').textContent = '¡Encontraron todas las palabras! Misión cumplida.';
     return true;
