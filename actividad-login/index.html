@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Iniciar sesión · Actividad práctica V</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <main class="tarjeta">
+    <h1>Iniciar sesión</h1>
+    <p class="sub">Actividad práctica V</p>
+
+    <form id="formLogin" novalidate>
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" name="usuario" autocomplete="username" required>
+
+      <label for="contrasena">Contraseña</label>
+      <input type="password" id="contrasena" name="contrasena" autocomplete="current-password" required>
+
+      <p id="mensaje" class="mensaje" role="alert"></p>
+
+      <button type="submit" id="enviar">Enviar</button>
+    </form>
+  </main>
+
+  <script type="module">
+    import { validarUsuario } from './js/conexion.js';
+
+    const form = document.getElementById('formLogin');
+    const mensaje = document.getElementById('mensaje');
+    const boton = document.getElementById('enviar');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const usuario = form.usuario.value.trim();
+      const contrasena = form.contrasena.value;
+      mensaje.textContent = '';
+
+      if (!usuario || !contrasena) {
+        mensaje.textContent = 'Escribe el usuario y la contraseña.';
+        return;
+      }
+
+      boton.disabled = true;
+      boton.textContent = 'Validando...';
+      try {
+        const encontrado = await validarUsuario(usuario, contrasena);
+        if (encontrado) {
+          sessionStorage.setItem('usuario', encontrado);
+          location.href = 'bienvenida.html';
+        } else {
+          mensaje.textContent = 'Usuario inválido';
+          form.contrasena.value = '';
+          form.contrasena.focus();
+        }
+      } catch (err) {
+        mensaje.textContent = 'No se pudo conectar a la base de datos. ' + err.message;
+      } finally {
+        boton.disabled = false;
+        boton.textContent = 'Enviar';
+      }
+    });
+  </script>
+</body>
+</html>

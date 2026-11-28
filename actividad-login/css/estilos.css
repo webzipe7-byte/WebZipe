@@ -1,0 +1,85 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #eef1f5;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+}
+
+.tarjeta {
+  width: 100%;
+  max-width: 360px;
+  background: #fff;
+  border: 1px solid #d6dbe1;
+  border-radius: 8px;
+  padding: 28px 26px;
+}
+
+h1 {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.sub {
+  margin: 0 0 22px;
+  color: #666;
+  font-size: 14px;
+}
+
+label {
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #b9c0c8;
+  border-radius: 4px;
+}
+
+input:focus {
+  outline: 2px solid #3b6fd8;
+  border-color: #3b6fd8;
+}
+
+button {
+  margin-top: 18px;
+  width: 100%;
+  padding: 11px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+  background: #3b6fd8;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #2f5cb8;
+}
+
+button:disabled {
+  background: #8aa5dc;
+  cursor: default;
+}
+
+.mensaje {
+  min-height: 18px;
+  margin: 12px 0 0;
+  color: #c0392b;
+  font-size: 14px;
+  font-weight: bold;
+}

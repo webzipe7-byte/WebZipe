@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Bienvenido · Actividad práctica V</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <script>
+    // Si no se ha iniciado sesión, vuelve al formulario
+    if (!sessionStorage.getItem('usuario')) location.replace('index.html');
+  </script>
+</head>
+<body>
+  <main class="tarjeta">
+    <h1>¡Bienvenido, <span id="nombre"></span>!</h1>
+    <p>Iniciaste sesión correctamente. Tu usuario existe en la base de datos.</p>
+    <button type="button" id="salir">Cerrar sesión</button>
+  </main>
+
+  <script>
+    document.getElementById('nombre').textContent = sessionStorage.getItem('usuario');
+    document.getElementById('salir').addEventListener('click', () => {
+      sessionStorage.removeItem('usuario');
+      location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
